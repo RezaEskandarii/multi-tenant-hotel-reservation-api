@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// baseModel
 type baseModel struct {
 	Id        uint64     `json:"id"`
 	CreatedAt *time.Time `json:"created_at"`

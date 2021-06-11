@@ -1,0 +1,11 @@
+database:
+  username: postgres
+  password:
+  port: 3306
+  SSLMode: disabled
+  host: 12.0.0.1
+  name: hote_reservation
+
+application:
+  port: 8080
+  cluster_name: cluster1

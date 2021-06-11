@@ -1,5 +1,6 @@
 package models
 
+// City city struct
 type City struct {
 	baseModel
 	Name      string  `json:"name"`
