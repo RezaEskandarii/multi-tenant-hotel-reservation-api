@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
-	"hotel-reservation/config"
+	"hotel-reservation/internal/bootstrap"
+	"os"
 )
 
 func main() {
 
-	cfg, err := config.NewConfig()
+	err := bootstrap.Run()
 
-	if err == nil {
-		fmt.Println(cfg)
+	if err != nil {
+		fmt.Println("exit ...")
+		os.Exit(1)
 	}
 }

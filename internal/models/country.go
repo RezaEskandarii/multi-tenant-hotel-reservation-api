@@ -2,7 +2,7 @@ package models
 
 // Country country struct
 type Country struct {
-	baseModel
+	BaseModel
 	Name  string `json:"name"`
 	Alias string `json:"alias"`
 }
