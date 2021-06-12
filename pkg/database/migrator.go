@@ -12,6 +12,7 @@ var (
 	}
 )
 
+// Migrate migrate tables
 func Migrate() error {
 
 	application_loger.LogInfo("migration started ...")
@@ -30,7 +31,6 @@ func Migrate() error {
 	}
 
 	err = db.AutoMigrate(&models.City{})
-
 	if err != nil {
 		application_loger.LogDebug(err.Error())
 	}
