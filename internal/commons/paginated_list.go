@@ -6,6 +6,7 @@ var (
 	defaultSize uint = 20
 )
 
+// PaginatedList paginate list
 type PaginatedList struct {
 	Data         interface{} `json:"data"`
 	Page         uint        `json:"page"`
@@ -14,6 +15,7 @@ type PaginatedList struct {
 	TotalPages   uint        `json:"total_pages"`
 }
 
+// Paginate it returns new paginatesList struct and fills fields.
 func (p *PaginatedList) Paginate(totalTableRows uint, perPage uint, page uint) *PaginatedList {
 
 	if perPage == 0 {
