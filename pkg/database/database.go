@@ -22,7 +22,8 @@ var dbLogger = logger.New(
 	},
 )
 
-func getConnectionString() (string, error) {
+// generate database connection string
+func getDSN() (string, error) {
 	dbCfg, err := config.NewConfig()
 
 	if err != nil {
@@ -62,7 +63,7 @@ func getConnectionString() (string, error) {
 
 func GetDb() (*gorm.DB, error) {
 
-	connectionString, err := getConnectionString()
+	connectionString, err := getDSN()
 
 	if err != nil {
 		return nil, err
