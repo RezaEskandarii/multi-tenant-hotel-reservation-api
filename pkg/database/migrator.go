@@ -1,6 +1,7 @@
 package database
 
 import (
+	"gorm.io/gorm"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/pkg/application_loger"
 )
@@ -13,24 +14,11 @@ var (
 )
 
 // Migrate migrate tables
-func Migrate() error {
+func Migrate(db *gorm.DB) error {
 
 	application_loger.LogInfo("migration started ...")
 
-	defer func() {
-		if r := recover(); r != nil {
-			application_loger.LogError(r)
-			return
-		}
-	}()
-
-	db, err := GetDb()
-
-	if err != nil {
-		return err
-	}
-
-	err = db.AutoMigrate(&models.City{})
+	err := db.AutoMigrate(&models.City{})
 	if err != nil {
 		application_loger.LogDebug(err.Error())
 	}

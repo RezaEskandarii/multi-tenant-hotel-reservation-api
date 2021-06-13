@@ -14,5 +14,5 @@ func NewCountryService() *CountryService {
 }
 
 func (s *CountryService) Create(country *models.Country) (*models.Country, error) {
-	return s.Create(country)
+	return s.Repository.Create(country)
 }
