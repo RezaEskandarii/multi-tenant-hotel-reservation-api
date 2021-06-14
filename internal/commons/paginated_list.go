@@ -16,7 +16,7 @@ type PaginatedList struct {
 }
 
 // NewPaginatedList it returns new paginatesList struct and fills fields.
-func NewPaginatedList(totalTableRows uint, perPage uint, page uint) *PaginatedList {
+func NewPaginatedList(totalTableRows uint, page uint, perPage uint) *PaginatedList {
 
 	p := &PaginatedList{}
 

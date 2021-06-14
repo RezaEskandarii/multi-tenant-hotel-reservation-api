@@ -56,7 +56,17 @@ func (r *CountryRepository) Find(id uint64) (*models.Country, error) {
 func (r *CountryRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	list := make([]models.Country, 0)
-	result := &commons.PaginatedList{}
+	var total int64
+
+	query := r.DB.Model(&models.Country{})
+	query.Count(&total)
+	result := commons.NewPaginatedList(uint(total), uint(input.Page), uint(input.PerPage))
+	query = query.Limit(int(result.PerPage)).Offset(int(result.Page)).Order("id desc").Scan(&list)
+
+	if query.Error != nil {
+		application_loger.LogError(query.Error)
+		return nil, query.Error
+	}
 
 	result.Data = list
 	return result, nil
