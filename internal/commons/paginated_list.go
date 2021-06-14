@@ -15,8 +15,10 @@ type PaginatedList struct {
 	TotalPages   uint        `json:"total_pages"`
 }
 
-// Paginate it returns new paginatesList struct and fills fields.
-func (p *PaginatedList) Paginate(totalTableRows uint, perPage uint, page uint) *PaginatedList {
+// NewPaginatedList it returns new paginatesList struct and fills fields.
+func NewPaginatedList(totalTableRows uint, perPage uint, page uint) *PaginatedList {
+
+	p := &PaginatedList{}
 
 	if perPage == 0 {
 		perPage = defaultSize
