@@ -61,6 +61,7 @@ func (r *CountryRepository) FindAll(input *dto.PaginationInput) (*commons.Pagina
 	query := r.DB.Model(&models.Country{})
 	query.Count(&total)
 	result := commons.NewPaginatedList(uint(total), uint(input.Page), uint(input.PerPage))
+	query = query.Preload("cities")
 	query = query.Limit(int(result.PerPage)).Offset(int(result.Page)).Order("id desc").Scan(&list)
 
 	if query.Error != nil {

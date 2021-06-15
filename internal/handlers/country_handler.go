@@ -14,10 +14,10 @@ import (
 // CountryHandler country endpoint handler
 type CountryHandler struct {
 	Router  *echo.Group
-	Service services.CountryService
+	Service services.CityService
 }
 
-func (handler *CountryHandler) Register(router *echo.Group, service services.CountryService) {
+func (handler *CountryHandler) Register(router *echo.Group, service services.CityService) {
 	handler.Router = router
 	handler.Service = service
 	handler.Router.POST("", handler.create)
