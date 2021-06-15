@@ -23,6 +23,7 @@ func (handler *CountryHandler) Register(router *echo.Group, service services.Cou
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
+	handler.Router.GET("/:id/cities", handler.cities)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 
@@ -138,6 +139,29 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         list,
+		ResponseCode: http.StatusOK,
+		Message:      "",
+	})
+}
+
+func (handler *CountryHandler) cities(c echo.Context) error {
+
+	id, err := utils.ConvertToUint(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+	cities, err := handler.Service.GetCities(id)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ApiResponse{
+			Data:         nil,
+			ResponseCode: InternalServerError,
+			Message:      "server error",
+		})
+	}
+
+	return c.JSON(http.StatusOK, ApiResponse{
+		Data:         cities,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
