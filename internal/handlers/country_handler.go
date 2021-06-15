@@ -39,7 +39,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 			})
 	}
 
-	if err, _ := handler.Service.Create(model); err == nil {
+	if _, err := handler.Service.Create(model); err == nil {
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         model,
