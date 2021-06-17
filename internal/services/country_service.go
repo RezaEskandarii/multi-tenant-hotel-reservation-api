@@ -35,7 +35,7 @@ func (s *CountryService) FindAll(input *dto.PaginationInput) (*commons.Paginated
 	return s.Repository.FindAll(input)
 }
 
-func (s *CountryService) GetProvinces(countryId uint64) ([]*models.City, error) {
+func (s *CountryService) GetProvinces(countryId uint64) ([]*models.Province, error) {
 
 	return s.Repository.GetProvinces(countryId)
 }

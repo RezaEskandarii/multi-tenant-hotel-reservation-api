@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
-	. "hotel-reservation/internal/commons"
+	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/middlewares"
 	"hotel-reservation/internal/models"
@@ -11,54 +11,54 @@ import (
 	"net/http"
 )
 
-// CountryHandler country endpoint handler
-type CountryHandler struct {
+// ProvinceHandler Province endpoint handler
+type ProvinceHandler struct {
 	Router  *echo.Group
-	Service services.CountryService
+	Service services.ProvinceService
 }
 
-func (handler *CountryHandler) Register(router *echo.Group, service services.CountryService) {
+func (handler *ProvinceHandler) Register(router *echo.Group, service services.ProvinceService) {
 	handler.Router = router
 	handler.Service = service
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
-	handler.Router.GET("/:id/provinces", handler.provinces)
+	handler.Router.GET("/:id/cities", handler.cities)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 
-func (handler *CountryHandler) create(c echo.Context) error {
+func (handler *ProvinceHandler) create(c echo.Context) error {
 
-	model := &models.Country{}
+	model := &models.Province{}
 
 	if err := c.Bind(&model); err != nil {
 		return c.JSON(http.StatusBadRequest,
-			ApiResponse{
+			commons.ApiResponse{
 				Data:         nil,
-				ResponseCode: BadRequest,
+				ResponseCode: http.StatusBadRequest,
 				Message:      "BadRequest",
 			})
 	}
 
 	if _, err := handler.Service.Create(model); err == nil {
 		return c.JSON(http.StatusBadRequest,
-			ApiResponse{
+			commons.ApiResponse{
 				Data:         model,
-				ResponseCode: Ok,
+				ResponseCode: http.StatusOK,
 				Message:      "Ok",
 			})
 	}
 
 	return c.JSON(http.StatusInternalServerError,
-		ApiResponse{
+		commons.ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "BadRequest",
 		})
 
 }
 
-func (handler *CountryHandler) update(c echo.Context) error {
+func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -67,15 +67,15 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ApiResponse{
+		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "server error",
 		})
 	}
 
 	if model == nil {
-		return c.JSON(http.StatusNotFound, ApiResponse{
+		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      "Not Found",
@@ -87,7 +87,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
-		return c.JSON(http.StatusOK, ApiResponse{
+		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,
 			Message:      "Successfully updated",
@@ -97,7 +97,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 }
 
-func (handler *CountryHandler) find(c echo.Context) error {
+func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
@@ -105,29 +105,29 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ApiResponse{
+		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "server error",
 		})
 	}
 
 	if model == nil {
-		return c.JSON(http.StatusNotFound, ApiResponse{
+		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      "Not Found",
 		})
 	}
 
-	return c.JSON(http.StatusOK, ApiResponse{
+	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         model,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
 }
 
-func (handler *CountryHandler) findAll(c echo.Context) error {
+func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
 
@@ -137,31 +137,31 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
-	return c.JSON(http.StatusOK, ApiResponse{
+	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
 }
 
-func (handler *CountryHandler) provinces(c echo.Context) error {
+func (handler *ProvinceHandler) cities(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	provinces, err := handler.Service.GetProvinces(id)
+	cities, err := handler.Service.GetCities(id)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ApiResponse{
+		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
-			Message:      err.Error(),
+			ResponseCode: http.StatusInternalServerError,
+			Message:      "server error",
 		})
 	}
 
-	return c.JSON(http.StatusOK, ApiResponse{
-		Data:         provinces,
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:         cities,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

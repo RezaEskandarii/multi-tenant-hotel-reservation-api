@@ -9,24 +9,35 @@ import (
 
 // services
 var (
-	countryService = *services.NewCountryService()
-	cityService    = *services.NewCityService()
+	countryService  = *services.NewCountryService()
+	provinceService = *services.NewProvinceService()
+	cityService     = *services.NewCityService()
 )
 
 // handlers
 var (
-	countryHandler = handlers.CountryHandler{}
-	cityHandler    = handlers.CityHandler{}
+	countryHandler  = handlers.CountryHandler{}
+	provinceHandler = handlers.ProvinceHandler{}
+	cityHandler     = handlers.CityHandler{}
 )
 
 func RegisterServices(db *gorm.DB, router *echo.Group) {
 
+	setRepositoriesDb(db)
+
 	countriesRouter := router.Group("/countries")
-	countryService.Repository.DB = db
 	countryHandler.Register(countriesRouter, countryService)
 
+	provinceRouter := router.Group("/provinces")
+	provinceHandler.Register(provinceRouter, provinceService)
+
 	citiesRouter := router.Group("/cities")
-	cityService.Repository.DB = db
 	cityHandler.Register(citiesRouter, cityService)
 
+}
+
+func setRepositoriesDb(db *gorm.DB) {
+	countryService.Repository.DB = db
+	provinceService.Repository.DB = db
+	cityService.Repository.DB = db
 }
