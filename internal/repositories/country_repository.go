@@ -55,21 +55,7 @@ func (r *CountryRepository) Find(id uint64) (*models.Country, error) {
 
 func (r *CountryRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
-	var list []models.Country
-	var total int64
-
-	query := r.DB.Model(&models.Country{})
-	query.Count(&total)
-	result := commons.NewPaginatedList(uint(total), uint(input.Page), uint(input.PerPage))
-	query = query.Limit(int(result.PerPage)).Offset(int(result.Page)).Order("id desc").Find(&list)
-
-	if query.Error != nil {
-		application_loger.LogError(query.Error)
-		return nil, query.Error
-	}
-
-	result.Data = list
-	return result, nil
+	return finAll(&models.Country{}, r.DB, input)
 }
 
 func (r *CountryRepository) GetCities(countryId uint64) ([]*models.City, error) {
