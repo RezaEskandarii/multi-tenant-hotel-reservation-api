@@ -10,6 +10,7 @@ var (
 	entities = []interface{}{
 		models.Country{},
 		models.City{},
+		models.Province{},
 	}
 )
 

@@ -58,10 +58,10 @@ func (r *CountryRepository) FindAll(input *dto.PaginationInput) (*commons.Pagina
 	return finAll(&models.Country{}, r.DB, input)
 }
 
-func (r *CountryRepository) GetCities(countryId uint64) ([]*models.City, error) {
+func (r *CountryRepository) GetProvinces(countryId uint64) ([]*models.City, error) {
 	var result []*models.City
 
-	query := r.DB.Model(&models.City{}).
+	query := r.DB.Model(&models.Province{}).
 		Where("country_id=?", countryId).Find(&result)
 
 	if query.Error != nil {
