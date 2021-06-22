@@ -6,6 +6,7 @@ import (
 	"hotel-reservation/internal/utils"
 )
 
+// PaginationMiddleware set pagination global object
 func PaginationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		page := 1

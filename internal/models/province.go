@@ -1,5 +1,6 @@
 package models
 
+// Province province model
 type Province struct {
 	BaseModel
 	Name      string   `json:"name"`

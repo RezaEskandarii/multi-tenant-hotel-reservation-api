@@ -21,6 +21,7 @@ var (
 	cityHandler     = handlers.CityHandler{}
 )
 
+// RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	setRepositoriesDb(db)
