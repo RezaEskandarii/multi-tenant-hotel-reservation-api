@@ -57,3 +57,17 @@ func (r *CurrencyRepository) FindAll(input *dto.PaginationInput) (*commons.Pagin
 
 	return finAll(&models.Currency{}, r.DB, input)
 }
+
+func (r *CurrencyRepository) FindBySymbol(symbol string) (*models.Currency, error) {
+	model := models.Currency{}
+	if tx := r.DB.Where("symbol=?", symbol).Find(&model); tx.Error != nil {
+		application_loger.LogError(tx.Error)
+		return nil, tx.Error
+	}
+
+	if model.Id == 0 {
+		return nil, nil
+	}
+
+	return &model, nil
+}
