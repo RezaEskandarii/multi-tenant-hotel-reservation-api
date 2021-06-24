@@ -8,7 +8,7 @@ var (
 
 // PaginatedList paginate list
 type PaginatedList struct {
-	Data         interface{} `json:"data"`
+	Records      interface{} `json:"records"`
 	Page         uint        `json:"page"`
 	PerPage      uint        `json:"per_page"`
 	TotalRecords uint        `json:"total_records"`

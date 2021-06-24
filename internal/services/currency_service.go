@@ -8,7 +8,7 @@ import (
 )
 
 type CurrencyService struct {
-	Repository repositories.CurrencyRepository
+	Repository *repositories.CurrencyRepository
 }
 
 func NewCurrencyService() *CurrencyService {

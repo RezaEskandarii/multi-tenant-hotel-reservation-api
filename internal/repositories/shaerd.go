@@ -30,6 +30,6 @@ func finAll(model interface{}, db *gorm.DB, input *dto.PaginationInput) (*common
 		return nil, query.Error
 	}
 
-	result.Data = modelSlice.Interface()
+	result.Records = modelSlice.Interface()
 	return result, nil
 }
