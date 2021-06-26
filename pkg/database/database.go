@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"hotel-reservation/config"
+	config2 "hotel-reservation/internal/config"
 	"hotel-reservation/pkg/application_loger"
 	"log"
 	"os"
@@ -24,7 +24,7 @@ var dbLogger = logger.New(
 
 // generate database connection string
 func getDSN() (string, error) {
-	dbCfg, err := config.NewConfig()
+	dbCfg, err := config2.NewConfig()
 
 	if err != nil {
 		return "", nil
