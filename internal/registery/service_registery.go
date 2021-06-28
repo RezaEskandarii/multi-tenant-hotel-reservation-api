@@ -6,6 +6,7 @@ import (
 	"hotel-reservation/internal/handlers"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
+	"hotel-reservation/pkg/translator"
 )
 
 // services
@@ -24,6 +25,12 @@ var (
 	currencyHandler = handlers.CurrencyHandler{}
 )
 
+// pckgs
+
+var (
+	i18nTranslator = translator.New()
+)
+
 // RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group) {
 
@@ -36,7 +43,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	provinceHandler.Register(provinceRouter, provinceService)
 
 	citiesRouter := router.Group("/cities")
-	cityHandler.Register(citiesRouter, cityService)
+	cityHandler.Register(citiesRouter, cityService, i18nTranslator)
 
 	currencyRouter := router.Group("/currencies")
 	currencyHandler.Register(currencyRouter, currencyService)
