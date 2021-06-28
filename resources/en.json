@@ -1,7 +1,13 @@
 {
   "RoomBusy": "This room is reserved.",
-
   "CrudMessages": {
-    "Created": "The creation operation was successful."
+    "Created": "The creation operation was successful.",
+    "Updated": "Editing operation completed successfully.",
+    "Deleted": "The removal operation was successful."
+  },
+  "Errors": {
+    "NotFound": "No items found.",
+    "InternalServerError": "InternalServerError",
+    "BadRequest": "BadRequest"
   }
 }
