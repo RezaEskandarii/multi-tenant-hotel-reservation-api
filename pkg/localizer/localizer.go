@@ -17,6 +17,7 @@ var (
 )
 
 func New() *Translator {
+
 	bundle := *i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 	_, err := bundle.LoadMessageFile("resources/en.json")
@@ -30,6 +31,7 @@ func New() *Translator {
 	return &Translator{bundle: bundle}
 }
 
+// Localize Translates the given message into the given language.
 func (t *Translator) Localize(lang string, key string) string {
 
 	if lang == "" || strings.TrimSpace(lang) == "" {

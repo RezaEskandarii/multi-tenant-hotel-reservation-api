@@ -1,3 +1,7 @@
 {
-  "RoomBusy": "This room is reserved."
+  "RoomBusy": "This room is reserved.",
+
+  "CrudMessages": {
+    "Created": "The creation operation was successful."
+  }
 }
