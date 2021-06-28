@@ -25,7 +25,7 @@ type Config struct {
 }
 
 func NewConfig() (*Config, error) {
-	cfgFile, err := ioutil.ReadFile("./data/config.yml")
+	cfgFile, err := ioutil.ReadFile("./resources/config.yml")
 
 	if err != nil {
 		application_loger.LogError(err.Error())
