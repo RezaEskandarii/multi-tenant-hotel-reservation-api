@@ -7,7 +7,7 @@ const (
 
 	Created = CrudMessages + "Created"
 	Updated = CrudMessages + "Updated"
-	Deleted = CrudMessages + ".Deleted"
+	Deleted = CrudMessages + "Deleted"
 
 	NotFound            = Errors + "NotFound"
 	InternalServerError = Errors + "InternalServerError"
