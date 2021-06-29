@@ -28,7 +28,7 @@ func (s *CityService) Update(city *models.City) (*models.City, error) {
 	return s.Repository.Update(city)
 }
 
-// Find returns city شnd if it does not find the city, it returns nil.
+// Find returns city and if it does not find the city, it returns nil.
 func (s *CityService) Find(id uint64) (*models.City, error) {
 
 	return s.Repository.Find(id)
