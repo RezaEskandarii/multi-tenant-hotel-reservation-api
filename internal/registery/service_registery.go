@@ -26,7 +26,6 @@ var (
 )
 
 // pckgs
-
 var (
 	i18nTranslator = translator.New()
 )
