@@ -11,15 +11,18 @@ type CountryService struct {
 	Repository repositories.CountryRepository
 }
 
+// NewCountryService returns new countryService
 func NewCountryService() *CountryService {
 	return &CountryService{}
 }
 
+// Create creates new country.
 func (s *CountryService) Create(country *models.Country) (*models.Country, error) {
 
 	return s.Repository.Create(country)
 }
 
+// Update updates country.
 func (s *CountryService) Update(country *models.Country) (*models.Country, error) {
 
 	return s.Repository.Update(country)

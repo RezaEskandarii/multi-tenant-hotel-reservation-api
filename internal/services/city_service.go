@@ -11,25 +11,30 @@ type CityService struct {
 	Repository repositories.CityRepository
 }
 
+// NewCityService returns new cityService
 func NewCityService() *CityService {
 	return &CityService{}
 }
 
+// Create creates new city.
 func (s *CityService) Create(city *models.City) (*models.City, error) {
 
 	return s.Repository.Create(city)
 }
 
+// Update updates city.
 func (s *CityService) Update(city *models.City) (*models.City, error) {
 
 	return s.Repository.Update(city)
 }
 
+// Find returns city شnd if it does not find the city, it returns nil.
 func (s *CityService) Find(id uint64) (*models.City, error) {
 
 	return s.Repository.Find(id)
 }
 
+// FindAll returns paginates list of cities.
 func (s *CityService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
