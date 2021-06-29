@@ -11,7 +11,7 @@ type CityService struct {
 	Repository repositories.CityRepository
 }
 
-// NewCityService returns new cityService
+// NewCityService returns new CityService
 func NewCityService() *CityService {
 	return &CityService{}
 }

@@ -11,7 +11,7 @@ type CountryService struct {
 	Repository repositories.CountryRepository
 }
 
-// NewCountryService returns new countryService
+// NewCountryService returns new CountryService
 func NewCountryService() *CountryService {
 	return &CountryService{}
 }
