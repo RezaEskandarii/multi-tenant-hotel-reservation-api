@@ -18,24 +18,24 @@ func NewCurrencyRepository(db *gorm.DB) *CurrencyRepository {
 	}
 }
 
-func (r *CurrencyRepository) Create(country *models.Currency) (*models.Currency, error) {
+func (r *CurrencyRepository) Create(currency *models.Currency) (*models.Currency, error) {
 
-	if tx := r.DB.Create(&country); tx.Error != nil {
+	if tx := r.DB.Create(&currency); tx.Error != nil {
 		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
-	return country, nil
+	return currency, nil
 }
 
-func (r *CurrencyRepository) Update(country *models.Currency) (*models.Currency, error) {
+func (r *CurrencyRepository) Update(currency *models.Currency) (*models.Currency, error) {
 
-	if tx := r.DB.Updates(&country); tx.Error != nil {
+	if tx := r.DB.Updates(&currency); tx.Error != nil {
 		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
-	return country, nil
+	return currency, nil
 }
 
 func (r *CurrencyRepository) Find(id uint64) (*models.Currency, error) {
