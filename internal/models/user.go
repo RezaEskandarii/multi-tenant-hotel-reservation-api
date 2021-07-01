@@ -24,8 +24,8 @@ type User struct {
 	Email                string     `json:"email"`
 	PhoneNumber          string     `json:"phone_number"`
 	BirthDate            *time.Time `json:"birth_date"`
-	PhoneNumberConfirmed bool       `json:"phone_number_confirmed"`
-	EmailConfirmed       bool       `json:"email_confirmed"`
+	PhoneNumberConfirmed bool       `json:"-"`
+	EmailConfirmed       bool       `json:"-"`
 	Password             string     `json:"password,omitempty"`
 	CityId               int        `json:"city_id"`
 	City                 *City      `json:"city"`

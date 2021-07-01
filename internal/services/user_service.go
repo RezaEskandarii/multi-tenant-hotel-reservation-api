@@ -34,6 +34,7 @@ func (s *UserService) Find(id uint64) (*models.User, error) {
 	return s.Repository.Find(id)
 }
 
+// FindByUsername returns User by username and if it does not find the User, it returns nil.
 func (s *UserService) FindByUsername(username string) (*models.User, error) {
 
 	return s.Repository.FindByUsername(username)

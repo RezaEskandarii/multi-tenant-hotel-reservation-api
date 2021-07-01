@@ -28,6 +28,7 @@ func (handler *UserHandler) Register(router *echo.Group, service *services.UserS
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
+	handler.Router.GET("/by-username/:username", handler.findByUsername)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 
@@ -44,6 +45,16 @@ func (handler *UserHandler) create(c echo.Context) error {
 				ResponseCode: http.StatusBadRequest,
 				Message:      handler.translator.Localize(lang, message_keys.BadRequest),
 			})
+	}
+
+	oldUser, _ := handler.Service.FindByUsername(model.Username)
+
+	if oldUser != nil && oldUser.Id > 0 {
+		return c.JSON(http.StatusConflict, commons.ApiResponse{
+			Data:         nil,
+			ResponseCode: http.StatusConflict,
+			Message:      handler.translator.Localize(lang, message_keys.UsernameDuplicated),
+		})
 	}
 
 	if _, err := handler.Service.Create(&model); err == nil {
@@ -152,6 +163,37 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
+		ResponseCode: http.StatusOK,
+		Message:      "",
+	})
+}
+
+func (handler *UserHandler) findByUsername(c echo.Context) error {
+
+	username := c.Param("username")
+
+	model, err := handler.Service.FindByUsername(username)
+
+	lang := c.Request().Header.Get(acceptLanguage)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
+			Data:         nil,
+			ResponseCode: http.StatusInternalServerError,
+			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
+		})
+	}
+
+	if model == nil {
+		return c.JSON(http.StatusNotFound, commons.ApiResponse{
+			Data:         nil,
+			ResponseCode: http.StatusNotFound,
+			Message:      handler.translator.Localize(lang, message_keys.NotFound),
+		})
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:         model,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

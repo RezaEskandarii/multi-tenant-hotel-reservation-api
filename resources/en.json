@@ -9,5 +9,8 @@
     "NotFound": "No items found.",
     "InternalServerError": "InternalServerError",
     "BadRequest": "BadRequest"
+  },
+  "Users": {
+    "DuplicatedUsername": "Username is duplicate."
   }
 }

@@ -4,6 +4,7 @@ package message_keys
 const (
 	CrudMessages = "CrudMessages."
 	Errors       = "Errors."
+	Users        = "Users."
 
 	Created = CrudMessages + "Created"
 	Updated = CrudMessages + "Updated"
@@ -12,4 +13,6 @@ const (
 	NotFound            = Errors + "NotFound"
 	InternalServerError = Errors + "InternalServerError"
 	BadRequest          = Errors + "BadRequest"
+
+	UsernameDuplicated = Users + "DuplicatedUsername"
 )
