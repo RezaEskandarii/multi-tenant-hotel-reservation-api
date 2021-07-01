@@ -15,6 +15,7 @@ var (
 	provinceService = *services.NewProvinceService()
 	cityService     = *services.NewCityService()
 	currencyService = *services.NewCurrencyService()
+	userService     = services.NewUserService()
 )
 
 // handlers
@@ -23,6 +24,7 @@ var (
 	provinceHandler = handlers.ProvinceHandler{}
 	cityHandler     = handlers.CityHandler{}
 	currencyHandler = handlers.CurrencyHandler{}
+	usersHandler    = handlers.UserHandler{}
 )
 
 // pckgs
@@ -46,6 +48,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	currencyRouter := router.Group("/currencies")
 	currencyHandler.Register(currencyRouter, currencyService)
+
+	usersRouter := router.Group("/users")
+	usersHandler.Register(usersRouter, userService, i18nTranslator)
 }
 
 func setRepositoriesDb(db *gorm.DB) {
@@ -54,5 +59,5 @@ func setRepositoriesDb(db *gorm.DB) {
 	cityService.Repository.DB = db
 
 	currencyService.Repository = repositories.NewCurrencyRepository(db)
-
+	userService.Repository = *repositories.NewUserRepository(db)
 }
