@@ -53,6 +53,14 @@ func (r *UserRepository) Find(id uint64) (*models.User, error) {
 	return &model, nil
 }
 
+func (r *UserRepository) Delete(id uint64) error {
+	if tx := r.DB.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
 func (r *UserRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return finAll(&models.User{}, r.DB, input)
