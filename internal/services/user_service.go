@@ -34,6 +34,11 @@ func (s *UserService) Find(id uint64) (*models.User, error) {
 	return s.Repository.Find(id)
 }
 
+func (s *UserService) FindByUsername(username string) (*models.User, error) {
+
+	return s.Repository.FindByUsername(username)
+}
+
 // Delete removes user permanently;
 func (s *UserService) Delete(id uint64) error {
 

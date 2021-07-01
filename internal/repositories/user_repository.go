@@ -53,6 +53,21 @@ func (r *UserRepository) Find(id uint64) (*models.User, error) {
 	return &model, nil
 }
 
+func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
+
+	model := models.User{Username: username}
+	if tx := r.DB.Where(model).Find(&model); tx.Error != nil {
+		application_loger.LogError(tx.Error)
+		return nil, tx.Error
+	}
+
+	if model.Id == 0 {
+		return nil, nil
+	}
+
+	return &model, nil
+}
+
 func (r *UserRepository) Delete(id uint64) error {
 	if tx := r.DB.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error
