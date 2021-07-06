@@ -38,16 +38,16 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	setRepositoriesDb(db)
 
 	countriesRouter := router.Group("/countries")
-	countryHandler.Register(countriesRouter, countryService)
+	countryHandler.Register(countriesRouter, countryService, i18nTranslator)
 
 	provinceRouter := router.Group("/provinces")
-	provinceHandler.Register(provinceRouter, provinceService)
+	provinceHandler.Register(provinceRouter, provinceService, i18nTranslator)
 
 	citiesRouter := router.Group("/cities")
 	cityHandler.Register(citiesRouter, cityService, i18nTranslator)
 
 	currencyRouter := router.Group("/currencies")
-	currencyHandler.Register(currencyRouter, currencyService)
+	currencyHandler.Register(currencyRouter, currencyService, i18nTranslator)
 
 	usersRouter := router.Group("/users")
 	usersHandler.Register(usersRouter, userService, i18nTranslator)

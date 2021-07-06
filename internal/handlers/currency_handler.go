@@ -4,22 +4,27 @@ import (
 	"github.com/labstack/echo/v4"
 	. "hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
+	"hotel-reservation/internal/message_keys"
 	"hotel-reservation/internal/middlewares"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
+	"hotel-reservation/pkg/translator"
 	"net/http"
 )
 
 // CurrencyHandler Currency endpoint handler
 type CurrencyHandler struct {
-	Router  *echo.Group
-	Service services.CurrencyService
+	Router     *echo.Group
+	Service    services.CurrencyService
+	translator *translator.Translator
 }
 
-func (handler *CurrencyHandler) Register(router *echo.Group, service services.CurrencyService) {
+func (handler *CurrencyHandler) Register(router *echo.Group, service services.CurrencyService, translator *translator.Translator) {
 	handler.Router = router
 	handler.Service = service
+	handler.translator = translator
+
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
@@ -29,13 +34,14 @@ func (handler *CurrencyHandler) Register(router *echo.Group, service services.Cu
 func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
+	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         nil,
 				ResponseCode: BadRequest,
-				Message:      "BadRequest",
+				Message:      handler.translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
 
@@ -44,7 +50,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			ApiResponse{
 				Data:         model,
 				ResponseCode: Ok,
-				Message:      "Ok",
+				Message:      handler.translator.Localize(lang, message_keys.Created),
 			})
 	}
 
@@ -52,7 +58,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 		ApiResponse{
 			Data:         nil,
 			ResponseCode: InternalServerError,
-			Message:      "BadRequest",
+			Message:      "",
 		})
 
 }
@@ -64,12 +70,12 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
-
+	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
 			ResponseCode: InternalServerError,
-			Message:      "server error",
+			Message:      "",
 		})
 	}
 
@@ -77,7 +83,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      "Not Found",
+			Message:      handler.translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -89,7 +95,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,
-			Message:      "Successfully updated",
+			Message:      handler.translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -102,12 +108,12 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
-
+	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
 			ResponseCode: InternalServerError,
-			Message:      "server error",
+			Message:      "",
 		})
 	}
 
@@ -115,7 +121,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      "Not Found",
+			Message:      handler.translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
