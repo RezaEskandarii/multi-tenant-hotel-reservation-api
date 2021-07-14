@@ -1,3 +1,16 @@
 {
-  "RoomBusy": "اتاق رزرو شده است."
+  "RoomBusy": "این اتاق رزرو شده است.",
+  "CrudMessages": {
+    "Created": "درج با موفقیت انجام شد.",
+    "Updated": "ویرایش با موفقیت انجام شد.",
+    "Deleted": "حذف با موفقیت انجام شد."
+  },
+  "Errors": {
+    "NotFound": "هیچ رکوردی پیدا نشد.",
+    "InternalServerError": "ارور",
+    "BadRequest": "درخواست با فرمت اشتباه"
+  },
+  "Users": {
+    "DuplicatedUsername": "نام کاربری تکراری است."
+  }
 }
