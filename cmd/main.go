@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"hotel-reservation/internal/bootstrap"
+	"hotel-reservation/internal/kernel"
 	"hotel-reservation/pkg/application_loger"
 	"os"
 )
@@ -14,7 +14,7 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "application port")
 	flag.Parse()
 
-	err := bootstrap.Run(port)
+	err := kernel.Run(port)
 	if err != nil {
 		application_loger.LogInfo("exit ...")
 		os.Exit(1)

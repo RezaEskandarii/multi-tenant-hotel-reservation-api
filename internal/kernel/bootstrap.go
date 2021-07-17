@@ -1,4 +1,4 @@
-package bootstrap
+package kernel
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"hotel-reservation/internal/registery"
 	"hotel-reservation/pkg/application_loger"
 	"hotel-reservation/pkg/database"
+	"net/http"
 )
 
 // Run run application
@@ -37,9 +38,20 @@ func Run(port int) error {
 	portStr := fmt.Sprintf(":%d", port)
 
 	e := echo.New()
+
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
+
+	corsCfg := middleware.CORSConfig{
+		Skipper: func(context echo.Context) bool {
+			return true
+		},
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+	}
+
+	e.Use(middleware.CORSWithConfig(corsCfg))
 
 	router := e.Group("/v1")
 
