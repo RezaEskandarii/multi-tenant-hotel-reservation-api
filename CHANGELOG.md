@@ -1,6 +1,18 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+### Doc
+- regenerate changelog file
+
+### Feat
+- add cors origin middleware
+- add persian new translations
+- add translator package to handlers
+- add findByUsername function user handler
+- add findByUsername function in userService
+- add user handler
+- add user service
+
 
 <a name="v0.1"></a>
 ## v0.1 - 2021-06-29
