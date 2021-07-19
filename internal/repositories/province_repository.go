@@ -12,6 +12,12 @@ type ProvinceRepository struct {
 	DB *gorm.DB
 }
 
+func NewProvinceRepository(db *gorm.DB) *ProvinceRepository {
+	return &ProvinceRepository{
+		DB: db,
+	}
+}
+
 func (r *ProvinceRepository) Create(province *models.Province) (*models.Province, error) {
 
 	if tx := r.DB.Create(&province); tx.Error != nil {

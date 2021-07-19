@@ -8,7 +8,7 @@ import (
 )
 
 type CountryService struct {
-	Repository repositories.CountryRepository
+	Repository *repositories.CountryRepository
 }
 
 // NewCountryService returns new CountryService

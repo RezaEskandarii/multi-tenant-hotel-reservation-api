@@ -54,10 +54,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 }
 
 func setRepositoriesDb(db *gorm.DB) {
-	countryService.Repository.DB = db
-	provinceService.Repository.DB = db
-	cityService.Repository.DB = db
-
+	countryService.Repository = repositories.NewCountryRepository(db)
+	provinceService.Repository = repositories.NewProvinceRepository(db)
+	cityService.Repository = repositories.NewCityRepository(db)
 	currencyService.Repository = repositories.NewCurrencyRepository(db)
 	userService.Repository = *repositories.NewUserRepository(db)
 }

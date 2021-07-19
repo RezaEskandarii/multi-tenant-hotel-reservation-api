@@ -20,6 +20,12 @@ type CityRepository struct {
 //	Delete(id uint64) error
 //}
 
+func NewCityRepository(db *gorm.DB) *CityRepository {
+	return &CityRepository{
+		DB: db,
+	}
+}
+
 func (r *CityRepository) Create(city *models.City) (*models.City, error) {
 
 	if tx := r.DB.Create(&city); tx.Error != nil {

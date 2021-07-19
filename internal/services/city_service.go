@@ -8,7 +8,7 @@ import (
 )
 
 type CityService struct {
-	Repository repositories.CityRepository
+	Repository *repositories.CityRepository
 }
 
 // NewCityService returns new CityService
