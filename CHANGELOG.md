@@ -59,7 +59,7 @@
 - add project structure and folders
 
 ### Fix
-- fix check error in create city handler
+- fix check errorLevel in create city handler
 
 ### Refactor
 - change localizer directory name to translator
