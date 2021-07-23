@@ -26,7 +26,6 @@ func Migrate(db *gorm.DB) error {
 	if err != nil {
 		application_loger.LogDebug(err.Error())
 	}
-	db = db.Debug()
 
 	for _, entity := range entities {
 		err = db.AutoMigrate(entity)

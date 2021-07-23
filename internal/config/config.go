@@ -19,8 +19,10 @@ type Config struct {
 	}
 
 	Application struct {
-		Port        string `yaml:"port"`
-		ClusterName string `yaml:"cluster_name"`
+		Port            string `yaml:"port"`
+		ClusterName     string `yaml:"cluster_name"`
+		IgnoreMigration bool   `yaml:"ignore_migration"`
+		SqlDebug        bool   `json:"sql_debug"`
 	}
 }
 

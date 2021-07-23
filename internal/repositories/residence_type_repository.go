@@ -40,7 +40,7 @@ func (r *ResidenceTypeRepository) Find(id uint64) (*models.ResidenceType, error)
 
 	model := models.ResidenceType{}
 
-	if tx := r.DB.Where("id=?", id).Preload("ResidenceGrade").Find(&model); tx.Error != nil {
+	if tx := r.DB.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
 		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"hotel-reservation/internal/config"
 	"hotel-reservation/internal/registery"
 	"hotel-reservation/pkg/application_loger"
 	"hotel-reservation/pkg/database"
@@ -21,18 +22,26 @@ func Run(port int) error {
 		}
 	}()
 
-	db, err := database.GetDb()
-
-	db = db.Debug()
+	cfg, err := config.NewConfig()
 
 	if err != nil {
 		return err
 	}
 
-	err = database.Migrate(db)
-
+	db, err := database.GetDb()
 	if err != nil {
 		return err
+	}
+
+	if cfg.Application.SqlDebug {
+		db = db.Debug()
+	}
+
+	if cfg.Application.IgnoreMigration == false {
+		err = database.Migrate(db)
+		if err != nil {
+			return err
+		}
 	}
 
 	portStr := fmt.Sprintf(":%d", port)
