@@ -8,7 +8,7 @@ import (
 )
 
 type UserService struct {
-	Repository repositories.UserRepository
+	Repository *repositories.UserRepository
 }
 
 // NewUserService returns new UserService
