@@ -13,6 +13,7 @@ var (
 		models.Province{},
 		models.Currency{},
 		models.User{},
+		models.Residence{},
 	}
 )
 
