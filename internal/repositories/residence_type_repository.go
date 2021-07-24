@@ -1,17 +1,11 @@
 package repositories
 
 import (
-	"errors"
 	"gorm.io/gorm"
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/message_keys"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/pkg/application_loger"
-)
-
-var (
-	TypeHasResidenceError = errors.New(message_keys.TypeHasResidence)
 )
 
 type ResidenceTypeRepository struct {

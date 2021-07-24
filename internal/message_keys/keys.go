@@ -16,5 +16,6 @@ const (
 
 	UsernameDuplicated = Users + "DuplicatedUsername"
 
-	TypeHasResidence = "TypeHasResidence"
+	TypeHasResidence  = "TypeHasResidence"
+	GradeHasResidence = "GradeHasResidence"
 )
