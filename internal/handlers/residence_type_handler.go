@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/labstack/echo/v4"
 	"hotel-reservation/internal/commons"
+	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/message_keys"
 	"hotel-reservation/internal/middlewares"
 	"hotel-reservation/internal/models"
@@ -27,7 +28,7 @@ func (handler *ResidenceTypeHandler) Register(router *echo.Group, service servic
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
-	handler.Router.GET("/:id/cities", handler.cities)
+	handler.Router.GET("/:id/delete", handler.delete)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 
@@ -128,12 +129,47 @@ func (handler *ResidenceTypeHandler) find(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceTypeHandler) cities(c echo.Context) error {
-
-	panic("not implemented")
-}
-
 func (handler *ResidenceTypeHandler) findAll(c echo.Context) error {
 
-	panic("not implemented")
+	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
+
+	list, err := handler.Service.FindAll(paginationInput)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:         list,
+		ResponseCode: http.StatusOK,
+		Message:      "",
+	})
+}
+
+func (handler *ResidenceTypeHandler) delete(c echo.Context) error {
+
+	id, err := utils.ConvertToUint(c.Param("id"))
+	lang := c.Request().Header.Get(acceptLanguage)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      handler.translator.Localize(lang, message_keys.BadRequest),
+		})
+	}
+
+	err = handler.Service.Delete(id)
+
+	if err != nil {
+
+		return c.JSON(http.StatusConflict, commons.ApiResponse{
+			ResponseCode: http.StatusConflict,
+			Message:      handler.translator.Localize(lang, err.Error()),
+		})
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		ResponseCode: http.StatusOK,
+		Message:      handler.translator.Localize(lang, message_keys.Deleted),
+	})
 }
