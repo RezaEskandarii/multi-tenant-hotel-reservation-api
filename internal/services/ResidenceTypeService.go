@@ -39,3 +39,9 @@ func (s *ResidenceTypeService) FindAll(input *dto.PaginationInput) (*commons.Pag
 
 	return s.Repository.FindAll(input)
 }
+
+// Delete removes residence type by given id.
+func (s *ResidenceTypeService) Delete(id uint64) error {
+
+	return s.Repository.Delete(id)
+}

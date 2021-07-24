@@ -15,4 +15,6 @@ const (
 	BadRequest          = Errors + "BadRequest"
 
 	UsernameDuplicated = Users + "DuplicatedUsername"
+
+	TypeHasResidence = "TypeHasResidence"
 )
