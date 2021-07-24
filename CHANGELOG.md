@@ -2,9 +2,22 @@
 ## [Unreleased]
 
 ### Doc
+- add some comments
 - regenerate changelog file
 
 ### Feat
+- implement find all and delete function in residence_type_handler
+- implement find all and delete function in residence_grade_handler
+- add residence grade handler
+- add ResidenceGradeService
+- add residence_grade_repository
+- add delete function to residence_type_repository
+- implement update residence type function
+- add ResidenceType handler
+- add ResidenceTypeService and ResidenceTypeRepository
+- add ResidenceType and ResidenceGrade struct and add to Residence struct relations
+- add Residence struct
+- implement logger package methods and add disitlog library
 - add cors origin middleware
 - add persian new translations
 - add translator package to handlers
@@ -12,6 +25,10 @@
 - add findByUsername function in userService
 - add user handler
 - add user service
+
+### Refactor
+- add logs file to gitignore
+- refactor services dependencies
 
 
 <a name="v0.1"></a>
@@ -59,7 +76,7 @@
 - add project structure and folders
 
 ### Fix
-- fix check errorLevel in create city handler
+- fix check error in create city handler
 
 ### Refactor
 - change localizer directory name to translator
