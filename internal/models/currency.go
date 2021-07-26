@@ -2,6 +2,6 @@ package models
 
 type Currency struct {
 	BaseModel
-	Name   string `json:"name"`
-	Symbol string `json:"symbol"`
+	Name   string `json:"name" valid:"required"`
+	Symbol string `json:"symbol" valid:"required"`
 }

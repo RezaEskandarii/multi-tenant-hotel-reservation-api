@@ -18,20 +18,20 @@ var (
 
 type User struct {
 	BaseModel
-	FirstName            string     `json:"first_name"`
-	LastName             string     `json:"last_name"`
-	Username             string     `json:"username"`
-	Email                string     `json:"email"`
-	PhoneNumber          string     `json:"phone_number"`
+	FirstName            string     `json:"first_name" valid:"required"`
+	LastName             string     `json:"last_name" valid:"required"`
+	Username             string     `json:"username" valid:"required"`
+	Email                string     `json:"email" valid:"required,email"`
+	PhoneNumber          string     `json:"phone_number" valid:"required"`
 	BirthDate            *time.Time `json:"birth_date"`
 	PhoneNumberConfirmed bool       `json:"-"`
 	EmailConfirmed       bool       `json:"-"`
 	Password             string     `json:"password,omitempty"`
 	CityId               int        `json:"city_id"`
 	City                 *City      `json:"city"`
-	Gender               Gender     `json:"gender"`
+	Gender               Gender     `json:"gender" valid:"required"`
 	PassportNumber       string     `json:"passport_number"`
-	NationalId           string     `json:"national_id"`
+	NationalId           string     `json:"national_id" valid:"required"`
 	Address              string     `json:"address"`
 }
 

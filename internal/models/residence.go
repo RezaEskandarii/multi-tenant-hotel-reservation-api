@@ -2,23 +2,23 @@ package models
 
 type Residence struct {
 	BaseModel
-	Name             string         `json:"name" gorm:"type:varchar(100)"`
-	PhoneNumber1     string         `json:"phone_number1" gorm:"type:varchar(100)"`
+	Name             string         `json:"name" gorm:"type:varchar(100)" valid:"required"`
+	PhoneNumber1     string         `json:"phone_number1" gorm:"type:varchar(100)" valid:"required"`
 	PhoneNumber2     string         `json:"phone_number2" gorm:"type:varchar(100)"`
 	Province         Province       `json:"province"`
-	ProvinceId       uint64         `json:"province_id" gorm:"foreignKey:Province"`
-	Address          string         `json:"address"`
-	PostalCode       string         `json:"postal_code" gorm:"type:varchar(100)"`
-	Longitude        float64        `json:"longitude"`
-	Latitude         float64        `json:"latitude"`
+	ProvinceId       uint64         `json:"province_id" gorm:"foreignKey:Province" valid:"required"`
+	Address          string         `json:"address" valid:"required"`
+	PostalCode       string         `json:"postal_code" gorm:"type:varchar(100)" valid:"required"`
+	Longitude        float64        `json:"longitude" valid:"required"`
+	Latitude         float64        `json:"latitude" valid:"required"`
 	FaxNumber        string         `json:"fax_number" gorm:"type:varchar(100)"`
 	Website          string         `json:"website" gorm:"type:varchar(100)"`
-	EmailAddress     string         `json:"email_address" gorm:"type:varchar(100)"`
+	EmailAddress     string         `json:"email_address" gorm:"type:varchar(100)" valid:"email"`
 	Owner            User           `json:"owner"`
-	OwnerId          uint64         `json:"owner_id" gorm:"foreignKey:Owner"`
+	OwnerId          uint64         `json:"owner_id" gorm:"foreignKey:Owner" valid:"required"`
 	Description      string         `json:"description"`
 	ResidenceType    ResidenceType  `json:"residence_type"`
-	ResidenceTypeId  uint64         `json:"residence_type_id" gorm:"foreignKey:ResidenceType"`
+	ResidenceTypeId  uint64         `json:"residence_type_id" gorm:"foreignKey:ResidenceType" valid:"required"`
 	ResidenceGrade   ResidenceGrade `json:"residence_grade"`
-	ResidenceGradeId uint64         `json:"residence_grade_id" gorm:"foreignKey:ResidenceGrade"`
+	ResidenceGradeId uint64         `json:"residence_grade_id" gorm:"foreignKey:ResidenceGrade" valid:"required"`
 }

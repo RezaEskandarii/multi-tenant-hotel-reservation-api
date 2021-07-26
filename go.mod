@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/amoghe/distillog v0.0.0-20180726233512-ae382b35b717 // indirect
 	github.com/andskur/argon2-hashing v0.1.3 // indirect
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/labstack/echo/v4 v4.3.0 // indirect
 	github.com/lib/pq v1.10.2 // indirect
