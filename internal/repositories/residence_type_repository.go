@@ -74,6 +74,14 @@ func (r ResidenceTypeRepository) Delete(id uint64) error {
 
 		application_loger.LogError(query.Error)
 		return query.Error
+	} else {
+
+		query = r.DB.Model(&models.ResidenceGrade{}).Where(&models.ResidenceGrade{ResidenceTypeId: id}).Delete(&models.ResidenceGrade{})
+
+		if query.Error != nil {
+			application_loger.LogError(query.Error)
+			return query.Error
+		}
 	}
 
 	return nil

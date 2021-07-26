@@ -16,11 +16,11 @@ import (
 // ResidenceGradeHandler Province endpoint handler
 type ResidenceGradeHandler struct {
 	Router     *echo.Group
-	Service    services.ResidenceGradeService
+	Service    *services.ResidenceGradeService
 	translator *translator.Translator
 }
 
-func (handler *ResidenceGradeHandler) Register(router *echo.Group, service services.ResidenceGradeService, translator *translator.Translator) {
+func (handler *ResidenceGradeHandler) Register(router *echo.Group, service *services.ResidenceGradeService, translator *translator.Translator) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator
@@ -28,7 +28,7 @@ func (handler *ResidenceGradeHandler) Register(router *echo.Group, service servi
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
-	handler.Router.DELETE("/:id/delete", handler.delete)
+	handler.Router.DELETE("/:id", handler.delete)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 
@@ -85,8 +85,19 @@ func (handler *ResidenceGradeHandler) update(c echo.Context) error {
 		})
 	}
 
-	name := c.FormValue("name")
-	result.Name = name
+	tmpModel := models.ResidenceGrade{}
+
+	err = c.Bind(&tmpModel)
+
+	if err != nil {
+
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      handler.translator.Localize(lang, message_keys.BadRequest),
+		})
+	}
+
+	result.Name = tmpModel.Name
 
 	updatedMode, err := handler.Service.Update(result)
 

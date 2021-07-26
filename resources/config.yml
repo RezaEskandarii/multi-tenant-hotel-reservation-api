@@ -9,5 +9,5 @@ database:
 application:
   port: 8080
   cluster_name: cluster1
-  ignore_migration: true
+  ignore_migration: false
   sql_debug: true

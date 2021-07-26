@@ -28,7 +28,7 @@ func (handler *ResidenceTypeHandler) Register(router *echo.Group, service servic
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
-	handler.Router.GET("/:id/delete", handler.delete)
+	handler.Router.DELETE("/:id", handler.delete)
 	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
 }
 

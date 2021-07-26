@@ -11,22 +11,24 @@ import (
 
 // services
 var (
-	countryService       = *services.NewCountryService()
-	provinceService      = *services.NewProvinceService()
-	cityService          = *services.NewCityService()
-	currencyService      = *services.NewCurrencyService()
-	userService          = services.NewUserService()
-	residenceTypeService = *services.NewResidenceTypeService()
+	countryService        = *services.NewCountryService()
+	provinceService       = *services.NewProvinceService()
+	cityService           = *services.NewCityService()
+	currencyService       = *services.NewCurrencyService()
+	userService           = services.NewUserService()
+	residenceTypeService  = *services.NewResidenceTypeService()
+	residenceGradeService = *services.NewResidenceGradeService()
 )
 
 // handlers
 var (
-	countryHandler       = handlers.CountryHandler{}
-	provinceHandler      = handlers.ProvinceHandler{}
-	cityHandler          = handlers.CityHandler{}
-	currencyHandler      = handlers.CurrencyHandler{}
-	usersHandler         = handlers.UserHandler{}
-	residenceTypeHandler = handlers.ResidenceTypeHandler{}
+	countryHandler        = handlers.CountryHandler{}
+	provinceHandler       = handlers.ProvinceHandler{}
+	cityHandler           = handlers.CityHandler{}
+	currencyHandler       = handlers.CurrencyHandler{}
+	usersHandler          = handlers.UserHandler{}
+	residenceTypeHandler  = handlers.ResidenceTypeHandler{}
+	residenceGradeHandler = handlers.ResidenceGradeHandler{}
 )
 
 // pckgs
@@ -56,6 +58,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	residenceTypeRouter := router.Group("/residence-type")
 	residenceTypeHandler.Register(residenceTypeRouter, residenceTypeService, i18nTranslator)
+
+	residenceGradeRouter := router.Group("/residence-grade")
+	residenceGradeHandler.Register(residenceGradeRouter, &residenceGradeService, i18nTranslator)
 }
 
 func setRepositoriesDb(db *gorm.DB) {
@@ -65,4 +70,5 @@ func setRepositoriesDb(db *gorm.DB) {
 	currencyService.Repository = repositories.NewCurrencyRepository(db)
 	userService.Repository = repositories.NewUserRepository(db)
 	residenceTypeService.Repository = repositories.NewResidenceTypeRepository(db)
+	residenceGradeService.Repository = repositories.NewResidenceGradeRepository(db)
 }
