@@ -34,7 +34,7 @@ func (s *ResidenceTypeService) Find(id uint64) (*models.ResidenceType, error) {
 	return s.Repository.Find(id)
 }
 
-// FindAll returns paginates list of currencies
+// FindAll returns paginates list of residence types.
 func (s *ResidenceTypeService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
