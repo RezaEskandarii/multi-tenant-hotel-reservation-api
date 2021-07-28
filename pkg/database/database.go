@@ -61,7 +61,11 @@ func getDSN() (string, error) {
 	}
 }
 
-func GetDb() (*gorm.DB, error) {
+func GetDb(isTest bool) (*gorm.DB, error) {
+
+	if isTest {
+		os.Setenv("CONFIG_PATH", "../../resources/config.yml")
+	}
 
 	connectionString, err := getDSN()
 

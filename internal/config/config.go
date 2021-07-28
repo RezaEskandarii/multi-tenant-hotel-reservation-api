@@ -4,6 +4,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"hotel-reservation/pkg/application_loger"
 	"io/ioutil"
+	"os"
 )
 
 // Config application config struct
@@ -27,7 +28,14 @@ type Config struct {
 }
 
 func NewConfig() (*Config, error) {
-	cfgFile, err := ioutil.ReadFile("./resources/config.yml")
+	path := "./resources/config.yml"
+
+	if os.Getenv("CONFIG_PATH") != "" {
+
+		path = os.Getenv("CONFIG_PATH")
+	}
+
+	cfgFile, err := ioutil.ReadFile(path)
 
 	if err != nil {
 		application_loger.LogError(err.Error())
