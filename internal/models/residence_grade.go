@@ -13,17 +13,15 @@ type ResidenceGrade struct {
 }
 
 func (r *ResidenceGrade) Validate() (bool, error) {
-
 	ok, err := govalidator.ValidateStruct(r)
+
 	if err != nil {
 		return false, err
 	}
-
 	return ok, nil
 }
 
 func (r *ResidenceGrade) BeforeCreate(tx *gorm.DB) error {
-
 	_, err := r.Validate()
 
 	if err != nil {

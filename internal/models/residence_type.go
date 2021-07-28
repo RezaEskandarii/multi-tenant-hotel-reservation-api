@@ -12,8 +12,8 @@ type ResidenceType struct {
 }
 
 func (r *ResidenceType) Validate() (bool, error) {
-
 	ok, err := govalidator.ValidateStruct(r)
+
 	if err != nil {
 		return false, err
 	}
@@ -22,13 +22,11 @@ func (r *ResidenceType) Validate() (bool, error) {
 }
 
 func (r *ResidenceType) BeforeCreate(tx *gorm.DB) error {
-
 	_, err := r.Validate()
 
 	if err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }

@@ -51,7 +51,6 @@ func (u *User) Validate() (bool, error) {
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {
-
 	_, err := u.Validate()
 
 	if err != nil {
@@ -66,13 +65,13 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	}
 
 	hash, err := argon2.GenerateFromPassword([]byte(u.Password), argon2.DefaultParams)
+
 	if err != nil {
 		tx.AddError(err)
 		return err
 	}
 
 	u.Password = fmt.Sprintf("%s", hash)
-
 	return nil
 }
 
