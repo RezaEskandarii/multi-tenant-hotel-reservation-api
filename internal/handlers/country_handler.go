@@ -42,27 +42,26 @@ func (handler *CountryHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         nil,
-				ResponseCode: BadRequest,
+				ResponseCode: http.StatusBadRequest,
 				Message:      handler.translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
 
-	if _, err := handler.Service.Create(model); err == nil {
-		return c.JSON(http.StatusBadRequest,
-			ApiResponse{
-				Data:         model,
-				ResponseCode: Ok,
-				Message:      handler.translator.Localize(lang, message_keys.Created),
-			})
+	output, err := handler.Service.Create(model)
+
+	if err != nil {
+
+		return c.JSON(http.StatusBadRequest, ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      err.Error(),
+		})
 	}
 
-	return c.JSON(http.StatusInternalServerError,
-		ApiResponse{
-			Data:         nil,
-			ResponseCode: InternalServerError,
-			Message:      handler.translator.Localize(lang, message_keys.BadRequest),
-		})
-
+	return c.JSON(http.StatusBadRequest, ApiResponse{
+		ResponseCode: http.StatusOK,
+		Message:      handler.translator.Localize(lang, message_keys.Created),
+		Data:         output,
+	})
 }
 
 func (handler *CountryHandler) update(c echo.Context) error {
@@ -77,8 +76,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
-			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
 		})
 	}
@@ -116,8 +114,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
-			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
 		})
 	}
@@ -164,8 +161,7 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
-			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      err.Error(),
 		})
 	}

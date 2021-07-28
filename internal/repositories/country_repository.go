@@ -20,6 +20,16 @@ func NewCountryRepository(db *gorm.DB) *CountryRepository {
 
 func (r *CountryRepository) Create(country *models.Country) (*models.Country, error) {
 
+	valid, err := country.Validate()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if valid == false {
+		return nil, nil
+	}
+
 	if tx := r.DB.Create(&country); tx.Error != nil {
 		application_loger.LogError(tx.Error)
 		return nil, tx.Error

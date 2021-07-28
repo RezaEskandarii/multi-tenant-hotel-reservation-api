@@ -39,8 +39,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	if err := c.Bind(&model); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
-				Data:         nil,
-				ResponseCode: BadRequest,
+				ResponseCode: http.StatusInternalServerError,
 				Message:      handler.translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
@@ -49,7 +48,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         model,
-				ResponseCode: Ok,
+				ResponseCode: http.StatusOK,
 				Message:      handler.translator.Localize(lang, message_keys.Created),
 			})
 	}
@@ -57,7 +56,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError,
 		ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "",
 		})
 
@@ -74,7 +73,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "",
 		})
 	}
@@ -111,8 +110,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
-			Data:         nil,
-			ResponseCode: InternalServerError,
+			ResponseCode: http.StatusInternalServerError,
 			Message:      "",
 		})
 	}

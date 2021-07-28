@@ -2,9 +2,12 @@ package models
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
+	"github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
+	"hotel-reservation/internal/message_keys"
 	"time"
 )
 
@@ -14,6 +17,8 @@ var (
 	Female Gender = "Female"
 	Male   Gender = "Male"
 	Other  Gender = "Other"
+
+	InvalidGenderError = errors.New(message_keys.GenderInvalid)
 )
 
 type User struct {
@@ -35,7 +40,30 @@ type User struct {
 	Address              string     `json:"address"`
 }
 
+func (u *User) Validate() (bool, error) {
+
+	ok, err := govalidator.ValidateStruct(u)
+	if err != nil {
+		return false, err
+	}
+
+	return ok, nil
+}
+
 func (u *User) BeforeCreate(tx *gorm.DB) error {
+
+	_, err := u.Validate()
+
+	if err != nil {
+		tx.AddError(err)
+		return err
+	}
+
+	if u.Gender != Male && u.Gender != Female && u.Gender != Other {
+
+		tx.AddError(InvalidGenderError)
+		return InvalidGenderError
+	}
 
 	hash, err := argon2.GenerateFromPassword([]byte(u.Password), argon2.DefaultParams)
 	if err != nil {
@@ -48,6 +76,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+// MarshalJSON prevents to show user's password in json serializations.
 func (u User) MarshalJSON() ([]byte, error) {
 	type user User
 	x := user(u)

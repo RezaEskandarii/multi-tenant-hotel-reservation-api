@@ -18,4 +18,6 @@ const (
 
 	TypeHasResidence  = "TypeHasResidence"
 	GradeHasResidence = "GradeHasResidence"
+	ValidationError   = "ValidationError"
+	GenderInvalid     = "GenderInvalid"
 )
