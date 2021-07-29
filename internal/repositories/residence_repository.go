@@ -1,9 +1,11 @@
 package repositories
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
+	"hotel-reservation/internal/message_keys"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/pkg/application_loger"
 )
@@ -64,5 +66,19 @@ func (r ResidenceRepository) Delete(id uint64) error {
 		return query.Error
 	}
 
+	return nil
+}
+
+func (r *ResidenceRepository) hasRepeatData(residence *models.Residence) error {
+	var countByName int64 = 0
+
+	if tx := *r.DB.Model(&models.Residence{}).Where(&models.Residence{Name: residence.Name}).Count(&countByName); tx.Error != nil {
+		return tx.Error
+	}
+
+	if countByName > 0 {
+
+		return errors.New(message_keys.ResidenceRepeatPostalCode)
+	}
 	return nil
 }

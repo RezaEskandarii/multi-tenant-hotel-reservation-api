@@ -12,6 +12,8 @@ type Residence struct {
 	PhoneNumber2     string         `json:"phone_number2" gorm:"type:varchar(100)"`
 	Province         Province       `json:"province"`
 	ProvinceId       uint64         `json:"province_id" gorm:"foreignKey:Province" valid:"required"`
+	City             City           `json:"city"`
+	CityId           uint64         `json:"city_id" gorm:"foreignKey:City" valid:"required"`
 	Address          string         `json:"address" valid:"required"`
 	PostalCode       string         `json:"postal_code" gorm:"type:varchar(100)" valid:"required"`
 	Longitude        float64        `json:"longitude" valid:"required"`

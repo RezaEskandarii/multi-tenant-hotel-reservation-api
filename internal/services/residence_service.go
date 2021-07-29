@@ -46,3 +46,23 @@ func (s *ResidenceService) Delete(id uint64) error {
 
 	return s.Repository.Delete(id)
 }
+
+func (s ResidenceService) Map(givenModel *models.Residence, returnModel *models.Residence) *models.Residence {
+
+	returnModel.Name = givenModel.Name
+	returnModel.ResidenceTypeId = givenModel.ResidenceTypeId
+	returnModel.Address = givenModel.Address
+	returnModel.ResidenceGradeId = givenModel.ResidenceGradeId
+	returnModel.Description = givenModel.Description
+	returnModel.ProvinceId = givenModel.ProvinceId
+	returnModel.CityId = givenModel.CityId
+	returnModel.EmailAddress = givenModel.EmailAddress
+	returnModel.FaxNumber = givenModel.FaxNumber
+	returnModel.Latitude = givenModel.Latitude
+	returnModel.Longitude = givenModel.Longitude
+	returnModel.OwnerId = givenModel.OwnerId
+	returnModel.PhoneNumber1 = givenModel.PhoneNumber1
+	returnModel.PhoneNumber2 = givenModel.PhoneNumber2
+
+	return returnModel
+}
