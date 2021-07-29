@@ -16,11 +16,11 @@ import (
 // CurrencyHandler Currency endpoint handler
 type CurrencyHandler struct {
 	Router     *echo.Group
-	Service    services.CurrencyService
+	Service    *services.CurrencyService
 	translator *translator.Translator
 }
 
-func (handler *CurrencyHandler) Register(router *echo.Group, service services.CurrencyService, translator *translator.Translator) {
+func (handler *CurrencyHandler) Register(router *echo.Group, service *services.CurrencyService, translator *translator.Translator) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator

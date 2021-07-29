@@ -16,11 +16,11 @@ import (
 // ProvinceHandler Province endpoint handler
 type ProvinceHandler struct {
 	Router     *echo.Group
-	Service    services.ProvinceService
+	Service    *services.ProvinceService
 	translator *translator.Translator
 }
 
-func (handler *ProvinceHandler) Register(router *echo.Group, service services.ProvinceService, translator *translator.Translator) {
+func (handler *ProvinceHandler) Register(router *echo.Group, service *services.ProvinceService, translator *translator.Translator) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator

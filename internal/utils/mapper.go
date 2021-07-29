@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func Map(givenModel interface{}, returnModel interface{}) (error, interface{}) {
+func Map(givenModel interface{}, returnModel interface{}) (interface{}, error) {
 
 	returnModelVal := reflect.ValueOf(returnModel)
 	givenModelVal := reflect.ValueOf(givenModel)
@@ -29,11 +29,11 @@ func Map(givenModel interface{}, returnModel interface{}) (error, interface{}) {
 
 				switch returnModelVal.Field(i).Kind() {
 				case reflect.String:
-					val.Field(i).Set(val)
+					val.Field(i).SetString("strconv.Atoi(s[val.Field(i).Name])")
 				}
 			}
 		}
 	}
 
-	return nil, returnModel
+	return returnModel, nil
 }

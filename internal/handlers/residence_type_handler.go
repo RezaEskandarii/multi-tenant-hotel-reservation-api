@@ -20,9 +20,9 @@ type ResidenceTypeHandler struct {
 	translator *translator.Translator
 }
 
-func (handler *ResidenceTypeHandler) Register(router *echo.Group, service services.ResidenceTypeService, translator *translator.Translator) {
+func (handler *ResidenceTypeHandler) Register(router *echo.Group, service *services.ResidenceTypeService, translator *translator.Translator) {
 	handler.Router = router
-	handler.Service = service
+	handler.Service = *service
 	handler.translator = translator
 
 	handler.Router.POST("", handler.create)

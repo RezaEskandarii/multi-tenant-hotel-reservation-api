@@ -16,11 +16,11 @@ import (
 // CityHandler City endpoint handler
 type CityHandler struct {
 	Router     *echo.Group
-	Service    services.CityService
+	Service    *services.CityService
 	translator *translator.Translator
 }
 
-func (handler *CityHandler) Register(router *echo.Group, service services.CityService, translator *translator.Translator) {
+func (handler *CityHandler) Register(router *echo.Group, service *services.CityService, translator *translator.Translator) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator

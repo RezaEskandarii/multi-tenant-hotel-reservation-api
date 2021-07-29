@@ -28,7 +28,7 @@ func Run(port int) error {
 		return err
 	}
 
-	db, err := database.GetDb()
+	db, err := database.GetDb(false)
 	if err != nil {
 		return err
 	}

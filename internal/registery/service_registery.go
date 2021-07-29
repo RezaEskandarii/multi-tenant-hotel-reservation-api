@@ -11,13 +11,14 @@ import (
 
 // services
 var (
-	countryService        = *services.NewCountryService()
-	provinceService       = *services.NewProvinceService()
-	cityService           = *services.NewCityService()
-	currencyService       = *services.NewCurrencyService()
+	countryService        = services.NewCountryService()
+	provinceService       = services.NewProvinceService()
+	cityService           = services.NewCityService()
+	currencyService       = services.NewCurrencyService()
 	userService           = services.NewUserService()
-	residenceTypeService  = *services.NewResidenceTypeService()
-	residenceGradeService = *services.NewResidenceGradeService()
+	residenceTypeService  = services.NewResidenceTypeService()
+	residenceGradeService = services.NewResidenceGradeService()
+	residenceService      = services.NewResidenceService()
 )
 
 // handlers
@@ -29,6 +30,7 @@ var (
 	usersHandler          = handlers.UserHandler{}
 	residenceTypeHandler  = handlers.ResidenceTypeHandler{}
 	residenceGradeHandler = handlers.ResidenceGradeHandler{}
+	residenceHandler      = handlers.ResidenceHandler{}
 )
 
 // pckgs
@@ -39,7 +41,7 @@ var (
 // RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group) {
 
-	setRepositoriesDb(db)
+	setServicesRepository(db)
 
 	countriesRouter := router.Group("/countries")
 	countryHandler.Register(countriesRouter, countryService, i18nTranslator)
@@ -60,10 +62,13 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	residenceTypeHandler.Register(residenceTypeRouter, residenceTypeService, i18nTranslator)
 
 	residenceGradeRouter := router.Group("/residence-grade")
-	residenceGradeHandler.Register(residenceGradeRouter, &residenceGradeService, i18nTranslator)
+	residenceGradeHandler.Register(residenceGradeRouter, residenceGradeService, i18nTranslator)
+
+	residenceRouteGroup := router.Group("/residence")
+	residenceHandler.Register(residenceRouteGroup, residenceService, i18nTranslator)
 }
 
-func setRepositoriesDb(db *gorm.DB) {
+func setServicesRepository(db *gorm.DB) {
 	countryService.Repository = repositories.NewCountryRepository(db)
 	provinceService.Repository = repositories.NewProvinceRepository(db)
 	cityService.Repository = repositories.NewCityRepository(db)
@@ -71,4 +76,5 @@ func setRepositoriesDb(db *gorm.DB) {
 	userService.Repository = repositories.NewUserRepository(db)
 	residenceTypeService.Repository = repositories.NewResidenceTypeRepository(db)
 	residenceGradeService.Repository = repositories.NewResidenceGradeRepository(db)
+	residenceService.Repository = repositories.NewResidenceRepository(db)
 }
