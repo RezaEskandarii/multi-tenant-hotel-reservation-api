@@ -3,7 +3,7 @@ package registery
 import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
-	"hotel-reservation/internal/handlers"
+	handlers2 "hotel-reservation/api/handlers"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/pkg/translator"
@@ -23,14 +23,14 @@ var (
 
 // handlers
 var (
-	countryHandler        = handlers.CountryHandler{}
-	provinceHandler       = handlers.ProvinceHandler{}
-	cityHandler           = handlers.CityHandler{}
-	currencyHandler       = handlers.CurrencyHandler{}
-	usersHandler          = handlers.UserHandler{}
-	residenceTypeHandler  = handlers.ResidenceTypeHandler{}
-	residenceGradeHandler = handlers.ResidenceGradeHandler{}
-	residenceHandler      = handlers.ResidenceHandler{}
+	countryHandler        = handlers2.CountryHandler{}
+	provinceHandler       = handlers2.ProvinceHandler{}
+	cityHandler           = handlers2.CityHandler{}
+	currencyHandler       = handlers2.CurrencyHandler{}
+	usersHandler          = handlers2.UserHandler{}
+	residenceTypeHandler  = handlers2.ResidenceTypeHandler{}
+	residenceGradeHandler = handlers2.ResidenceGradeHandler{}
+	residenceHandler      = handlers2.ResidenceHandler{}
 )
 
 // pckgs

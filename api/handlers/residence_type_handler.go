@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
+	middlewares2 "hotel-reservation/api/middlewares"
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/message_keys"
-	"hotel-reservation/internal/middlewares"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
@@ -13,28 +13,28 @@ import (
 	"net/http"
 )
 
-// ResidenceHandler Province endpoint handler
-type ResidenceHandler struct {
+// ResidenceTypeHandler Province endpoint handler
+type ResidenceTypeHandler struct {
 	Router     *echo.Group
-	Service    *services.ResidenceService
+	Service    services.ResidenceTypeService
 	translator *translator.Translator
 }
 
-func (handler *ResidenceHandler) Register(router *echo.Group, service *services.ResidenceService, translator *translator.Translator) {
+func (handler *ResidenceTypeHandler) Register(router *echo.Group, service *services.ResidenceTypeService, translator *translator.Translator) {
 	handler.Router = router
-	handler.Service = service
+	handler.Service = *service
 	handler.translator = translator
 
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
 	handler.Router.DELETE("/:id", handler.delete)
-	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
+	handler.Router.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-func (handler *ResidenceHandler) create(c echo.Context) error {
+func (handler *ResidenceTypeHandler) create(c echo.Context) error {
 
-	model := &models.Residence{}
+	model := &models.ResidenceType{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
@@ -62,7 +62,7 @@ func (handler *ResidenceHandler) create(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceHandler) update(c echo.Context) error {
+func (handler *ResidenceTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -70,7 +70,7 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	mainModel, err := handler.Service.Find(id)
+	result, err := handler.Service.Find(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -78,28 +78,17 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 		})
 	}
 
-	if mainModel == nil || (mainModel != nil && mainModel.Id == 0) {
+	if result == nil || (result != nil && result.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
 			Message:      handler.translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
-	clientModel := models.Residence{}
+	name := c.FormValue("name")
+	result.Name = name
 
-	err = c.Bind(&clientModel)
-
-	if err != nil {
-
-		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			ResponseCode: http.StatusBadRequest,
-			Message:      handler.translator.Localize(lang, message_keys.BadRequest),
-		})
-	}
-
-	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
-
-	updatedMode, err := handler.Service.Update(modelToUpdate)
+	updatedMode, err := handler.Service.Update(result)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -111,7 +100,7 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceHandler) find(c echo.Context) error {
+func (handler *ResidenceTypeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -140,7 +129,7 @@ func (handler *ResidenceHandler) find(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceHandler) findAll(c echo.Context) error {
+func (handler *ResidenceTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
 
@@ -157,7 +146,7 @@ func (handler *ResidenceHandler) findAll(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceHandler) delete(c echo.Context) error {
+func (handler *ResidenceTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)

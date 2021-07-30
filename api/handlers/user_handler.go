@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
+	middlewares2 "hotel-reservation/api/middlewares"
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/message_keys"
-	"hotel-reservation/internal/middlewares"
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
@@ -29,7 +29,7 @@ func (handler *UserHandler) Register(router *echo.Group, service *services.UserS
 	handler.Router.PUT("/:id", handler.update)
 	handler.Router.GET("/:id", handler.find)
 	handler.Router.GET("/by-username/:username", handler.findByUsername)
-	handler.Router.GET("", handler.findAll, middlewares.PaginationMiddleware)
+	handler.Router.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
 func (handler *UserHandler) create(c echo.Context) error {
