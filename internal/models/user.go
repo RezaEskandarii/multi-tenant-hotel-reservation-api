@@ -57,9 +57,12 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 		tx.AddError(err)
 		return err
 	}
+	hasWringGender := true
+	if u.Gender == Male || u.Gender == Female || u.Gender == Other {
+		hasWringGender = false
+	}
 
-	if u.Gender != Male && u.Gender != Female && u.Gender != Other {
-
+	if hasWringGender {
 		tx.AddError(InvalidGenderError)
 		return InvalidGenderError
 	}
