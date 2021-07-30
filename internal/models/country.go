@@ -10,7 +10,7 @@ type Country struct {
 	BaseModel
 	Name      string      `json:"name" valid:"required"`
 	Alias     string      `json:"alias" valid:"required"`
-	Provinces []*Province `json:"provinces" gorm:"foreignKey:CountryId"`
+	Provinces []*Province `json:"provinces" gorm:"foreignKey:CountryId" valid:"-"`
 }
 
 func (c *Country) Validate() (bool, error) {

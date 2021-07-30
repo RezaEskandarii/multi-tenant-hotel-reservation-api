@@ -33,7 +33,7 @@ type User struct {
 	EmailConfirmed       bool       `json:"-"`
 	Password             string     `json:"password,omitempty"`
 	CityId               int        `json:"city_id"`
-	City                 *City      `json:"city"`
+	City                 *City      `json:"city" valid:"-"`
 	Gender               Gender     `json:"gender" valid:"required"`
 	PassportNumber       string     `json:"passport_number"`
 	NationalId           string     `json:"national_id" valid:"required"`

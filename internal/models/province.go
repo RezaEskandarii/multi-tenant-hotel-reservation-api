@@ -10,9 +10,9 @@ type Province struct {
 	BaseModel
 	Name      string   `json:"name" valid:"required"`
 	Alias     string   `json:"alias" valid:"required"`
-	Cities    []*City  `json:"cities"`
+	Cities    []*City  `json:"cities" valid:"-"`
 	CountryId uint     `json:"country_id" valid:"required"`
-	Country   *Country `json:"country"`
+	Country   *Country `json:"country" valid:"-"`
 }
 
 func (p *Province) Validate() (bool, error) {

@@ -8,7 +8,7 @@ import (
 type ResidenceGrade struct {
 	BaseModel
 	Name            string         `json:"name" gorm:"type:varchar(100)" valid:"required"`
-	ResidenceType   *ResidenceType `json:"residence_type"`
+	ResidenceType   *ResidenceType `json:"residence_type" valid:"-"`
 	ResidenceTypeId uint64         `json:"residence_type_id" gorm:"foreignKey:ResidenceType" valid:"required"`
 }
 
