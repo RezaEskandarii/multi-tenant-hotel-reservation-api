@@ -2,10 +2,16 @@
 ## [Unreleased]
 
 ### Doc
+- regenerate changelog file
 - add some comments
 - regenerate changelog file
 
 ### Feat
+- add residence handler
+- add residence service
+- add residence repository
+- add validation to structs
+- add validator package and add validation tags to models
 - implement find all and delete function in residence_type_handler
 - implement find all and delete function in residence_grade_handler
 - add residence grade handler
@@ -27,8 +33,24 @@
 - add user service
 
 ### Refactor
+- validate user's gender before create
+- ignore validation to some model relations
+- add pointer to residence relations
+- prevent to validation residence releations
+- move handlers and middlewares to api directory
+- move test files to test package
+- improve some codes
+- refactor som docs
+- beautify some codes
+- remove some extra error codes
+- refactor residence_grade and residence_type handler
+- rename some structs
 - add logs file to gitignore
 - refactor services dependencies
+
+### Test
+- refactor country_service_test
+- add country service test
 
 
 <a name="v0.1"></a>
