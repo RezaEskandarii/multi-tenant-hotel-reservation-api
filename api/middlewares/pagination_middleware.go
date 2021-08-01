@@ -14,6 +14,7 @@ func PaginationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		if err == nil {
 			page = int(pageVar)
 		}
+
 		var perPage int
 		perPageVar, err := utils.ConvertToUint(c.QueryParam("perPage"))
 
