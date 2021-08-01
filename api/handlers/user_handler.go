@@ -9,6 +9,7 @@ import (
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 	"net/http"
 )
@@ -35,10 +36,11 @@ func (handler *UserHandler) Register(router *echo.Group, service *services.UserS
 func (handler *UserHandler) create(c echo.Context) error {
 
 	model := models.User{}
-
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -47,9 +49,20 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	}
 
-	oldUser, _ := handler.Service.FindByUsername(model.Username)
+	oldUser, err := handler.Service.FindByUsername(model.Username)
+
+	if err != nil {
+
+		applogger.LogError(err.Error())
+
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      handler.translator.Localize(lang, err.Error()),
+		})
+	}
 
 	if oldUser != nil && oldUser.Id > 0 {
+
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusConflict,
@@ -64,27 +77,34 @@ func (handler *UserHandler) create(c echo.Context) error {
 				ResponseCode: http.StatusOK,
 				Message:      handler.translator.Localize(lang, message_keys.Created),
 			})
-	}
+	} else {
 
-	return c.JSON(http.StatusInternalServerError,
-		commons.ApiResponse{
-			Data:         nil,
-			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
-		})
+		applogger.LogError(err.Error())
+		return c.JSON(http.StatusInternalServerError,
+			commons.ApiResponse{
+				Data:         nil,
+				ResponseCode: http.StatusInternalServerError,
+				Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
+			})
+	}
 
 }
 
 func (handler *UserHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	lang := c.Request().Header.Get(acceptLanguage)
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -101,6 +121,8 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -115,20 +137,27 @@ func (handler *UserHandler) update(c echo.Context) error {
 			Message:      handler.translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
 
 func (handler *UserHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id)
 
+	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -171,12 +200,12 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-
 	model, err := handler.Service.FindByUsername(username)
-
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
