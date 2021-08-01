@@ -40,6 +40,9 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
+
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         nil,
@@ -71,6 +74,8 @@ func (handler *CountryHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
@@ -96,16 +101,22 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
+
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
+
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,
 			Message:      handler.translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
+
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -113,6 +124,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 func (handler *CountryHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)

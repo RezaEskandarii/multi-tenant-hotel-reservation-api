@@ -39,6 +39,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -71,12 +72,16 @@ func (handler *CityHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	lang := c.Request().Header.Get(acceptLanguage)
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -115,6 +120,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 func (handler *CityHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
