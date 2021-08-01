@@ -9,6 +9,7 @@ import (
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 	"net/http"
 )
@@ -51,6 +52,8 @@ func (handler *CountryHandler) create(c echo.Context) error {
 
 	if err != nil {
 
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusBadRequest, ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
@@ -75,6 +78,9 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
@@ -113,6 +119,9 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
@@ -155,11 +164,15 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	provinces, err := handler.Service.GetProvinces(id)
 
 	if err != nil {
+
+		applogger.LogError(err.Error())
+
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      err.Error(),
