@@ -2,7 +2,7 @@ package config
 
 import (
 	"gopkg.in/yaml.v2"
-	"hotel-reservation/pkg/application_loger"
+	"hotel-reservation/pkg/applogger"
 	"io/ioutil"
 	"os"
 )
@@ -38,7 +38,7 @@ func NewConfig() (*Config, error) {
 	cfgFile, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		application_loger.LogError(err.Error())
+		applogger.LogError(err.Error())
 		return nil, err
 	}
 
@@ -47,7 +47,7 @@ func NewConfig() (*Config, error) {
 	err = yaml.Unmarshal(cfgFile, &conf)
 
 	if err != nil {
-		application_loger.LogError(err.Error())
+		applogger.LogError(err.Error())
 		return nil, err
 	}
 

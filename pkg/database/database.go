@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	config2 "hotel-reservation/internal/config"
-	"hotel-reservation/pkg/application_loger"
+	"hotel-reservation/pkg/applogger"
 	"log"
 	"os"
 	"strings"
@@ -95,7 +95,7 @@ func GetDb(usesInTestEnv bool) (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	if err != nil {
-		application_loger.LogError(err.Error())
+		applogger.LogError(err.Error())
 		return nil, err
 	}
 

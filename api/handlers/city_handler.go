@@ -9,6 +9,7 @@ import (
 	"hotel-reservation/internal/models"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/internal/utils"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 	"net/http"
 )
@@ -53,14 +54,16 @@ func (handler *CityHandler) create(c echo.Context) error {
 				ResponseCode: http.StatusOK,
 				Message:      handler.translator.Localize(lang, message_keys.Created),
 			})
-	}
+	} else {
 
-	return c.JSON(http.StatusInternalServerError,
-		commons.ApiResponse{
-			Data:         nil,
-			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
-		})
+		applogger.LogError(err.Error())
+		return c.JSON(http.StatusInternalServerError,
+			commons.ApiResponse{
+				Data:         nil,
+				ResponseCode: http.StatusInternalServerError,
+				Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
+			})
+	}
 
 }
 
@@ -104,6 +107,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 			Message:      handler.translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -118,6 +122,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
+		applogger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,

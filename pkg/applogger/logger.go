@@ -1,4 +1,4 @@
-package application_loger
+package applogger
 
 import (
 	"github.com/amoghe/distillog"

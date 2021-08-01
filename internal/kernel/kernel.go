@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"hotel-reservation/internal/config"
 	"hotel-reservation/internal/registery"
-	"hotel-reservation/pkg/application_loger"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/database"
 	"net/http"
 )
@@ -17,7 +17,7 @@ func Run(port int) error {
 
 	defer func() {
 		if r := recover(); r != nil {
-			application_loger.LogError(r)
+			applogger.LogError(r)
 			return
 		}
 	}()

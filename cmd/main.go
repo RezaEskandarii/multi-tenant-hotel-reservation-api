@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"hotel-reservation/internal/kernel"
-	"hotel-reservation/pkg/application_loger"
+	"hotel-reservation/pkg/applogger"
 	"os"
 )
 
@@ -16,7 +16,7 @@ func main() {
 
 	err := kernel.Run(port)
 	if err != nil {
-		application_loger.LogInfo("exit ...")
+		applogger.LogInfo("exit ...")
 		os.Exit(1)
 	}
 }

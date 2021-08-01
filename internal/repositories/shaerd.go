@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
-	"hotel-reservation/pkg/application_loger"
+	"hotel-reservation/pkg/applogger"
 	"reflect"
 )
 
@@ -26,7 +26,7 @@ func finAll(model interface{}, db *gorm.DB, input *dto.PaginationInput) (*common
 	query = query.Limit(int(result.PerPage)).Offset(int(result.Page)).Order("id desc").Find(modelSlice.Interface())
 
 	if query.Error != nil {
-		application_loger.LogError(query.Error)
+		applogger.LogError(query.Error)
 		return nil, query.Error
 	}
 
