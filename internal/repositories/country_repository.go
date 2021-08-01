@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type CountryRepository struct {
@@ -31,7 +30,7 @@ func (r *CountryRepository) Create(country *models.Country) (*models.Country, er
 	}
 
 	if tx := r.DB.Create(&country); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -41,7 +40,7 @@ func (r *CountryRepository) Create(country *models.Country) (*models.Country, er
 func (r *CountryRepository) Update(country *models.Country) (*models.Country, error) {
 
 	if tx := r.DB.Updates(&country); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -52,7 +51,7 @@ func (r *CountryRepository) Find(id uint64) (*models.Country, error) {
 
 	model := models.Country{}
 	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 

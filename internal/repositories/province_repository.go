@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type ProvinceRepository struct {
@@ -21,7 +20,7 @@ func NewProvinceRepository(db *gorm.DB) *ProvinceRepository {
 func (r *ProvinceRepository) Create(province *models.Province) (*models.Province, error) {
 
 	if tx := r.DB.Create(&province); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -31,7 +30,7 @@ func (r *ProvinceRepository) Create(province *models.Province) (*models.Province
 func (r *ProvinceRepository) Update(province *models.Province) (*models.Province, error) {
 
 	if tx := r.DB.Updates(&province); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -42,7 +41,7 @@ func (r *ProvinceRepository) Find(id uint64) (*models.Province, error) {
 
 	model := models.Province{}
 	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 

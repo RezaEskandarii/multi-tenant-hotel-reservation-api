@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type ResidenceGradeRepository struct {
@@ -19,7 +18,7 @@ func NewResidenceGradeRepository(db *gorm.DB) *ResidenceGradeRepository {
 func (r *ResidenceGradeRepository) Create(residenceGrade *models.ResidenceGrade) (*models.ResidenceGrade, error) {
 
 	if tx := r.DB.Create(&residenceGrade); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -29,7 +28,7 @@ func (r *ResidenceGradeRepository) Create(residenceGrade *models.ResidenceGrade)
 func (r *ResidenceGradeRepository) Update(residenceGrade *models.ResidenceGrade) (*models.ResidenceGrade, error) {
 
 	if tx := r.DB.Updates(&residenceGrade); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -41,7 +40,7 @@ func (r *ResidenceGradeRepository) Find(id uint64) (*models.ResidenceGrade, erro
 	model := models.ResidenceGrade{}
 
 	if tx := r.DB.Where("id=?", id).Preload("ResidenceType").Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -62,7 +61,7 @@ func (r ResidenceGradeRepository) Delete(id uint64) error {
 	var count int64 = 0
 
 	if query := r.DB.Model(&models.Residence{}).Where(&models.Residence{ResidenceGradeId: id}).Count(&count); query.Error != nil {
-		application_loger.LogError(query.Error)
+
 		return query.Error
 	}
 
@@ -72,7 +71,6 @@ func (r ResidenceGradeRepository) Delete(id uint64) error {
 
 	if query := r.DB.Model(&models.ResidenceGrade{}).Where("id=?", id).Delete(&models.ResidenceGrade{}); query.Error != nil {
 
-		application_loger.LogError(query.Error)
 		return query.Error
 	}
 

@@ -1,38 +1,50 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 )
 
+var (
+	NotStructErr = errors.New("given model or return model is not type of struct")
+)
+
 func Map(givenModel interface{}, returnModel interface{}) (interface{}, error) {
 
-	returnModelVal := reflect.ValueOf(returnModel)
-	givenModelVal := reflect.ValueOf(givenModel)
-	for i := 0; i < returnModelVal.NumField(); i++ {
+	if reflect.ValueOf(givenModel).Kind() == reflect.Struct && reflect.ValueOf(returnModel).Kind() == reflect.Struct {
 
-		for j := 0; j < givenModelVal.NumField(); j++ {
-			if returnModelVal.Type().Field(i).Name == givenModelVal.Type().Field(j).Name {
+		returnModelVal := reflect.ValueOf(returnModel)
+		givenModelVal := reflect.ValueOf(givenModel)
 
-				valueFieldGiven := givenModelVal.Field(j)
-				typeFieldGiven := givenModelVal.Type().Field(j)
+		for i := 0; i < returnModelVal.NumField(); i++ {
 
-				//valueFieldReturn := givenModelVal.Field()
-				//typeFieldReturn := givenModelVal.Type().Field(j)
+			for j := 0; j < givenModelVal.NumField(); j++ {
+				if returnModelVal.Type().Field(i).Name == givenModelVal.Type().Field(j).Name {
 
-				f := valueFieldGiven.Interface()
-				val := reflect.ValueOf(f)
-				fmt.Println(typeFieldGiven.Type)
-				fmt.Println(val)
+					valueFieldGiven := givenModelVal.Field(j)
+					typeFieldGiven := givenModelVal.Type().Field(j)
 
-				//fieldName := returnModelVal.Type().Field(i).Name
+					//valueFieldReturn := givenModelVal.Field()
+					typeFieldReturn := givenModelVal.Type().Field(j)
 
-				switch returnModelVal.Field(i).Kind() {
-				case reflect.String:
-					val.Field(i).SetString("strconv.Atoi(s[val.Field(i).Name])")
+					f := valueFieldGiven.Interface()
+					val := reflect.ValueOf(f)
+					fmt.Println(typeFieldGiven.Type)
+					fmt.Println(val)
+
+					//fieldName := returnModelVal.Type().Field(i).Name
+
+					if typeFieldReturn.Type == typeFieldGiven.Type {
+						val.Field(i).Set(val)
+					}
+
 				}
 			}
 		}
+
+	} else {
+		return nil, NotStructErr
 	}
 
 	return returnModel, nil

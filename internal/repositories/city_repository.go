@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type CityRepository struct {
@@ -29,7 +28,6 @@ func NewCityRepository(db *gorm.DB) *CityRepository {
 func (r *CityRepository) Create(city *models.City) (*models.City, error) {
 
 	if tx := r.DB.Create(&city); tx.Error != nil {
-		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
@@ -39,7 +37,7 @@ func (r *CityRepository) Create(city *models.City) (*models.City, error) {
 func (r *CityRepository) Update(city *models.City) (*models.City, error) {
 
 	if tx := r.DB.Updates(&city); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -50,7 +48,7 @@ func (r *CityRepository) Find(id uint64) (*models.City, error) {
 
 	model := models.City{}
 	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 

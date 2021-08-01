@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type ResidenceTypeRepository struct {
@@ -19,7 +18,6 @@ func NewResidenceTypeRepository(db *gorm.DB) *ResidenceTypeRepository {
 func (r *ResidenceTypeRepository) Create(residenceType *models.ResidenceType) (*models.ResidenceType, error) {
 
 	if tx := r.DB.Create(&residenceType); tx.Error != nil {
-		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
@@ -29,7 +27,6 @@ func (r *ResidenceTypeRepository) Create(residenceType *models.ResidenceType) (*
 func (r *ResidenceTypeRepository) Update(residenceType *models.ResidenceType) (*models.ResidenceType, error) {
 
 	if tx := r.DB.Updates(&residenceType); tx.Error != nil {
-		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
@@ -41,7 +38,6 @@ func (r *ResidenceTypeRepository) Find(id uint64) (*models.ResidenceType, error)
 	model := models.ResidenceType{}
 
 	if tx := r.DB.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
 		return nil, tx.Error
 	}
 
@@ -62,7 +58,7 @@ func (r ResidenceTypeRepository) Delete(id uint64) error {
 	var count int64 = 0
 
 	if query := r.DB.Model(&models.Residence{}).Where(&models.Residence{ResidenceTypeId: id}).Count(&count); query.Error != nil {
-		application_loger.LogError(query.Error)
+
 		return query.Error
 	}
 
@@ -72,14 +68,12 @@ func (r ResidenceTypeRepository) Delete(id uint64) error {
 
 	if query := r.DB.Model(&models.ResidenceType{}).Where("id=?", id).Delete(&models.ResidenceType{}); query.Error != nil {
 
-		application_loger.LogError(query.Error)
 		return query.Error
 	} else {
 
 		query = r.DB.Model(&models.ResidenceGrade{}).Where(&models.ResidenceGrade{ResidenceTypeId: id}).Delete(&models.ResidenceGrade{})
 
 		if query.Error != nil {
-			application_loger.LogError(query.Error)
 			return query.Error
 		}
 	}

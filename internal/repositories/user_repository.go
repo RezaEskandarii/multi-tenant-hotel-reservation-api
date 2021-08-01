@@ -5,7 +5,6 @@ import (
 	"hotel-reservation/internal/commons"
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type UserRepository struct {
@@ -21,7 +20,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 func (r *UserRepository) Create(user *models.User) (*models.User, error) {
 
 	if tx := r.DB.Create(&user); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -31,7 +30,7 @@ func (r *UserRepository) Create(user *models.User) (*models.User, error) {
 func (r *UserRepository) Update(user *models.User) (*models.User, error) {
 
 	if tx := r.DB.Updates(&user); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -42,7 +41,7 @@ func (r *UserRepository) Find(id uint64) (*models.User, error) {
 
 	model := models.User{}
 	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -57,7 +56,7 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 
 	model := models.User{Username: username}
 	if tx := r.DB.Where(model).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -84,7 +83,7 @@ func (r *UserRepository) FindAll(input *dto.PaginationInput) (*commons.Paginated
 func (r *UserRepository) FindBySymbol(symbol string) (*models.User, error) {
 	model := models.User{}
 	if tx := r.DB.Where("symbol=?", symbol).Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 

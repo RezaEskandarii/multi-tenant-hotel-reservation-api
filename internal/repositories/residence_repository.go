@@ -7,7 +7,6 @@ import (
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/message_keys"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/application_loger"
 )
 
 type ResidenceRepository struct {
@@ -22,7 +21,7 @@ func NewResidenceRepository(db *gorm.DB) *ResidenceRepository {
 func (r *ResidenceRepository) Create(residence *models.Residence) (*models.Residence, error) {
 
 	if tx := r.DB.Create(&residence); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -32,7 +31,7 @@ func (r *ResidenceRepository) Create(residence *models.Residence) (*models.Resid
 func (r *ResidenceRepository) Update(residence *models.Residence) (*models.Residence, error) {
 
 	if tx := r.DB.Updates(&residence); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -43,7 +42,7 @@ func (r *ResidenceRepository) Find(id uint64) (*models.Residence, error) {
 	model := models.Residence{}
 
 	if tx := r.DB.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
-		application_loger.LogError(tx.Error)
+
 		return nil, tx.Error
 	}
 
@@ -61,8 +60,6 @@ func (r *ResidenceRepository) FindAll(input *dto.PaginationInput) (*commons.Pagi
 
 func (r ResidenceRepository) Delete(id uint64) error {
 	if query := r.DB.Model(&models.Residence{}).Where("id=?", id).Delete(&models.Residence{}); query.Error != nil {
-
-		application_loger.LogError(query.Error)
 		return query.Error
 	}
 
