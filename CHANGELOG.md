@@ -7,6 +7,15 @@
 - regenerate changelog file
 
 ### Feat
+- add logger to user handler
+- add logger to residence type handler
+- add logger to residence handler
+- add logger to residence grade handler
+- add logger to province handler
+- add logger to currency handler
+- add logger to country handler
+- add logger to city handler
+- add room model
 - add residence handler
 - add residence service
 - add residence repository
@@ -33,6 +42,7 @@
 - add user service
 
 ### Refactor
+- improve repositories code
 - validate user's gender before create
 - ignore validation to some model relations
 - add pointer to residence relations
