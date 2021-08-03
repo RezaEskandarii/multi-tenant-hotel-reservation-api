@@ -15,13 +15,8 @@ type City struct {
 }
 
 func (c *City) Validate() (bool, error) {
-	ok, err := govalidator.ValidateStruct(c)
 
-	if err != nil {
-		return false, err
-	}
-
-	return ok, nil
+	return govalidator.ValidateStruct(c)
 }
 
 func (c *City) BeforeCreate(tx *gorm.DB) error {

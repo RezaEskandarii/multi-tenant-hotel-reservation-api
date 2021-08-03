@@ -12,13 +12,8 @@ type Currency struct {
 }
 
 func (c *Currency) Validate() (bool, error) {
-	ok, err := govalidator.ValidateStruct(c)
 
-	if err != nil {
-		return false, err
-	}
-
-	return ok, nil
+	return govalidator.ValidateStruct(c)
 }
 
 func (c *Currency) BeforeCreate(tx *gorm.DB) error {

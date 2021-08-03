@@ -16,13 +16,8 @@ type Province struct {
 }
 
 func (p *Province) Validate() (bool, error) {
-	ok, err := govalidator.ValidateStruct(p)
 
-	if err != nil {
-		return false, err
-	}
-
-	return ok, nil
+	return govalidator.ValidateStruct(p)
 }
 
 func (p *Province) BeforeCreate(tx *gorm.DB) error {

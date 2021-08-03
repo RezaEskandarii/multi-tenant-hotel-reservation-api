@@ -14,13 +14,8 @@ type Country struct {
 }
 
 func (c *Country) Validate() (bool, error) {
-	ok, err := govalidator.ValidateStruct(c)
 
-	if err != nil {
-		return false, err
-	}
-
-	return ok, nil
+	return govalidator.ValidateStruct(c)
 }
 
 func (c *Country) BeforeCreate(tx *gorm.DB) error {
