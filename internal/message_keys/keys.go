@@ -26,4 +26,5 @@ const (
 	ResidenceRepeatPostalCode = Residences + "RepeatPostalCode"
 
 	InvalidRoomCleanStatus = Rooms + "InvalidCleanStatus"
+	RoomTypeHasRoomErr     = Rooms + "RoomTypeHasRoomErr"
 )
