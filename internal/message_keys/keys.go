@@ -6,6 +6,7 @@ const (
 	Errors       = "Errors."
 	Users        = "Users."
 	Residences   = "Residences."
+	Rooms        = "Rooms."
 
 	Created = CrudMessages + "Created"
 	Updated = CrudMessages + "Updated"
@@ -23,4 +24,6 @@ const (
 	GenderInvalid     = "GenderInvalid"
 
 	ResidenceRepeatPostalCode = Residences + "RepeatPostalCode"
+
+	InvalidRoomCleanStatus = Rooms + "InvalidCleanStatus"
 )
