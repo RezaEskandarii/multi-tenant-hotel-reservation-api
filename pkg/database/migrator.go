@@ -30,6 +30,7 @@ func Migrate(db *gorm.DB) error {
 	}
 
 	for _, entity := range entities {
+
 		err = db.AutoMigrate(entity)
 
 		if err != nil {
