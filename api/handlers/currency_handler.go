@@ -19,12 +19,14 @@ type CurrencyHandler struct {
 	Router     *echo.Group
 	Service    *services.CurrencyService
 	translator *translator.Translator
+	logger     applogger.Logger
 }
 
-func (handler *CurrencyHandler) Register(router *echo.Group, service *services.CurrencyService, translator *translator.Translator) {
+func (handler *CurrencyHandler) Register(router *echo.Group, service *services.CurrencyService, translator *translator.Translator, logger applogger.Logger) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator
+	handler.logger = logger
 
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
@@ -38,7 +40,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -56,7 +58,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError,
 			ApiResponse{
@@ -78,7 +80,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
@@ -107,7 +109,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -116,14 +118,14 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,

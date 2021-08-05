@@ -6,6 +6,21 @@ import (
 	"strings"
 )
 
+type Logger interface {
+	LogInfo(message interface{})
+	LogDebug(message interface{})
+	LogWarning(message interface{})
+	LogError(message interface{})
+}
+
+type AppLogger struct {
+}
+
+func New() *AppLogger {
+
+	return &AppLogger{}
+}
+
 var (
 	logHandler = &lumberjack.Logger{
 		Filename:   "logs/application.log",
@@ -49,25 +64,25 @@ func writeLog(level string, message interface{}) {
 }
 
 // LogInfo Logs in Info level.
-func LogInfo(message interface{}) {
+func (l *AppLogger) LogInfo(message interface{}) {
 
 	writeLog(infoLevel, message)
 }
 
 // LogWarning Logs in Warning level.
-func LogWarning(message interface{}) {
+func (l *AppLogger) LogWarning(message interface{}) {
 
 	writeLog(warningLevel, message)
 }
 
 // LogDebug Logs in Debug level.
-func LogDebug(message interface{}) {
+func (l *AppLogger) LogDebug(message interface{}) {
 
 	writeLog(debugLevel, message)
 }
 
 // LogError Logs in Error level.
-func LogError(message interface{}) {
+func (l *AppLogger) LogError(message interface{}) {
 
 	writeLog(errorLevel, message)
 }

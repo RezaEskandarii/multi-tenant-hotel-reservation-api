@@ -13,11 +13,13 @@ import (
 
 // Run run application
 func Run(port int) error {
-	fmt.Println("application started ...")
+
+	logger := applogger.New()
+	logger.LogInfo("application started ...")
 
 	defer func() {
 		if r := recover(); r != nil {
-			applogger.LogError(r)
+			logger.LogError(r)
 			return
 		}
 	}()
@@ -30,6 +32,7 @@ func Run(port int) error {
 
 	db, err := database.GetDb(false)
 	if err != nil {
+		logger.LogError(err)
 		return err
 	}
 
@@ -40,6 +43,7 @@ func Run(port int) error {
 	if cfg.Application.IgnoreMigration == false {
 		err = database.Migrate(db)
 		if err != nil {
+			logger.LogDebug(err.Error())
 			return err
 		}
 	}

@@ -6,6 +6,7 @@ import (
 	handlers2 "hotel-reservation/api/handlers"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 )
 
@@ -45,32 +46,34 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	setServicesRepository(db)
 
+	logger := applogger.New()
+
 	countriesRouter := router.Group("/countries")
-	countryHandler.Register(countriesRouter, countryService, i18nTranslator)
+	countryHandler.Register(countriesRouter, countryService, i18nTranslator, logger)
 
 	provinceRouter := router.Group("/provinces")
-	provinceHandler.Register(provinceRouter, provinceService, i18nTranslator)
+	provinceHandler.Register(provinceRouter, provinceService, i18nTranslator, logger)
 
 	citiesRouter := router.Group("/cities")
-	cityHandler.Register(citiesRouter, cityService, i18nTranslator)
+	cityHandler.Register(citiesRouter, cityService, i18nTranslator, logger)
 
 	currencyRouter := router.Group("/currencies")
-	currencyHandler.Register(currencyRouter, currencyService, i18nTranslator)
+	currencyHandler.Register(currencyRouter, currencyService, i18nTranslator, logger)
 
 	usersRouter := router.Group("/users")
-	usersHandler.Register(usersRouter, userService, i18nTranslator)
+	usersHandler.Register(usersRouter, userService, i18nTranslator, logger)
 
 	residenceTypeRouter := router.Group("/residence-type")
-	residenceTypeHandler.Register(residenceTypeRouter, residenceTypeService, i18nTranslator)
+	residenceTypeHandler.Register(residenceTypeRouter, residenceTypeService, i18nTranslator, logger)
 
 	residenceGradeRouter := router.Group("/residence-grade")
-	residenceGradeHandler.Register(residenceGradeRouter, residenceGradeService, i18nTranslator)
+	residenceGradeHandler.Register(residenceGradeRouter, residenceGradeService, i18nTranslator, logger)
 
 	residenceRouteGroup := router.Group("/residence")
-	residenceHandler.Register(residenceRouteGroup, residenceService, i18nTranslator)
+	residenceHandler.Register(residenceRouteGroup, residenceService, i18nTranslator, logger)
 
 	roomTypeRouteGroup := router.Group("/room-type")
-	roomTypeHandler.Register(roomTypeRouteGroup, roomTypeService, i18nTranslator)
+	roomTypeHandler.Register(roomTypeRouteGroup, roomTypeService, i18nTranslator, logger)
 }
 
 func setServicesRepository(db *gorm.DB) {

@@ -30,6 +30,8 @@ type Config struct {
 func NewConfig() (*Config, error) {
 	path := "./resources/config.yml"
 
+	logger := applogger.New()
+
 	if os.Getenv("CONFIG_PATH") != "" {
 
 		path = os.Getenv("CONFIG_PATH")
@@ -38,7 +40,7 @@ func NewConfig() (*Config, error) {
 	cfgFile, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		applogger.LogError(err.Error())
+		logger.LogError(err.Error())
 		return nil, err
 	}
 
@@ -47,7 +49,7 @@ func NewConfig() (*Config, error) {
 	err = yaml.Unmarshal(cfgFile, &conf)
 
 	if err != nil {
-		applogger.LogError(err.Error())
+		logger.LogError(err.Error())
 		return nil, err
 	}
 

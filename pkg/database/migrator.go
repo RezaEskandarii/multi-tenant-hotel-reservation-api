@@ -22,11 +22,12 @@ var (
 // Migrate migrate tables
 func Migrate(db *gorm.DB) error {
 
-	applogger.LogInfo("migration started ...")
+	logger := applogger.New()
+	logger.LogInfo("migration started ...")
 
 	err := db.AutoMigrate(&models.City{})
 	if err != nil {
-		applogger.LogDebug(err.Error())
+		logger.LogDebug(err.Error())
 	}
 
 	for _, entity := range entities {
@@ -34,7 +35,7 @@ func Migrate(db *gorm.DB) error {
 		err = db.AutoMigrate(entity)
 
 		if err != nil {
-			applogger.LogError(err.Error())
+			logger.LogError(err.Error())
 			return err
 		}
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
-	"hotel-reservation/pkg/applogger"
 	"strings"
 )
 
@@ -24,7 +23,6 @@ func New() *Translator {
 	_, err = bundle.LoadMessageFile("resources/fa.json")
 
 	if err != nil {
-		applogger.LogError(err.Error())
 		panic(err)
 	}
 

@@ -14,9 +14,11 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "application port")
 	flag.Parse()
 
+	logger := applogger.New()
+
 	err := kernel.Run(port)
 	if err != nil {
-		applogger.LogInfo("exit ...")
+		logger.LogInfo("exit ...")
 		os.Exit(1)
 	}
 

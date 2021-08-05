@@ -19,12 +19,14 @@ type ProvinceHandler struct {
 	Router     *echo.Group
 	Service    *services.ProvinceService
 	translator *translator.Translator
+	logger     applogger.Logger
 }
 
-func (handler *ProvinceHandler) Register(router *echo.Group, service *services.ProvinceService, translator *translator.Translator) {
+func (handler *ProvinceHandler) Register(router *echo.Group, service *services.ProvinceService, translator *translator.Translator, logger applogger.Logger) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator
+	handler.logger = logger
 
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
@@ -40,7 +42,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	if err := c.Bind(&model); err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -59,7 +61,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
@@ -75,14 +77,14 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
@@ -102,7 +104,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	if err := c.Bind(&model); err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -114,7 +116,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -123,7 +125,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(id)
@@ -131,7 +133,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -176,14 +178,14 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	cities, err := handler.Service.GetCities(id)
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,

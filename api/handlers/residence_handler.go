@@ -19,12 +19,14 @@ type ResidenceHandler struct {
 	Router     *echo.Group
 	Service    *services.ResidenceService
 	translator *translator.Translator
+	logger     applogger.Logger
 }
 
-func (handler *ResidenceHandler) Register(router *echo.Group, service *services.ResidenceService, translator *translator.Translator) {
+func (handler *ResidenceHandler) Register(router *echo.Group, service *services.ResidenceService, translator *translator.Translator, logger applogger.Logger) {
 	handler.Router = router
 	handler.Service = service
 	handler.translator = translator
+	handler.logger = logger
 
 	handler.Router.POST("", handler.create)
 	handler.Router.PUT("/:id", handler.update)
@@ -39,7 +41,7 @@ func (handler *ResidenceHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -72,14 +74,14 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	mainModel, err := handler.Service.Find(id)
 
 	if err != nil {
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -99,7 +101,7 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 	err = c.Bind(&clientModel)
 
 	if err != nil {
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -113,7 +115,7 @@ func (handler *ResidenceHandler) update(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -130,7 +132,7 @@ func (handler *ResidenceHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -138,7 +140,7 @@ func (handler *ResidenceHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -183,7 +185,7 @@ func (handler *ResidenceHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      handler.translator.Localize(lang, message_keys.BadRequest),
@@ -194,7 +196,7 @@ func (handler *ResidenceHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		applogger.LogError(err.Error())
+		handler.logger.LogError(err.Error())
 
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
