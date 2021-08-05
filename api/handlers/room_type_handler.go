@@ -58,7 +58,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
-			Message:      "",
+			Message:      err.Error(),
 		})
 	}
 

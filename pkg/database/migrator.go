@@ -14,6 +14,8 @@ var (
 		models.Currency{},
 		models.User{},
 		models.Residence{},
+		models.Room{},
+		models.RoomType{},
 	}
 )
 

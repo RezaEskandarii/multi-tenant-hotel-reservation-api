@@ -19,6 +19,7 @@ var (
 	residenceTypeService  = services.NewResidenceTypeService()
 	residenceGradeService = services.NewResidenceGradeService()
 	residenceService      = services.NewResidenceService()
+	roomTypeService       = services.NewRoomTypeService()
 )
 
 // handlers
@@ -31,6 +32,7 @@ var (
 	residenceTypeHandler  = handlers2.ResidenceTypeHandler{}
 	residenceGradeHandler = handlers2.ResidenceGradeHandler{}
 	residenceHandler      = handlers2.ResidenceHandler{}
+	roomTypeHandler       = handlers2.RoomTypeHandler{}
 )
 
 // pckgs
@@ -66,6 +68,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	residenceRouteGroup := router.Group("/residence")
 	residenceHandler.Register(residenceRouteGroup, residenceService, i18nTranslator)
+
+	roomTypeRouteGroup := router.Group("/room-type")
+	roomTypeHandler.Register(roomTypeRouteGroup, roomTypeService, i18nTranslator)
 }
 
 func setServicesRepository(db *gorm.DB) {
@@ -77,4 +82,5 @@ func setServicesRepository(db *gorm.DB) {
 	residenceTypeService.Repository = repositories.NewResidenceTypeRepository(db)
 	residenceGradeService.Repository = repositories.NewResidenceGradeRepository(db)
 	residenceService.Repository = repositories.NewResidenceRepository(db)
+	roomTypeService.Repository = repositories.NewRoomTypeRepository(db)
 }
