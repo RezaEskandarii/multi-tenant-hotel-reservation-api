@@ -81,6 +81,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	roomHandler.Register(roomRouteGroup, roomService, i18nTranslator, logger)
 }
 
+// set repository dependency
 func setServicesRepository(db *gorm.DB) {
 	countryService.Repository = repositories.NewCountryRepository(db)
 	provinceService.Repository = repositories.NewProvinceRepository(db)
