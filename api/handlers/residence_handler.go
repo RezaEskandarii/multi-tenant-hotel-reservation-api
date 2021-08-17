@@ -22,17 +22,19 @@ type ResidenceHandler struct {
 	logger     applogger.Logger
 }
 
-func (handler *ResidenceHandler) Register(router *echo.Group, service *services.ResidenceService, translator *translator.Translator, logger applogger.Logger) {
-	handler.Router = router
+func (handler *ResidenceHandler) Register(input *dto.HandlerInput, service *services.ResidenceService) {
+	handler.Router = input.Router
 	handler.Service = service
-	handler.translator = translator
-	handler.logger = logger
+	handler.translator = input.Translator
+	handler.logger = input.Logger
 
-	handler.Router.POST("", handler.create)
-	handler.Router.PUT("/:id", handler.update)
-	handler.Router.GET("/:id", handler.find)
-	handler.Router.DELETE("/:id", handler.delete)
-	handler.Router.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	routeGroup := input.Router.Group("/residence")
+
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.DELETE("/:id", handler.delete)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
 func (handler *ResidenceHandler) create(c echo.Context) error {

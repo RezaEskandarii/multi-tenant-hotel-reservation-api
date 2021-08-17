@@ -22,16 +22,18 @@ type CurrencyHandler struct {
 	logger     applogger.Logger
 }
 
-func (handler *CurrencyHandler) Register(router *echo.Group, service *services.CurrencyService, translator *translator.Translator, logger applogger.Logger) {
-	handler.Router = router
+func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *services.CurrencyService) {
+	handler.Router = input.Router
 	handler.Service = service
-	handler.translator = translator
-	handler.logger = logger
+	handler.translator = input.Translator
+	handler.logger = input.Logger
 
-	handler.Router.POST("", handler.create)
-	handler.Router.PUT("/:id", handler.update)
-	handler.Router.GET("/:id", handler.find)
-	handler.Router.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	routeGroup := handler.Router.Group("/currencies")
+
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
 func (handler *CurrencyHandler) create(c echo.Context) error {

@@ -22,17 +22,19 @@ type CountryHandler struct {
 	logger     applogger.Logger
 }
 
-func (handler *CountryHandler) Register(router *echo.Group, service *services.CountryService, translator *translator.Translator, logger applogger.Logger) {
-	handler.Router = router
+func (handler *CountryHandler) Register(input *dto.HandlerInput, service *services.CountryService) {
+	handler.Router = input.Router
 	handler.Service = service
-	handler.translator = translator
-	handler.logger = logger
+	handler.translator = input.Translator
+	handler.logger = input.Logger
 
-	handler.Router.POST("", handler.create)
-	handler.Router.PUT("/:id", handler.update)
-	handler.Router.GET("/:id", handler.find)
-	handler.Router.GET("/:id/provinces", handler.provinces)
-	handler.Router.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	routeGroup := handler.Router.Group("/countries")
+
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("/:id/provinces", handler.provinces)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
 func (handler *CountryHandler) create(c echo.Context) error {

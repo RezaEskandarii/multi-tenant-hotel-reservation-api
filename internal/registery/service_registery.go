@@ -3,7 +3,8 @@ package registery
 import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
-	handlers2 "hotel-reservation/api/handlers"
+	"hotel-reservation/api/handlers"
+	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
 	"hotel-reservation/pkg/applogger"
@@ -26,21 +27,16 @@ var (
 
 // handlers
 var (
-	countryHandler        = handlers2.CountryHandler{}
-	provinceHandler       = handlers2.ProvinceHandler{}
-	cityHandler           = handlers2.CityHandler{}
-	currencyHandler       = handlers2.CurrencyHandler{}
-	usersHandler          = handlers2.UserHandler{}
-	residenceTypeHandler  = handlers2.ResidenceTypeHandler{}
-	residenceGradeHandler = handlers2.ResidenceGradeHandler{}
-	residenceHandler      = handlers2.ResidenceHandler{}
-	roomTypeHandler       = handlers2.RoomTypeHandler{}
-	roomHandler           = handlers2.RoomHandler{}
-)
-
-// pckgs
-var (
-	i18nTranslator = translator.New()
+	countryHandler        = handlers.CountryHandler{}
+	provinceHandler       = handlers.ProvinceHandler{}
+	cityHandler           = handlers.CityHandler{}
+	currencyHandler       = handlers.CurrencyHandler{}
+	usersHandler          = handlers.UserHandler{}
+	residenceTypeHandler  = handlers.ResidenceTypeHandler{}
+	residenceGradeHandler = handlers.ResidenceGradeHandler{}
+	residenceHandler      = handlers.ResidenceHandler{}
+	roomTypeHandler       = handlers.RoomTypeHandler{}
+	roomHandler           = handlers.RoomHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -49,36 +45,33 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	setServicesRepository(db)
 
 	logger := applogger.New()
+	i18nTranslator := translator.New()
 
-	countriesRouter := router.Group("/countries")
-	countryHandler.Register(countriesRouter, countryService, i18nTranslator, logger)
+	handlerInput := &dto.HandlerInput{
+		Router:     router,
+		Translator: i18nTranslator,
+		Logger:     logger,
+	}
 
-	provinceRouter := router.Group("/provinces")
-	provinceHandler.Register(provinceRouter, provinceService, i18nTranslator, logger)
+	countryHandler.Register(handlerInput, countryService)
 
-	citiesRouter := router.Group("/cities")
-	cityHandler.Register(citiesRouter, cityService, i18nTranslator, logger)
+	provinceHandler.Register(handlerInput, provinceService)
 
-	currencyRouter := router.Group("/currencies")
-	currencyHandler.Register(currencyRouter, currencyService, i18nTranslator, logger)
+	cityHandler.Register(handlerInput, cityService)
 
-	usersRouter := router.Group("/users")
-	usersHandler.Register(usersRouter, userService, i18nTranslator, logger)
+	currencyHandler.Register(handlerInput, currencyService)
 
-	residenceTypeRouter := router.Group("/residence-type")
-	residenceTypeHandler.Register(residenceTypeRouter, residenceTypeService, i18nTranslator, logger)
+	usersHandler.Register(handlerInput, userService)
 
-	residenceGradeRouter := router.Group("/residence-grade")
-	residenceGradeHandler.Register(residenceGradeRouter, residenceGradeService, i18nTranslator, logger)
+	residenceTypeHandler.Register(handlerInput, residenceTypeService)
 
-	residenceRouteGroup := router.Group("/residence")
-	residenceHandler.Register(residenceRouteGroup, residenceService, i18nTranslator, logger)
+	residenceGradeHandler.Register(handlerInput, residenceGradeService)
 
-	roomTypeRouteGroup := router.Group("/room-type")
-	roomTypeHandler.Register(roomTypeRouteGroup, roomTypeService, i18nTranslator, logger)
+	residenceHandler.Register(handlerInput, residenceService)
 
-	roomRouteGroup := router.Group("/room")
-	roomHandler.Register(roomRouteGroup, roomService, i18nTranslator, logger)
+	roomTypeHandler.Register(handlerInput, roomTypeService)
+
+	roomHandler.Register(handlerInput, roomService)
 }
 
 // set repository dependency
