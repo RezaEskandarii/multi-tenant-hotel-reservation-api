@@ -2,25 +2,13 @@ package test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/models"
-	"hotel-reservation/internal/repositories"
-	"hotel-reservation/internal/services"
-	"hotel-reservation/pkg/database"
 	"testing"
 )
 
-var (
-	db, _      = database.GetDb(true)
-	pagination = dto.PaginationInput{
-		Page:    1,
-		PerPage: 20,
-	}
-	countryService = *services.NewCountryService()
-)
-
 func init() {
-	countryService.Repository = repositories.NewCountryRepository(db)
+
+	setRepository()
 }
 
 func TestCanCreateNewCountry(t *testing.T) {

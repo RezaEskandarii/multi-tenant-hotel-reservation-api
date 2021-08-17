@@ -11,7 +11,7 @@ type Province struct {
 	Name      string   `json:"name" valid:"required"`
 	Alias     string   `json:"alias" valid:"required"`
 	Cities    []*City  `json:"cities" valid:"-"`
-	CountryId uint     `json:"country_id" valid:"required"`
+	CountryId uint64   `json:"country_id" valid:"required"`
 	Country   *Country `json:"country" valid:"-"`
 }
 
