@@ -67,6 +67,46 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 	return &model, nil
 }
 
+func (r *UserRepository) Deactivate(id uint64) (*models.User, error) {
+
+	user := models.User{}
+
+	query := r.DB.Model(&models.User{}).Where("id=?", id).Find(&user)
+
+	if query.Error != nil {
+		return nil, query.Error
+	}
+
+	user.IsActive = false
+
+	if tx := r.DB.Model(&models.User{}).Updates(user); tx.Error != nil {
+
+		return nil, tx.Error
+	}
+
+	return &user, nil
+}
+
+func (r *UserRepository) Activate(id uint64) (*models.User, error) {
+
+	user := models.User{}
+
+	query := r.DB.Model(&models.User{}).Where("id=?", id).Find(&user)
+
+	if query.Error != nil {
+		return nil, query.Error
+	}
+
+	user.IsActive = true
+
+	if tx := r.DB.Model(&models.User{}).Updates(user); tx.Error != nil {
+
+		return nil, tx.Error
+	}
+
+	return &user, nil
+}
+
 func (r *UserRepository) Delete(id uint64) error {
 	if tx := r.DB.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error

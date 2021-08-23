@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	middlewares2 "hotel-reservation/api/middlewares"
 	. "hotel-reservation/internal/commons"
@@ -38,6 +39,8 @@ func (handler *CountryHandler) Register(input *dto.HandlerInput, service *servic
 }
 
 func (handler *CountryHandler) create(c echo.Context) error {
+
+	fmt.Println("request dispatched")
 
 	model := &models.Country{}
 

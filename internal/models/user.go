@@ -38,6 +38,7 @@ type User struct {
 	PassportNumber       string     `json:"passport_number"`
 	NationalId           string     `json:"national_id" valid:"required"`
 	Address              string     `json:"address"`
+	IsActive             bool       `json:"is_active"`
 }
 
 func (u *User) Validate() (bool, error) {
