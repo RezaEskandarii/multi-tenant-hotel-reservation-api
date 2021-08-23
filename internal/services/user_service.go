@@ -51,3 +51,15 @@ func (s *UserService) FindAll(input *dto.PaginationInput) (*commons.PaginatedLis
 
 	return s.Repository.FindAll(input)
 }
+
+// Activate find user by id and activate.
+func (s *UserService) Activate(id uint64) (*models.User, error) {
+
+	return s.Repository.Activate(id)
+}
+
+// Deactivate find and deactivates user by user id.
+func (s *UserService) Deactivate(id uint64) (*models.User, error) {
+
+	return s.Repository.Deactivate(id)
+}
