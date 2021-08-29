@@ -46,7 +46,7 @@ func (s *UserService) Delete(id uint64) error {
 	return s.Repository.Delete(id)
 }
 
-// FindAll returns paginates list of cities.
+// FindAll returns paginated list of cities.
 func (s *UserService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
