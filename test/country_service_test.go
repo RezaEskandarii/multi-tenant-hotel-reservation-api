@@ -13,17 +13,19 @@ func init() {
 
 func TestCanCreateNewCountry(t *testing.T) {
 
-	country1 := models.Country{
+	country := models.Country{
 		Name:  "Iran",
 		Alias: "IRI",
 	}
 
-	country2, err := countryService.Create(&country1)
+	actualCountry, err := countryService.Create(&country)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, country2)
-	assert.Equal(t, country1.Id, country2.Id)
-	assert.NotEqual(t, country2, 0)
+	assert.NotNil(t, actualCountry)
+	assert.Equal(t, actualCountry.Id, country.Id)
+	assert.Equal(t, actualCountry.Name, country.Name)
+	assert.Equal(t, actualCountry.Alias, country.Alias)
+	assert.NotEqual(t, actualCountry, 0)
 
 }
 
@@ -48,28 +50,29 @@ func TestCanFindCountry(t *testing.T) {
 }
 
 func TestCanUpdateCountry(t *testing.T) {
-	country1 := models.Country{
+	country := models.Country{
 		Name:  "Canada",
 		Alias: "Ca",
 	}
-	country2, err := countryService.Create(&country1)
+
+	actualCountry, err := countryService.Create(&country)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, country2)
-	assert.NotEqual(t, country2, 0)
+	assert.NotNil(t, actualCountry)
+	assert.NotEqual(t, actualCountry, 0)
 
-	country2.Name = "Iran"
-	country2.Alias = "IRI"
+	actualCountry.Name = "Iran"
+	actualCountry.Alias = "IRI"
 
-	country3, err := countryService.Update(country2)
+	exceptedCountry, err := countryService.Update(actualCountry)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, country3)
-	assert.NotEqual(t, country3.Id, 0)
-	assert.Equal(t, country2.Name, country3.Name)
-	assert.Equal(t, country2.Alias, country3.Alias)
-	assert.Equal(t, country3.Name, "Iran")
-	assert.Equal(t, country3.Alias, "IRI")
+	assert.NotNil(t, exceptedCountry)
+	assert.NotEqual(t, exceptedCountry.Id, 0)
+	assert.Equal(t, exceptedCountry.Name, actualCountry.Name)
+	assert.Equal(t, exceptedCountry.Alias, actualCountry.Alias)
+	assert.Equal(t, exceptedCountry.Name, "Iran")
+	assert.Equal(t, exceptedCountry.Alias, "IRI")
 }
 
 func TestCanFindAllCountries(t *testing.T) {

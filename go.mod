@@ -11,7 +11,6 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/stretchr/testify v1.7.0
-	gocv.io/x/gocv v0.28.0
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	golang.org/x/text v0.3.6

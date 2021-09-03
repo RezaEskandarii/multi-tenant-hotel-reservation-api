@@ -17,7 +17,7 @@ func TestCanCreateNewProvince(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, country)
 
-	Province1 := models.Province{
+	province := models.Province{
 		Name:      "Mazandaran",
 		Alias:     "mz",
 		CountryId: country.Id,
@@ -25,58 +25,59 @@ func TestCanCreateNewProvince(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	Province2, err := provinceService.Create(&Province1)
+	actualProvince, err := provinceService.Create(&province)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, Province2)
-	assert.Equal(t, Province1.Id, Province2.Id)
-	assert.NotEqual(t, Province2, 0)
+	assert.NotNil(t, actualProvince)
+	assert.Equal(t, province.Id, actualProvince.Id)
+	assert.NotEqual(t, actualProvince, 0)
 
 }
 
 func TestCanFindProvince(t *testing.T) {
 
-	Province1 := models.Province{
+	province := models.Province{
 		Name:  "Tehran",
 		Alias: "th",
 	}
 
-	Province2, err := provinceService.Create(&Province1)
+	actualProvince, err := provinceService.Create(&province)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, Province2)
-	assert.NotEqual(t, Province2, 0)
+	assert.NotNil(t, actualProvince)
+	assert.NotEqual(t, actualProvince, 0)
 
-	Province3, err := provinceService.Find(Province2.Id)
+	exceptedProvince, err := provinceService.Find(actualProvince.Id)
 	assert.Nil(t, err)
-	assert.NotNil(t, Province3)
-	assert.NotEqual(t, Province3.Id, 0)
-	assert.Equal(t, Province2.Name, Province3.Name)
+	assert.NotNil(t, exceptedProvince)
+	assert.NotEqual(t, exceptedProvince.Id, 0)
+	assert.Equal(t, exceptedProvince.Name, actualProvince.Name)
 }
 
 func TestCanUpdateProvince(t *testing.T) {
-	Province1 := models.Province{
+	province := models.Province{
 		Name:  "NewYork",
 		Alias: "Ny",
 	}
-	Province2, err := provinceService.Create(&Province1)
+
+	exceptedProvince, err := provinceService.Create(&province)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, Province2)
-	assert.NotEqual(t, Province2, 0)
+	assert.NotNil(t, exceptedProvince)
+	assert.NotEqual(t, exceptedProvince, 0)
 
-	Province2.Name = "Texas"
-	Province2.Alias = "tx"
+	exceptedProvince.Name = "Texas"
+	exceptedProvince.Alias = "tx"
 
-	Province3, err := provinceService.Update(Province2)
+	actualProvince, err := provinceService.Update(exceptedProvince)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, Province3)
-	assert.NotEqual(t, Province3.Id, 0)
-	assert.Equal(t, Province2.Name, Province3.Name)
-	assert.Equal(t, Province2.Alias, Province3.Alias)
-	assert.Equal(t, Province3.Name, "Texas")
-	assert.Equal(t, Province3.Alias, "tx")
+	assert.NotNil(t, actualProvince)
+	assert.NotEqual(t, actualProvince.Id, 0)
+	assert.Equal(t, exceptedProvince.Name, actualProvince.Name)
+	assert.Equal(t, exceptedProvince.Alias, actualProvince.Alias)
+	assert.Equal(t, actualProvince.Name, "Texas")
+	assert.Equal(t, actualProvince.Alias, "tx")
 }
 
 //func TestCanFindAllProvinces(t *testing.T) {
