@@ -19,6 +19,7 @@ type Config struct {
 		Engine   string `yaml:"engine"`
 	}
 
+	// Application is application config
 	Application struct {
 		Port            string `yaml:"port"`
 		ClusterName     string `yaml:"cluster_name"`
@@ -27,6 +28,7 @@ type Config struct {
 	}
 }
 
+// NewConfig reads config from yml file copies to config struct and returns config struct
 func NewConfig() (*Config, error) {
 	path := "./resources/config.yml"
 
