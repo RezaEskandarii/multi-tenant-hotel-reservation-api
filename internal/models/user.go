@@ -51,6 +51,7 @@ func (u *User) Validate() (bool, error) {
 	return ok, nil
 }
 
+// BeforeCreate validates user struct and change user's password to bcrypt.
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	_, err := u.Validate()
 

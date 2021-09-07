@@ -25,6 +25,7 @@ type Guest struct {
 	Address            string     `json:"address" valid:"required"`
 }
 
+// Validate validates guest model.
 func (g *Guest) Validate() (bool, error) {
 
 	return govalidator.ValidateStruct(g)
