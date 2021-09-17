@@ -11,6 +11,7 @@ type Currency struct {
 	Symbol string `json:"symbol" valid:"required"`
 }
 
+// Validate validates currency struct
 func (c *Currency) Validate() (bool, error) {
 
 	return govalidator.ValidateStruct(c)
