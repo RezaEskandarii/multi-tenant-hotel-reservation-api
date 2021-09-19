@@ -29,6 +29,10 @@ func (handler *GuestHandler) Register(input *dto.HandlerInput, service *services
 
 	routeGroup := handler.Router.Group("/guests")
 	routeGroup.POST("", handler.create)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("", handler.findAll)
+	routeGroup.PUT("", handler.update)
+	//routeGroup.DELETE("", handler)
 }
 
 func (handler *GuestHandler) create(c echo.Context) error {
