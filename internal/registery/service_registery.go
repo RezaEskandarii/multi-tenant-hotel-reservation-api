@@ -23,6 +23,7 @@ var (
 	residenceService      = services.NewResidenceService()
 	roomTypeService       = services.NewRoomTypeService()
 	roomService           = services.NewRoomService()
+	guestService          = services.NewGuestService()
 )
 
 // handlers
@@ -37,6 +38,7 @@ var (
 	residenceHandler      = handlers.ResidenceHandler{}
 	roomTypeHandler       = handlers.RoomTypeHandler{}
 	roomHandler           = handlers.RoomHandler{}
+	guestHandler          = handlers.GuestHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -72,6 +74,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	roomTypeHandler.Register(handlerInput, roomTypeService)
 
 	roomHandler.Register(handlerInput, roomService)
+
+	guestHandler.Register(handlerInput, guestService)
 }
 
 // set repository dependency
@@ -86,4 +90,5 @@ func setServicesRepository(db *gorm.DB) {
 	residenceService.Repository = repositories.NewResidenceRepository(db)
 	roomTypeService.Repository = repositories.NewRoomTypeRepository(db)
 	roomService.Repository = repositories.NewRoomRepository(db)
+	guestService.Repository = repositories.NewGuestRepository(db)
 }

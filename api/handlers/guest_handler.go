@@ -27,8 +27,7 @@ func (handler *GuestHandler) Register(input *dto.HandlerInput, service *services
 	handler.translator = input.Translator
 	handler.logger = input.Logger
 
-	routeGroup := handler.Router.Group("/currencies")
-
+	routeGroup := handler.Router.Group("/guests")
 	routeGroup.POST("", handler.create)
 }
 
