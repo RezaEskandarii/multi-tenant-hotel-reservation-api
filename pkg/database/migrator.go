@@ -16,6 +16,7 @@ var (
 		models.Residence{},
 		models.Room{},
 		models.RoomType{},
+		models.Guest{},
 	}
 )
 
