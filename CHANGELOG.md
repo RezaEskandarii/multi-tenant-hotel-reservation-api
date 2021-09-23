@@ -15,7 +15,7 @@
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
-- add room model
+- add model model
 - add residence handler
 - add residence service
 - add residence repository
