@@ -1,8 +1,9 @@
 package applogger
 
 import (
-	"github.com/amoghe/distillog"
 	"github.com/natefinch/lumberjack"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"strings"
 )
 
@@ -21,16 +22,6 @@ func New() *AppLogger {
 	return &AppLogger{}
 }
 
-var (
-	logHandler = &lumberjack.Logger{
-		Filename:   "logs/application.log",
-		MaxSize:    5, // megabytes
-		MaxBackups: 10,
-		MaxAge:     30, // days
-		Compress:   false,
-	}
-)
-
 const (
 	infoLevel    = "info"
 	warningLevel = "warning"
@@ -38,51 +29,82 @@ const (
 	errorLevel   = "error"
 )
 
-func writeLog(level string, message interface{}) {
+var sugarLogger *zap.SugaredLogger
 
-	logger := distillog.NewStreamLogger(level, logHandler)
-	defer logger.Close()
-	distillog.SetOutput(logHandler)
+func InitLogger() {
+	writeSyncer := getLogWriter()
+	encoder := getEncoder()
+	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
+
+	logger := zap.New(core, zap.AddCaller())
+	sugarLogger = logger.Sugar()
+}
+
+// getEncoder returns zapcore encoder
+func getEncoder() zapcore.Encoder {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	return zapcore.NewConsoleEncoder(encoderConfig)
+}
+
+// getLogWriter returns zapcore WriteSyncer
+func getLogWriter() zapcore.WriteSyncer {
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   "./logs/application.log",
+		MaxSize:    1,
+		MaxBackups: 5,
+		MaxAge:     30,
+		Compress:   false,
+	}
+	return zapcore.AddSync(lumberJackLogger)
+}
+
+func writeLog(level string, message string) {
+
+	InitLogger()
+	defer sugarLogger.Sync()
 
 	switch strings.TrimSpace(level) {
 	case "errorLevel":
-		logger.Errorf("%s", message)
+		sugarLogger.Info(message)
 		break
 	case "infoLevel":
-		logger.Infof("%s", message)
+		sugarLogger.Info(message)
 		break
 	case "warningLevel":
-		logger.Warningf("%s", message)
+		sugarLogger.Warn(message)
 		break
 	case "debugLevel":
-		logger.Debugf("%s", message)
+		sugarLogger.Debug(message)
 		break
 	default:
-		logger.Errorf("%s", message)
+		sugarLogger.Error(message)
 		break
 	}
 }
 
 // LogInfo Logs in Info level.
-func (l *AppLogger) LogInfo(message interface{}) {
+func (l *AppLogger) LogInfo(message string) {
 
 	writeLog(infoLevel, message)
 }
 
 // LogWarning Logs in Warning level.
-func (l *AppLogger) LogWarning(message interface{}) {
+func (l *AppLogger) LogWarning(message string) {
 
 	writeLog(warningLevel, message)
 }
 
 // LogDebug Logs in Debug level.
-func (l *AppLogger) LogDebug(message interface{}) {
+func (l *AppLogger) LogDebug(message string) {
 
 	writeLog(debugLevel, message)
 }
 
 // LogError Logs in Error level.
-func (l *AppLogger) LogError(message interface{}) {
+func (l *AppLogger) LogError(err interface{}) {
 
+	message := err.(string)
 	writeLog(errorLevel, message)
 }

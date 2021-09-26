@@ -7,7 +7,6 @@ import (
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
-	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 )
 
@@ -46,13 +45,13 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	setServicesRepository(db)
 
-	logger := applogger.New()
+	//logger := applogger.New()
 	i18nTranslator := translator.New()
 
 	handlerInput := &dto.HandlerInput{
 		Router:     router,
 		Translator: i18nTranslator,
-		Logger:     logger,
+		//Logger:     logger,
 	}
 
 	countryHandler.Register(handlerInput, countryService)

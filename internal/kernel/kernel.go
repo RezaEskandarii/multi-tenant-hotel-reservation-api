@@ -32,7 +32,7 @@ func Run(port int) error {
 
 	db, err := database.GetDb(false)
 	if err != nil {
-		logger.LogError(err)
+		logger.LogError(err.Error())
 		return err
 	}
 
