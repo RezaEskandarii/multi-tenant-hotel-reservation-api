@@ -8,7 +8,7 @@ import (
 )
 
 type RateGroupService struct {
-	Repository repositories.RateGroupRepository
+	Repository *repositories.RateGroupRepository
 }
 
 // NewRateGroupService returns new RateGroupService

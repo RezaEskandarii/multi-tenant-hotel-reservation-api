@@ -8,10 +8,10 @@ import (
 )
 
 type Logger interface {
-	LogInfo(message interface{})
-	LogDebug(message interface{})
-	LogWarning(message interface{})
-	LogError(message interface{})
+	LogInfo(message string)
+	LogDebug(message string)
+	LogWarning(message string)
+	LogError(err interface{})
 }
 
 type AppLogger struct {

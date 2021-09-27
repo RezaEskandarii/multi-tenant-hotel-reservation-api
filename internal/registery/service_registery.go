@@ -7,6 +7,7 @@ import (
 	"hotel-reservation/internal/dto"
 	"hotel-reservation/internal/repositories"
 	"hotel-reservation/internal/services"
+	"hotel-reservation/pkg/applogger"
 	"hotel-reservation/pkg/translator"
 )
 
@@ -23,6 +24,7 @@ var (
 	roomTypeService       = services.NewRoomTypeService()
 	roomService           = services.NewRoomService()
 	guestService          = services.NewGuestService()
+	rateGroupService      = services.NewRateGroupService()
 )
 
 // handlers
@@ -38,6 +40,7 @@ var (
 	roomTypeHandler       = handlers.RoomTypeHandler{}
 	roomHandler           = handlers.RoomHandler{}
 	guestHandler          = handlers.GuestHandler{}
+	rateGroupHandler      = handlers.RateGroupHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -45,13 +48,13 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	setServicesRepository(db)
 
-	//logger := applogger.New()
+	logger := applogger.New()
 	i18nTranslator := translator.New()
 
 	handlerInput := &dto.HandlerInput{
 		Router:     router,
 		Translator: i18nTranslator,
-		//Logger:     logger,
+		Logger:     logger,
 	}
 
 	countryHandler.Register(handlerInput, countryService)
@@ -75,6 +78,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	roomHandler.Register(handlerInput, roomService)
 
 	guestHandler.Register(handlerInput, guestService)
+
+	rateGroupHandler.Register(handlerInput, rateGroupService)
+
 }
 
 // set repository dependency
@@ -90,4 +96,5 @@ func setServicesRepository(db *gorm.DB) {
 	roomTypeService.Repository = repositories.NewRoomTypeRepository(db)
 	roomService.Repository = repositories.NewRoomRepository(db)
 	guestService.Repository = repositories.NewGuestRepository(db)
+	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
 }
