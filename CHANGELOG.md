@@ -2,11 +2,39 @@
 ## [Unreleased]
 
 ### Doc
+- add comment to some codes
+- add comemnt to some codes
+- add comment to some codes
+- add document to some functions
 - regenerate changelog file
 - add some comments
 - regenerate changelog file
 
 ### Feat
+- add rate group handler
+- add rate group repository service
+- add rate group repository functions
+- add rate group repository
+- add rate group model
+- add guest model to migrator
+- implement guest handler functions
+- add guest handler to service registry
+- implement guests handler
+- add guests handler
+- add activate and deactivate functions to user service
+- add activate and deactivate functions to user repository
+- add guest service
+- add guest repository
+- add guest model
+- add room handler
+- add room room service
+- add room repository
+- add logger to handlers
+- add room type handler
+- add room type service
+- add room room type repository
+- add room struct fields
+- add room type struct
 - add logger to user handler
 - add logger to residence type handler
 - add logger to residence handler
@@ -15,7 +43,7 @@
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
-- add model model
+- add room model
 - add residence handler
 - add residence service
 - add residence repository
@@ -41,7 +69,16 @@
 - add user handler
 - add user service
 
+### Fix
+- register rate group handler in service registry
+
 ### Refactor
+- change logger library with zaplogger
+- tidy go mod file
+- refactor some field names is tests
+- change handlers input with shared struct
+- refactor some codes
+- refactor some codes
 - improve repositories code
 - validate user's gender before create
 - ignore validation to some model relations
