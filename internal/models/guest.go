@@ -32,12 +32,9 @@ func (g *Guest) Validate() (bool, error) {
 }
 
 func (g *Guest) BeforeCreate(tx *gorm.DB) error {
-	_, err := g.Validate()
-
-	if err != nil {
+	if _, err := g.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }

@@ -18,12 +18,9 @@ func (c *Currency) Validate() (bool, error) {
 }
 
 func (c *Currency) BeforeCreate(tx *gorm.DB) error {
-	_, err := c.Validate()
-
-	if err != nil {
+	if _, err := c.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }

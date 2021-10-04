@@ -18,12 +18,9 @@ func (r *ResidenceGrade) Validate() (bool, error) {
 }
 
 func (r *ResidenceGrade) BeforeCreate(tx *gorm.DB) error {
-	_, err := r.Validate()
-
-	if err != nil {
+	if _, err := r.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }

@@ -21,12 +21,9 @@ func (p *Province) Validate() (bool, error) {
 }
 
 func (p *Province) BeforeCreate(tx *gorm.DB) error {
-	_, err := p.Validate()
-
-	if err != nil {
+	if _, err := p.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }

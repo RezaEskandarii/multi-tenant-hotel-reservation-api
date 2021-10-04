@@ -20,9 +20,7 @@ func (r *RoomType) Validate() (bool, error) {
 }
 
 func (r *RoomType) BeforeCreate(tx *gorm.DB) error {
-	_, err := r.Validate()
-
-	if err != nil {
+	if _, err := r.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}

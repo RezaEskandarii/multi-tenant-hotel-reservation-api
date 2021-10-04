@@ -20,12 +20,9 @@ func (c *City) Validate() (bool, error) {
 }
 
 func (c *City) BeforeCreate(tx *gorm.DB) error {
-	_, err := c.Validate()
-
-	if err != nil {
+	if _, err := c.Validate(); err != nil {
 		tx.AddError(err)
 		return err
 	}
-
 	return nil
 }
