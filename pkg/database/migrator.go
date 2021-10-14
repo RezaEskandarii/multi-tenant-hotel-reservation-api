@@ -17,6 +17,8 @@ var (
 		models.Room{},
 		models.RoomType{},
 		models.Guest{},
+		models.RateGroup{},
+		models.RateCode{},
 	}
 )
 
