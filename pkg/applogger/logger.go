@@ -14,12 +14,21 @@ type Logger interface {
 	LogError(err interface{})
 }
 
-type AppLogger struct {
+type LoggerConfig struct {
+	CustomFilePath      string
+	CustomFileExtension string
+	LogServerAddr       string
 }
 
-func New() *AppLogger {
+type AppLogger struct {
+	Config *LoggerConfig
+}
 
-	return &AppLogger{}
+func New(conf *LoggerConfig) *AppLogger {
+
+	return &AppLogger{
+		Config: conf,
+	}
 }
 
 const (
