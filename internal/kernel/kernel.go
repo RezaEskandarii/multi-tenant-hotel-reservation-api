@@ -14,7 +14,7 @@ import (
 // Run run application
 func Run(port int) error {
 
-	logger := applogger.New()
+	logger := applogger.New(nil)
 	logger.LogInfo("application started ...")
 
 	defer func() {

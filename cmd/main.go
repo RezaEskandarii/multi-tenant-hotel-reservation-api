@@ -14,7 +14,7 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "application port")
 	flag.Parse()
 
-	logger := applogger.New()
+	logger := applogger.New(nil)
 
 	err := kernel.Run(port)
 	if err != nil {

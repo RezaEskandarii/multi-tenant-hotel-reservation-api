@@ -25,7 +25,7 @@ var (
 // Migrate migrate tables
 func Migrate(db *gorm.DB) error {
 
-	logger := applogger.New()
+	logger := applogger.New(nil)
 	logger.LogInfo("migration started ...")
 
 	err := db.AutoMigrate(&models.City{})

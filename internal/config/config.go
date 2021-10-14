@@ -32,7 +32,7 @@ type Config struct {
 func NewConfig() (*Config, error) {
 	path := "./resources/config.yml"
 
-	logger := applogger.New()
+	logger := applogger.New(nil)
 
 	if os.Getenv("CONFIG_PATH") != "" {
 

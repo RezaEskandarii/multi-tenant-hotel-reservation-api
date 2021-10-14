@@ -50,7 +50,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	setServicesRepository(db)
 
-	logger := applogger.New()
+	logger := applogger.New(nil)
 	i18nTranslator := translator.New()
 
 	handlerInput := &dto.HandlerInput{
