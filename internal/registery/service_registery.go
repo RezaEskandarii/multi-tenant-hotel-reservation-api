@@ -25,6 +25,7 @@ var (
 	roomService           = services.NewRoomService()
 	guestService          = services.NewGuestService()
 	rateGroupService      = services.NewRateGroupService()
+	rateCodeService       = services.NewRateCodeService()
 )
 
 // handlers
@@ -41,6 +42,7 @@ var (
 	roomHandler           = handlers.RoomHandler{}
 	guestHandler          = handlers.GuestHandler{}
 	rateGroupHandler      = handlers.RateGroupHandler{}
+	rateCodeHandler       = handlers.RateCodeHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -81,6 +83,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
+	rateCodeHandler.Register(handlerInput, rateCodeService)
+
 }
 
 // set repository dependency
@@ -97,4 +101,5 @@ func setServicesRepository(db *gorm.DB) {
 	roomService.Repository = repositories.NewRoomRepository(db)
 	guestService.Repository = repositories.NewGuestRepository(db)
 	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
+	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 }
