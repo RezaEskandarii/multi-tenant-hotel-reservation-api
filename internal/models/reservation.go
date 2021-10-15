@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"github.com/asaskevich/govalidator"
+	"gorm.io/gorm"
+	"time"
+)
 
 type Reservation struct {
 	BaseModel
@@ -17,4 +21,17 @@ type Reservation struct {
 	GuestCount   uint64         `json:"guest_count" valid:"required"`
 	Children     []*Reservation `json:"children" valid:"-"`
 	ParentId     uint64         `json:"parent_id" valid:"-"`
+}
+
+func (r *Reservation) Validate() (bool, error) {
+
+	return govalidator.ValidateStruct(r)
+}
+
+func (r *Reservation) BeforeCreate(tx *gorm.DB) error {
+	if _, err := r.Validate(); err != nil {
+		tx.AddError(err)
+		return err
+	}
+	return nil
 }
