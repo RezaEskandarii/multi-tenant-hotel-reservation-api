@@ -17,6 +17,7 @@ type AppLogger struct {
 	Config *LoggerConfig
 }
 
+// New returns AppLogger pointer
 func New(conf *LoggerConfig) *AppLogger {
 
 	return &AppLogger{
