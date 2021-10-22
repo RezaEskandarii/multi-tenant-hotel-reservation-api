@@ -1,5 +1,6 @@
 package applogger
 
+// Logger is logger base type
 type Logger interface {
 	LogInfo(message string)
 	LogDebug(message string)
