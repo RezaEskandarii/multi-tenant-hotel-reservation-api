@@ -55,7 +55,6 @@ func (r *RateCodeRepository) FindAll(input *dto.PaginationInput) (*commons.Pagin
 func (r RateCodeRepository) Delete(id uint64) error {
 
 	if query := r.DB.Model(&models.RateCode{}).Where("id=?", id).Delete(&models.RateCode{}); query.Error != nil {
-
 		return query.Error
 	}
 	return nil
