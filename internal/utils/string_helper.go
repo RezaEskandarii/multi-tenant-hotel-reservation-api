@@ -4,6 +4,7 @@ import (
 	"strconv"
 )
 
+// ConvertToUint gives interface as a input and converts interface to uint.
 func ConvertToUint(input interface{}) (uint64, error) {
 
 	if input == nil {
