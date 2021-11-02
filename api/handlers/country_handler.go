@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	middlewares2 "hotel-reservation/api/middlewares"
 	. "hotel-reservation/internal/commons"
@@ -30,7 +29,6 @@ func (handler *CountryHandler) Register(input *dto.HandlerInput, service *servic
 	handler.logger = input.Logger
 
 	routeGroup := handler.Router.Group("/countries")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -40,16 +38,11 @@ func (handler *CountryHandler) Register(input *dto.HandlerInput, service *servic
 
 func (handler *CountryHandler) create(c echo.Context) error {
 
-	fmt.Println("request dispatched")
-
 	model := &models.Country{}
-
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         nil,
@@ -59,11 +52,8 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	}
 
 	output, err := handler.Service.Create(model)
-
 	if err != nil {
-
 		handler.logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
@@ -85,14 +75,12 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id)
 
-	lang := c.Request().Header.Get(acceptLanguage)
+	model, err := handler.Service.Find(id)
+	lang := getAcceptLanguage(c)
 
 	if err != nil {
-
 		handler.logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.translator.Localize(lang, message_keys.InternalServerError),
@@ -134,8 +122,9 @@ func (handler *CountryHandler) find(c echo.Context) error {
 		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(id)
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
 
 	if err != nil {
 

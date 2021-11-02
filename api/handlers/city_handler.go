@@ -29,7 +29,6 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *services.
 	handler.logger = input.Logger
 
 	routeGroup := handler.Router.Group("/cities")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -39,11 +38,9 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *services.
 func (handler *CityHandler) create(c echo.Context) error {
 
 	model := models.City{}
-
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&model); err != nil {
-
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -79,7 +76,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
@@ -122,14 +119,15 @@ func (handler *CityHandler) update(c echo.Context) error {
 }
 
 func (handler *CityHandler) find(c echo.Context) error {
+
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id)
 
-	lang := c.Request().Header.Get(acceptLanguage)
+	model, err := handler.Service.Find(id)
+	lang := getAcceptLanguage(c)
 
 	if err != nil {
 		handler.logger.LogError(err.Error())
@@ -158,7 +156,6 @@ func (handler *CityHandler) find(c echo.Context) error {
 func (handler *CityHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
-
 	list, err := handler.Service.FindAll(paginationInput)
 
 	if err != nil {
