@@ -29,7 +29,6 @@ func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *servi
 	handler.logger = input.Logger
 
 	routeGroup := handler.Router.Group("/currencies")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -39,7 +38,7 @@ func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *servi
 func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.logger.LogError(err.Error())
@@ -78,8 +77,10 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(id)
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
+
 	if err != nil {
 
 		handler.logger.LogError(err.Error())
@@ -123,8 +124,10 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		handler.logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(id)
-	lang := c.Request().Header.Get(acceptLanguage)
+	lang := getAcceptLanguage(c)
+
 	if err != nil {
 
 		handler.logger.LogError(err.Error())
