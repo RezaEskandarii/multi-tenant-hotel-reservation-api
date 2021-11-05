@@ -15,8 +15,6 @@ func NewSeederRepository(db *gorm.DB) *SeederRepository {
 	return &SeederRepository{DB: db}
 }
 
-// Seed gives the model and address of the json file from the input and
-// fills given model's fields with given json and bulk inserts given model.
 func (r *SeederRepository) Seed(jsonFilePath string, model []interface{}) error {
 
 	if err := castJsonFileToModel(jsonFilePath, model); err != nil {
