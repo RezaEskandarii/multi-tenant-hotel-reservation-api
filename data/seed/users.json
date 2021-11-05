@@ -1,0 +1,11 @@
+[
+  {
+    "first_name": "reza",
+    "last_name": "eskandari",
+    "email": "test@test.test",
+    "is_active": true,
+    "gender": "Male",
+    "phone_number": "9999999",
+    "password": "Reza1234"
+  }
+]
