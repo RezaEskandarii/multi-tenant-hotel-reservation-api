@@ -2,16 +2,16 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
-	middlewares2 "hotel-reservation/api/middlewares"
-	. "hotel-reservation/internal/commons"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/message_keys"
-	"hotel-reservation/internal/models"
-	"hotel-reservation/internal/services"
-	"hotel-reservation/internal/utils"
-	"hotel-reservation/pkg/applogger"
-	"hotel-reservation/pkg/translator"
 	"net/http"
+	middlewares2 "reservation-api/api/middlewares"
+	. "reservation-api/internal/commons"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/message_keys"
+	"reservation-api/internal/models"
+	"reservation-api/internal/services"
+	"reservation-api/internal/utils"
+	"reservation-api/pkg/applogger"
+	"reservation-api/pkg/translator"
 )
 
 // CurrencyHandler Currency endpoint handler

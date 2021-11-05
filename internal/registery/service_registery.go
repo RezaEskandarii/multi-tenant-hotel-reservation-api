@@ -3,12 +3,12 @@ package registery
 import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
-	"hotel-reservation/api/handlers"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/repositories"
-	"hotel-reservation/internal/services"
-	"hotel-reservation/pkg/applogger"
-	"hotel-reservation/pkg/translator"
+	"reservation-api/api/handlers"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/repositories"
+	"reservation-api/internal/services"
+	"reservation-api/pkg/applogger"
+	"reservation-api/pkg/translator"
 )
 
 // services

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"hotel-reservation/internal/config"
-	"hotel-reservation/internal/registery"
-	"hotel-reservation/pkg/applogger"
-	"hotel-reservation/pkg/database"
 	"net/http"
+	"reservation-api/internal/config"
+	"reservation-api/internal/registery"
+	"reservation-api/pkg/applogger"
+	"reservation-api/pkg/database"
 )
 
 // Run run application

@@ -7,7 +7,7 @@ import (
 	"github.com/andskur/argon2-hashing"
 	"github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
-	"hotel-reservation/internal/message_keys"
+	"reservation-api/internal/message_keys"
 	"time"
 )
 

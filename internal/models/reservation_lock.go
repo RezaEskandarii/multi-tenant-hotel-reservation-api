@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"hotel-reservation/internal/utils"
+	"reservation-api/internal/utils"
 	"time"
 )
 

@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"github.com/labstack/echo/v4"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/utils"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/utils"
 )
 
 // PaginationMiddleware set pagination global object

@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"errors"
-	"hotel-reservation/internal/message_keys"
+	"reservation-api/internal/message_keys"
 )
 
 var (

@@ -1,4 +1,4 @@
-module hotel-reservation
+module reservation-api
 
 go 1.17
 

@@ -3,10 +3,10 @@ package repositories
 import (
 	"errors"
 	"gorm.io/gorm"
-	"hotel-reservation/internal/commons"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/message_keys"
-	"hotel-reservation/internal/models"
+	"reservation-api/internal/commons"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/message_keys"
+	"reservation-api/internal/models"
 )
 
 var (

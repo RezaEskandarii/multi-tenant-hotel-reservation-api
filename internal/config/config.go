@@ -2,9 +2,9 @@ package config
 
 import (
 	"gopkg.in/yaml.v2"
-	"hotel-reservation/pkg/applogger"
 	"io/ioutil"
 	"os"
+	"reservation-api/pkg/applogger"
 )
 
 // Config application config struct

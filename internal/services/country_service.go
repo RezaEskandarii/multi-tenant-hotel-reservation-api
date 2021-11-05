@@ -1,10 +1,10 @@
 package services
 
 import (
-	"hotel-reservation/internal/commons"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/models"
-	"hotel-reservation/internal/repositories"
+	"reservation-api/internal/commons"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/models"
+	"reservation-api/internal/repositories"
 )
 
 type CountryService struct {

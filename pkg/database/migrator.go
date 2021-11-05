@@ -2,8 +2,8 @@ package database
 
 import (
 	"gorm.io/gorm"
-	"hotel-reservation/internal/models"
-	"hotel-reservation/pkg/applogger"
+	"reservation-api/internal/models"
+	"reservation-api/pkg/applogger"
 )
 
 var (

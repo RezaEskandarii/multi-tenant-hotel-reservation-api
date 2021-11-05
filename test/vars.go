@@ -1,10 +1,10 @@
 package test
 
 import (
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/repositories"
-	"hotel-reservation/internal/services"
-	"hotel-reservation/pkg/database"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/repositories"
+	"reservation-api/internal/services"
+	"reservation-api/pkg/database"
 )
 
 var (

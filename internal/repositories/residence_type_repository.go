@@ -2,9 +2,9 @@ package repositories
 
 import (
 	"gorm.io/gorm"
-	"hotel-reservation/internal/commons"
-	"hotel-reservation/internal/dto"
-	"hotel-reservation/internal/models"
+	"reservation-api/internal/commons"
+	"reservation-api/internal/dto"
+	"reservation-api/internal/models"
 )
 
 type ResidenceTypeRepository struct {

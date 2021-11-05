@@ -5,9 +5,9 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	config2 "hotel-reservation/internal/config"
 	"log"
 	"os"
+	config2 "reservation-api/internal/config"
 	"strings"
 	"time"
 )

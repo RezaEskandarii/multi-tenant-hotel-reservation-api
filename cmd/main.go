@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"hotel-reservation/internal/kernel"
-	"hotel-reservation/pkg/applogger"
 	"os"
+	"reservation-api/internal/kernel"
+	"reservation-api/pkg/applogger"
 )
 
 func main() {

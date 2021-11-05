@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"hotel-reservation/internal/models"
+	"reservation-api/internal/models"
 	"testing"
 )
 
