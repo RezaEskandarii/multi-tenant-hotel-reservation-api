@@ -105,6 +105,7 @@ func setServicesRepository(db *gorm.DB) {
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 }
 
+// ApplySeed seeds given json file to database.
 func ApplySeed(db *gorm.DB) error {
 	setServicesRepository(db)
 	if err := userService.Seed("./data/seed/users.json"); err != nil {
