@@ -63,3 +63,7 @@ func (s *UserService) Deactivate(id uint64) (*models.User, error) {
 
 	return s.Repository.Deactivate(id)
 }
+
+func (s *UserService) Seed(jsonFilePath string) error {
+	return s.Repository.Seed(jsonFilePath)
+}

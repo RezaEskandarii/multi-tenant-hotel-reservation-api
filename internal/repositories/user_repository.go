@@ -5,6 +5,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/utils"
 )
 
 type UserRepository struct {
@@ -120,16 +121,24 @@ func (r *UserRepository) FindAll(input *dto.PaginationInput) (*commons.Paginated
 	return finAll(&models.User{}, r.DB, input)
 }
 
-func (r *UserRepository) FindBySymbol(symbol string) (*models.User, error) {
-	model := models.User{}
-	if tx := r.DB.Where("symbol=?", symbol).Find(&model); tx.Error != nil {
+func (r *UserRepository) Seed(jsonFilePath string) error {
 
-		return nil, tx.Error
+	users := make([]models.User, 0)
+	if err := utils.CastJsonFileToModel(jsonFilePath, &users); err == nil {
+		for _, user := range users {
+			var count int64 = 0
+			if err := r.DB.Model(models.User{}).Where("username", user.Username).Count(&count).Error; err != nil {
+				return err
+			} else {
+				if count == 0 {
+					if err := r.DB.Create(&user).Error; err != nil {
+						return err
+					}
+				}
+			}
+		}
+	} else {
+		return err
 	}
-
-	if model.Id == 0 {
-		return nil, nil
-	}
-
-	return &model, nil
+	return nil
 }

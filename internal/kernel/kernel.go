@@ -70,6 +70,11 @@ func Run(port int) error {
 
 	registery.RegisterServices(db, router)
 
+	if err := registery.ApplySeed(db); err != nil {
+		logger.LogError(err.Error())
+		return err
+	}
+
 	e.Logger.Fatal(e.Start(portStr))
 
 	return nil

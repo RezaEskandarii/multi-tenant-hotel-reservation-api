@@ -104,3 +104,11 @@ func setServicesRepository(db *gorm.DB) {
 	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 }
+
+func ApplySeed(db *gorm.DB) error {
+	setServicesRepository(db)
+	if err := userService.Seed("./data/seed/users.json"); err != nil {
+		return err
+	}
+	return nil
+}

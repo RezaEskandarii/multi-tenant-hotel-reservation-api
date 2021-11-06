@@ -21,5 +21,4 @@ func main() {
 		logger.LogInfo("exit ...")
 		os.Exit(1)
 	}
-
 }

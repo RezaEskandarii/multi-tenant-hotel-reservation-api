@@ -6,6 +6,8 @@
     "is_active": true,
     "gender": "Male",
     "phone_number": "9999999",
-    "password": "Reza1234"
+    "password": "Reza1234",
+    "national_id": "123456",
+    "username": "reza"
   }
 ]
