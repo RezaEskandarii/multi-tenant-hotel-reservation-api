@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/andskur/argon2-hashing"
 	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
@@ -63,6 +64,25 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 
 	if model.Id == 0 {
 		return nil, nil
+	}
+
+	return &model, nil
+}
+func (r *UserRepository) FindByUsernameAndPassword(username string, password string) (*models.User, error) {
+
+	model := models.User{Username: username}
+	if tx := r.DB.Where(model).Find(&model); tx.Error != nil {
+
+		return nil, tx.Error
+	}
+
+	if model.Id == 0 {
+		return nil, nil
+	}
+
+	err := argon2.CompareHashAndPassword([]byte(model.Password), []byte(password))
+	if err != nil {
+		return nil, err
 	}
 
 	return &model, nil
