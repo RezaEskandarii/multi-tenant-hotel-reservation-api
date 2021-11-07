@@ -58,9 +58,9 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	}
 
 	// Get the expected password from our in memory map
-	user, err := handler.Service.FindByUsernameAndPassword(creds.Username, creds.Password)
+	user, userErr := handler.Service.FindByUsernameAndPassword(creds.Username, creds.Password)
 
-	if user == nil && err != nil {
+	if user == nil || userErr != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -79,7 +79,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Create the JWT string
-	tokenString, err := token.SignedString("jwtKey")
+	tokenString, err := token.SignedString([]byte("netdata.io"))
 	if err != nil {
 		// If there is an error in creating the JWT return an internal server error
 		return c.JSON(http.StatusInternalServerError, nil)

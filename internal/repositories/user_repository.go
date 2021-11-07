@@ -70,8 +70,8 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 }
 func (r *UserRepository) FindByUsernameAndPassword(username string, password string) (*models.User, error) {
 
-	model := models.User{Username: username}
-	if tx := r.DB.Where(model).Find(&model); tx.Error != nil {
+	model := models.User{}
+	if tx := r.DB.Where("username=?", username).Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
 	}

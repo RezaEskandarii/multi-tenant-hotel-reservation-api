@@ -1,7 +1,6 @@
 package models
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
@@ -31,7 +30,7 @@ type User struct {
 	BirthDate            *time.Time `json:"birth_date"`
 	PhoneNumberConfirmed bool       `json:"-"`
 	EmailConfirmed       bool       `json:"-"`
-	Password             string     `json:"password,omitempty"`
+	Password             string     `json:"password"`
 	CityId               int        `json:"city_id"`
 	City                 *City      `json:"city" valid:"-"`
 	Gender               Gender     `json:"gender" valid:"required"`
@@ -81,9 +80,9 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 }
 
 // MarshalJSON prevents to show user's password in json serializations.
-func (u User) MarshalJSON() ([]byte, error) {
-	type user User
-	x := user(u)
-	x.Password = ""
-	return json.Marshal(x)
-}
+//func (u User) MarshalJSON() ([]byte, error) {
+//	type user User
+//	x := user(u)
+//	x.Password = ""
+//	return json.Marshal(x)
+//}

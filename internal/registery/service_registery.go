@@ -43,6 +43,7 @@ var (
 	guestHandler          = handlers.GuestHandler{}
 	rateGroupHandler      = handlers.RateGroupHandler{}
 	rateCodeHandler       = handlers.RateCodeHandler{}
+	authHandler           = handlers.AuthHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -85,6 +86,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
 	rateCodeHandler.Register(handlerInput, rateCodeService)
+
+	authHandler.Register(handlerInput, userService)
 
 }
 
