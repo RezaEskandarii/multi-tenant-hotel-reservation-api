@@ -27,7 +27,7 @@ func (handler *AuthHandler) Register(input *dto.HandlerInput, service *services.
 	handler.logger = input.Logger
 
 	routeGroup := handler.Router.Group("/auth")
-	routeGroup.POST("", handler.signin)
+	routeGroup.POST("/signin", handler.signin)
 	routeGroup.POST("", handler.refreshToken)
 	routeGroup.POST("", handler.logOut)
 }
@@ -42,6 +42,11 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
+type TokenResponse struct {
+	ExpireAt    time.Time `json:"expire_at"`
+	AccessToken string    `json:"access_token"`
+}
+
 func (handler *AuthHandler) signin(c echo.Context) error {
 
 	var creds Credentials
@@ -53,14 +58,10 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	}
 
 	// Get the expected password from our in memory map
-	expectedPassword, ok := handler.Service.FindByUsername(creds.Username)
+	user, err := handler.Service.FindByUsernameAndPassword(creds.Username, creds.Password)
 
-	// If a password exists for the given user
-	// AND, if it is the same as the password we received, the we can move ahead
-	// if NOT, then we return an "Unauthorized" status
-	if !ok || expectedPassword != creds.Password {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
+	if user == nil && err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	// Declare the expiration time of the token
@@ -78,26 +79,27 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Create the JWT string
-	tokenString, err := token.SignedString(jwtKey)
+	tokenString, err := token.SignedString("jwtKey")
 	if err != nil {
 		// If there is an error in creating the JWT return an internal server error
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
 	// Finally, we set the client cookie for "token" as the JWT we just generated
 	// we also set an expiry time which is the same as the token itself
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
+
+	return c.JSON(http.StatusOK, TokenResponse{
+		ExpireAt:    expirationTime,
+		AccessToken: tokenString,
 	})
 }
 
 func (handler *AuthHandler) refreshToken(c echo.Context) error {
 
+	return nil
 }
 
 func (handler *AuthHandler) logOut(c echo.Context) error {
 
+	return nil
 }
