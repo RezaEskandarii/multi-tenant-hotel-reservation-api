@@ -30,7 +30,7 @@ func (handler *AuthHandler) Register(input *dto.HandlerInput, service *services.
 
 	routeGroup := handler.Router.Group("/auth")
 	routeGroup.POST("/signin", handler.signin)
-	routeGroup.POST("", handler.refreshToken)
+	routeGroup.POST("/refresh-token", handler.refreshToken)
 	routeGroup.POST("", handler.logOut)
 }
 
