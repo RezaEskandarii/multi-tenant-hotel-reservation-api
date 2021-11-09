@@ -96,7 +96,14 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 func (handler *AuthHandler) refreshToken(c echo.Context) error {
 
 	tknStr := c.Request().Header.Get("Authorization")
-	tknStr = strings.Trim(tknStr, " Bearer")
+
+	if tknStr == "" {
+		return c.JSON(http.StatusBadRequest, "Authorization header is empty.")
+	}
+
+	authToken := strings.Split(tknStr, "Bearer ")
+
+	tknStr = authToken[1]
 	claims := &Claims{}
 
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {

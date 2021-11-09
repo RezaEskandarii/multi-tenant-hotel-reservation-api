@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
@@ -79,10 +80,10 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-// MarshalJSON prevents to show user's password in json serializations.
-//func (u User) MarshalJSON() ([]byte, error) {
-//	type user User
-//	x := user(u)
-//	x.Password = ""
-//	return json.Marshal(x)
-//}
+//MarshalJSON prevents to show user's password in json serializations.
+func (u User) MarshalJSON() ([]byte, error) {
+	type user User
+	x := user(u)
+	x.Password = ""
+	return json.Marshal(x)
+}

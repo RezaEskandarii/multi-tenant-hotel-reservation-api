@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		authHeader := strings.Split(c.Request().Header.Get("Authorization"), "Bearer ")
