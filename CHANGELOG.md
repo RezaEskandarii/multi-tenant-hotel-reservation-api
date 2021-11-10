@@ -2,6 +2,14 @@
 ## [Unreleased]
 
 ### Doc
+- add comment
+- change readme file content.
+- add comment
+- add comment
+- add comment
+- add comment
+- add comment
+- add comment
 - add comment to some codes
 - add comemnt to some codes
 - add comment to some codes
@@ -11,6 +19,32 @@
 - regenerate changelog file
 
 ### Feat
+- protect routes with JWTAuthMiddleware
+- add auth middleware
+- implement refreshToken function in auth_handler
+- implement signin function
+- add AuthHandler and implement signin function
+- add FindByUsernameAndPassword function userservice
+- add user seeder
+- add seeder service
+- add seeder repository
+- add users seed file
+- add reservation type field to reservation model
+- add reservation repository
+- add validation to reservation model
+- add validation to reservation model
+- generate reservationKey's hash before create
+- add hash_generator
+- add reservationLock model
+- add reservation model
+- add ratCodeHandler to serviceRegistry
+- add ratCodeHandler's functions
+- add rate_code_handler
+- add rate_code_service
+- implement rate_code_repository functions
+- add rate_code_repository
+- add validator to rate_code model
+- add rate_code model
 - add rate group handler
 - add rate group repository service
 - add rate group repository functions
@@ -73,6 +107,14 @@
 - register rate group handler in service registry
 
 ### Refactor
+- rename module name to reservation-api
+- refactor currency_handler
+- refactor country_handler
+- refactor some codes
+- add logger config
+- add logger config
+- add new models to migration models
+- refactor validations in models beforeCreate hook
 - change logger library with zaplogger
 - tidy go mod file
 - refactor some field names is tests
