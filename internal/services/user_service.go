@@ -69,6 +69,7 @@ func (s *UserService) Seed(jsonFilePath string) error {
 	return s.Repository.Seed(jsonFilePath)
 }
 
+// FindByUsernameAndPassword finds user by username and password.
 func (s *UserService) FindByUsernameAndPassword(username string, password string) (*models.User, error) {
 	return s.Repository.FindByUsernameAndPassword(username, password)
 }
