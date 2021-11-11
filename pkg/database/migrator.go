@@ -19,6 +19,11 @@ var (
 		models.Guest{},
 		models.RateGroup{},
 		models.RateCode{},
+		models.ResidenceGrade{},
+		models.ResidenceType{},
+		models.ReservationLock{},
+		models.Reservation{},
+		models.Audit{},
 	}
 )
 
