@@ -14,7 +14,7 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		authHeader := strings.Split(c.Request().Header.Get("Authorization"), "Bearer ")
 		if len(authHeader) != 2 {
-			return c.JSON(http.StatusBadRequest, "invalid token")
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid token")
 		} else {
 			jwtToken := authHeader[1]
 			token, _ := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
@@ -23,19 +23,20 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 					return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 				}
 
-				SECRETKEY, _ := os.LookupEnv("JWT_KEY")
-				return []byte(SECRETKEY), nil
+				Secretkey, _ := os.LookupEnv("JWT_KEY")
+				return []byte(Secretkey), nil
 			})
 
 			if token == nil {
-				return c.JSON(http.StatusBadRequest, "")
+				return echo.NewHTTPError(http.StatusBadRequest, "")
 			}
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 				c.Set("claims", claims)
+				c.Set("username", claims["username"])
 				return next(c)
 			} else {
-				return c.JSON(http.StatusUnauthorized, "")
+				return echo.NewHTTPError(http.StatusUnauthorized, "")
 			}
 		}
 	}

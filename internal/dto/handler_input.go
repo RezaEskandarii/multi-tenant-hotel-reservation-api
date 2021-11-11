@@ -8,7 +8,8 @@ import (
 
 // HandlerInput contains shared handler dependencies.
 type HandlerInput struct {
-	Router     *echo.Group
-	Translator *translator.Translator
-	Logger     applogger.Logger
+	Router      *echo.Group
+	Translator  *translator.Translator
+	Logger      applogger.Logger
+	AuditDataCh chan interface{}
 }
