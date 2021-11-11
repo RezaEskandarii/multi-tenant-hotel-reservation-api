@@ -22,7 +22,7 @@ func NewAuditRepository(Db *gorm.DB, completedCh chan bool, DataCh chan interfac
 	}
 }
 
-func (r *AuditRepository) Save(model *models.Audit) (*models.Audit, error) {
+func (r *AuditRepository) Create(model *models.Audit) (*models.Audit, error) {
 	model.Data = fmt.Sprintf("%v", model.DataChannel)
 	if err := r.DB.Save(&model).Error; err != nil {
 		return nil, err
