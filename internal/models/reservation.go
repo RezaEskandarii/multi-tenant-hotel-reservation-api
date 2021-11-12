@@ -15,19 +15,19 @@ const (
 
 type Reservation struct {
 	BaseModel
-	Residence       Residence       `json:"residence" valid:"-"`
 	ResidenceId     uint64          `json:"residence_id" valid:"required"`
-	Supervisor      Guest           `json:"supervisor" valid:"-"`
+	Residence       Residence       `json:"residence" valid:"-"  gorm:"foreignKey:ResidenceId;references:id"`
 	SupervisorId    uint64          `json:"supervisor_id" valid:"required"`
+	Supervisor      Guest           `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
 	CheckinDate     time.Time       `json:"checkin_date" valid:"required"`
 	CheckoutDate    time.Time       `json:"checkout_date" valid:"required"`
-	Room            Room            `json:"room" valid:"-"`
 	RoomId          uint64          `json:"room_id" valid:"required"`
-	RateCode        RateCode        `json:"rate_code" valid:"required"`
+	Room            Room            `json:"room" valid:"-"   gorm:"foreignKey:RoomId;references:id"`
 	RateCodeId      uint64          `json:"rate_code_id" valid:"required"`
+	RateCode        RateCode        `json:"rate_code" valid:"required"   gorm:"foreignKey:RateCodeId;references:id"`
 	GuestCount      uint64          `json:"guest_count" valid:"required"`
-	Children        []*Reservation  `json:"children" valid:"-"`
 	ParentId        uint64          `json:"parent_id" valid:"-"`
+	Parent          *Reservation    `json:"parent" gorm:"foreignKey:ParentId;references:id"`
 	ReservationType ReservationType `json:"reservation_type"`
 }
 

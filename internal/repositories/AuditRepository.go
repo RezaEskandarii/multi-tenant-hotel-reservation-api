@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
@@ -9,22 +8,17 @@ import (
 )
 
 type AuditRepository struct {
-	Completed chan bool
-	Data      chan interface{}
-	DB        *gorm.DB
+	DB *gorm.DB
 }
 
-func NewAuditRepository(Db *gorm.DB, completedCh chan bool, DataCh chan interface{}) *AuditRepository {
+func NewAuditRepository(Db *gorm.DB) *AuditRepository {
 	return &AuditRepository{
-		Completed: completedCh,
-		Data:      DataCh,
-		DB:        Db,
+		DB: Db,
 	}
 }
 
 func (r *AuditRepository) Create(model *models.Audit) (*models.Audit, error) {
-	model.Data = fmt.Sprintf("%v", model.DataChannel)
-	if err := r.DB.Save(&model).Error; err != nil {
+	if err := r.DB.Create(&model).Error; err != nil {
 		return nil, err
 	}
 	return model, nil

@@ -27,6 +27,7 @@ var (
 	guestService          = services.NewGuestService()
 	rateGroupService      = services.NewRateGroupService()
 	rateCodeService       = services.NewRateCodeService()
+	auditService          = services.AuditService{}
 )
 
 // handlers
@@ -52,22 +53,21 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	// set service layer repository and database object.
 	setServicesRepository(db)
-
 	logger := applogger.New(nil)
 	i18nTranslator := translator.New()
 
 	handlerInput := &dto.HandlerInput{
-		Router:      router,
-		Translator:  i18nTranslator,
-		Logger:      logger,
-		AuditDataCh: make(chan interface{}),
+		Router:       router,
+		Translator:   i18nTranslator,
+		Logger:       logger,
+		AuditChannel: make(chan interface{}, 1),
 	}
 
 	// authHandler does bot need to authMiddleware.
 	authHandler.Register(handlerInput, userService)
 
 	// add authentication middleware to all routes.
-	router.Use(middlewares.JWTAuthMiddleware)
+	router.Use(middlewares.JWTAuthMiddleware, middlewares.AuditMiddleware(userService, auditService, handlerInput.AuditChannel))
 
 	countryHandler.Register(handlerInput, countryService)
 
@@ -112,6 +112,7 @@ func setServicesRepository(db *gorm.DB) {
 	guestService.Repository = repositories.NewGuestRepository(db)
 	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
+	auditService.Repository = repositories.NewAuditRepository(db)
 }
 
 // ApplySeed seeds given json file to database.

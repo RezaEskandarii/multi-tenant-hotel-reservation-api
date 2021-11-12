@@ -21,7 +21,7 @@ type CountryHandler struct {
 func (handler *CountryHandler) Register(input *dto.HandlerInput, service *services.CountryService) {
 
 	handler.Service = service
-
+	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/countries")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
@@ -53,7 +53,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditDataCh <- output
+	handler.Input.AuditChannel <- output
 	return c.JSON(http.StatusBadRequest, ApiResponse{
 		ResponseCode: http.StatusOK,
 		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
@@ -97,7 +97,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditDataCh <- output
+		handler.Input.AuditChannel <- output
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,
