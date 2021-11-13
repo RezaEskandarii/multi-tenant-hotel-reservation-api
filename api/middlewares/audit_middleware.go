@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func AuditMiddleware(userService *services.UserService, auditService services.AuditService, ch chan interface{}) echo.MiddlewareFunc {
+func AuditMiddleware(userService *services.UserService, auditService *services.AuditService, ch chan interface{}) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			if c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPut {

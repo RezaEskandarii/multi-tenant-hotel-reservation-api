@@ -27,7 +27,7 @@ var (
 	guestService          = services.NewGuestService()
 	rateGroupService      = services.NewRateGroupService()
 	rateCodeService       = services.NewRateCodeService()
-	auditService          = services.AuditService{}
+	auditService          = services.NewAuditService()
 )
 
 // handlers

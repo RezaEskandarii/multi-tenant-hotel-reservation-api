@@ -11,6 +11,10 @@ type AuditService struct {
 	Repository *repositories.AuditRepository
 }
 
+func NewAuditService() *AuditService {
+	return &AuditService{}
+}
+
 func (s *AuditService) Save(model *models.Audit) (*models.Audit, error) {
 	return s.Repository.Create(model)
 }
