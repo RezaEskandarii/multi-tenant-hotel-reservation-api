@@ -5,6 +5,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal/utils"
 	"reservation-api/pkg/cache"
 )
 
@@ -20,13 +21,16 @@ func NewCityService() *CityService {
 
 // Create creates new city.
 func (s *CityService) Create(city *models.City) (*models.City, error) {
-	s.CacheManager.Set("", city, nil)
-	return s.Repository.Create(city)
+	city, err := s.Repository.Create(city)
+	if err != nil && city != nil {
+		s.CacheManager.Set(utils.GenerateCacheKey(city.Id, city.Name), city, nil)
+	}
+	return city, err
 }
 
 // Update updates city.
 func (s *CityService) Update(city *models.City) (*models.City, error) {
-
+	s.CacheManager.Update(utils.GenerateCacheKey(city.Id, city.Name), city)
 	return s.Repository.Update(city)
 }
 

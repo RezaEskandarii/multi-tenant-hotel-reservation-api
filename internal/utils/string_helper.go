@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -26,9 +27,10 @@ func ConvertToUint(input interface{}) (uint64, error) {
 }
 
 // GenerateCacheKey returns string to use as a cache key.
-func GenerateCacheKey(keys ...string) string {
+func GenerateCacheKey(keys ...interface{}) string {
 	strBuilder := strings.Builder{}
 	for _, str := range keys {
+		str := fmt.Sprintf("%v", str)
 		strBuilder.Write([]byte(str))
 	}
 	return GenerateSHA256(strBuilder.String())
