@@ -5,10 +5,12 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/pkg/cache"
 )
 
 type CityService struct {
-	Repository *repositories.CityRepository
+	Repository   *repositories.CityRepository
+	CacheManager cache.Manager
 }
 
 // NewCityService returns new CityService
@@ -18,7 +20,7 @@ func NewCityService() *CityService {
 
 // Create creates new city.
 func (s *CityService) Create(city *models.City) (*models.City, error) {
-
+	s.CacheManager.Set("", city, nil)
 	return s.Repository.Create(city)
 }
 
