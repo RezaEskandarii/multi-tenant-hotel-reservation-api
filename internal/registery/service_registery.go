@@ -1,7 +1,6 @@
 package registery
 
 import (
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
@@ -9,6 +8,7 @@ import (
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services"
 	"reservation-api/pkg/applogger"
+	"reservation-api/pkg/cache"
 	"reservation-api/pkg/translator"
 )
 
@@ -99,9 +99,14 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 // set repository dependency
 func setServicesRepository(db *gorm.DB) {
+
+	cacheManager := &cache.Manager{}
 	countryService.Repository = repositories.NewCountryRepository(db)
+
 	provinceService.Repository = repositories.NewProvinceRepository(db)
 	cityService.Repository = repositories.NewCityRepository(db)
+	cityService.CacheManager = cacheManager
+
 	currencyService.Repository = repositories.NewCurrencyRepository(db)
 	userService.Repository = repositories.NewUserRepository(db)
 	residenceTypeService.Repository = repositories.NewResidenceTypeRepository(db)

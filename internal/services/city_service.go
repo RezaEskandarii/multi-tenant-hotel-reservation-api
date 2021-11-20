@@ -11,7 +11,7 @@ import (
 
 type CityService struct {
 	Repository   *repositories.CityRepository
-	CacheManager cache.Manager
+	CacheManager *cache.Manager
 }
 
 // NewCityService returns new CityService
