@@ -5,6 +5,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/utils"
 )
 
 type CountryRepository struct {
@@ -78,4 +79,26 @@ func (r *CountryRepository) GetProvinces(countryId uint64) ([]*models.Province, 
 	}
 
 	return result, nil
+}
+
+func (r *CountryRepository) Seed(jsonFilePath string) error {
+
+	countries := make([]models.Country, 0)
+	if err := utils.CastJsonFileToModel(jsonFilePath, &countries); err == nil {
+		for _, country := range countries {
+			var count int64 = 0
+			if err := r.DB.Model(models.Country{}).Where("name", country.Name).Count(&count).Error; err != nil {
+				return err
+			} else {
+				if count == 0 {
+					if err := r.DB.Create(&country).Error; err != nil {
+						return err
+					}
+				}
+			}
+		}
+	} else {
+		return err
+	}
+	return nil
 }
