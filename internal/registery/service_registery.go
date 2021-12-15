@@ -1,6 +1,7 @@
 package registery
 
 import (
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
