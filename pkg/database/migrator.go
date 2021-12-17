@@ -21,7 +21,7 @@ var (
 		models.RateCode{},
 		models.ResidenceGrade{},
 		models.ResidenceType{},
-		models.ReservationLock{},
+		models.ReservationRequest{},
 		models.Reservation{},
 		models.Audit{},
 	}
