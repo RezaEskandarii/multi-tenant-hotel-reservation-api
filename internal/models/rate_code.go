@@ -8,8 +8,8 @@ import (
 type RateCode struct {
 	BaseModel
 	Name        string    `json:"name"  valid:"required"`
-	hotel       Hotel     `json:"hotel"  valid:"-"`
-	hotelId     uint64    `json:"hotel_id"  valid:"required"`
+	Hotel       Hotel     `json:"hotel"  valid:"-"`
+	HotelId     uint64    `json:"hotel_id"  valid:"required"`
 	Currency    Currency  `json:"currency"  valid:"-"`
 	CurrencyId  uint64    `json:"currency_id" valid:"required"`
 	RateGroup   RateGroup `json:"rate_group" valid:"-"`

@@ -70,30 +70,30 @@
 - add room struct fields
 - add room type struct
 - add logger to user handler
-- add logger to hotel type handler
-- add logger to hotel handler
-- add logger to hotel grade handler
+- add logger to Hotel type handler
+- add logger to Hotel handler
+- add logger to Hotel grade handler
 - add logger to province handler
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
 - add room model
-- add hotel handler
-- add hotel service
-- add hotel repository
+- add Hotel handler
+- add Hotel service
+- add Hotel repository
 - add validation to structs
 - add validator package and add validation tags to models
 - implement find all and delete function in hotel_type_handler
 - implement find all and delete function in hotel_grade_handler
-- add hotel grade handler
+- add Hotel grade handler
 - add hotelGradeService
 - add hotel_grade_repository
 - add delete function to hotel_type_repository
-- implement update hotel type function
+- implement update Hotel type function
 - add HotelType handler
 - add hotelTypeService and hotelTypeRepository
-- add HotelType and HotelGrade struct and add to hotel struct relations
-- add hotel struct
+- add HotelType and HotelGrade struct and add to Hotel struct relations
+- add Hotel struct
 - implement logger package methods and add disitlog library
 - add cors origin middleware
 - add persian new translations
@@ -124,8 +124,8 @@
 - improve repositories code
 - validate user's gender before create
 - ignore validation to some model relations
-- add pointer to hotel relations
-- prevent to validation hotel releations
+- add pointer to Hotel relations
+- prevent to validation Hotel releations
 - move handlers and middlewares to api directory
 - move test files to test package
 - improve some codes
@@ -198,4 +198,4 @@
 - add yaml package to go mod
 
 
-[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/v0.1...HEAD
+[Unreleased]: https://github.com/RezaEskandarii/Hotel-reservation/compare/v0.1...HEAD

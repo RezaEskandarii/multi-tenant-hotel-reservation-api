@@ -10,8 +10,8 @@ type RateGroup struct {
 	BaseModel
 	Name        string `json:"name" valid:"required"`
 	Description string `json:"description"`
-	hotelId     uint64 `json:"hotel_id" valid:"required"`
-	hotel       Hotel  `json:"hotel"`
+	HotelId     uint64 `json:"hotel_id" valid:"required"`
+	Hotel       Hotel  `json:"hotel"`
 }
 
 func (r *RateGroup) Validate() (bool, error) {
