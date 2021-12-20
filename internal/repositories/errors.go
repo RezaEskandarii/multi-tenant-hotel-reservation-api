@@ -6,6 +6,6 @@ import (
 )
 
 var (
-	TypeHasResidenceError = errors.New(message_keys.TypeHasResidence)
-	GradeHasResidence     = errors.New(message_keys.GradeHasResidence)
+	TypeHashotelError = errors.New(message_keys.TypeHashotel)
+	GradeHashotel     = errors.New(message_keys.GradeHashotel)
 )

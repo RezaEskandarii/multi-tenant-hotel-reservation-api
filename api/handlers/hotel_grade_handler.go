@@ -12,16 +12,16 @@ import (
 	"reservation-api/internal/utils"
 )
 
-// ResidenceGradeHandler Province endpoint handler
-type ResidenceGradeHandler struct {
-	Service *services.ResidenceGradeService
+// HotelGradeHandler Province endpoint handler
+type HotelGradeHandler struct {
+	Service *services.HotelGradeService
 	Input   *dto.HandlerInput
 }
 
-func (handler *ResidenceGradeHandler) Register(input *dto.HandlerInput, service *services.ResidenceGradeService) {
+func (handler *HotelGradeHandler) Register(input *dto.HandlerInput, service *services.HotelGradeService) {
 	handler.Service = service
 	handler.Input = input
-	routeGroup := input.Router.Group("/residence-grade")
+	routeGroup := input.Router.Group("/hotel-grades")
 
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
@@ -30,9 +30,9 @@ func (handler *ResidenceGradeHandler) Register(input *dto.HandlerInput, service 
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-func (handler *ResidenceGradeHandler) create(c echo.Context) error {
+func (handler *HotelGradeHandler) create(c echo.Context) error {
 
-	model := &models.ResidenceGrade{}
+	model := &models.HotelGrade{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
@@ -66,7 +66,7 @@ func (handler *ResidenceGradeHandler) create(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceGradeHandler) update(c echo.Context) error {
+func (handler *HotelGradeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -93,7 +93,7 @@ func (handler *ResidenceGradeHandler) update(c echo.Context) error {
 		})
 	}
 
-	tmpModel := models.ResidenceGrade{}
+	tmpModel := models.HotelGrade{}
 
 	err = c.Bind(&tmpModel)
 
@@ -121,7 +121,7 @@ func (handler *ResidenceGradeHandler) update(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceGradeHandler) find(c echo.Context) error {
+func (handler *HotelGradeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -154,7 +154,7 @@ func (handler *ResidenceGradeHandler) find(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceGradeHandler) findAll(c echo.Context) error {
+func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
 
@@ -171,7 +171,7 @@ func (handler *ResidenceGradeHandler) findAll(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceGradeHandler) delete(c echo.Context) error {
+func (handler *HotelGradeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)

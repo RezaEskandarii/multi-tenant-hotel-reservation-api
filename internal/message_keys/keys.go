@@ -5,7 +5,7 @@ const (
 	CrudMessages = "CrudMessages."
 	Errors       = "Errors."
 	Users        = "Users."
-	Residences   = "Residences."
+	hotels       = "hotels."
 	Rooms        = "Rooms."
 
 	Created = CrudMessages + "Created"
@@ -18,12 +18,12 @@ const (
 
 	UsernameDuplicated = Users + "DuplicatedUsername"
 
-	TypeHasResidence  = "TypeHasResidence"
-	GradeHasResidence = "GradeHasResidence"
-	ValidationError   = "ValidationError"
-	GenderInvalid     = "GenderInvalid"
+	TypeHashotel    = "TypeHashotel"
+	GradeHashotel   = "GradeHashotel"
+	ValidationError = "ValidationError"
+	GenderInvalid   = "GenderInvalid"
 
-	ResidenceRepeatPostalCode = Residences + "RepeatPostalCode"
+	HotelRepeatPostalCode = hotels + "RepeatPostalCode"
 
 	InvalidRoomCleanStatus = Rooms + "InvalidCleanStatus"
 	RoomTypeHasRoomErr     = Rooms + "RoomTypeHasRoomErr"

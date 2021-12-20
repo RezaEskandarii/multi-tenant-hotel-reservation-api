@@ -8,10 +8,10 @@ import (
 // RateGroup is struct for rating group of reservations rate price.
 type RateGroup struct {
 	BaseModel
-	Name        string    `json:"name" valid:"required"`
-	Description string    `json:"description"`
-	ResidenceId uint64    `json:"residence_id" valid:"required"`
-	Residence   Residence `json:"residence"`
+	Name        string `json:"name" valid:"required"`
+	Description string `json:"description"`
+	hotelId     uint64 `json:"hotel_id" valid:"required"`
+	hotel       Hotel  `json:"hotel"`
 }
 
 func (r *RateGroup) Validate() (bool, error) {

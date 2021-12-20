@@ -70,30 +70,30 @@
 - add room struct fields
 - add room type struct
 - add logger to user handler
-- add logger to residence type handler
-- add logger to residence handler
-- add logger to residence grade handler
+- add logger to hotel type handler
+- add logger to hotel handler
+- add logger to hotel grade handler
 - add logger to province handler
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
 - add room model
-- add residence handler
-- add residence service
-- add residence repository
+- add hotel handler
+- add hotel service
+- add hotel repository
 - add validation to structs
 - add validator package and add validation tags to models
-- implement find all and delete function in residence_type_handler
-- implement find all and delete function in residence_grade_handler
-- add residence grade handler
-- add ResidenceGradeService
-- add residence_grade_repository
-- add delete function to residence_type_repository
-- implement update residence type function
-- add ResidenceType handler
-- add ResidenceTypeService and ResidenceTypeRepository
-- add ResidenceType and ResidenceGrade struct and add to Residence struct relations
-- add Residence struct
+- implement find all and delete function in hotel_type_handler
+- implement find all and delete function in hotel_grade_handler
+- add hotel grade handler
+- add hotelGradeService
+- add hotel_grade_repository
+- add delete function to hotel_type_repository
+- implement update hotel type function
+- add HotelType handler
+- add hotelTypeService and hotelTypeRepository
+- add HotelType and HotelGrade struct and add to hotel struct relations
+- add hotel struct
 - implement logger package methods and add disitlog library
 - add cors origin middleware
 - add persian new translations
@@ -124,15 +124,15 @@
 - improve repositories code
 - validate user's gender before create
 - ignore validation to some model relations
-- add pointer to residence relations
-- prevent to validation residence releations
+- add pointer to hotel relations
+- prevent to validation hotel releations
 - move handlers and middlewares to api directory
 - move test files to test package
 - improve some codes
 - refactor som docs
 - beautify some codes
 - remove some extra error codes
-- refactor residence_grade and residence_type handler
+- refactor hotel_grade and hotel_type handler
 - rename some structs
 - add logs file to gitignore
 - refactor services dependencies

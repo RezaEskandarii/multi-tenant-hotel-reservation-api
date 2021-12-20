@@ -12,16 +12,16 @@ import (
 	"reservation-api/internal/utils"
 )
 
-// ResidenceTypeHandler Province endpoint handler
-type ResidenceTypeHandler struct {
-	Service *services.ResidenceTypeService
+// HotelHandler Province endpoint handler
+type HotelHandler struct {
+	Service *services.HotelService
 	Input   *dto.HandlerInput
 }
 
-func (handler *ResidenceTypeHandler) Register(input *dto.HandlerInput, service *services.ResidenceTypeService) {
+func (handler *HotelHandler) Register(input *dto.HandlerInput, service *services.HotelService) {
 	handler.Service = service
 	handler.Input = input
-	routeGroup := input.Router.Group("/residence-type")
+	routeGroup := input.Router.Group("/hotels")
 
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
@@ -30,13 +30,12 @@ func (handler *ResidenceTypeHandler) Register(input *dto.HandlerInput, service *
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-func (handler *ResidenceTypeHandler) create(c echo.Context) error {
+func (handler *HotelHandler) create(c echo.Context) error {
 
-	model := &models.ResidenceType{}
+	model := &models.Hotel{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -49,13 +48,10 @@ func (handler *ResidenceTypeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
-
-		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
-			Message:      "",
+			Message:      err.Error(),
 		})
 	}
 
@@ -66,17 +62,20 @@ func (handler *ResidenceTypeHandler) create(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceTypeHandler) update(c echo.Context) error {
+func (handler *HotelHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
+
+		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id)
-	if err != nil {
+	mainModel, err := handler.Service.Find(id)
 
+	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -85,17 +84,29 @@ func (handler *ResidenceTypeHandler) update(c echo.Context) error {
 		})
 	}
 
-	if result == nil || (result != nil && result.Id == 0) {
+	if mainModel == nil || (mainModel != nil && mainModel.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
-	name := c.FormValue("name")
-	result.Name = name
+	clientModel := models.Hotel{}
 
-	updatedMode, err := handler.Service.Update(result)
+	err = c.Bind(&clientModel)
+
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+		})
+	}
+
+	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
+
+	updatedMode, err := handler.Service.Update(modelToUpdate)
 
 	if err != nil {
 
@@ -109,7 +120,7 @@ func (handler *ResidenceTypeHandler) update(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceTypeHandler) find(c echo.Context) error {
+func (handler *HotelHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -125,6 +136,7 @@ func (handler *ResidenceTypeHandler) find(c echo.Context) error {
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
+
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
@@ -144,7 +156,7 @@ func (handler *ResidenceTypeHandler) find(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceTypeHandler) findAll(c echo.Context) error {
+func (handler *HotelHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
 
@@ -161,7 +173,7 @@ func (handler *ResidenceTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
-func (handler *ResidenceTypeHandler) delete(c echo.Context) error {
+func (handler *HotelHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -180,6 +192,7 @@ func (handler *ResidenceTypeHandler) delete(c echo.Context) error {
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
+
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      handler.Input.Translator.Localize(lang, err.Error()),

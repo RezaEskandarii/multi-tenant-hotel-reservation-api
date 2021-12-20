@@ -15,8 +15,8 @@ const (
 
 type Reservation struct {
 	BaseModel
-	ResidenceId     uint64          `json:"residence_id" valid:"required"`
-	Residence       Residence       `json:"residence" valid:"-"  gorm:"foreignKey:ResidenceId;references:id"`
+	hotelId         uint64          `json:"hotel_id" valid:"required"`
+	hotel           Hotel           `json:"hotel" valid:"-"  gorm:"foreignKey:hotelId;references:id"`
 	SupervisorId    uint64          `json:"supervisor_id" valid:"required"`
 	Supervisor      Guest           `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
 	CheckinDate     time.Time       `json:"checkin_date" valid:"required"`

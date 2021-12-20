@@ -33,13 +33,13 @@ func (s *RoomTypeService) Find(id uint64) (*models.RoomType, error) {
 	return s.Repository.Find(id)
 }
 
-// FindAll returns paginates list of residence types.
+// FindAll returns paginates list of hotel types.
 func (s *RoomTypeService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
 }
 
-// Delete removes residence type by given id.
+// Delete removes hotel type by given id.
 func (s *RoomTypeService) Delete(id uint64) error {
 
 	return s.Repository.Delete(id)
