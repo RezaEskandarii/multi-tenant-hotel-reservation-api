@@ -8,17 +8,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // RateGroupHandler RateGroup endpoint handler
 type RateGroupHandler struct {
-	Service *services.RateGroupService
+	Service *domain_services.RateGroupService
 	Input   *dto.HandlerInput
 }
 
-func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *services.RateGroupService) {
+func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *domain_services.RateGroupService) {
 	handler.Service = service
 	handler.Input = input
 

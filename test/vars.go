@@ -3,7 +3,7 @@ package test
 import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/repositories"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/database"
 )
 
@@ -14,8 +14,8 @@ var (
 		PerPage: 20,
 	}
 
-	countryService  = services.NewCountryService()
-	provinceService = services.NewProvinceService()
+	countryService  = domain_services.NewCountryService()
+	provinceService = domain_services.NewProvinceService()
 )
 
 func setRepository() {

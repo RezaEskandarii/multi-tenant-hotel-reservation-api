@@ -8,17 +8,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // RateCodeHandler RateCode endpoint handler
 type RateCodeHandler struct {
-	Service *services.RateCodeService
+	Service *domain_services.RateCodeService
 	Input   *dto.HandlerInput
 }
 
-func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *services.RateCodeService) {
+func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domain_services.RateCodeService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/rate-groups")

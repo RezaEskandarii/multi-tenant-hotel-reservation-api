@@ -7,17 +7,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // GuestHandler  Currency endpoint handler
 type GuestHandler struct {
-	Service *services.GuestService
+	Service *domain_services.GuestService
 	Input   *dto.HandlerInput
 }
 
-func (handler *GuestHandler) Register(input *dto.HandlerInput, service *services.GuestService) {
+func (handler *GuestHandler) Register(input *dto.HandlerInput, service *domain_services.GuestService) {
 	handler.Input = input
 	handler.Service = service
 

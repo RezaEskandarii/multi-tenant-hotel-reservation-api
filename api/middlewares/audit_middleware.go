@@ -6,11 +6,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"time"
 )
 
-func AuditMiddleware(userService *services.UserService, auditService *services.AuditService, ch chan interface{}) echo.MiddlewareFunc {
+func AuditMiddleware(userService *domain_services.UserService, auditService *domain_services.AuditService, ch chan interface{}) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			if c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPut {

@@ -1,4 +1,4 @@
-package services
+package domain_services
 
 import (
 	"reservation-api/internal/commons"

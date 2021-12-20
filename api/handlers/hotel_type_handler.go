@@ -8,17 +8,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // HotelTypeHandler Province endpoint handler
 type HotelTypeHandler struct {
-	Service *services.HotelTypeService
+	Service *domain_services.HotelTypeService
 	Input   *dto.HandlerInput
 }
 
-func (handler *HotelTypeHandler) Register(input *dto.HandlerInput, service *services.HotelTypeService) {
+func (handler *HotelTypeHandler) Register(input *dto.HandlerInput, service *domain_services.HotelTypeService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/hotel-types")

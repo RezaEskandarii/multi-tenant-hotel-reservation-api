@@ -8,17 +8,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // CurrencyHandler Currency endpoint handler
 type CurrencyHandler struct {
-	Service *services.CurrencyService
+	Service *domain_services.CurrencyService
 	Input   *dto.HandlerInput
 }
 
-func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *services.CurrencyService) {
+func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *domain_services.CurrencyService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/currencies")

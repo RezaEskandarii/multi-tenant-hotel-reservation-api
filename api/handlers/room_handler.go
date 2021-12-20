@@ -8,17 +8,17 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // RoomHandler Province endpoint handler
 type RoomHandler struct {
-	Service *services.RoomService
+	Service *domain_services.RoomService
 	Input   *dto.HandlerInput
 }
 
-func (handler *RoomHandler) Register(input *dto.HandlerInput, service *services.RoomService) {
+func (handler *RoomHandler) Register(input *dto.HandlerInput, service *domain_services.RoomService) {
 	handler.Service = service
 	handler.Input = input
 

@@ -7,7 +7,7 @@ import (
 	"reservation-api/api/middlewares"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/repositories"
-	"reservation-api/internal/services"
+	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/cache"
 	"reservation-api/pkg/translator"
@@ -15,20 +15,20 @@ import (
 
 // services
 var (
-	countryService    = services.NewCountryService()
-	provinceService   = services.NewProvinceService()
-	cityService       = services.NewCityService()
-	currencyService   = services.NewCurrencyService()
-	userService       = services.NewUserService()
-	hotelTypeService  = services.NewHotelTypeService()
-	hotelGradeService = services.NewhotelGradeService()
-	hotelService      = services.NewHotelService()
-	roomTypeService   = services.NewRoomTypeService()
-	roomService       = services.NewRoomService()
-	guestService      = services.NewGuestService()
-	rateGroupService  = services.NewRateGroupService()
-	rateCodeService   = services.NewRateCodeService()
-	auditService      = services.NewAuditService()
+	countryService    = domain_services.NewCountryService()
+	provinceService   = domain_services.NewProvinceService()
+	cityService       = domain_services.NewCityService()
+	currencyService   = domain_services.NewCurrencyService()
+	userService       = domain_services.NewUserService()
+	hotelTypeService  = domain_services.NewHotelTypeService()
+	hotelGradeService = domain_services.NewhotelGradeService()
+	hotelService      = domain_services.NewHotelService()
+	roomTypeService   = domain_services.NewRoomTypeService()
+	roomService       = domain_services.NewRoomService()
+	guestService      = domain_services.NewGuestService()
+	rateGroupService  = domain_services.NewRateGroupService()
+	rateCodeService   = domain_services.NewRateCodeService()
+	auditService      = domain_services.NewAuditService()
 )
 
 // handlers
