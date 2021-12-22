@@ -37,9 +37,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -50,16 +48,14 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
 		})
 	}
-
+	handler.Input.AuditChannel <- result
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
@@ -96,16 +92,15 @@ func (handler *RoomHandler) update(c echo.Context) error {
 	name := c.FormValue("name")
 	result.Name = name
 
-	updatedMode, err := handler.Service.Update(result)
+	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
-
+	handler.Input.AuditChannel <- updatedModel
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:         updatedMode,
+		Data:         updatedModel,
 		ResponseCode: http.StatusOK,
 	})
 }

@@ -59,6 +59,8 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 		})
 	}
 
+	handler.Input.AuditChannel <- result
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
@@ -95,7 +97,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	name := c.FormValue("name")
 	result.Name = name
 
-	updatedMode, err := handler.Service.Update(result)
+	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {
 
@@ -103,8 +105,10 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
+	handler.Input.AuditChannel <- updatedModel
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:         updatedMode,
+		Data:         updatedModel,
 		ResponseCode: http.StatusOK,
 	})
 }

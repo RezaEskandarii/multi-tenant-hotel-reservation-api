@@ -63,7 +63,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	user, userErr := handler.Service.FindByUsernameAndPassword(creds.Username, creds.Password)
 
 	if user == nil || userErr != nil {
-		return c.JSON(http.StatusBadRequest, nil)
+		return c.JSON(http.StatusNotFound, nil)
 	}
 
 	// Declare the expiration time of the token

@@ -43,6 +43,8 @@ func (handler *CityHandler) create(c echo.Context) error {
 	}
 
 	if _, err := handler.Service.Create(&model); err == nil {
+		handler.Input.AuditChannel <- model
+
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         model,
@@ -100,6 +102,8 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
+		handler.Input.AuditChannel <- output
+
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,

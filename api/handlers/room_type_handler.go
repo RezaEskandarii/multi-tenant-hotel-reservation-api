@@ -58,7 +58,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-
+	handler.Input.AuditChannel <- result
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
@@ -95,16 +95,15 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	name := c.FormValue("name")
 	result.Name = name
 
-	updatedMode, err := handler.Service.Update(result)
+	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
-
+	handler.Input.AuditChannel <- updatedModel
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:         updatedMode,
+		Data:         updatedModel,
 		ResponseCode: http.StatusOK,
 	})
 }

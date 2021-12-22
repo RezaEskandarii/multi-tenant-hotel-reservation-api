@@ -47,41 +47,38 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 			})
 	}
 
-	output, err := handler.Service.Create(model)
+	result, err := handler.Service.Create(model)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
 		})
 	}
+	handler.Input.AuditChannel <- result
 
 	return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
 		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
-		Data:         output,
+		Data:         result,
 	})
 }
 
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	if err != nil {
 
+	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id)
 
+	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
@@ -103,10 +100,10 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	}
 
-	if output, err := handler.Service.Update(model); err == nil {
-
+	if result, err := handler.Service.Update(model); err == nil {
+		handler.Input.AuditChannel <- result
 		return c.JSON(http.StatusOK, commons.ApiResponse{
-			Data:         output,
+			Data:         result,
 			ResponseCode: http.StatusOK,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
 		})

@@ -43,7 +43,8 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := handler.Service.Create(model); err == nil {
+	if result, err := handler.Service.Create(model); err == nil {
+		handler.Input.AuditChannel <- result
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         model,
@@ -97,9 +98,11 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if output, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model); err == nil {
+		handler.Input.AuditChannel <- result
+
 		return c.JSON(http.StatusOK, ApiResponse{
-			Data:         output,
+			Data:         result,
 			ResponseCode: http.StatusOK,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
 		})

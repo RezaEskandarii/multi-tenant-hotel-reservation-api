@@ -36,7 +36,6 @@ func (handler *UserHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -67,7 +66,8 @@ func (handler *UserHandler) create(c echo.Context) error {
 		})
 	}
 
-	if _, err := handler.Service.Create(&model); err == nil {
+	if result, err := handler.Service.Create(&model); err == nil {
+		handler.Input.AuditChannel <- result
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         model,
@@ -118,7 +118,6 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -127,9 +126,10 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	}
 
-	if output, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model); err == nil {
+		handler.Input.AuditChannel <- result
 		return c.JSON(http.StatusOK, commons.ApiResponse{
-			Data:         output,
+			Data:         result,
 			ResponseCode: http.StatusOK,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
 		})
@@ -144,7 +144,6 @@ func (handler *UserHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -153,7 +152,6 @@ func (handler *UserHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
@@ -180,7 +178,6 @@ func (handler *UserHandler) find(c echo.Context) error {
 func (handler *UserHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
-
 	list, err := handler.Service.FindAll(paginationInput)
 
 	if err != nil {
@@ -201,7 +198,6 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,

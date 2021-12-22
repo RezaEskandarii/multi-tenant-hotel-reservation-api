@@ -46,7 +46,9 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := handler.Service.Create(model); err == nil {
+	if result, err := handler.Service.Create(model); err == nil {
+		handler.Input.AuditChannel <- result
+
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         model,
@@ -69,17 +71,18 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	if err != nil {
 
+	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
+
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -102,9 +105,10 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if output, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model); err == nil {
+		handler.Input.AuditChannel <- result
 		return c.JSON(http.StatusOK, commons.ApiResponse{
-			Data:         output,
+			Data:         result,
 			ResponseCode: http.StatusOK,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
 		})
