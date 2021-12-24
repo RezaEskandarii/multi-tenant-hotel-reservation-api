@@ -5,16 +5,48 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
+	"os"
+	"reservation-api/cmd"
 	"reservation-api/internal/config"
 	"reservation-api/internal/registery"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/database"
 )
 
+var (
+	db, dbErr = database.GetDb(false)
+	logger    = applogger.New(nil)
+)
+
+func SetCommands() {
+	commands := make([]cmd.Runner, 0)
+
+	migrateCmd := cmd.NewCommand(cmd.Migrate, "false", "migrate structs to database", func() error {
+		return database.Migrate(db)
+	})
+
+	commands = append(commands, migrateCmd)
+
+	for _, arg := range os.Args {
+
+		for _, c := range commands {
+			if c.Name() == arg {
+				c.Run()
+			}
+		}
+	}
+
+}
+
 // Run run application
 func Run(port int) error {
 
-	logger := applogger.New(nil)
+	SetCommands()
+
+	if dbErr != nil {
+		return dbErr
+	}
+
 	logger.LogInfo("application started ...")
 
 	defer func() {
@@ -30,7 +62,6 @@ func Run(port int) error {
 		return err
 	}
 
-	db, err := database.GetDb(false)
 	if err != nil {
 		logger.LogError(err.Error())
 		return err
@@ -38,14 +69,6 @@ func Run(port int) error {
 
 	if cfg.Application.SqlDebug {
 		db = db.Debug()
-	}
-
-	if cfg.Application.IgnoreMigration == false {
-		err = database.Migrate(db)
-		if err != nil {
-			logger.LogDebug(err.Error())
-			return err
-		}
 	}
 
 	portStr := fmt.Sprintf(":%d", port)
