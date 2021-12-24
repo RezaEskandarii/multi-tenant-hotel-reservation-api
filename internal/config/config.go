@@ -4,7 +4,6 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
-	"reservation-api/pkg/applogger"
 )
 
 // Config application config struct
@@ -30,19 +29,16 @@ type Config struct {
 
 // NewConfig reads config from yml file copies to config struct and returns config struct
 func NewConfig() (*Config, error) {
+
 	path := "./resources/config.yml"
 
-	logger := applogger.New(nil)
-
 	if os.Getenv("CONFIG_PATH") != "" {
-
 		path = os.Getenv("CONFIG_PATH")
 	}
 
 	cfgFile, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		logger.LogError(err.Error())
 		return nil, err
 	}
 
@@ -51,7 +47,6 @@ func NewConfig() (*Config, error) {
 	err = yaml.Unmarshal(cfgFile, &conf)
 
 	if err != nil {
-		logger.LogError(err.Error())
 		return nil, err
 	}
 
