@@ -1,7 +1,7 @@
 package commons
 
 const (
-	hotelTypeHashotel   = 800
+	hotelTypeHasHotel   = 800
 	ReservationConflict = 700
 	RoomBusy            = 701
 )

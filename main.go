@@ -8,13 +8,10 @@ import (
 
 func main() {
 
-	var port int
-
 	logger := applogger.New(nil)
-	kernel.SetCommands()
-	err := kernel.Run(port)
-	if err != nil {
-		logger.LogInfo("exit ...")
+
+	if err := kernel.Run(); err != nil {
+		logger.LogError(err)
 		os.Exit(1)
 	}
 }

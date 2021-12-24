@@ -5,8 +5,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
-	"os"
-	"reservation-api/cmd"
 	"reservation-api/internal/config"
 	"reservation-api/internal/registery"
 	"reservation-api/pkg/applogger"
@@ -14,47 +12,22 @@ import (
 )
 
 var (
-	db, dbErr = database.GetDb(false)
-	logger    = applogger.New(nil)
+	db, dbErr     = database.GetDb(false)
+	logger        = applogger.New(nil)
+	httpRouter    = getHttpRouter()
+	v1RouterGroup = httpRouter.Group("/v1")
 )
 
-func SetCommands() {
-	commands := make([]cmd.Runner, 0)
-
-	migrateCmd := cmd.NewCommand(cmd.Migrate, "false", "migrate structs to database", func() error {
-		return database.Migrate(db)
-	})
-
-	commands = append(commands, migrateCmd)
-
-	for _, arg := range os.Args {
-
-		for _, c := range commands {
-			if c.Name() == arg {
-				c.Run()
-			}
-		}
-	}
-
-}
-
 // Run run application
-func Run(port int) error {
+func Run() error {
 
-	SetCommands()
+	registery.RegisterServices(db, v1RouterGroup)
+
+	loadFlags()
 
 	if dbErr != nil {
 		return dbErr
 	}
-
-	logger.LogInfo("application started ...")
-
-	defer func() {
-		if r := recover(); r != nil {
-			logger.LogError(r)
-			return
-		}
-	}()
 
 	cfg, err := config.NewConfig()
 
@@ -62,17 +35,17 @@ func Run(port int) error {
 		return err
 	}
 
-	if err != nil {
-		logger.LogError(err.Error())
-		return err
-	}
-
 	if cfg.Application.SqlDebug {
 		db = db.Debug()
 	}
 
-	portStr := fmt.Sprintf(":%d", port)
+	httpRouter.Logger.Fatal(httpRouter.Start(fmt.Sprintf(":%s", cfg.Application.Port)))
 
+	return nil
+}
+
+// return new instance of echo.
+func getHttpRouter() *echo.Echo {
 	e := echo.New()
 
 	e.Use(middleware.Recover())
@@ -89,16 +62,5 @@ func Run(port int) error {
 
 	e.Use(middleware.CORSWithConfig(corsCfg))
 
-	router := e.Group("/v1")
-
-	registery.RegisterServices(db, router)
-
-	if err := registery.ApplySeed(db); err != nil {
-		logger.LogError(err.Error())
-		return err
-	}
-
-	e.Logger.Fatal(e.Start(portStr))
-
-	return nil
+	return e
 }

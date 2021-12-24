@@ -177,7 +177,7 @@
 - implement city respository
 - implement pagination in country repository
 - implement update and find function in country handler
-- add some middlewares to echo router
+- add some middlewares to echo v1RouterGroup
 - implement country handler's create method
 - implement country handler
 - implement paginated_list's methods
