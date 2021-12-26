@@ -1,4 +1,4 @@
-package cmd
+package main
 
 type Runner interface {
 	Run() error
