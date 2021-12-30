@@ -14,9 +14,9 @@ type RateCode struct {
 	CurrencyId  uint64    `json:"currency_id" valid:"required"`
 	RateGroup   RateGroup `json:"rate_group" valid:"-"`
 	RateGroupId uint64    `json:"rate_group_id"  valid:"required"`
-	Guest       Guest     `json:"guest"  valid:"-"`
-	GuestId     uint64    `json:"guest_id"  valid:"required"`
-	Status      bool      `json:"status"`
+	//Guest       Guest     `json:"guest"  valid:"-"`
+	//GuestId     uint64    `json:"guest_id"  valid:"required"`
+	Status bool `json:"status"`
 }
 
 func (r *RateCode) Validate() (bool, error) {

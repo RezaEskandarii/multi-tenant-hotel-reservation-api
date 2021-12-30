@@ -9,6 +9,8 @@ type RateCodeDetail struct {
 	NightCount uint64     `json:"guest_count"`
 	DateStart  *time.Time `json:"date_start"`
 	DateEnd    *time.Time `json:"date_end"`
+	Room       *Room      `json:"room"`
+	RoomId     uint64     `json:"room_id"`
 
 	RatePrices []*RateCodeDetailPrice `json:"rate_prices"`
 }
