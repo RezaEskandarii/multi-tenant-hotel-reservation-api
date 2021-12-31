@@ -24,12 +24,13 @@ var (
 		models.ReservationRequest{},
 		models.Reservation{},
 		models.Audit{},
+		models.RateCodeDetail{},
+		models.RateCodeDetailPrice{},
 	}
 )
 
 // Migrate migrate tables
 func Migrate(db *gorm.DB) error {
-
 	logger := applogger.New(nil)
 	logger.LogInfo("migration started ...")
 
@@ -39,7 +40,6 @@ func Migrate(db *gorm.DB) error {
 	}
 
 	for _, entity := range entities {
-
 		err = db.AutoMigrate(entity)
 
 		if err != nil {
