@@ -56,7 +56,6 @@ func (r *RoomRepository) FindAll(input *dto.PaginationInput) (*commons.Paginated
 func (r RoomRepository) Delete(id uint64) error {
 
 	if query := r.DB.Model(&models.Room{}).Where("id=?", id).Delete(&models.Room{}); query.Error != nil {
-
 		return query.Error
 	}
 
