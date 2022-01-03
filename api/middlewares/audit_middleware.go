@@ -20,10 +20,8 @@ func AuditMiddleware(userService *domain_services.UserService, auditService *dom
 				if err != nil {
 					return echo.NewHTTPError(http.StatusUnauthorized, "")
 				}
-
 				once := sync.Once{}
 				once.Do(func() {
-
 					go func() {
 						for {
 							time.Sleep(1000 * time.Millisecond)
