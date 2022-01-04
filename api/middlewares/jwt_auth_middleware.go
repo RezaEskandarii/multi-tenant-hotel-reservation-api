@@ -23,8 +23,8 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 					return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 				}
 
-				Secretkey, _ := os.LookupEnv("JWT_KEY")
-				return []byte(Secretkey), nil
+				secretkey, _ := os.LookupEnv("JWT_KEY")
+				return []byte(secretkey), nil
 			})
 
 			if token == nil {
