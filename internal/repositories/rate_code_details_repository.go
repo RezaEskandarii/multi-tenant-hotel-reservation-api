@@ -47,7 +47,7 @@ func (r *RateCodeDetailRepository) Find(id uint64) (*models.RateCodeDetail, erro
 
 	model := models.RateCodeDetail{}
 
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := r.DB.Where("id=?", id).Find(&model).Preload("RateCodeDetailPrice"); tx.Error != nil {
 		return nil, tx.Error
 	}
 
