@@ -14,19 +14,23 @@ import (
 
 // RateCodeHandler RateCode endpoint handler
 type RateCodeHandler struct {
-	Service *domain_services.RateCodeService
-	Input   *dto.HandlerInput
+	Service               *domain_services.RateCodeService
+	RateCodeDetailService *domain_services.RateCodeDetailService
+	Input                 *dto.HandlerInput
 }
 
-func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domain_services.RateCodeService) {
+func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domain_services.RateCodeService, rateCodeDetailService *domain_services.RateCodeDetailService) {
 	handler.Service = service
+	handler.RateCodeDetailService = rateCodeDetailService
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/rate-groups")
+
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.DELETE("/:id", handler.delete)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	routeGroup.POST("/addDetails/{id}", handler.AddDetails)
 }
 
 func (handler *RateCodeHandler) create(c echo.Context) error {
@@ -193,5 +197,35 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
 		Message:      handler.Input.Translator.Localize(lang, message_keys.Deleted),
+	})
+}
+
+func (handler *RateCodeHandler) AddDetails(c echo.Context) error {
+
+	id, err := utils.ConvertToUint(c.Get("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+	requestBody := models.RateCodeDetail{RateCodeId: id}
+	if err := c.Bind(&requestBody); err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+
+	result, err := handler.RateCodeDetailService.Create(&requestBody)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+			Message:      err.Error(),
+		})
+	}
+	handler.Input.AuditChannel <- result
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:         result,
+		ResponseCode: http.StatusOK,
+		Message:      handler.Input.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.Created),
 	})
 }

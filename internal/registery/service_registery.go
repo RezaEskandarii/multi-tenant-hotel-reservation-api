@@ -15,20 +15,21 @@ import (
 
 // services
 var (
-	countryService    = domain_services.NewCountryService()
-	provinceService   = domain_services.NewProvinceService()
-	cityService       = domain_services.NewCityService()
-	currencyService   = domain_services.NewCurrencyService()
-	userService       = domain_services.NewUserService()
-	hotelTypeService  = domain_services.NewHotelTypeService()
-	hotelGradeService = domain_services.NewhotelGradeService()
-	hotelService      = domain_services.NewHotelService()
-	roomTypeService   = domain_services.NewRoomTypeService()
-	roomService       = domain_services.NewRoomService()
-	guestService      = domain_services.NewGuestService()
-	rateGroupService  = domain_services.NewRateGroupService()
-	rateCodeService   = domain_services.NewRateCodeService()
-	auditService      = domain_services.NewAuditService()
+	countryService        = domain_services.NewCountryService()
+	provinceService       = domain_services.NewProvinceService()
+	cityService           = domain_services.NewCityService()
+	currencyService       = domain_services.NewCurrencyService()
+	userService           = domain_services.NewUserService()
+	hotelTypeService      = domain_services.NewHotelTypeService()
+	hotelGradeService     = domain_services.NewhotelGradeService()
+	hotelService          = domain_services.NewHotelService()
+	roomTypeService       = domain_services.NewRoomTypeService()
+	roomService           = domain_services.NewRoomService()
+	guestService          = domain_services.NewGuestService()
+	rateGroupService      = domain_services.NewRateGroupService()
+	rateCodeService       = domain_services.NewRateCodeService()
+	auditService          = domain_services.NewAuditService()
+	rateCodeDetailService = domain_services.NewRateCodeDetailService()
 )
 
 // handlers
@@ -94,7 +95,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
-	rateCodeHandler.Register(handlerInput, rateCodeService)
+	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
 
 }
 
@@ -119,6 +120,7 @@ func setServicesRepository(db *gorm.DB) {
 	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 	auditService.Repository = repositories.NewAuditRepository(db)
+	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
 }
 
 // ApplySeed seeds given json file to database.
