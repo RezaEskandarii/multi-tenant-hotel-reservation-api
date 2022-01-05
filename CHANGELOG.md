@@ -19,6 +19,28 @@
 - regenerate changelog file
 
 ### Feat
+- add addDetails function to rate_code_handler
+- add rate code details service
+- add rate_code_details_repository
+- add feat: add new entities to migration
+- add new fields to rate_code_details model
+- add rate_code_details model
+- add file_transfer_service interface
+- add command runner
+- add auditChannel to handlers
+- add thumbnail model
+- add checkIn function to reservation_repository
+- add CreateReservationRequest function to reservation_repository
+- add seed function to country_repository
+- add cache to city service
+- add cache to city service
+- implement cache manage functions
+- implement redis cache layer
+- add audit middleware
+- add audit middleware
+- add audit service
+- add audit repository
+- add audit model
 - protect routes with JWTAuthMiddleware
 - add auth middleware
 - implement refreshToken function in auth_handler
@@ -70,30 +92,30 @@
 - add room struct fields
 - add room type struct
 - add logger to user handler
-- add logger to Hotel type handler
-- add logger to Hotel handler
-- add logger to Hotel grade handler
+- add logger to residence type handler
+- add logger to residence handler
+- add logger to residence grade handler
 - add logger to province handler
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
 - add room model
-- add Hotel handler
-- add Hotel service
-- add Hotel repository
+- add residence handler
+- add residence service
+- add residence repository
 - add validation to structs
 - add validator package and add validation tags to models
-- implement find all and delete function in hotel_type_handler
-- implement find all and delete function in hotel_grade_handler
-- add Hotel grade handler
-- add hotelGradeService
-- add hotel_grade_repository
-- add delete function to hotel_type_repository
-- implement update Hotel type function
-- add HotelType handler
-- add hotelTypeService and hotelTypeRepository
-- add HotelType and HotelGrade struct and add to Hotel struct relations
-- add Hotel struct
+- implement find all and delete function in residence_type_handler
+- implement find all and delete function in residence_grade_handler
+- add residence grade handler
+- add ResidenceGradeService
+- add residence_grade_repository
+- add delete function to residence_type_repository
+- implement update residence type function
+- add ResidenceType handler
+- add ResidenceTypeService and ResidenceTypeRepository
+- add ResidenceType and ResidenceGrade struct and add to Residence struct relations
+- add Residence struct
 - implement logger package methods and add disitlog library
 - add cors origin middleware
 - add persian new translations
@@ -104,9 +126,20 @@
 - add user service
 
 ### Fix
+- singleton audit channel listener in audit_middleware
+- regenerate gmo mod file
+- regenerate gmo mod file
 - register rate group handler in service registry
 
 ### Refactor
+- refactor audit_middleware
+- refactor audit_middleware
+- remove logger from config module
+- refactor kernel module codes
+- move services to domain_service module
+- refactor residence word to hotel in all part of project
+- refactor handlers input
+- refactor handlers input
 - rename module name to reservation-api
 - refactor currency_handler
 - refactor country_handler
@@ -124,15 +157,15 @@
 - improve repositories code
 - validate user's gender before create
 - ignore validation to some model relations
-- add pointer to Hotel relations
-- prevent to validation Hotel releations
+- add pointer to residence relations
+- prevent to validation residence releations
 - move handlers and middlewares to api directory
 - move test files to test package
 - improve some codes
 - refactor som docs
 - beautify some codes
 - remove some extra error codes
-- refactor hotel_grade and hotel_type handler
+- refactor residence_grade and residence_type handler
 - rename some structs
 - add logs file to gitignore
 - refactor services dependencies
@@ -177,7 +210,7 @@
 - implement city respository
 - implement pagination in country repository
 - implement update and find function in country handler
-- add some middlewares to echo v1RouterGroup
+- add some middlewares to echo router
 - implement country handler's create method
 - implement country handler
 - implement paginated_list's methods
@@ -198,4 +231,4 @@
 - add yaml package to go mod
 
 
-[Unreleased]: https://github.com/RezaEskandarii/Hotel-reservation/compare/v0.1...HEAD
+[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/v0.1...HEAD
