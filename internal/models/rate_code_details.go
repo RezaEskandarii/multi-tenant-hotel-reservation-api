@@ -6,7 +6,7 @@ type RateCodeDetail struct {
 	BaseModel
 	RateCode   RateCode   `json:"rate_code"`
 	RateCodeId uint64     `json:"rate_code_id"`
-	NightCount uint64     `json:"guest_count"`
+	NightCount uint64     `json:"night_count"`
 	DateStart  *time.Time `json:"date_start"`
 	DateEnd    *time.Time `json:"date_end"`
 	Room       *Room      `json:"room"`
