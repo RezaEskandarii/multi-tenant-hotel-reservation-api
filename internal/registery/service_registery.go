@@ -21,7 +21,7 @@ var (
 	currencyService       = domain_services.NewCurrencyService()
 	userService           = domain_services.NewUserService()
 	hotelTypeService      = domain_services.NewHotelTypeService()
-	hotelGradeService     = domain_services.NewhotelGradeService()
+	hotelGradeService     = domain_services.NewHotelGradeService()
 	hotelService          = domain_services.NewHotelService()
 	roomTypeService       = domain_services.NewRoomTypeService()
 	roomService           = domain_services.NewRoomService()

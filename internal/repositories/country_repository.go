@@ -84,7 +84,7 @@ func (r *CountryRepository) GetProvinces(countryId uint64) ([]*models.Province, 
 func (r *CountryRepository) Seed(jsonFilePath string) error {
 
 	countries := make([]models.Country, 0)
-	if err := utils.CastJsonFileToModel(jsonFilePath, &countries); err == nil {
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {
 		for _, country := range countries {
 			var count int64 = 0
 			if err := r.DB.Model(models.Country{}).Where("name", country.Name).Count(&count).Error; err != nil {

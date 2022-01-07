@@ -29,11 +29,12 @@ func (r *RateCodeDetailRepository) Update(model *models.RateCodeDetail) (*models
 
 	tx := r.DB.Begin()
 
-	if err := tx.Model(&models.RateCodeDetailPrice{}).Where("rate_code_detail_id=?", model.Id).Error; err != nil {
+	// remove old price.
+	if err := tx.Where("rate_code_detail_id=?", model.Id).Delete(&models.RateCodeDetailPrice{}).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-
+	// update
 	if err := tx.Updates(&model).Error; err != nil {
 		return nil, err
 	}

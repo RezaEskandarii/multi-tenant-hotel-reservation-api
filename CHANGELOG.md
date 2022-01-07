@@ -23,12 +23,12 @@
 - add rate code details service
 - add rate_code_details_repository
 - add feat: add new entities to migration
-- add new fields to rate_code_details model
-- add rate_code_details model
+- add new fields to rate_code_details structModel
+- add rate_code_details structModel
 - add file_transfer_service interface
 - add command runner
 - add auditChannel to handlers
-- add thumbnail model
+- add thumbnail structModel
 - add checkIn function to reservation_repository
 - add CreateReservationRequest function to reservation_repository
 - add seed function to country_repository
@@ -40,7 +40,7 @@
 - add audit middleware
 - add audit service
 - add audit repository
-- add audit model
+- add audit structModel
 - protect routes with JWTAuthMiddleware
 - add auth middleware
 - implement refreshToken function in auth_handler
@@ -51,28 +51,28 @@
 - add seeder service
 - add seeder repository
 - add users seed file
-- add reservation type field to reservation model
+- add reservation type field to reservation structModel
 - add reservation repository
-- add validation to reservation model
-- add validation to reservation model
+- add validation to reservation structModel
+- add validation to reservation structModel
 - generate reservationKey's hash before create
 - add hash_generator
-- add reservationLock model
-- add reservation model
+- add reservationLock structModel
+- add reservation structModel
 - add ratCodeHandler to serviceRegistry
 - add ratCodeHandler's functions
 - add rate_code_handler
 - add rate_code_service
 - implement rate_code_repository functions
 - add rate_code_repository
-- add validator to rate_code model
-- add rate_code model
+- add validator to rate_code structModel
+- add rate_code structModel
 - add rate group handler
 - add rate group repository service
 - add rate group repository functions
 - add rate group repository
-- add rate group model
-- add guest model to migrator
+- add rate group structModel
+- add guest structModel to migrator
 - implement guest handler functions
 - add guest handler to service registry
 - implement guests handler
@@ -81,7 +81,7 @@
 - add activate and deactivate functions to user repository
 - add guest service
 - add guest repository
-- add guest model
+- add guest structModel
 - add room handler
 - add room room service
 - add room repository
@@ -99,7 +99,7 @@
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
-- add room model
+- add room structModel
 - add residence handler
 - add residence service
 - add residence repository
@@ -156,7 +156,7 @@
 - refactor some codes
 - improve repositories code
 - validate user's gender before create
-- ignore validation to some model relations
+- ignore validation to some structModel relations
 - add pointer to residence relations
 - prevent to validation residence releations
 - move handlers and middlewares to api directory
@@ -193,11 +193,11 @@
 - add message_keys module to hold translation message files keys
 - add message_keys module to hold translation message files keys
 - add localized message translator module
-- add user model
+- add user structModel
 - add currency handler
 - add currency service
 - add currency repository
-- add currency model
+- add currency structModel
 - implement province handler
 - add province service
 - add province repository
@@ -216,7 +216,7 @@
 - implement paginated_list's methods
 - implement application config struct
 - add country_repository
-- add country and city model
+- add country and city structModel
 - add project structure and folders
 
 ### Fix

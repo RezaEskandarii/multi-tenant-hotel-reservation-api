@@ -144,7 +144,7 @@ func (r *UserRepository) FindAll(input *dto.PaginationInput) (*commons.Paginated
 func (r *UserRepository) Seed(jsonFilePath string) error {
 
 	users := make([]models.User, 0)
-	if err := utils.CastJsonFileToModel(jsonFilePath, &users); err == nil {
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {
 		for _, user := range users {
 			var count int64 = 0
 			if err := r.DB.Model(models.User{}).Where("username", user.Username).Count(&count).Error; err != nil {
