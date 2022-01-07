@@ -30,7 +30,7 @@ func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domai
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.DELETE("/:id", handler.delete)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
-	routeGroup.POST("/addDetails/{id}", handler.AddDetails)
+	routeGroup.POST("/add-details/:id", handler.AddDetails)
 }
 
 func (handler *RateCodeHandler) create(c echo.Context) error {
