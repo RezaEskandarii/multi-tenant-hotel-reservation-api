@@ -4,21 +4,21 @@ import "time"
 
 type RateCodeDetail struct {
 	BaseModel
-	RateCode   *RateCode  `json:"rate_code"  gorm:"foreignkey:RateCodeId"`
-	RateCodeId uint64     `json:"rate_code_id"`
-	NightCount uint64     `json:"night_count"`
-	DateStart  *time.Time `json:"date_start"`
-	DateEnd    *time.Time `json:"date_end"`
-	Room       *Room      `json:"room" gorm:"foreignkey:RoomId"`
-	RoomId     uint64     `json:"room_id"`
+	RateCode   *RateCode  `json:"rate_code"     gorm:"foreignkey:RateCodeId"`
+	RateCodeId uint64     `json:"rate_code_id"  valid:"required"`
+	NightCount uint64     `json:"night_count"   valid:"required"`
+	DateStart  *time.Time `json:"date_start"    valid:"required"`
+	DateEnd    *time.Time `json:"date_end"      valid:"required"`
+	Room       *Room      `json:"room"          gorm:"foreignkey:RoomId"`
+	RoomId     uint64     `json:"room_id"       valid:"required"`
 
-	RatePrices []*RateCodeDetailPrice `json:"rate_prices"`
+	RatePrices []*RateCodeDetailPrice `json:"rate_prices" valid:"required"`
 }
 
 type RateCodeDetailPrice struct {
 	BaseModel
-	GuestCount       uint64          `json:"guest_count"`
-	Price            float64         `json:"price"`
+	GuestCount       uint64          `json:"guest_count"  valid:"required"`
+	Price            float64         `json:"price"  valid:"required"`
 	RateCodeDetail   *RateCodeDetail `json:"rate_code_detail" gorm:"foreignkey:RateCodeDetailId"`
 	RateCodeDetailId uint64          `json:"rate_code_detail_id"`
 }
