@@ -29,6 +29,10 @@ type Reservation struct {
 	ParentId        uint64          `json:"parent_id" valid:"-"`
 	Parent          *Reservation    `json:"parent" gorm:"foreignKey:ParentId;references:id"`
 	ReservationType ReservationType `json:"reservation_type"`
+	Price           float64         `json:"price"`
+	Nights          float64         `json:"nights"`
+
+	///Children        []*Reservation  `gorm:"many2many:reservation_children;association_jointable_foreignkey:parent_id"`
 }
 
 func (r *Reservation) Validate() (bool, error) {
@@ -38,13 +42,13 @@ func (r *Reservation) Validate() (bool, error) {
 
 func (r *Reservation) BeforeCreate(tx *gorm.DB) error {
 
-	if r.ReservationType == "" {
-		r.ReservationType = Normal
-	}
-
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
+	//if r.ReservationType == "" {
+	//	r.ReservationType = Normal
+	//}
+	//
+	//if _, err := r.Validate(); err != nil {
+	//	tx.AddError(err)
+	//	return err
+	//}
 	return nil
 }

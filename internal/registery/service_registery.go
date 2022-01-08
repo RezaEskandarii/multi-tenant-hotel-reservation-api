@@ -96,7 +96,6 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
 	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
-
 }
 
 // set repository dependency
