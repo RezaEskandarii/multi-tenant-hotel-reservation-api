@@ -36,6 +36,18 @@ func (r *ReservationRepository) CreateReservationRequest(model models.Reservatio
 	return &requestModel, nil
 }
 
+func (r *ReservationRepository) Create() (*models.Reservation, error) {
+	panic("not implemented")
+}
+
+func (r *ReservationRepository) Update() (*models.Reservation, error) {
+	panic("not implemented")
+}
+
 func (r ReservationRepository) CheckIn(model *models.Reservation) error {
+	panic("not implemented")
+}
+
+func (r ReservationRepository) CheckOut(model *models.Reservation) error {
 	panic("not implemented")
 }
