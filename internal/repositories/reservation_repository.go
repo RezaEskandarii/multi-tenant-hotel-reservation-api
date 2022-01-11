@@ -1,8 +1,11 @@
 package repositories
 
 import (
+	"bytes"
+	"crypto/rand"
 	"fmt"
 	"gorm.io/gorm"
+	"math/big"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
 	"time"
@@ -17,16 +20,18 @@ func NewReservationRepository(db *gorm.DB) *ReservationRepository {
 	return &ReservationRepository{DB: db}
 }
 
-func (r *ReservationRepository) CreateReservationRequest(model models.Reservation) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) CreateReservationRequest(roomId uint64) (*models.ReservationRequest, error) {
 
+	expireTime := time.Now().Add(time.Minute * 20)
+	buffer := bytes.Buffer{}
+	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
+	if err == nil {
+		buffer.WriteString(rnd.String())
+	}
 	requestModel := models.ReservationRequest{
-		RoomId:                  model.RoomId,
-		GuestId:                 model.SupervisorId,
-		RateCodeId:              model.RateCodeId,
-		ExpireTime:              time.Now().Add(time.Minute * 20),
-		LockKey:                 utils.GenerateSHA256(fmt.Sprintf("%d_%d_%d_%s_%s", model.RoomId, model.SupervisorId, model.RateCodeId, model.CheckinDate, model.CheckoutDate)),
-		ReservationCheckinDate:  model.CheckinDate,
-		ReservationCheckoutDate: model.CheckoutDate,
+		RoomId:     roomId,
+		ExpireTime: expireTime,
+		LockKey:    utils.GenerateSHA256(fmt.Sprintf("%s%s", expireTime, buffer.String())),
 	}
 
 	if err := r.DB.Create(&requestModel).Error; err != nil {
