@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"math/big"
+	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
 	"time"
@@ -70,39 +71,50 @@ func (r ReservationRepository) CheckOut(model *models.Reservation) error {
 	panic("not implemented")
 }
 
-//func (r *ReservationRepository) CalculatePrice(reservation *models.Reservation) (float64, error) {
-//	db := r.DB
-//	var defaultPrice float64 = -1
-//	rateCodeDetails := make([]models.RateCodeDetail, 0)
-//	prices := make(map[time.Time]float64, 0)
-//
-//	if err := db.Where("room_id=?", reservation.RoomId).Preload("RateCodeDetailPrice").Find(&rateCodeDetails).Error; err != nil {
-//		return defaultPrice, err
-//	}
-//
-//	if rateCodeDetails == nil || (rateCodeDetails != nil && len(rateCodeDetails) == 0) {
-//		return defaultPrice, errors.New("rate code not found matching with reservation information")
-//	}
-//
-//	for _, details := range rateCodeDetails {
-//		if details.RatePrices != nil {
-//			if reservation.CheckinDate.After(*details.DateStart) && reservation.CheckoutDate.Before(*details.DateEnd) {
-//				for _, priceDetail := range details.RatePrices {
-//				}
-//			}
-//		}
-//	}
-//}
+func (r *ReservationRepository) CalculatePrice(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
 
-/**
+	db := r.DB
+	ratePrices := make([]*dto.RateCodePricesDto, 0)
 
-select
-details.created_at,details.room_id,details.id,details.rate_code_id,details.date_start,details.date_end,
-prices.id,prices.price,prices.guest_count
-from rate_code_details details
-join rate_code_detail_prices prices
-on prices.rate_code_detail_id=details.id where details.room_id=1
-and prices.guest_count = 1 and details.min_nights >=1 and details.max_nights <=10
-and details.date_start >='2019-02-02' and details.date_end <='2025-01-01'
+	db.Table("rate_code_details details").Select(`
+	   parent.name as rate_code_name,
+       details.rate_code_id,
+       details.created_at,
+       details.room_id,
+       details.id,
+       details.date_start,
+       details.date_end,
+       prices.price,
+       prices.guest_count
+	`).Joins(`
+         join rate_code_detail_prices prices
+              on prices.rate_code_detail_id = details.id
+         join rate_codes parent 
+              on details.rate_code_id = parent.id
+	`).Where(`
+		  details.room_id = ?
+		  and prices.guest_count = ?
+		  and details.min_nights >= ?
+		  and details.date_start >= ?
+		  and details.date_end <= ?
+	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart, priceDto.DateEnd).Scan(&ratePrices)
 
-*/
+	return ratePrices, nil
+	//if len(ratePrices) == 0 {
+	//	return nil, errors.New("rate code details not found")
+	//}
+	//
+	//if len(ratePrices) == 1 {
+	//	return ratePrices[0], nil
+	//}
+	//
+	//// get latest inserted rate code details price by created at time.
+	//result := ratePrices[0]
+	//for _, v := range ratePrices {
+	//	if v.CreatedAt.After(*result.CreatedAt) {
+	//		result = v
+	//	}
+	//}
+	//
+	//return result, nil
+}
