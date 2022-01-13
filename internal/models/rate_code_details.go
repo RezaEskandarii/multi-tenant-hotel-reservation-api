@@ -6,7 +6,8 @@ type RateCodeDetail struct {
 	BaseModel
 	RateCode   *RateCode  `json:"rate_code"     gorm:"foreignkey:RateCodeId"`
 	RateCodeId uint64     `json:"rate_code_id"  valid:"required"`
-	NightCount uint64     `json:"night_count"   valid:"required"`
+	MinNights  uint64     `json:"min_nights"    valid:"required"`
+	MaxNights  uint64     `json:"max_nights"    valid:"required"`
 	DateStart  *time.Time `json:"date_start"    valid:"required"`
 	DateEnd    *time.Time `json:"date_end"      valid:"required"`
 	Room       *Room      `json:"room"          gorm:"foreignkey:RoomId"`

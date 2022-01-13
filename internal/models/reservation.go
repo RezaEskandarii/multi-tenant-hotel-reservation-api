@@ -31,6 +31,7 @@ type Reservation struct {
 	ReservationType ReservationType `json:"reservation_type"`
 	Price           float64         `json:"price"`
 	Nights          float64         `json:"nights"`
+	RequestKey      string          `json:"request_key" gorm:"-"`
 
 	///Children        []*Reservation  `gorm:"many2many:reservation_children;association_jointable_foreignkey:parent_id"`
 }
