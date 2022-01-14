@@ -28,27 +28,27 @@ func NewReservationRepository(db *gorm.DB) *ReservationRepository {
 	return &ReservationRepository{DB: db}
 }
 
-func (r *ReservationRepository) CreateReservationRequest(roomId uint64, checkinDate *time.Time, checkoutDate *time.Time) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
-	if checkinDate == nil {
+	if dto.CheckInDate == nil {
 		return nil, errors.New("checkInDate is empty")
 	}
-	if checkoutDate == nil {
+	if dto.CheckOutDate == nil {
 		return nil, errors.New("checkOutDate is empty")
 	}
 	expireTime := config.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
-	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), checkinDate.String(), checkoutDate.String()))
+	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), dto.CheckInDate.String(), dto.CheckOutDate.String()))
 	if err == nil {
 		buffer.WriteString(rnd.String())
 	}
 	requestModel := models.ReservationRequest{
-		RoomId:       roomId,
+		RoomId:       dto.RoomId,
 		ExpireTime:   expireTime,
 		RequestKey:   requestKey,
-		CheckoutDate: checkoutDate,
-		CheckInDate:  checkinDate,
+		CheckoutDate: dto.CheckOutDate,
+		CheckInDate:  dto.CheckInDate,
 	}
 
 	if err := r.DB.Create(&requestModel).Error; err != nil {
@@ -80,7 +80,7 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	return nil, nil
 }
 
-func (r *ReservationRepository) Update() (*models.Reservation, error) {
+func (r *ReservationRepository) Update(model *models.Reservation) (*models.Reservation, error) {
 	panic("not implemented")
 }
 
