@@ -33,6 +33,7 @@ type Reservation struct {
 	Nights          float64         `json:"nights"`
 	RequestKey      string          `json:"request_key" gorm:"-"`
 
+	Sharer []*Sharer `json:"sharer"`
 	///Children        []*Reservation  `gorm:"many2many:reservation_children;association_jointable_foreignkey:parent_id"`
 }
 

@@ -3,13 +3,20 @@ package repositories
 import (
 	"bytes"
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"gorm.io/gorm"
 	"math/big"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
+	"strings"
 	"time"
+)
+
+var (
+	InvalidReservationKeyErr = errors.New("invalid reservation key")
 )
 
 type ReservationRepository struct {
@@ -21,18 +28,27 @@ func NewReservationRepository(db *gorm.DB) *ReservationRepository {
 	return &ReservationRepository{DB: db}
 }
 
-func (r *ReservationRepository) CreateReservationRequest(roomId uint64) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) CreateReservationRequest(roomId uint64, checkinDate *time.Time, checkoutDate *time.Time) (*models.ReservationRequest, error) {
 
-	expireTime := time.Now().Add(time.Minute * 20)
+	if checkinDate == nil {
+		return nil, errors.New("checkInDate is empty")
+	}
+	if checkoutDate == nil {
+		return nil, errors.New("checkOutDate is empty")
+	}
+	expireTime := config.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
+	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), checkinDate.String(), checkoutDate.String()))
 	if err == nil {
 		buffer.WriteString(rnd.String())
 	}
 	requestModel := models.ReservationRequest{
-		RoomId:     roomId,
-		ExpireTime: expireTime,
-		RequestKey: utils.GenerateSHA256(fmt.Sprintf("%s%s", expireTime, buffer.String())),
+		RoomId:       roomId,
+		ExpireTime:   expireTime,
+		RequestKey:   requestKey,
+		CheckoutDate: checkoutDate,
+		CheckInDate:  checkinDate,
 	}
 
 	if err := r.DB.Create(&requestModel).Error; err != nil {
@@ -44,18 +60,23 @@ func (r *ReservationRepository) CreateReservationRequest(roomId uint64) (*models
 
 func (r *ReservationRepository) Create(reservation *models.Reservation) (*models.Reservation, error) {
 	db := r.DB
-
+	if strings.TrimSpace(reservation.RequestKey) == "" {
+		return nil, InvalidReservationKeyErr
+	}
 	reservationRequest := models.ReservationRequest{}
 	if err := db.Where("request_key=? AND room_id=?", reservation.RequestKey, reservation.RoomId).Find(&reservationRequest).Error; err != nil {
-
+		return nil, err
 	}
 	// check if exists.
-	if reservationRequest.Id != 0 {
-		if time.Now().Before(reservationRequest.ExpireTime) {
-
-		}
+	if reservationRequest.Id == 0 {
+		return nil, InvalidReservationKeyErr
 	}
-
+	if time.Now().After(reservationRequest.ExpireTime) {
+		return nil, InvalidReservationKeyErr
+	}
+	if reserveErr := db.Create(&reservation).Error; reserveErr != nil {
+		return nil, reserveErr
+	}
 	return nil, nil
 }
 
@@ -71,7 +92,7 @@ func (r ReservationRepository) CheckOut(model *models.Reservation) error {
 	panic("not implemented")
 }
 
-func (r *ReservationRepository) CalculatePrice(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
+func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
 
 	db := r.DB
 	ratePrices := make([]*dto.RateCodePricesDto, 0)

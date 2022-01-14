@@ -53,7 +53,7 @@ var (
 // RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group) {
 	x := repositories.NewReservationRepository(db)
-	x.CalculatePrice(nil)
+	x.Recommend(nil)
 	// set service layer repository and database object.
 	setServicesRepository(db)
 	logger := applogger.New(nil)
