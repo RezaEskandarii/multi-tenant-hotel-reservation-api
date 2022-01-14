@@ -16,11 +16,10 @@ type ReservationHandler struct {
 
 func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_services.ReservationService) {
 	r.Router = input.Router
-	r.Router.Group("reservation")
+	routerGroup := r.Router.Group("reservation")
 
 	r.Service = service
-
-	r.Router.POST("/room-request", r.createRequest)
+	routerGroup.POST("/room-request", r.createRequest)
 }
 
 func (r *ReservationHandler) createRequest(c echo.Context) error {

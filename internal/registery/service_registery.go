@@ -30,30 +30,31 @@ var (
 	rateCodeService       = domain_services.NewRateCodeService()
 	auditService          = domain_services.NewAuditService()
 	rateCodeDetailService = domain_services.NewRateCodeDetailService()
+	reservationService    = domain_services.NewReservationService()
 )
 
 // handlers
 var (
-	countryHandler    = handlers.CountryHandler{}
-	provinceHandler   = handlers.ProvinceHandler{}
-	cityHandler       = handlers.CityHandler{}
-	currencyHandler   = handlers.CurrencyHandler{}
-	usersHandler      = handlers.UserHandler{}
-	hotelTypeHandler  = handlers.HotelTypeHandler{}
-	hotelGradeHandler = handlers.HotelGradeHandler{}
-	hotelHandler      = handlers.HotelHandler{}
-	roomTypeHandler   = handlers.RoomTypeHandler{}
-	roomHandler       = handlers.RoomHandler{}
-	guestHandler      = handlers.GuestHandler{}
-	rateGroupHandler  = handlers.RateGroupHandler{}
-	rateCodeHandler   = handlers.RateCodeHandler{}
-	authHandler       = handlers.AuthHandler{}
+	countryHandler     = handlers.CountryHandler{}
+	provinceHandler    = handlers.ProvinceHandler{}
+	cityHandler        = handlers.CityHandler{}
+	currencyHandler    = handlers.CurrencyHandler{}
+	usersHandler       = handlers.UserHandler{}
+	hotelTypeHandler   = handlers.HotelTypeHandler{}
+	hotelGradeHandler  = handlers.HotelGradeHandler{}
+	hotelHandler       = handlers.HotelHandler{}
+	roomTypeHandler    = handlers.RoomTypeHandler{}
+	roomHandler        = handlers.RoomHandler{}
+	guestHandler       = handlers.GuestHandler{}
+	rateGroupHandler   = handlers.RateGroupHandler{}
+	rateCodeHandler    = handlers.RateCodeHandler{}
+	authHandler        = handlers.AuthHandler{}
+	reservationHandler = handlers.ReservationHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group) {
-	x := repositories.NewReservationRepository(db)
-	x.Recommend(nil)
+
 	// set service layer repository and database object.
 	setServicesRepository(db)
 	logger := applogger.New(nil)
@@ -70,7 +71,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	authHandler.Register(handlerInput, userService)
 
 	// add authentication middleware to all routes.
-	router.Use(middlewares.JWTAuthMiddleware, middlewares.AuditMiddleware(userService, auditService, handlerInput.AuditChannel))
+	router.Use( /**middlewares.JWTAuthMiddleware, */ middlewares.AuditMiddleware(userService, auditService, handlerInput.AuditChannel))
 
 	countryHandler.Register(handlerInput, countryService)
 
@@ -97,6 +98,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
 	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
+
+	reservationHandler.Register(handlerInput, reservationService)
 }
 
 // set repository dependency
@@ -121,7 +124,7 @@ func setServicesRepository(db *gorm.DB) {
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 	auditService.Repository = repositories.NewAuditRepository(db)
 	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
-
+	reservationService.Repository = repositories.NewReservationRepository(db)
 }
 
 // ApplySeed seeds given json file to database.
