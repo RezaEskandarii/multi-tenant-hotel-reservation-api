@@ -12,5 +12,8 @@
   },
   "Users": {
     "DuplicatedUsername": "Username is duplicate."
+  },
+  "Rooms": {
+    "HasReservationRequest": "this room has reservation request in checkInDate %s and checkoutDate %s"
   }
 }

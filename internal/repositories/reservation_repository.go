@@ -47,7 +47,7 @@ func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto
 		RoomId:       dto.RoomId,
 		ExpireTime:   expireTime,
 		RequestKey:   requestKey,
-		CheckoutDate: dto.CheckOutDate,
+		CheckOutDate: dto.CheckOutDate,
 		CheckInDate:  dto.CheckInDate,
 	}
 
@@ -143,8 +143,8 @@ func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDt
 func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
 
 	var requestCount int64 = 0
-	if err := r.DB.Model(&models.ReservationRequest{}).
-		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time <=?",
+	if err := r.DB.Debug().Model(&models.ReservationRequest{}).
+		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time >=?",
 			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&requestCount).Error; err != nil {
 		return false, err
 	}

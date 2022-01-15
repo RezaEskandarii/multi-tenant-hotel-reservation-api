@@ -9,5 +9,9 @@ var (
 )
 
 func getAcceptLanguage(c echo.Context) string {
-	return c.Request().Header.Get(acceptLanguage)
+	lang := c.Request().Header.Get(acceptLanguage)
+	if lang == "" {
+		lang = "en"
+	}
+	return lang
 }

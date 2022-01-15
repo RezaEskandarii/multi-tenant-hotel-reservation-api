@@ -32,3 +32,7 @@ func (s *ReservationService) CreateReservationRequest(dto *dto.RoomRequestDto) (
 
 	return s.Repository.CreateReservationRequest(dto)
 }
+
+func (s *ReservationService) HasConflict(request *dto.RoomRequestDto) (bool, error) {
+	return s.Repository.HasConflict(request)
+}

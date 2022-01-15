@@ -2,21 +2,21 @@ package message_keys
 
 // hold localization files key here
 const (
-	CrudMessages = "CrudMessages."
-	Errors       = "Errors."
-	Users        = "Users."
-	hotels       = "hotels."
-	Rooms        = "Rooms."
+	crudMessages = "CrudMessages."
+	errors       = "Errors."
+	users        = "Users."
+	hotels       = "Hotels."
+	rooms        = "Rooms."
 
-	Created = CrudMessages + "Created"
-	Updated = CrudMessages + "Updated"
-	Deleted = CrudMessages + "Deleted"
+	Created = crudMessages + "Created"
+	Updated = crudMessages + "Updated"
+	Deleted = crudMessages + "Deleted"
 
-	NotFound            = Errors + "NotFound"
-	InternalServerError = Errors + "InternalServerError"
-	BadRequest          = Errors + "BadRequest"
+	NotFound            = errors + "NotFound"
+	InternalServerError = errors + "InternalServerError"
+	BadRequest          = errors + "BadRequest"
 
-	UsernameDuplicated = Users + "DuplicatedUsername"
+	UsernameDuplicated = users + "DuplicatedUsername"
 
 	TypeHashotel    = "TypeHashotel"
 	GradeHashotel   = "GradeHashotel"
@@ -25,7 +25,7 @@ const (
 
 	HotelRepeatPostalCode = hotels + "RepeatPostalCode"
 
-	InvalidRoomCleanStatus    = Rooms + "InvalidCleanStatus"
-	RoomTypeHasRoomErr        = Rooms + "RoomTypeHasRoomErr"
-	RoomHasReservationRequest = "RoomHasReservationRequest"
+	InvalidRoomCleanStatus    = rooms + "InvalidCleanStatus"
+	RoomTypeHasRoomErr        = rooms + "RoomTypeHasRoomErr"
+	RoomHasReservationRequest = rooms + "HasReservationRequest"
 )
