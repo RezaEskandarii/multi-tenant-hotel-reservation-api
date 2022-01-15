@@ -25,6 +25,7 @@ const (
 
 	HotelRepeatPostalCode = hotels + "RepeatPostalCode"
 
-	InvalidRoomCleanStatus = Rooms + "InvalidCleanStatus"
-	RoomTypeHasRoomErr     = Rooms + "RoomTypeHasRoomErr"
+	InvalidRoomCleanStatus    = Rooms + "InvalidCleanStatus"
+	RoomTypeHasRoomErr        = Rooms + "RoomTypeHasRoomErr"
+	RoomHasReservationRequest = "RoomHasReservationRequest"
 )

@@ -16,7 +16,7 @@ type ReservationHandler struct {
 
 func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_services.ReservationService) {
 	r.Router = input.Router
-	routerGroup := r.Router.Group("reservation")
+	routerGroup := r.Router.Group("/reservation")
 
 	r.Service = service
 	routerGroup.POST("/room-request", r.createRequest)

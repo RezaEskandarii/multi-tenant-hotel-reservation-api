@@ -139,3 +139,18 @@ func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDt
 	//
 	//return result, nil
 }
+
+func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
+
+	var requestCount int64 = 0
+	if err := r.DB.Model(&models.ReservationRequest{}).
+		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time <=?",
+			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&requestCount).Error; err != nil {
+		return false, err
+	}
+
+	if requestCount > 0 {
+		return true, nil
+	}
+	return false, nil
+}
