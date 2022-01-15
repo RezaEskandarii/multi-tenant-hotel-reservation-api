@@ -7,6 +7,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
+	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 )
 
@@ -23,6 +24,7 @@ func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_s
 
 	r.Service = service
 	routerGroup.POST("/room-request", r.createRequest)
+	routerGroup.POST("", r.create)
 }
 
 func (r *ReservationHandler) createRequest(c echo.Context) error {
@@ -49,6 +51,25 @@ func (r *ReservationHandler) createRequest(c echo.Context) error {
 			Message: err.Error(),
 		})
 	}
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:    result,
+		Message: r.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+	})
+}
+
+func (r *ReservationHandler) create(c echo.Context) error {
+
+	reservation := models.Reservation{}
+	if err := c.Bind(&reservation); err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+	result, err := r.Service.Create(&reservation)
+	if err != nil {
+		return c.JSON(http.StatusConflict, commons.ApiResponse{
+			Message: err.Error(),
+		})
+	}
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
 		Message: r.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
