@@ -25,16 +25,19 @@ func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_s
 	r.Service = service
 	routerGroup.POST("/room-request", r.createRequest)
 	routerGroup.POST("", r.create)
+	routerGroup.DELETE("/cancel", r.cancelRequest)
 }
 
 func (r *ReservationHandler) createRequest(c echo.Context) error {
 
 	request := dto.RoomRequestDto{}
 	if err := c.Bind(&request); err != nil {
+		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	hasConflict, err := r.Service.HasConflict(&request)
 	if err != nil {
+		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
@@ -47,6 +50,7 @@ func (r *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	result, err := r.Service.CreateReservationRequest(&request)
 	if err != nil {
+		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
@@ -61,10 +65,12 @@ func (r *ReservationHandler) create(c echo.Context) error {
 
 	reservation := models.Reservation{}
 	if err := c.Bind(&reservation); err != nil {
+		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	result, err := r.Service.Create(&reservation)
 	if err != nil {
+		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
@@ -74,4 +80,12 @@ func (r *ReservationHandler) create(c echo.Context) error {
 		Data:    result,
 		Message: r.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
 	})
+}
+
+func (r *ReservationHandler) cancelRequest(c echo.Context) error {
+	requestKey := c.QueryParam("requestKey")
+	if err := r.Service.CancelReservationRequest(requestKey); err != nil {
+		r.Input.Logger.LogError(err.Error())
+	}
+	return c.JSON(http.StatusOK, nil)
 }
