@@ -36,3 +36,8 @@ func (s *ReservationService) CreateReservationRequest(dto *dto.RoomRequestDto) (
 func (s *ReservationService) HasConflict(request *dto.RoomRequestDto) (bool, error) {
 	return s.Repository.HasConflict(request)
 }
+
+// CancelReservationRequest this function remove reservation request bt given requestKey param.
+func (s *ReservationService) CancelReservationRequest(requestKey string) error {
+	return s.Repository.CancelReservationRequest(requestKey)
+}

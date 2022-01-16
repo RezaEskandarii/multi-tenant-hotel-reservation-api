@@ -74,6 +74,7 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	if time.Now().After(reservationRequest.ExpireTime) {
 		return nil, InvalidReservationKeyErr
 	}
+	reservation.GuestCount = uint64(len(reservation.Sharer))
 	if reserveErr := db.Create(&reservation).Error; reserveErr != nil {
 		return nil, reserveErr
 	}
@@ -121,29 +122,12 @@ func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDt
 	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart, priceDto.DateEnd).Scan(&ratePrices)
 
 	return ratePrices, nil
-	//if len(ratePrices) == 0 {
-	//	return nil, errors.New("rate code details not found")
-	//}
-	//
-	//if len(ratePrices) == 1 {
-	//	return ratePrices[0], nil
-	//}
-	//
-	//// get latest inserted rate code details price by created at time.
-	//result := ratePrices[0]
-	//for _, v := range ratePrices {
-	//	if v.CreatedAt.After(*result.CreatedAt) {
-	//		result = v
-	//	}
-	//}
-	//
-	//return result, nil
 }
 
 func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
 
 	var requestCount int64 = 0
-	if err := r.DB.Debug().Model(&models.ReservationRequest{}).
+	if err := r.DB.Model(&models.ReservationRequest{}).
 		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time >=?",
 			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&requestCount).Error; err != nil {
 		return false, err
@@ -153,4 +137,17 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 		return true, nil
 	}
 	return false, nil
+}
+
+func (r ReservationRepository) CancelReservationRequest(requestKey string) error {
+	var count int64 = 0
+	if err := r.DB.Model(models.ReservationRequest{}).Where("requestKey=?", requestKey).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		if err := r.DB.Where("requestKey=?", requestKey).Delete(&models.ReservationRequest{}).Error; err != nil {
+			return err
+		}
+	}
+	return nil
 }
