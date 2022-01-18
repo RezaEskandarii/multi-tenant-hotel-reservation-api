@@ -23,6 +23,7 @@ func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *doma
 	handler.Input = input
 
 	routeGroup := handler.Input.Router.Group("/rate-groups")
+
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -30,6 +31,7 @@ func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *doma
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *RateGroupHandler) create(c echo.Context) error {
 
 	model := &models.RateGroup{}
@@ -62,12 +64,12 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateGroupHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -110,19 +112,20 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *RateGroupHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
@@ -144,6 +147,7 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateGroupHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -161,6 +165,7 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateGroupHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

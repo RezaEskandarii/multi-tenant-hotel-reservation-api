@@ -28,6 +28,7 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *domain_se
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+// create new city
 func (handler *CityHandler) create(c echo.Context) error {
 
 	model := models.City{}
@@ -64,13 +65,16 @@ func (handler *CityHandler) create(c echo.Context) error {
 
 }
 
+/*====================================================================================*/
 func (handler *CityHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	lang := getAcceptLanguage(c)
 	model, err := handler.Service.Find(id)
 
@@ -115,6 +119,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *CityHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -150,6 +155,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *CityHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)

@@ -23,6 +23,7 @@ func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domai
 	handler.Service = service
 	handler.RateCodeDetailService = rateCodeDetailService
 	handler.Input = input
+
 	routeGroup := handler.Input.Router.Group("/rate-codes")
 
 	routeGroup.POST("", handler.create)
@@ -30,9 +31,10 @@ func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domai
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.DELETE("/:id", handler.delete)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
-	routeGroup.POST("/add-details/:id", handler.AddDetails)
+	routeGroup.POST("/add-details/:id", handler.addDetails)
 }
 
+/*====================================================================================*/
 func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
@@ -69,6 +71,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -118,6 +121,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *RateCodeHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -152,6 +156,7 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateCodeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -169,6 +174,7 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -200,7 +206,8 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 	})
 }
 
-func (handler *RateCodeHandler) AddDetails(c echo.Context) error {
+/*====================================================================================*/
+func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Get("id"))
 	if err != nil {
@@ -214,7 +221,7 @@ func (handler *RateCodeHandler) AddDetails(c echo.Context) error {
 			ResponseCode: http.StatusBadRequest,
 		})
 	}
-
+	// create new rateCodeDetail.
 	result, err := handler.RateCodeDetailService.Create(&requestBody)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{

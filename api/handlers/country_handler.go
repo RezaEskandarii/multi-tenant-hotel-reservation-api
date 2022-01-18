@@ -19,10 +19,11 @@ type CountryHandler struct {
 }
 
 func (handler *CountryHandler) Register(input *dto.HandlerInput, service *domain_services.CountryService) {
-
 	handler.Service = service
 	handler.Input = input
+
 	routeGroup := handler.Input.Router.Group("/countries")
+
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -30,6 +31,7 @@ func (handler *CountryHandler) Register(input *dto.HandlerInput, service *domain
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *CountryHandler) create(c echo.Context) error {
 
 	model := &models.Country{}
@@ -61,6 +63,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *CountryHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -90,10 +93,8 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
-
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
@@ -104,12 +105,12 @@ func (handler *CountryHandler) update(c echo.Context) error {
 			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
 
+/*====================================================================================*/
 func (handler *CountryHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -145,6 +146,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *CountryHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -162,13 +164,17 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
+// get provinces by countryId.
 func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	provinces, err := handler.Service.GetProvinces(id)
 
 	if err != nil {

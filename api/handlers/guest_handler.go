@@ -29,10 +29,10 @@ func (handler *GuestHandler) Register(input *dto.HandlerInput, service *domain_s
 	//routeGroup.DELETE("", handler)
 }
 
+/*====================================================================================*/
 func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
-
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
@@ -58,6 +58,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
@@ -97,6 +98,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *GuestHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -116,6 +118,7 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -131,7 +134,6 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 	result, err := handler.Service.FindAll(input)
 
 	if err != nil {
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: handler.Input.Translator.Localize(lang, err.Error()),
 		})

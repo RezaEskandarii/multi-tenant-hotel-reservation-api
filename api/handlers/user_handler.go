@@ -30,6 +30,7 @@ func (handler *UserHandler) Register(input *dto.HandlerInput, service *domain_se
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *UserHandler) create(c echo.Context) error {
 
 	model := models.User{}
@@ -57,6 +58,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 		})
 	}
 
+	// prevent to create repeat user.
 	if oldUser != nil && oldUser.Id > 0 {
 
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -87,6 +89,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 }
 
+/*====================================================================================*/
 func (handler *UserHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -100,7 +103,6 @@ func (handler *UserHandler) update(c echo.Context) error {
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
@@ -140,6 +142,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *UserHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
@@ -175,6 +178,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *UserHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -191,6 +195,7 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")

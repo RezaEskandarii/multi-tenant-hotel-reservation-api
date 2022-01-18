@@ -30,6 +30,7 @@ func (handler *HotelGradeHandler) Register(input *dto.HandlerInput, service *dom
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *HotelGradeHandler) create(c echo.Context) error {
 
 	model := &models.HotelGrade{}
@@ -68,19 +69,19 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelGradeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	if err != nil {
 
+	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	result, err := handler.Service.Find(id)
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -88,6 +89,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 		})
 	}
 
+	// If not found any item, return 404.
 	if result == nil || (result != nil && result.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
@@ -95,8 +97,8 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 		})
 	}
 
+	// bind request to tmp struct.
 	tmpModel := models.HotelGrade{}
-
 	err = c.Bind(&tmpModel)
 
 	if err != nil {
@@ -107,12 +109,11 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 		})
 	}
 
+	// prevent to edit other fields.
 	result.Name = tmpModel.Name
-
 	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -125,12 +126,13 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelGradeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	if err != nil {
 
+	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -158,10 +160,10 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
-
 	list, err := handler.Service.FindAll(paginationInput)
 
 	if err != nil {
@@ -175,6 +177,7 @@ func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelGradeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -192,7 +195,6 @@ func (handler *HotelGradeHandler) delete(c echo.Context) error {
 	err = handler.Service.Delete(id)
 
 	if err != nil {
-
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      handler.Input.Translator.Localize(lang, err.Error()),

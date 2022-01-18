@@ -30,15 +30,14 @@ func (handler *RoomTypeHandler) Register(input *dto.HandlerInput, service *domai
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *RoomTypeHandler) create(c echo.Context) error {
 
 	model := &models.RoomType{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -49,9 +48,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -66,6 +63,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -78,7 +76,6 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
@@ -92,6 +89,7 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 		})
 	}
 
+	// prevent to edit other fields by client.
 	name := c.FormValue("name")
 	result.Name = name
 
@@ -108,13 +106,13 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomTypeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -122,7 +120,6 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 	result, err := handler.Service.Find(id)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -143,6 +140,7 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -160,13 +158,13 @@ func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -177,7 +175,6 @@ func (handler *RoomTypeHandler) delete(c echo.Context) error {
 	err = handler.Service.Delete(id)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,

@@ -30,6 +30,7 @@ func (handler *HotelTypeHandler) Register(input *dto.HandlerInput, service *doma
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *HotelTypeHandler) create(c echo.Context) error {
 
 	model := &models.HotelType{}
@@ -49,9 +50,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -68,6 +67,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -80,7 +80,6 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
@@ -94,6 +93,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 		})
 	}
 
+	// prevent to update other fields by client.
 	name := c.FormValue("name")
 	result.Name = name
 
@@ -113,6 +113,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelTypeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -148,6 +149,7 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -165,6 +167,7 @@ func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

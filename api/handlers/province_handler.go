@@ -21,7 +21,9 @@ type ProvinceHandler struct {
 func (handler *ProvinceHandler) Register(input *dto.HandlerInput, service *domain_services.ProvinceService) {
 	handler.Service = service
 	handler.Input = input
+
 	routeGroup := input.Router.Group("/provinces")
+
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -29,6 +31,7 @@ func (handler *ProvinceHandler) Register(input *dto.HandlerInput, service *domai
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	model := &models.Province{}
@@ -68,6 +71,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 }
 
+/*====================================================================================*/
 func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -119,6 +123,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -154,6 +159,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -171,6 +177,7 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *ProvinceHandler) cities(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

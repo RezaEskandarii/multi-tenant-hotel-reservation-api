@@ -28,6 +28,7 @@ func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_s
 	routerGroup.DELETE("/cancel", r.cancelRequest)
 }
 
+/*=====================================================================================================*/
 func (r *ReservationHandler) createRequest(c echo.Context) error {
 
 	request := dto.RoomRequestDto{}
@@ -35,6 +36,8 @@ func (r *ReservationHandler) createRequest(c echo.Context) error {
 		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+	// Checks if there is another reservation request for this room on the same check-in and check-out date,
+	// otherwise do not allow a booking request.
 	hasConflict, err := r.Service.HasConflict(&request)
 	if err != nil {
 		r.Input.Logger.LogError(err.Error())
@@ -42,12 +45,14 @@ func (r *ReservationHandler) createRequest(c echo.Context) error {
 			Message: err.Error(),
 		})
 	}
+	// If there is a simultaneous booking request, the booking request is not given.
 	if hasConflict {
 		message := fmt.Sprintf(r.Input.Translator.Localize(getAcceptLanguage(c), message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: message,
 		})
 	}
+	// create new reservation request for requested room.
 	result, err := r.Service.CreateReservationRequest(&request)
 	if err != nil {
 		r.Input.Logger.LogError(err.Error())
@@ -61,6 +66,8 @@ func (r *ReservationHandler) createRequest(c echo.Context) error {
 	})
 }
 
+/*==========================================================================================================*/
+
 func (r *ReservationHandler) create(c echo.Context) error {
 
 	reservation := models.Reservation{}
@@ -68,6 +75,7 @@ func (r *ReservationHandler) create(c echo.Context) error {
 		r.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+	// create new reservation.
 	result, err := r.Service.Create(&reservation)
 	if err != nil {
 		r.Input.Logger.LogError(err.Error())
@@ -82,6 +90,9 @@ func (r *ReservationHandler) create(c echo.Context) error {
 	})
 }
 
+/*===================================================================================*/
+
+// If the client cancels the reservation request, they can call this endpoint to delete the reservation request.
 func (r *ReservationHandler) cancelRequest(c echo.Context) error {
 	requestKey := c.QueryParam("requestKey")
 	if err := r.Service.CancelReservationRequest(requestKey); err != nil {

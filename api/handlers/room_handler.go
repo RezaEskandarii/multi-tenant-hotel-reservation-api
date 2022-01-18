@@ -31,6 +31,7 @@ func (handler *RoomHandler) Register(input *dto.HandlerInput, service *domain_se
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *RoomHandler) create(c echo.Context) error {
 
 	model := &models.Room{}
@@ -63,6 +64,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -73,9 +75,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 
 	result, err := handler.Service.Find(id)
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
@@ -105,6 +105,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -139,6 +140,7 @@ func (handler *RoomHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
@@ -156,6 +158,7 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *RoomHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

@@ -93,6 +93,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	})
 }
 
+// refresh token.
 func (handler *AuthHandler) refreshToken(c echo.Context) error {
 
 	tknStr := c.Request().Header.Get("Authorization")

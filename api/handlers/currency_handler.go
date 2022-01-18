@@ -22,12 +22,14 @@ func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *domai
 	handler.Service = service
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/currencies")
+
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
@@ -65,6 +67,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *CurrencyHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -76,9 +79,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -113,6 +114,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 }
 
+/*====================================================================================*/
 func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -149,6 +151,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *CurrencyHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)

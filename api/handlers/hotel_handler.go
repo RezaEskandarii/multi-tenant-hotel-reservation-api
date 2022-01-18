@@ -30,6 +30,7 @@ func (handler *HotelHandler) Register(input *dto.HandlerInput, service *domain_s
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
+/*====================================================================================*/
 func (handler *HotelHandler) create(c echo.Context) error {
 
 	model := &models.Hotel{}
@@ -64,6 +65,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -94,7 +96,6 @@ func (handler *HotelHandler) update(c echo.Context) error {
 	}
 
 	clientModel := models.Hotel{}
-
 	err = c.Bind(&clientModel)
 
 	if err != nil {
@@ -106,12 +107,11 @@ func (handler *HotelHandler) update(c echo.Context) error {
 		})
 	}
 
+	// map client request fields.
 	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
-
 	updatedModel, err := handler.Service.Update(modelToUpdate)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -124,6 +124,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -177,13 +178,13 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 	})
 }
 
+/*====================================================================================*/
 func (handler *HotelHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -194,9 +195,7 @@ func (handler *HotelHandler) delete(c echo.Context) error {
 	err = handler.Service.Delete(id)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      handler.Input.Translator.Localize(lang, err.Error()),
