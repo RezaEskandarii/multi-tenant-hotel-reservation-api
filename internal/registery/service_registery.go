@@ -130,8 +130,14 @@ func setServicesRepository(db *gorm.DB) {
 // ApplySeed seeds given json file to database.
 func ApplySeed(db *gorm.DB) error {
 	setServicesRepository(db)
+	// seed users
 	if err := userService.Seed("./data/seed/users.json"); err != nil {
 		return err
 	}
+	// seed roomTypes
+	if err := roomTypeService.Seed("./data/seed/room_types.json"); err != nil {
+		return err
+	}
+
 	return nil
 }

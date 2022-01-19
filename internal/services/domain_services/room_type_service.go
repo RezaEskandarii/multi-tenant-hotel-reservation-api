@@ -44,3 +44,8 @@ func (s *RoomTypeService) Delete(id uint64) error {
 
 	return s.Repository.Delete(id)
 }
+
+// Seed seed given json file data to roomTypes.
+func (s *RoomTypeService) Seed(jsonFilePath string) error {
+	return s.Repository.Seed(jsonFilePath)
+}
