@@ -7,6 +7,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+	"reservation-api/internal/utils"
 )
 
 var (
@@ -77,5 +78,27 @@ func (r RoomTypeRepository) Delete(id uint64) error {
 		return query.Error
 	}
 
+	return nil
+}
+
+func (r *RoomTypeRepository) Seed(jsonFilePath string) error {
+
+	roomTypes := make([]models.RoomType, 0)
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err == nil {
+		for _, roomType := range roomTypes {
+			var count int64 = 0
+			if err := r.DB.Model(models.RoomType{}).Count(&count).Error; err != nil {
+				return err
+			} else {
+				if count == 0 {
+					if err := r.DB.Create(&roomType).Error; err != nil {
+						return err
+					}
+				}
+			}
+		}
+	} else {
+		return err
+	}
 	return nil
 }

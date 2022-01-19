@@ -47,10 +47,10 @@
 - implement signin function
 - add AuthHandler and implement signin function
 - add FindByUsernameAndPassword function userservice
-- add user seeder
+- add roomType seeder
 - add seeder service
 - add seeder repository
-- add users seed file
+- add roomTypes seed file
 - add reservation type field to reservation structModel
 - add reservation repository
 - add validation to reservation structModel
@@ -77,8 +77,8 @@
 - add guest handler to service registry
 - implement guests handler
 - add guests handler
-- add activate and deactivate functions to user service
-- add activate and deactivate functions to user repository
+- add activate and deactivate functions to roomType service
+- add activate and deactivate functions to roomType repository
 - add guest service
 - add guest repository
 - add guest structModel
@@ -91,7 +91,7 @@
 - add room room type repository
 - add room struct fields
 - add room type struct
-- add logger to user handler
+- add logger to roomType handler
 - add logger to residence type handler
 - add logger to residence handler
 - add logger to residence grade handler
@@ -120,10 +120,10 @@
 - add cors origin middleware
 - add persian new translations
 - add translator package to handlers
-- add findByUsername function user handler
+- add findByUsername function roomType handler
 - add findByUsername function in userService
-- add user handler
-- add user service
+- add roomType handler
+- add roomType service
 
 ### Fix
 - singleton audit channel listener in audit_middleware
@@ -155,7 +155,7 @@
 - refactor some codes
 - refactor some codes
 - improve repositories code
-- validate user's gender before create
+- validate roomType's gender before create
 - ignore validation to some structModel relations
 - add pointer to residence relations
 - prevent to validation residence releations
@@ -187,13 +187,13 @@
 - add document
 
 ### Feat
-- add user reository
+- add roomType reository
 - add i18n translator to city handler
 - add i18n translator to city handler
 - add message_keys module to hold translation message files keys
 - add message_keys module to hold translation message files keys
 - add localized message translator module
-- add user structModel
+- add roomType structModel
 - add currency handler
 - add currency service
 - add currency repository
