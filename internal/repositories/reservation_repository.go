@@ -17,15 +17,20 @@ import (
 
 var (
 	InvalidReservationKeyErr = errors.New("invalid reservation key")
+	SharerListEmptyErr       = errors.New("sharers List is empty")
 )
 
 type ReservationRepository struct {
-	DB *gorm.DB
+	DB                 *gorm.DB
+	RateCodeRepository *RateCodeDetailRepository
 }
 
 // NewReservationRepository returns new ReservationRepository
-func NewReservationRepository(db *gorm.DB) *ReservationRepository {
-	return &ReservationRepository{DB: db}
+func NewReservationRepository(db *gorm.DB, rateCodeRepository *RateCodeDetailRepository) *ReservationRepository {
+	return &ReservationRepository{
+		DB:                 db,
+		RateCodeRepository: rateCodeRepository,
+	}
 }
 
 func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
@@ -74,6 +79,14 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	if time.Now().After(reservationRequest.ExpireTime) {
 		return nil, InvalidReservationKeyErr
 	}
+	if len(reservation.Sharer) == 0 {
+		return nil, SharerListEmptyErr
+	}
+	priceDetail, err := r.RateCodeRepository.FindPrice(reservation.RatePriceId)
+	if err != nil {
+		return nil, err
+	}
+	reservation.Price = priceDetail.Price
 	reservation.GuestCount = uint64(len(reservation.Sharer))
 	if reserveErr := db.Create(&reservation).Error; reserveErr != nil {
 		return nil, reserveErr
@@ -93,7 +106,7 @@ func (r ReservationRepository) CheckOut(model *models.Reservation) error {
 	panic("not implemented")
 }
 
-func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
+func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
 
 	db := r.DB
 	ratePrices := make([]*dto.RateCodePricesDto, 0)
@@ -107,7 +120,8 @@ func (r *ReservationRepository) GetRelatedRateCodes(priceDto *dto.GetRatePriceDt
        details.date_start,
        details.date_end,
        prices.price,
-       prices.guest_count
+       prices.guest_count,
+       prices.id as rate_price_id
 	`).Joins(`
          join rate_code_detail_prices prices
               on prices.rate_code_detail_id = details.id

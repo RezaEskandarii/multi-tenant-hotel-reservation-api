@@ -20,4 +20,5 @@ type RateCodePricesDto struct {
 	DateEnd      *time.Time `json:"date_end"`
 	Price        float64    `json:"price"`
 	GuestCount   uint64     `json:"guest_count"`
+	RatePriceId  uint64     `json:"rate_price_id"`
 }

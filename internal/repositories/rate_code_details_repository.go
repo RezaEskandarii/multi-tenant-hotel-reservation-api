@@ -44,6 +44,20 @@ func (r *RateCodeDetailRepository) Update(model *models.RateCodeDetail) (*models
 	return model, nil
 }
 
+func (r *RateCodeDetailRepository) FindPrice(id uint64) (*models.RateCodeDetailPrice, error) {
+
+	model := models.RateCodeDetailPrice{}
+
+	if err := r.DB.Model(models.RateCodeDetailPrice{}).Where("id=?", id).Find(&model).Error; err != nil {
+		return nil, err
+	}
+	if model.Id == 0 {
+		return nil, nil
+	}
+
+	return &model, nil
+}
+
 func (r *RateCodeDetailRepository) Find(id uint64) (*models.RateCodeDetail, error) {
 
 	model := models.RateCodeDetail{}

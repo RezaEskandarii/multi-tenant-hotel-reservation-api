@@ -45,3 +45,9 @@ func (s *RateCodeDetailService) Delete(id uint64) error {
 
 	return s.Repository.Delete(id)
 }
+
+// FindPrice returns RateCodePrice by given id.
+func (s *RateCodeDetailService) FindPrice(id uint64) (*models.RateCodeDetailPrice, error) {
+
+	return s.Repository.FindPrice(id)
+}
