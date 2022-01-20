@@ -8,7 +8,7 @@ import (
 
 type Guest struct {
 	BaseModel
-	Country            Country    `json:"country" valid:"-"`
+	Country            *Country   `json:"country" valid:"-"`
 	CountryId          uint64     `json:"country_id" valid:"required"`
 	Gender             Gender     `json:"gender" valid:"required"`
 	FirstName          string     `json:"first_name" valid:"required"`
@@ -17,11 +17,11 @@ type Guest struct {
 	NationalId         string     `json:"national_id" valid:"required"`
 	CellNumber         string     `json:"cell_number" valid:"required"`
 	PhoneNumber        string     `json:"phone_number"`
-	PassportNumber     string     `json:"passport_number" valid:"required"`
-	PassportIssueDate  string     `json:"passport_date_of_issue" valid:"required"`
-	PassportExpireDate string     `json:"passport_expire_date" valid:"required"`
+	PassportNumber     string     `json:"passport_number"`
+	PassportIssueDate  string     `json:"passport_date_of_issue"`
+	PassportExpireDate string     `json:"passport_expire_date"`
 	Email              string     `json:"email" valid:"email"`
-	DateOfBirth        *time.Time `json:"date_of_birth" valid:"required"`
+	DateOfBirth        *time.Time `json:"date_of_birth"`
 	Address            string     `json:"address" valid:"required"`
 }
 

@@ -12,7 +12,6 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"strings"
 	"time"
 )
 
@@ -65,33 +64,15 @@ func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto
 }
 
 func (r *ReservationRepository) Create(reservation *models.Reservation) (*models.Reservation, error) {
-	db := r.DB
-	if strings.TrimSpace(reservation.RequestKey) == "" {
-		return nil, InvalidReservationKeyErr
-	}
-	reservationRequest := models.ReservationRequest{}
-	if err := db.Where("request_key=? AND room_id=?", reservation.RequestKey, reservation.RoomId).Find(&reservationRequest).Error; err != nil {
-		return nil, err
-	}
-	// check if exists.
-	if reservationRequest.Id == 0 {
-		return nil, InvalidReservationKeyErr
-	}
-	if time.Now().After(reservationRequest.ExpireTime) {
-		return nil, InvalidReservationKeyErr
-	}
-	if len(reservation.Sharers) == 0 {
-		return nil, SharerListEmptyErr
-	}
 
 	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
 	reservation.GuestCount = uint64(len(reservation.Sharers))
 	reservation.Price = r.calculatePrice(reservation)
 
-	if reserveErr := db.Create(&reservation).Error; reserveErr != nil {
-		return nil, reserveErr
+	if err := r.DB.Create(&reservation).Error; err != nil {
+		return nil, err
 	}
-	return nil, nil
+	return reservation, nil
 }
 
 func (r *ReservationRepository) Update(model *models.Reservation) (*models.Reservation, error) {
@@ -141,16 +122,29 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 
 func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
 
-	var requestCount int64 = 0
+	var reservationRequestCount int64 = 0
+	var reservationCount int64 = 0
+
 	if err := r.DB.Model(&models.ReservationRequest{}).
 		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time >=?",
-			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&requestCount).Error; err != nil {
+			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&reservationRequestCount).Error; err != nil {
 		return false, err
 	}
 
-	if requestCount > 0 {
+	if err := r.DB.Model(&models.Reservation{}).
+		Where("room_id=? AND checkin_date >=? AND checkout_date<=? AND expire_time >=?",
+			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&reservationCount).Error; err != nil {
+		return false, err
+	}
+
+	if reservationRequestCount > 0 {
 		return true, nil
 	}
+
+	if reservationCount > 0 {
+		return true, nil
+	}
+
 	return false, nil
 }
 
@@ -178,6 +172,17 @@ func (r *ReservationRepository) Find(id uint64) (*models.Reservation, error) {
 		return nil, nil
 	}
 	return &reservation, nil
+}
+
+func (r *ReservationRepository) FindReservationRequest(requestKey string, roomId uint64) (*models.ReservationRequest, error) {
+	reservationRequest := models.ReservationRequest{}
+	if err := r.DB.Where("request_key=? AND room_id=?", requestKey, roomId).Find(&reservationRequest).Error; err != nil {
+		return nil, err
+	}
+	if reservationRequest.Id == 0 {
+		return nil, nil
+	}
+	return &reservationRequest, nil
 }
 
 /*================= private functions ===========================================================*/

@@ -7,6 +7,7 @@ const (
 	users        = "Users."
 	hotels       = "Hotels."
 	rooms        = "Rooms."
+	reservation  = "Reservation."
 
 	Created = crudMessages + "Created"
 	Updated = crudMessages + "Updated"
@@ -28,4 +29,7 @@ const (
 	InvalidRoomCleanStatus    = rooms + "InvalidCleanStatus"
 	RoomTypeHasRoomErr        = rooms + "RoomTypeHasRoomErr"
 	RoomHasReservationRequest = rooms + "HasReservationRequest"
+
+	InvalidReservationRequestKey = reservation + "InvalidReservationRequestKey"
+	EmptySharerError             = reservation + "EmptySharerError"
 )

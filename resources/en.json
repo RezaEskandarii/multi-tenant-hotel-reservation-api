@@ -15,5 +15,9 @@
   },
   "Rooms": {
     "HasReservationRequest": "this room has reservation request in checkInDate %s and checkoutDate %s"
+  },
+  "Reservation": {
+    "InvalidReservationRequestKey": "request key is invalid.",
+    "EmptySharerError": "sharers list is empty."
   }
 }

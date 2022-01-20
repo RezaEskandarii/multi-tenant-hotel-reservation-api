@@ -46,3 +46,13 @@ func (s *ReservationService) CancelReservationRequest(requestKey string) error {
 func (s *ReservationService) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
 	return s.Repository.GetRecommendedRateCodes(priceDto)
 }
+
+// Find find and returns reservation by id.
+func (s *ReservationService) Find(id uint64) (*models.Reservation, error) {
+	return s.Repository.Find(id)
+}
+
+// FindReservationRequest find and returns reservationRequest by  given roomId and requestKey.
+func (s *ReservationService) FindReservationRequest(requestKey string, roomId uint64) (*models.ReservationRequest, error) {
+	return s.Repository.FindReservationRequest(requestKey, roomId)
+}
