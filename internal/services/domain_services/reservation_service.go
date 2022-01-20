@@ -4,6 +4,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"time"
 )
 
 type ReservationService struct {
@@ -37,9 +38,13 @@ func (s *ReservationService) HasConflict(request *dto.RoomRequestDto) (bool, err
 	return s.Repository.HasConflict(request)
 }
 
-// CancelReservationRequest this function remove reservation request bt given requestKey param.
-func (s *ReservationService) CancelReservationRequest(requestKey string) error {
-	return s.Repository.CancelReservationRequest(requestKey)
+func (s *ReservationService) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
+	return s.Repository.HasReservationConflict(checkInDate, checkOutDate, roomId)
+}
+
+// RemoveReservationRequest this function remove reservation request bt given requestKey param.
+func (s *ReservationService) RemoveReservationRequest(requestKey string) error {
+	return s.Repository.DeleteReservationRequest(requestKey)
 }
 
 // GetRecommendedRateCodes returns list of recommended rateCodeDetails price per reservation condition.

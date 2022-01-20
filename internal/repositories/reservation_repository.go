@@ -3,6 +3,7 @@ package repositories
 import (
 	"bytes"
 	"crypto/rand"
+	"database/sql"
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
@@ -13,11 +14,6 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
 	"time"
-)
-
-var (
-	InvalidReservationKeyErr = errors.New("invalid reservation key")
-	SharerListEmptyErr       = errors.New("sharers List is empty")
 )
 
 type ReservationRepository struct {
@@ -69,9 +65,25 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	reservation.GuestCount = uint64(len(reservation.Sharers))
 	reservation.Price = r.calculatePrice(reservation)
 
-	if err := r.DB.Create(&reservation).Error; err != nil {
+	option := sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	}
+
+	tx := r.DB.Begin(&option)
+
+	if err := tx.Create(&reservation).Error; err != nil {
+		tx.Rollback()
 		return nil, err
 	}
+	// remove reservation request after create reservation.
+	if err := tx.Where("request_key=?", reservation.RequestKey).Delete(models.ReservationRequest{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+
 	return reservation, nil
 }
 
@@ -123,7 +135,6 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
 
 	var reservationRequestCount int64 = 0
-	var reservationCount int64 = 0
 
 	if err := r.DB.Model(&models.ReservationRequest{}).
 		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time >=?",
@@ -131,24 +142,34 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 		return false, err
 	}
 
-	if err := r.DB.Model(&models.Reservation{}).
-		Where("room_id=? AND checkin_date >=? AND checkout_date<=? AND expire_time >=?",
-			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&reservationCount).Error; err != nil {
-		return false, err
-	}
-
 	if reservationRequestCount > 0 {
 		return true, nil
 	}
 
-	if reservationCount > 0 {
+	hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId)
+	if err != nil {
+		return false, err
+	}
+
+	return hasReservationConflict, nil
+}
+
+func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
+	var count int64 = 0
+	if err := r.DB.Model(&models.Reservation{}).
+		Where("room_id=? AND checkin_date >=? AND checkout_date<=?",
+			roomId, checkInDate, checkOutDate).Count(&count).Error; err != nil {
+		return false, err
+	}
+
+	if count > 0 {
 		return true, nil
 	}
 
 	return false, nil
 }
 
-func (r *ReservationRepository) CancelReservationRequest(requestKey string) error {
+func (r *ReservationRepository) DeleteReservationRequest(requestKey string) error {
 	var count int64 = 0
 	if err := r.DB.Model(models.ReservationRequest{}).Where("requestKey=?", requestKey).Count(&count).Error; err != nil {
 		return err

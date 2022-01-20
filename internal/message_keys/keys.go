@@ -32,4 +32,5 @@ const (
 
 	InvalidReservationRequestKey = reservation + "InvalidReservationRequestKey"
 	EmptySharerError             = reservation + "EmptySharerError"
+	ReservationConflictError     = reservation + "ReservationConflictError"
 )

@@ -18,6 +18,7 @@
   },
   "Reservation": {
     "InvalidReservationRequestKey": "request key is invalid.",
-    "EmptySharerError": "sharers list is empty."
+    "EmptySharerError": "sharers list is empty.",
+    "ReservationConflictError": "this reservation request checkin or checkout date has conflict with other reservation."
   }
 }

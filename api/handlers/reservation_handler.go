@@ -95,6 +95,13 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
+	if reservationRequest == nil {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: invalidReservationRequestKeyErr,
+			})
+	}
+
 	if time.Now().After(reservationRequest.ExpireTime) {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -109,6 +116,18 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
+	hasReservationConflict, err := handler.Service.HasReservationConflict(reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	if hasReservationConflict {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
+			})
+	}
 	// create new reservation.
 	result, err := handler.Service.Create(&reservation)
 	if err != nil {
@@ -129,7 +148,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 // If the client cancels the reservation request, they can call this endpoint to delete the reservation request.
 func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	requestKey := c.QueryParam("requestKey")
-	if err := handler.Service.CancelReservationRequest(requestKey); err != nil {
+	if err := handler.Service.RemoveReservationRequest(requestKey); err != nil {
 		handler.Input.Logger.LogError(err.Error())
 	}
 	return c.JSON(http.StatusOK, nil)
