@@ -26,6 +26,7 @@ var (
 		models.Audit{},
 		models.RateCodeDetail{},
 		models.RateCodeDetailPrice{},
+		models.Sharer{},
 	}
 )
 

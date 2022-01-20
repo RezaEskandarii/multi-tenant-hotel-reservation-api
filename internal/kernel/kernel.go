@@ -21,8 +21,6 @@ var (
 // Run run application
 func Run() error {
 
-	registery.RegisterServices(db, v1RouterGroup)
-
 	loadFlags()
 
 	if dbErr != nil {
@@ -38,7 +36,7 @@ func Run() error {
 	if cfg.Application.SqlDebug {
 		db = db.Debug()
 	}
-
+	registery.RegisterServices(db, v1RouterGroup)
 	httpRouter.Logger.Fatal(httpRouter.Start(fmt.Sprintf(":%s", cfg.Application.Port)))
 
 	return nil

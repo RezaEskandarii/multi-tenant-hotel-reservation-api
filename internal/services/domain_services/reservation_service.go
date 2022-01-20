@@ -41,3 +41,8 @@ func (s *ReservationService) HasConflict(request *dto.RoomRequestDto) (bool, err
 func (s *ReservationService) CancelReservationRequest(requestKey string) error {
 	return s.Repository.CancelReservationRequest(requestKey)
 }
+
+// GetRecommendedRateCodes returns list of recommended rateCodeDetails price per reservation condition.
+func (s *ReservationService) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
+	return s.Repository.GetRecommendedRateCodes(priceDto)
+}

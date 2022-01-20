@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"math"
 	"math/big"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
@@ -79,15 +80,14 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	if time.Now().After(reservationRequest.ExpireTime) {
 		return nil, InvalidReservationKeyErr
 	}
-	if len(reservation.Sharer) == 0 {
+	if len(reservation.Sharers) == 0 {
 		return nil, SharerListEmptyErr
 	}
-	priceDetail, err := r.RateCodeRepository.FindPrice(reservation.RatePriceId)
-	if err != nil {
-		return nil, err
-	}
-	reservation.Price = priceDetail.Price
-	reservation.GuestCount = uint64(len(reservation.Sharer))
+
+	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
+	reservation.GuestCount = uint64(len(reservation.Sharers))
+	reservation.Price = r.calculatePrice(reservation)
+
 	if reserveErr := db.Create(&reservation).Error; reserveErr != nil {
 		return nil, reserveErr
 	}
@@ -130,10 +130,11 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 	`).Where(`
 		  details.room_id = ?
 		  and prices.guest_count = ?
-		  and details.min_nights >= ?
-		  and details.date_start >= ?
-		  and details.date_end <= ?
-	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart, priceDto.DateEnd).Scan(&ratePrices)
+		  and details.min_nights <= ?
+		  and details.date_start <= ?
+		  and details.date_end >= ?
+          and details.rate_code_id=?
+	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart, priceDto.DateEnd, priceDto.RateCodeId).Scan(&ratePrices)
 
 	return ratePrices, nil
 }
@@ -153,7 +154,7 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 	return false, nil
 }
 
-func (r ReservationRepository) CancelReservationRequest(requestKey string) error {
+func (r *ReservationRepository) CancelReservationRequest(requestKey string) error {
 	var count int64 = 0
 	if err := r.DB.Model(models.ReservationRequest{}).Where("requestKey=?", requestKey).Count(&count).Error; err != nil {
 		return err
@@ -164,4 +165,55 @@ func (r ReservationRepository) CancelReservationRequest(requestKey string) error
 		}
 	}
 	return nil
+}
+
+func (r *ReservationRepository) Find(id uint64) (*models.Reservation, error) {
+	reservation := models.Reservation{}
+	db := r.DB.Model(models.Reservation{})
+	db = r.withReservationPreloads(db)
+	if err := db.Where("id=?", id).Find(&reservation).Error; err != nil {
+		return nil, err
+	}
+	if reservation.Id == 0 {
+		return nil, nil
+	}
+	return &reservation, nil
+}
+
+/*================= private functions ===========================================================*/
+
+func (r *ReservationRepository) withReservationPreloads(query *gorm.DB) *gorm.DB {
+	return query.Preload("Room").Preload("Supervisor").Preload("RateCode").
+		Preload("Sharers").Preload("Sharers.Guest")
+}
+
+func (r *ReservationRepository) calculatePrice(reservation *models.Reservation) float64 {
+
+	priceDto := &dto.GetRatePriceDto{
+		RoomId:     reservation.RoomId,
+		NightCount: reservation.Nights,
+		GuestCount: reservation.GuestCount,
+		DateStart:  reservation.CheckinDate,
+		DateEnd:    reservation.CheckoutDate,
+		RateCodeId: reservation.RateCodeId,
+	}
+
+	prices, err := r.GetRecommendedRateCodes(priceDto)
+	if err != nil {
+		return 0
+	}
+	if len(prices) == 0 {
+		return 0
+	}
+	if len(prices) == 1 {
+		return prices[0].Price * reservation.Nights
+	}
+	defaultPrice := prices[0]
+	for _, price := range prices {
+		// get latest inserted.
+		if price.CreatedAt.After(*defaultPrice.CreatedAt) {
+			defaultPrice = price
+		}
+	}
+	return defaultPrice.Price * reservation.Nights
 }

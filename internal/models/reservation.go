@@ -15,27 +15,25 @@ const (
 
 type Reservation struct {
 	BaseModel
-	HotelId             uint64               `json:"hotel_id" valid:"-"`
-	Hotel               Hotel                `json:"hotel" valid:"-"  gorm:"foreignKey:HotelId;references:id"`
-	SupervisorId        uint64               `json:"supervisor_id" valid:"required"`
-	Supervisor          Guest                `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
-	CheckinDate         time.Time            `json:"checkin_date" valid:"required"`
-	CheckoutDate        time.Time            `json:"checkout_date" valid:"required"`
-	RoomId              uint64               `json:"room_id" valid:"required"`
-	Room                Room                 `json:"room" valid:"-"   gorm:"foreignKey:RoomId;references:id"`
-	RateCodeId          uint64               `json:"rate_code_id" valid:"required"`
-	RateCode            RateCode             `json:"rate_code" valid:"-"   gorm:"foreignKey:RateCodeId;references:id"`
-	GuestCount          uint64               `json:"guest_count"`
-	ParentId            uint64               `json:"parent_id" valid:"-"`
-	Parent              *Reservation         `json:"parent" gorm:"foreignKey:ParentId;references:id"`
-	ReservationType     ReservationType      `json:"reservation_type"`
-	Price               float64              `json:"price"`
-	Nights              float64              `json:"nights"`
-	RequestKey          string               `json:"request_key" gorm:"-" valid:"required"`
-	RatePriceId         uint64               `json:"rate_price_id" valid:"required"`
-	RateCodeDetailPrice *RateCodeDetailPrice `json:"rate_code_detail_price" valid:"-"   gorm:"foreignKey:RatePriceId;references:id"`
+	HotelId         uint64          `json:"hotel_id" valid:"-"`
+	Hotel           Hotel           `json:"hotel" valid:"-"  gorm:"foreignKey:HotelId;references:id"`
+	SupervisorId    uint64          `json:"supervisor_id" valid:"required"`
+	Supervisor      Guest           `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
+	CheckinDate     *time.Time      `json:"checkin_date" valid:"required"`
+	CheckoutDate    *time.Time      `json:"checkout_date" valid:"required"`
+	RoomId          uint64          `json:"room_id" valid:"required"`
+	Room            Room            `json:"room" valid:"-"   gorm:"foreignKey:RoomId;references:id"`
+	RateCodeId      uint64          `json:"rate_code_id" valid:"required"`
+	RateCode        RateCode        `json:"rate_code" valid:"-"   gorm:"foreignKey:RateCodeId;references:id"`
+	GuestCount      uint64          `json:"guest_count"`
+	ParentId        uint64          `json:"parent_id" valid:"-"`
+	Parent          *Reservation    `json:"parent" gorm:"foreignKey:ParentId;references:id"`
+	ReservationType ReservationType `json:"reservation_type"`
+	Price           float64         `json:"price"`
+	Nights          float64         `json:"nights"`
+	RequestKey      string          `json:"request_key" gorm:"-" valid:"required"`
 
-	Sharer []*Sharer `json:"sharer"`
+	Sharers []*Sharer `json:"sharers"`
 	///Children        []*Reservation  `gorm:"many2many:reservation_children;association_jointable_foreignkey:parent_id"`
 }
 

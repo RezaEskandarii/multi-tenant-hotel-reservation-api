@@ -1,13 +1,25 @@
 package dto
 
-import "time"
+import (
+	"github.com/asaskevich/govalidator"
+	"time"
+)
 
 type GetRatePriceDto struct {
-	RoomId     uint64     `json:"room_id"`
-	NightCount uint64     `json:"night_count"`
-	GuestCount uint64     `json:"guest_count"`
-	DateStart  *time.Time `json:"date_start"`
-	DateEnd    *time.Time `json:"date_end"`
+	RoomId     uint64     `json:"room_id" valid:"required"`
+	NightCount float64    `json:"night_count" valid:"required"`
+	GuestCount uint64     `json:"guest_count" valid:"required"`
+	DateStart  *time.Time `json:"date_start"  valid:"required"`
+	DateEnd    *time.Time `json:"date_end"    valid:"required"`
+	RateCodeId uint64     `json:"rate_code_id"`
+}
+
+func (d *GetRatePriceDto) Validate() (bool, error) {
+	ok, err := govalidator.ValidateStruct(d)
+	if err != nil {
+		return false, err
+	}
+	return ok, nil
 }
 
 type RateCodePricesDto struct {

@@ -124,7 +124,7 @@ func setServicesRepository(db *gorm.DB) {
 	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
 	auditService.Repository = repositories.NewAuditRepository(db)
 	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
-	reservationService.Repository = repositories.NewReservationRepository(db)
+	reservationService.Repository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
 }
 
 // ApplySeed seeds given json file to database.

@@ -1,9 +1,11 @@
 package applogger
 
 import (
+	"fmt"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"os"
 	"strings"
 )
 
@@ -35,8 +37,13 @@ func getEncoder() zapcore.Encoder {
 
 // getLogWriter returns zapcore WriteSyncer
 func getLogWriter() zapcore.WriteSyncer {
+	dir, err := os.Getwd()
+	fileName := "./logs/application.log"
+	if err != nil {
+		fileName = fmt.Sprintf("%s/%s", dir, "logs/application.log")
+	}
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "./logs/application.log",
+		Filename:   fileName,
 		MaxSize:    1,
 		MaxBackups: 5,
 		MaxAge:     30,

@@ -26,6 +26,7 @@ func (r *ReservationHandler) Register(input *dto.HandlerInput, service *domain_s
 	routerGroup.POST("/room-request", r.createRequest)
 	routerGroup.POST("", r.create)
 	routerGroup.DELETE("/cancel", r.cancelRequest)
+	routerGroup.POST("/recommend-rate-codes", r.recommendRateCodes)
 }
 
 /*=====================================================================================================*/
@@ -99,4 +100,31 @@ func (r *ReservationHandler) cancelRequest(c echo.Context) error {
 		r.Input.Logger.LogError(err.Error())
 	}
 	return c.JSON(http.StatusOK, nil)
+}
+
+/*===================================================================================*/
+func (r *ReservationHandler) recommendRateCodes(c echo.Context) error {
+
+	priceDto := dto.GetRatePriceDto{}
+
+	if err := c.Bind(&priceDto); err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	isValid, err := priceDto.Validate()
+	if isValid == false && err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Data: err.Error(),
+		})
+	}
+
+	result, err := r.Service.GetRecommendedRateCodes(&priceDto)
+	if err != nil {
+		r.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data: result,
+	})
 }
