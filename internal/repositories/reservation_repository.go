@@ -91,12 +91,20 @@ func (r *ReservationRepository) Update(model *models.Reservation) (*models.Reser
 	panic("not implemented")
 }
 
-func (r ReservationRepository) CheckIn(model *models.Reservation) error {
-	panic("not implemented")
-}
+// ChangeStatus changes the reservation check status.
+func (r ReservationRepository) ChangeStatus(id uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
+	reservation := models.Reservation{}
+	if err := r.DB.Find(&reservation, id).Error; err != nil {
+		return nil, err
+	}
+	if reservation.Id == 0 {
+		return nil, nil
+	}
 
-func (r ReservationRepository) CheckOut(model *models.Reservation) error {
-	panic("not implemented")
+	if err := r.DB.Model(&models.Reservation{}).Where("id=?", id).Update("CheckStatus", status).Error; err != nil {
+		return nil, err
+	}
+	return &reservation, nil
 }
 
 func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
@@ -185,7 +193,7 @@ func (r *ReservationRepository) DeleteReservationRequest(requestKey string) erro
 func (r *ReservationRepository) Find(id uint64) (*models.Reservation, error) {
 	reservation := models.Reservation{}
 	db := r.DB.Model(models.Reservation{})
-	db = r.withReservationPreloads(db)
+	db = r.preloadReservationRelations(db)
 	if err := db.Where("id=?", id).Find(&reservation).Error; err != nil {
 		return nil, err
 	}
@@ -208,7 +216,7 @@ func (r *ReservationRepository) FindReservationRequest(requestKey string, roomId
 
 /*================= private functions ===========================================================*/
 
-func (r *ReservationRepository) withReservationPreloads(query *gorm.DB) *gorm.DB {
+func (r *ReservationRepository) preloadReservationRelations(query *gorm.DB) *gorm.DB {
 	return query.Preload("Room").Preload("Supervisor").Preload("RateCode").
 		Preload("Sharers").Preload("Sharers.Guest")
 }

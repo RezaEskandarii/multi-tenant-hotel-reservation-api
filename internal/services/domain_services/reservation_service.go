@@ -22,6 +22,12 @@ func (s *ReservationService) Create(model *models.Reservation) (*models.Reservat
 	return s.Repository.Create(model)
 }
 
+// ChangeStatus changes the reservation check status.
+func (s *ReservationService) ChangeStatus(id uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
+
+	return s.Repository.ChangeStatus(id, status)
+}
+
 // Update updates Reservation.
 func (s *ReservationService) Update(model *models.Reservation) (*models.Reservation, error) {
 
