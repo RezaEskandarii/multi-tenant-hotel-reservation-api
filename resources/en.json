@@ -19,6 +19,7 @@
   "Reservation": {
     "InvalidReservationRequestKey": "request key is invalid.",
     "EmptySharerError": "sharers list is empty.",
-    "ReservationConflictError": "this reservation request checkin or checkout date has conflict with other reservation."
+    "ReservationConflictError": "this reservation request checkin or checkout date has conflict with other reservation.",
+    "ImpossibleReservationLatDateError": "It is not possible to reserve for the past date."
   }
 }

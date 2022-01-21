@@ -36,6 +36,7 @@ func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *do
 /*=====================================================================================================*/
 func (handler *ReservationHandler) createRequest(c echo.Context) error {
 
+	lang := getAcceptLanguage(c)
 	request := dto.RoomRequestDto{}
 	if err := c.Bind(&request); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -52,11 +53,18 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	// If there is a simultaneous booking request, the booking request is not given.
 	if hasConflict {
-		message := fmt.Sprintf(handler.Input.Translator.Localize(getAcceptLanguage(c), message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
+		message := fmt.Sprintf(handler.Input.Translator.Localize(lang, message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: message,
 		})
 	}
+
+	if request.CheckInDate.Before(time.Now()) {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Message: handler.Input.Translator.Localize(lang, message_keys.ImpossibleReservationLatDateError),
+		})
+	}
+
 	// create new reservation request for requested room.
 	result, err := handler.Service.CreateReservationRequest(&request)
 	if err != nil {
@@ -128,8 +136,10 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
+
+	if reservation.CheckinDate.After(time.Now())
 	// create new reservation.
-	result, err := handler.Service.Create(&reservation)
+		result, err := handler.Service.Create(&reservation)
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
