@@ -59,7 +59,8 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 		})
 	}
 
-	if request.CheckInDate.Before(time.Now()) {
+	// prevent to reserve room for past dates.
+	if request.CheckInDate.Before(time.Now()) && request.RequestType == dto.CreateReservation {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: handler.Input.Translator.Localize(lang, message_keys.ImpossibleReservationLatDateError),
 		})
@@ -137,9 +138,8 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
-	if reservation.CheckinDate.After(time.Now())
 	// create new reservation.
-		result, err := handler.Service.Create(&reservation)
+	result, err := handler.Service.Create(&reservation)
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
