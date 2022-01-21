@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Doc
+- add comment to handlers
 - add comment
 - change readme file content.
 - add comment
@@ -19,16 +20,30 @@
 - regenerate changelog file
 
 ### Feat
+- add rateCodePrice field to reservation model
+- seed roomTypes on application startup
+- add seed function to room_type_repository
+- add roomType seed json file
+- add cancelRequest function to reservationHandler
+- add implement CancelReservationRequest function in reservation_service
+- add create function to reservation_handler
+- add HasConflict function to reservation_repository
+- add reservation_handler
+- add reservation_handler
+- implement CalculatePrice function in reservation_repository
+- add rate_code_calculate_dto
+- add new functions to reservation_repository
+- add new fields to reservation model
 - add addDetails function to rate_code_handler
 - add rate code details service
 - add rate_code_details_repository
 - add feat: add new entities to migration
-- add new fields to rate_code_details structModel
-- add rate_code_details structModel
+- add new fields to rate_code_details model
+- add rate_code_details model
 - add file_transfer_service interface
 - add command runner
 - add auditChannel to handlers
-- add thumbnail structModel
+- add thumbnail model
 - add checkIn function to reservation_repository
 - add CreateReservationRequest function to reservation_repository
 - add seed function to country_repository
@@ -40,48 +55,48 @@
 - add audit middleware
 - add audit service
 - add audit repository
-- add audit structModel
+- add audit model
 - protect routes with JWTAuthMiddleware
 - add auth middleware
 - implement refreshToken function in auth_handler
 - implement signin function
 - add AuthHandler and implement signin function
 - add FindByUsernameAndPassword function userservice
-- add roomType seeder
+- add user seeder
 - add seeder service
 - add seeder repository
-- add roomTypes seed file
-- add reservation type field to reservation structModel
+- add users seed file
+- add reservation type field to reservation model
 - add reservation repository
-- add validation to reservation structModel
-- add validation to reservation structModel
+- add validation to reservation model
+- add validation to reservation model
 - generate reservationKey's hash before create
 - add hash_generator
-- add reservationLock structModel
-- add reservation structModel
+- add reservationLock model
+- add reservation model
 - add ratCodeHandler to serviceRegistry
 - add ratCodeHandler's functions
 - add rate_code_handler
 - add rate_code_service
 - implement rate_code_repository functions
 - add rate_code_repository
-- add validator to rate_code structModel
-- add rate_code structModel
+- add validator to rate_code model
+- add rate_code model
 - add rate group handler
 - add rate group repository service
 - add rate group repository functions
 - add rate group repository
-- add rate group structModel
-- add guest structModel to migrator
+- add rate group model
+- add guest model to migrator
 - implement guest handler functions
 - add guest handler to service registry
 - implement guests handler
 - add guests handler
-- add activate and deactivate functions to roomType service
-- add activate and deactivate functions to roomType repository
+- add activate and deactivate functions to user service
+- add activate and deactivate functions to user repository
 - add guest service
 - add guest repository
-- add guest structModel
+- add guest model
 - add room handler
 - add room room service
 - add room repository
@@ -91,7 +106,7 @@
 - add room room type repository
 - add room struct fields
 - add room type struct
-- add logger to roomType handler
+- add logger to user handler
 - add logger to residence type handler
 - add logger to residence handler
 - add logger to residence grade handler
@@ -99,7 +114,7 @@
 - add logger to currency handler
 - add logger to country handler
 - add logger to city handler
-- add room structModel
+- add room model
 - add residence handler
 - add residence service
 - add residence repository
@@ -120,18 +135,33 @@
 - add cors origin middleware
 - add persian new translations
 - add translator package to handlers
-- add findByUsername function roomType handler
+- add findByUsername function user handler
 - add findByUsername function in userService
-- add roomType handler
-- add roomType service
+- add user handler
+- add user service
 
 ### Fix
+- implement ChangeStatus function in reservation_repository and reservation_service
+- prevent to add new reservation for past dates
+- prevent to add new reservation for past dates
+- prevent to add new reservation with conflict checkin or checkout date
+- check expireDate in room HasConflict function
+- add validation to rate_code_details model
+- fix add-details endpoint name
+- fix typo in rate_code_details model
+- fix rateCodeHandler name
 - singleton audit channel listener in audit_middleware
 - regenerate gmo mod file
 - regenerate gmo mod file
 - register rate group handler in service registry
 
 ### Refactor
+- refactor reservationRepository
+- refactor reservationRepository
+- refactor createReservation function
+- refactor reservationRequest function
+- add validation to CastJsonFileToStruct function
+- add pointer to rate_code model relation
 - refactor audit_middleware
 - refactor audit_middleware
 - remove logger from config module
@@ -155,8 +185,8 @@
 - refactor some codes
 - refactor some codes
 - improve repositories code
-- validate roomType's gender before create
-- ignore validation to some structModel relations
+- validate user's gender before create
+- ignore validation to some model relations
 - add pointer to residence relations
 - prevent to validation residence releations
 - move handlers and middlewares to api directory
@@ -187,17 +217,17 @@
 - add document
 
 ### Feat
-- add roomType reository
+- add user reository
 - add i18n translator to city handler
 - add i18n translator to city handler
 - add message_keys module to hold translation message files keys
 - add message_keys module to hold translation message files keys
 - add localized message translator module
-- add roomType structModel
+- add user model
 - add currency handler
 - add currency service
 - add currency repository
-- add currency structModel
+- add currency model
 - implement province handler
 - add province service
 - add province repository
@@ -216,7 +246,7 @@
 - implement paginated_list's methods
 - implement application config struct
 - add country_repository
-- add country and city structModel
+- add country and city model
 - add project structure and folders
 
 ### Fix
