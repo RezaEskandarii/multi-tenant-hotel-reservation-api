@@ -31,6 +31,7 @@ func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *do
 	routerGroup.DELETE("/cancel", handler.cancelRequest)
 	routerGroup.POST("/recommend-rate-codes", handler.recommendRateCodes)
 	routerGroup.GET("/:id", handler.find)
+	routerGroup.PUT("/:id", handler.update)
 }
 
 /*=====================================================================================================*/
@@ -137,9 +138,104 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
-
+	handler.setReservationFields(&reservation, reservationRequest)
 	// create new reservation.
 	result, err := handler.Service.Create(&reservation)
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusConflict, commons.ApiResponse{
+			Message: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:    result,
+		Message: handler.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+	})
+}
+
+/*===================================================================================*/
+
+func (handler *ReservationHandler) update(c echo.Context) error {
+
+	id, err := utils.ConvertToUint(c.Param("id"))
+	lang := c.Request().Header.Get(acceptLanguage)
+
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+
+	reservationModel, err := handler.Service.Find(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusInternalServerError,
+		})
+	}
+
+	if reservationModel == nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			ResponseCode: http.StatusNotFound,
+		})
+	}
+
+	reservation := models.Reservation{}
+	if err := c.Bind(&reservation); err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	invalidReservationRequestKeyErr := handler.Input.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
+	if strings.TrimSpace(reservation.RequestKey) == "" {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: invalidReservationRequestKeyErr,
+			})
+	}
+
+	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey, reservation.RoomId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	if reservationRequest == nil {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: invalidReservationRequestKeyErr,
+			})
+	}
+
+	if time.Now().After(reservationRequest.ExpireTime) {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: invalidReservationRequestKeyErr,
+			})
+	}
+
+	if len(reservation.Sharers) == 0 {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: handler.Input.Translator.Localize(lang, message_keys.EmptySharerError),
+			})
+	}
+
+	hasReservationConflict, err := handler.Service.HasReservationConflict(reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	if hasReservationConflict {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
+			})
+	}
+
+	// create new reservation.
+	result, err := handler.Service.Update(id, &reservation)
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -213,4 +309,11 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data: result,
 	})
+}
+
+/*====================================================================================*/
+func (handler *ReservationHandler) setReservationFields(reservation *models.Reservation, reservationRequest *models.ReservationRequest) {
+	reservation.CheckinDate = reservationRequest.CheckInDate
+	reservation.CheckoutDate = reservationRequest.CheckOutDate
+	reservation.RoomId = reservationRequest.RoomId
 }

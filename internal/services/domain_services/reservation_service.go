@@ -29,9 +29,9 @@ func (s *ReservationService) ChangeStatus(id uint64, status models.ReservationCh
 }
 
 // Update updates Reservation.
-func (s *ReservationService) Update(model *models.Reservation) (*models.Reservation, error) {
+func (s *ReservationService) Update(id uint64, model *models.Reservation) (*models.Reservation, error) {
 
-	return s.Repository.Update(model)
+	return s.Repository.Update(id, model)
 }
 
 // CreateReservationRequest creates reservation request for given room to prevent concurrent request for specific room.

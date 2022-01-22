@@ -170,8 +170,8 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 	var reservationRequestCount int64 = 0
 
 	if err := r.DB.Model(&models.ReservationRequest{}).
-		Where("room_id=? AND check_in_date >=? AND check_out_date<=? AND expire_time >=?",
-			request.RoomId, request.CheckInDate, request.CheckOutDate, time.Now()).Count(&reservationRequestCount).Error; err != nil {
+		Where("room_id=? AND check_in_date >=? AND check_out_date<=? ",
+			request.RoomId, request.CheckInDate, request.CheckOutDate).Count(&reservationRequestCount).Error; err != nil {
 		return false, err
 	}
 
@@ -179,12 +179,16 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 		return true, nil
 	}
 
-	hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId)
-	if err != nil {
-		return false, err
+	if request.RequestType == dto.CreateReservation {
+		hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId)
+		if err != nil {
+			return false, err
+		}
+
+		return hasReservationConflict, nil
 	}
 
-	return hasReservationConflict, nil
+	return false, nil
 }
 
 func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
