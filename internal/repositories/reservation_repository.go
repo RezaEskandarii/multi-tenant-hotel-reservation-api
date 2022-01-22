@@ -61,9 +61,7 @@ func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto
 
 func (r *ReservationRepository) Create(reservation *models.Reservation) (*models.Reservation, error) {
 
-	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
-	reservation.GuestCount = uint64(len(reservation.Sharers))
-	reservation.Price = r.calculatePrice(reservation)
+	r.setReservationCalcFields(reservation)
 
 	option := sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -87,8 +85,35 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 	return reservation, nil
 }
 
-func (r *ReservationRepository) Update(model *models.Reservation) (*models.Reservation, error) {
-	panic("not implemented")
+func (r *ReservationRepository) Update(id uint64, reservation *models.Reservation) (*models.Reservation, error) {
+
+	r.setReservationCalcFields(reservation)
+
+	option := sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	}
+
+	tx := r.DB.Begin(&option)
+	// remove old sharers and replace with new sharers.
+	if err := tx.Where("reservation_id=?", id).Delete(&models.Sharer{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Where("id=?", id).Updates(&reservation).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	// remove reservation request after create reservation.
+	if err := tx.Where("request_key=?", reservation.RequestKey).Delete(models.ReservationRequest{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+
+	return reservation, nil
 }
 
 // ChangeStatus changes the reservation check status.
@@ -250,4 +275,11 @@ func (r *ReservationRepository) calculatePrice(reservation *models.Reservation) 
 		}
 	}
 	return defaultPrice.Price * reservation.Nights
+}
+
+// fill calculation fields
+func (r *ReservationRepository) setReservationCalcFields(reservation *models.Reservation) {
+	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
+	reservation.GuestCount = uint64(len(reservation.Sharers))
+	reservation.Price = r.calculatePrice(reservation)
 }
