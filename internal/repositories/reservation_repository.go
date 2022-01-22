@@ -88,13 +88,8 @@ func (r *ReservationRepository) Create(reservation *models.Reservation) (*models
 func (r *ReservationRepository) Update(id uint64, reservation *models.Reservation) (*models.Reservation, error) {
 
 	r.setReservationCalcFields(reservation)
-
-	option := sql.TxOptions{
-		Isolation: sql.LevelDefault,
-		ReadOnly:  false,
-	}
-
-	tx := r.DB.Begin(&option)
+	reservation.Id = id
+	tx := r.DB.Begin()
 	// remove old sharers and replace with new sharers.
 	if err := tx.Where("reservation_id=?", id).Delete(&models.Sharer{}).Error; err != nil {
 		tx.Rollback()
@@ -113,7 +108,9 @@ func (r *ReservationRepository) Update(id uint64, reservation *models.Reservatio
 
 	tx.Commit()
 
-	return reservation, nil
+	result, err := r.Find(id)
+
+	return result, err
 }
 
 // ChangeStatus changes the reservation check status.
@@ -165,7 +162,7 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 	return ratePrices, nil
 }
 
-func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, error) {
+func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation) (bool, error) {
 
 	var reservationRequestCount int64 = 0
 
@@ -184,8 +181,23 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto) (bool, 
 		if err != nil {
 			return false, err
 		}
-
 		return hasReservationConflict, nil
+	}
+
+	if request.RequestType == dto.UpdateReservation && reservation != nil {
+		// check if reservation checkin or checkout date changes in update operation
+		// and prevent to conflict with other reservations in update operations.
+		if request.CheckInDate.Before(*reservation.CheckinDate) || request.CheckInDate.After(*request.CheckInDate) ||
+			request.CheckOutDate.Before(*reservation.CheckoutDate) || request.CheckInDate.After(*reservation.CheckoutDate) {
+
+			hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId)
+			if err != nil {
+				return false, err
+			}
+			return hasReservationConflict, nil
+
+		}
+
 	}
 
 	return false, nil
@@ -232,9 +244,9 @@ func (r *ReservationRepository) Find(id uint64) (*models.Reservation, error) {
 	return &reservation, nil
 }
 
-func (r *ReservationRepository) FindReservationRequest(requestKey string, roomId uint64) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) FindReservationRequest(requestKey string) (*models.ReservationRequest, error) {
 	reservationRequest := models.ReservationRequest{}
-	if err := r.DB.Where("request_key=? AND room_id=?", requestKey, roomId).Find(&reservationRequest).Error; err != nil {
+	if err := r.DB.Where("request_key=?", requestKey).Find(&reservationRequest).Error; err != nil {
 		return nil, err
 	}
 	if reservationRequest.Id == 0 {

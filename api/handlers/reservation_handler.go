@@ -38,6 +38,24 @@ func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *do
 func (handler *ReservationHandler) createRequest(c echo.Context) error {
 
 	lang := getAcceptLanguage(c)
+	reservationIdStr := c.QueryParam("reservationId")
+	reservation := &models.Reservation{}
+
+	// If the client requests to edit a reservation,
+	// client must send the reservation ID to avoid conflicts with other reservations on this check-in and check-out date.
+	if strings.TrimSpace(reservationIdStr) != "" {
+
+		reservationId, _ := utils.ConvertToUint(reservationIdStr)
+		reservationResult, err := handler.Service.Find(reservationId)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, nil)
+		}
+
+		reservation = reservationResult
+
+	} else {
+		reservation = nil
+	}
 	request := dto.RoomRequestDto{}
 	if err := c.Bind(&request); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -45,7 +63,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	// Checks if there is another reservation request for this room on the same check-in and check-out date,
 	// otherwise do not allow a booking request.
-	hasConflict, err := handler.Service.HasConflict(&request)
+	hasConflict, err := handler.Service.HasConflict(&request, reservation)
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -100,7 +118,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey, reservation.RoomId)
+	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -176,7 +194,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	}
 
 	if reservationModel == nil {
-		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
 		})
 	}
@@ -195,7 +213,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey, reservation.RoomId)
+	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -233,7 +251,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
-
+	handler.setReservationFields(&reservation, reservationRequest)
 	// create new reservation.
 	result, err := handler.Service.Update(id, &reservation)
 	if err != nil {

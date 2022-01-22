@@ -40,8 +40,8 @@ func (s *ReservationService) CreateReservationRequest(dto *dto.RoomRequestDto) (
 	return s.Repository.CreateReservationRequest(dto)
 }
 
-func (s *ReservationService) HasConflict(request *dto.RoomRequestDto) (bool, error) {
-	return s.Repository.HasConflict(request)
+func (s *ReservationService) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation) (bool, error) {
+	return s.Repository.HasConflict(request, reservation)
 }
 
 func (s *ReservationService) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
@@ -64,6 +64,6 @@ func (s *ReservationService) Find(id uint64) (*models.Reservation, error) {
 }
 
 // FindReservationRequest find and returns reservationRequest by  given roomId and requestKey.
-func (s *ReservationService) FindReservationRequest(requestKey string, roomId uint64) (*models.ReservationRequest, error) {
-	return s.Repository.FindReservationRequest(requestKey, roomId)
+func (s *ReservationService) FindReservationRequest(requestKey string) (*models.ReservationRequest, error) {
+	return s.Repository.FindReservationRequest(requestKey)
 }
