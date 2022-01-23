@@ -35,4 +35,6 @@ const (
 	EmptySharerError                  = reservation + "EmptySharerError"
 	ReservationConflictError          = reservation + "ReservationConflictError"
 	ImpossibleReservationLatDateError = reservation + "ImpossibleReservationLatDateError"
+	CheckOutDateEmptyError            = reservation + "CheckOutDateEmptyError"
+	CheckInDateEmptyError             = reservation + "CheckInDateEmptyError"
 )

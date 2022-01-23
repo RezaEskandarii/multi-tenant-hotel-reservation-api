@@ -31,12 +31,6 @@ func NewReservationRepository(db *gorm.DB, rateCodeRepository *RateCodeDetailRep
 
 func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
-	if dto.CheckInDate == nil {
-		return nil, errors.New("checkInDate is empty")
-	}
-	if dto.CheckOutDate == nil {
-		return nil, errors.New("checkOutDate is empty")
-	}
 	expireTime := config.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))

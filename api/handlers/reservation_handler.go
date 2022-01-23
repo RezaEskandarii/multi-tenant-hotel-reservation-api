@@ -85,6 +85,17 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 		})
 	}
 
+	if request.CheckInDate == nil {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: handler.Input.Translator.Localize(lang, message_keys.CheckInDateEmptyError)})
+	}
+	if request.CheckOutDate == nil {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Message: handler.Input.Translator.Localize(lang, message_keys.CheckOutDateEmptyError)})
+	}
+
 	// create new reservation request for requested room.
 	result, err := handler.Service.CreateReservationRequest(&request)
 	if err != nil {
