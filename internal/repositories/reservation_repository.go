@@ -35,8 +35,8 @@ func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomReq
 	buffer := bytes.Buffer{}
 
 	// default hour
-	checkInDate := time.Date(requestDto.CheckInDate.Year(), requestDto.CheckInDate.Month(), requestDto.CheckInDate.Day(), 12, 0, 0, 0, nil)
-	checkOutDate := time.Date(requestDto.CheckOutDate.Year(), requestDto.CheckOutDate.Month(), requestDto.CheckOutDate.Day(), 12, 0, 0, 0, nil)
+	checkInDate := time.Date(requestDto.CheckInDate.Year(), requestDto.CheckInDate.Month(), requestDto.CheckInDate.Day(), 12, 0, 0, 0, requestDto.CheckInDate.Location())
+	checkOutDate := time.Date(requestDto.CheckOutDate.Year(), requestDto.CheckOutDate.Month(), requestDto.CheckOutDate.Day(), 12, 0, 0, 0, requestDto.CheckOutDate.Location())
 
 	// fill checkin date to converted checkinDate with default hour.
 	requestDto.CheckInDate = &checkInDate
