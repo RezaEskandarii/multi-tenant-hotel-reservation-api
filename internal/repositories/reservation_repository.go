@@ -30,16 +30,23 @@ func NewReservationRepository(db *gorm.DB, rateCodeRepository *RateCodeDetailRep
 
 func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
+	// read from default config
 	expireTime := config.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
 
+	// default hour
 	checkInDate := time.Date(requestDto.CheckInDate.Year(), requestDto.CheckInDate.Month(), requestDto.CheckInDate.Day(), 12, 0, 0, 0, nil)
 	checkOutDate := time.Date(requestDto.CheckOutDate.Year(), requestDto.CheckOutDate.Month(), requestDto.CheckOutDate.Day(), 12, 0, 0, 0, nil)
 
+	// fill checkin date to converted checkinDate with default hour.
 	requestDto.CheckInDate = &checkInDate
+	// fill checkin date to converted checkinDate with default hour.
 	requestDto.CheckOutDate = &checkOutDate
 
+	// get random number.
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
+
+	// generate reservation request key.
 	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), requestDto.CheckInDate.String(), requestDto.CheckOutDate.String()))
 
 	if err == nil {
