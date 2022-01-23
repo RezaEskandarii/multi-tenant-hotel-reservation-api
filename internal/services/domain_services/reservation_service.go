@@ -35,9 +35,9 @@ func (s *ReservationService) Update(id uint64, model *models.Reservation) (*mode
 }
 
 // CreateReservationRequest creates reservation request for given room to prevent concurrent request for specific room.
-func (s *ReservationService) CreateReservationRequest(dto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
+func (s *ReservationService) CreateReservationRequest(requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
-	return s.Repository.CreateReservationRequest(dto)
+	return s.Repository.CreateReservationRequest(requestDto)
 }
 
 func (s *ReservationService) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation) (bool, error) {

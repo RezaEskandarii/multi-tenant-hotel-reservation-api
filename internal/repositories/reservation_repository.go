@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/rand"
 	"database/sql"
-	"errors"
 	"fmt"
 	"gorm.io/gorm"
 	"math"
@@ -29,21 +28,30 @@ func NewReservationRepository(db *gorm.DB, rateCodeRepository *RateCodeDetailRep
 	}
 }
 
-func (r *ReservationRepository) CreateReservationRequest(dto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
 	expireTime := config.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
+
+	checkInDate := time.Date(requestDto.CheckInDate.Year(), requestDto.CheckInDate.Month(), requestDto.CheckInDate.Day(), 12, 0, 0, 0, nil)
+	checkOutDate := time.Date(requestDto.CheckOutDate.Year(), requestDto.CheckOutDate.Month(), requestDto.CheckOutDate.Day(), 12, 0, 0, 0, nil)
+
+	requestDto.CheckInDate = &checkInDate
+	requestDto.CheckOutDate = &checkOutDate
+
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
-	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), dto.CheckInDate.String(), dto.CheckOutDate.String()))
+	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), requestDto.CheckInDate.String(), requestDto.CheckOutDate.String()))
+
 	if err == nil {
 		buffer.WriteString(rnd.String())
 	}
+
 	requestModel := models.ReservationRequest{
-		RoomId:       dto.RoomId,
+		RoomId:       requestDto.RoomId,
 		ExpireTime:   expireTime,
 		RequestKey:   requestKey,
-		CheckOutDate: dto.CheckOutDate,
-		CheckInDate:  dto.CheckInDate,
+		CheckOutDate: requestDto.CheckOutDate,
+		CheckInDate:  requestDto.CheckInDate,
 	}
 
 	if err := r.DB.Create(&requestModel).Error; err != nil {
