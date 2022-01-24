@@ -24,7 +24,6 @@ func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *do
 	handler.Router = input.Router
 	routerGroup := handler.Router.Group("/reservation")
 	handler.Input = input
-
 	handler.Service = service
 	routerGroup.POST("/room-request", handler.createRequest)
 	routerGroup.POST("", handler.create)
@@ -32,6 +31,7 @@ func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *do
 	routerGroup.POST("/recommend-rate-codes", handler.recommendRateCodes)
 	routerGroup.GET("/:id", handler.find)
 	routerGroup.PUT("/:id", handler.update)
+	routerGroup.PUT("/change-status/:id", handler.changeStatus)
 }
 
 /*=====================================================================================================*/
@@ -337,6 +337,50 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data: result,
+	})
+}
+
+/*===================================================================================*/
+func (handler *ReservationHandler) changeStatus(c echo.Context) error {
+	id, err := utils.ConvertToUint(c.Param("id"))
+
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	reservation, err := handler.Service.Find(id)
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	if reservation == nil {
+		return c.JSON(http.StatusNotFound, nil)
+	}
+
+	statusVal, err := utils.ConvertToUint(c.QueryParam("status"))
+	status := models.ReservationCheckStatus(statusVal)
+
+	if err != nil {
+		handler.Input.Logger.LogError(err.Error())
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	if status == models.CheckIn || status == models.Checkout {
+		reservation.CheckStatus = status
+		_, err := handler.Service.ChangeStatus(id, status)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, nil)
+		}
+
+	} else {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data: reservation,
 	})
 }
 
