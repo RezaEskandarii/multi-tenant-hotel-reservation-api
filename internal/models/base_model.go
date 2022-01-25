@@ -11,4 +11,6 @@ type BaseModel struct {
 	UpdatedAt *time.Time `json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at"`
 	TenantId  uint64     `json:"tenant_id"`
+	CreatedBy uint64     `json:"created_by"`
+	UpdatedBy uint64     `json:"updated_by"`
 }
