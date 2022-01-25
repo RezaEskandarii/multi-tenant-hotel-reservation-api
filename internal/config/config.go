@@ -25,6 +25,13 @@ type Config struct {
 		IgnoreMigration bool   `yaml:"ignore_migration"`
 		SqlDebug        bool   `yaml:"sql_debug"`
 	}
+	// Minio file management
+	Minio struct {
+		Endpoint        string `yaml:"endpoint"`
+		AccessKeyID     string `yaml:"access_key_id"`
+		SecretAccessKey string `yaml:"secret_access_key"`
+		UseSSL          bool   `yaml:"use_ssl"`
+	}
 }
 
 // NewConfig reads config from yml file copies to config struct and returns config struct

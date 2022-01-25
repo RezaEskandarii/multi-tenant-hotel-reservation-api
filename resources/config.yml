@@ -11,3 +11,8 @@ application:
   cluster_name: cluster1
   ignore_migration: false
   sql_debug: true
+minio:
+  endpoint: http://127.0.0.1:9000
+  access_key_iD: miniosecret
+  secret_access_key: miniosecret
+  use_ssl: false
