@@ -11,4 +11,5 @@ type Thumbnail struct {
 	RoomId         uint64 `json:"room_id"`
 	Hotel          Hotel  `json:"hotel"`
 	HotelId        uint64 `json:"hotel_id"`
+	VersionID      string `json:"version_id" gorm:"type:varchar(255)"`
 }
