@@ -23,9 +23,7 @@ func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domai
 	handler.Service = service
 	handler.RateCodeDetailService = rateCodeDetailService
 	handler.Input = input
-
 	routeGroup := handler.Input.Router.Group("/rate-codes")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

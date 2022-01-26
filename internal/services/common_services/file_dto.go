@@ -3,8 +3,6 @@ package common_services
 import "os"
 
 type FileDto struct {
-	FileName   string
-	Bytes      []byte
 	BucketName string
 	ServerName string
 	FileSize   float64

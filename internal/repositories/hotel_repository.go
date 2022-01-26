@@ -7,15 +7,20 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+	"reservation-api/internal/services/common_services"
 )
 
 type HotelRepository struct {
-	DB *gorm.DB
+	DB                  *gorm.DB
+	FileTransferService common_services.IFileTransferService
 }
 
-func NewHotelRepository(db *gorm.DB) *HotelRepository {
+func NewHotelRepository(db *gorm.DB, fileTransferService common_services.IFileTransferService) *HotelRepository {
 
-	return &HotelRepository{DB: db}
+	return &HotelRepository{
+		DB:                  db,
+		FileTransferService: fileTransferService,
+	}
 }
 
 func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {

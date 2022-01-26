@@ -28,6 +28,7 @@ type Hotel struct {
 	HotelTypeId  uint64      `json:"hotel_type_id" gorm:"foreignKey:HotelType" valid:"required"`
 	HotelGrade   *HotelGrade `json:"hotel_grade"  valid:"-"`
 	HotelGradeId uint64      `json:"hotel_grade_id" gorm:"foreignKey:HotelGrade" valid:"required"`
+	Thumbnails   []*Thumbnail
 }
 
 func (r *Hotel) Validate() (bool, error) {
