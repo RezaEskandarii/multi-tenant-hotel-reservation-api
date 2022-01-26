@@ -22,7 +22,6 @@ func (handler *CurrencyHandler) Register(input *dto.HandlerInput, service *domai
 	handler.Service = service
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/currencies")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

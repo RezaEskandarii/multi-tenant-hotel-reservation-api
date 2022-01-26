@@ -21,9 +21,7 @@ type CountryHandler struct {
 func (handler *CountryHandler) Register(input *dto.HandlerInput, service *domain_services.CountryService) {
 	handler.Service = service
 	handler.Input = input
-
 	routeGroup := handler.Input.Router.Group("/countries")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

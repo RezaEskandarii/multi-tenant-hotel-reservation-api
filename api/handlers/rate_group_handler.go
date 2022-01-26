@@ -21,9 +21,7 @@ type RateGroupHandler struct {
 func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *domain_services.RateGroupService) {
 	handler.Service = service
 	handler.Input = input
-
 	routeGroup := handler.Input.Router.Group("/rate-groups")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

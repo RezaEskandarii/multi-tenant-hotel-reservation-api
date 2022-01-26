@@ -20,7 +20,6 @@ type GuestHandler struct {
 func (handler *GuestHandler) Register(input *dto.HandlerInput, service *domain_services.GuestService) {
 	handler.Input = input
 	handler.Service = service
-
 	routeGroup := handler.Input.Router.Group("/guests")
 	routeGroup.POST("", handler.create)
 	routeGroup.GET("/:id", handler.find)
