@@ -133,9 +133,15 @@ func (s *FileTransferService) stream(r io.Reader) error {
 	return nil
 }
 
+// generates randomFileName
 func (s *FileTransferService) generateRandomFileName(filename string) string {
+
+	// get file extension
 	fileExtension := filepath.Ext(filename)
+	// generate random string
 	randomStr := fmt.Sprintf("%s%s%s", filename, time.Now().String(), time.Now().UnixNano())
+	// convert generated random string to SHA256 hash.
 	randomStr = utils.GenerateSHA256(randomStr)
+
 	return fmt.Sprintf("%s%s", randomStr, fileExtension)
 }
