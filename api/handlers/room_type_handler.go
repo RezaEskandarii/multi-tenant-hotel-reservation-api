@@ -22,7 +22,6 @@ func (handler *RoomTypeHandler) Register(input *dto.HandlerInput, service *domai
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/room-type")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

@@ -1,12 +1,15 @@
 package registery
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/cache"
@@ -53,10 +56,11 @@ var (
 )
 
 // RegisterServices register dependencies for services and handlers
-func RegisterServices(db *gorm.DB, router *echo.Group) {
+func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	// set service layer repository and database object.
-	setServicesRepository(db)
+	setServicesRepository(db, cfg)
+
 	logger := applogger.New(nil)
 	i18nTranslator := translator.New()
 
@@ -103,20 +107,23 @@ func RegisterServices(db *gorm.DB, router *echo.Group) {
 }
 
 // set repository dependency
-func setServicesRepository(db *gorm.DB) {
+func setServicesRepository(db *gorm.DB, cfg *config.Config) {
 
 	cacheManager := &cache.Manager{}
-	countryService.Repository = repositories.NewCountryRepository(db)
+	fileService := common_services.FileTransferService{}
+	// fileTransferService context for minio
+	ctx := context.Background()
+	fileTransferService := fileService.New(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID, cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
 
+	countryService.Repository = repositories.NewCountryRepository(db)
 	provinceService.Repository = repositories.NewProvinceRepository(db)
 	cityService.Repository = repositories.NewCityRepository(db)
 	cityService.CacheManager = cacheManager
-
 	currencyService.Repository = repositories.NewCurrencyRepository(db)
 	userService.Repository = repositories.NewUserRepository(db)
 	hotelTypeService.Repository = repositories.NewHotelTypeRepository(db)
 	hotelGradeService.Repository = repositories.NewHotelGradeRepository(db)
-	hotelService.Repository = repositories.NewHotelRepository(db)
+	hotelService.Repository = repositories.NewHotelRepository(db, fileTransferService)
 	roomTypeService.Repository = repositories.NewRoomTypeRepository(db)
 	roomService.Repository = repositories.NewRoomRepository(db)
 	guestService.Repository = repositories.NewGuestRepository(db)
@@ -129,7 +136,7 @@ func setServicesRepository(db *gorm.DB) {
 
 // ApplySeed seeds given json file to database.
 func ApplySeed(db *gorm.DB) error {
-	setServicesRepository(db)
+	setServicesRepository(db, nil)
 	// seed users
 	if err := userService.Seed("./data/seed/users.json"); err != nil {
 		return err

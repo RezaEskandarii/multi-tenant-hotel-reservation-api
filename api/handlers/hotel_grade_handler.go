@@ -22,7 +22,6 @@ func (handler *HotelGradeHandler) Register(input *dto.HandlerInput, service *dom
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/hotel-grades")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)

@@ -8,20 +8,22 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"io"
+	"os"
 	"path/filepath"
 	"reservation-api/internal/utils"
+	"sync"
 	"time"
 )
 
-// IFileTransferService interface is related to file management,
+// FileTransferer interface is related to file management,
 // which includes three upload and delete upload methods
-type IFileTransferService interface {
-	Upload(fileInput *FileDto) (*FileTransferResponse, error)
+type FileTransferer interface {
+	Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*FileTransferResponse, error)
 	Remove(fileName, bucketName, versionID string) error
 	Download(fileName, bucketName string) error
 }
 
-// FileTransferService implements IFileTransferService interface
+// FileTransferService implements FileTransferer interface
 // this struct implements io functions with minio object manager.
 type FileTransferService struct {
 	Client *minio.Client
@@ -46,29 +48,30 @@ func (s *FileTransferService) New(endpoint, accessKeyID, secretAccessKey string,
 }
 
 // Upload uploads files via minion with FileDto input.
-func (s *FileTransferService) Upload(fileInput *FileDto) (*FileTransferResponse, error) {
+func (s *FileTransferService) Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*FileTransferResponse, error) {
 
-	if fileInput.File == nil {
+	if file == nil {
+		wg.Done()
 		return nil, errors.New("file is empty")
 	}
 
-	file := fileInput.File
 	defer file.Close()
 
 	// get file stat.
 	fileStat, err := file.Stat()
 	if err != nil {
+		wg.Done()
 		return nil, err
 	}
 
 	// check bucket exists.
-	bucketExists, err := s.Client.BucketExists(s.Ctx, fileInput.BucketName)
+	bucketExists, err := s.Client.BucketExists(s.Ctx, bucketName)
 	if err != nil {
 		return nil, err
 	}
 	// create bucket if not exists.
 	if !bucketExists {
-		s.Client.MakeBucket(s.Ctx, fileInput.BucketName, minio.MakeBucketOptions{
+		s.Client.MakeBucket(s.Ctx, bucketName, minio.MakeBucketOptions{
 			Region:        "",
 			ObjectLocking: false,
 		})
@@ -76,12 +79,13 @@ func (s *FileTransferService) Upload(fileInput *FileDto) (*FileTransferResponse,
 
 	// generate random fileName
 	fileName := s.generateRandomFileName(fileStat.Name())
-	result, err := s.Client.PutObject(s.Ctx, fileInput.BucketName, fileName, file, fileStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
+	result, err := s.Client.PutObject(s.Ctx, bucketName, fileName, file, fileStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
 
 	if err != nil {
+		wg.Done()
 		return nil, err
 	}
-
+	wg.Done()
 	return &FileTransferResponse{
 		Message:    "Successfully uploaded.",
 		BucketName: result.Bucket,

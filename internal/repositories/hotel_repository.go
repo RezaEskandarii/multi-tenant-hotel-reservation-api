@@ -4,18 +4,20 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"reservation-api/internal/commons"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
+	"sync"
 )
 
 type HotelRepository struct {
 	DB                  *gorm.DB
-	FileTransferService common_services.IFileTransferService
+	FileTransferService common_services.FileTransferer
 }
 
-func NewHotelRepository(db *gorm.DB, fileTransferService common_services.IFileTransferService) *HotelRepository {
+func NewHotelRepository(db *gorm.DB, fileTransferService common_services.FileTransferer) *HotelRepository {
 
 	return &HotelRepository{
 		DB:                  db,
@@ -28,6 +30,43 @@ func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
 	if tx := r.DB.Create(&hotel); tx.Error != nil {
 
 		return nil, tx.Error
+	}
+
+	if hotel.Thumbnails != nil && len(hotel.Thumbnails) > 0 {
+
+		var wg sync.WaitGroup
+		errorsCh := make(chan error, 0)
+
+		for _, thumbnail := range hotel.Thumbnails {
+			if thumbnail.File != nil {
+				wg.Add(1)
+				go func() {
+					result, err := r.FileTransferService.Upload(config.HotelsBucketName, "", thumbnail.File, &wg)
+					if err != nil {
+						errorsCh <- err
+						return
+					}
+
+					thumbnail.VersionID = result.VersionID
+					thumbnail.HotelId = hotel.Id
+					thumbnail.BucketName = result.BucketName
+					thumbnail.FileName = result.FileName
+					thumbnail.FileSize = result.FileSize
+
+					if err := r.DB.Create(&thumbnail).Error; err != nil {
+						errorsCh <- err
+					}
+				}()
+			}
+		}
+		select {
+		case err := <-errorsCh:
+			return nil, err
+		default:
+
+		}
+		wg.Wait()
+		close(errorsCh)
 	}
 
 	return hotel, nil

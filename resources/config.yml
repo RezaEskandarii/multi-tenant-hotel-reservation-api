@@ -12,7 +12,7 @@ application:
   ignore_migration: false
   sql_debug: true
 minio:
-  endpoint: http://127.0.0.1:9000
-  access_key_iD: miniosecret
-  secret_access_key: miniosecret
+  endpoint: 127.0.0.1:9000
+  access_key_id: minioadmin
+  secret_access_key: minioadmin
   use_ssl: false

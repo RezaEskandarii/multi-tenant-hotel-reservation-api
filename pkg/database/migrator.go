@@ -27,6 +27,7 @@ var (
 		models.RateCodeDetail{},
 		models.RateCodeDetailPrice{},
 		models.Sharer{},
+		models.Thumbnail{},
 	}
 )
 
