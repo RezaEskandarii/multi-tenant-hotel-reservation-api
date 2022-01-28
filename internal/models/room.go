@@ -18,12 +18,12 @@ var (
 
 type Room struct {
 	BaseModel
-	Name        string      `json:"name" valid:"required"`
+	Name        string      `json:"name" valid:"required"  gorm:"type:varchar(255)"`
 	RoomType    RoomType    `json:"room_type" valid:"-"`
 	RoomTypeId  uint64      `json:"room_type_id" valid:"required"`
 	MaxBeds     uint64      `json:"max_beds" valid:"required"`
 	CleanStatus CleanStatus `json:"clean_status" valid:"required"`
-	Description string      `json:"description" valid:"maxstringlength(255)"`
+	Description string      `json:"description" valid:"maxstringlength(255)"  gorm:"type:varchar(255)"`
 }
 
 func (r *Room) Validate() (bool, error) {

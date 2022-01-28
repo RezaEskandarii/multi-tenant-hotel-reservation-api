@@ -8,8 +8,8 @@ import (
 // Country country struct
 type Country struct {
 	BaseModel
-	Name      string      `json:"name" valid:"required"`
-	Alias     string      `json:"alias" valid:"required"`
+	Name      string      `json:"name" valid:"required"  gorm:"type:varchar(50)"`
+	Alias     string      `json:"alias" valid:"required"  gorm:"type:varchar(50)"`
 	Provinces []*Province `json:"provinces" gorm:"foreignKey:CountryId" valid:"-"`
 }
 

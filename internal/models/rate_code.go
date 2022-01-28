@@ -7,7 +7,7 @@ import (
 
 type RateCode struct {
 	BaseModel
-	Name        string     `json:"name"  valid:"required"`
+	Name        string     `json:"name"  valid:"required  gorm:"type:varchar(255)""`
 	Hotel       *Hotel     `json:"hotel"  valid:"-"`
 	HotelId     uint64     `json:"hotel_id"  valid:"required"`
 	Currency    *Currency  `json:"currency"  valid:"-"`

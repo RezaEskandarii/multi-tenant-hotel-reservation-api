@@ -5,9 +5,9 @@ import "os"
 // Thumbnail struct
 type Thumbnail struct {
 	BaseModel
-	FileName       string   `json:"file_name"`
-	BucketName     string   `json:"bucket_name"`
-	ServerLocation string   `json:"server_location"`
+	FileName       string   `json:"file_name"        gorm:"type:varchar(255)"`
+	BucketName     string   `json:"bucket_name"      gorm:"type:varchar(255)"`
+	ServerLocation string   `json:"server_location"  gorm:"type:varchar(255)"`
 	Room           Room     `json:"room"  gorm:"foreignKey:RoomId;references:id"`
 	RoomId         uint64   `json:"room_id"`
 	Hotel          Hotel    `json:"hotel"  gorm:"foreignKey:HotelId;references:id"`

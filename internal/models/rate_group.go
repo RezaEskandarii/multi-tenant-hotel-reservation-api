@@ -8,7 +8,7 @@ import (
 // RateGroup is struct for rating group of reservations rate price.
 type RateGroup struct {
 	BaseModel
-	Name        string `json:"name" valid:"required"`
+	Name        string `json:"name" valid:"required"  gorm:"type:varchar(255)"`
 	Description string `json:"description"`
 	HotelId     uint64 `json:"hotel_id" valid:"required"`
 	Hotel       Hotel  `json:"hotel"`

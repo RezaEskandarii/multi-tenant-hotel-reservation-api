@@ -23,20 +23,18 @@ var (
 
 type User struct {
 	BaseModel
-	FirstName            string     `json:"first_name" valid:"required"`
-	LastName             string     `json:"last_name" valid:"required"`
-	Username             string     `json:"username" valid:"required"`
-	Email                string     `json:"email" valid:"required,email"`
-	PhoneNumber          string     `json:"phone_number" valid:"required"`
+	FirstName            string     `json:"first_name" valid:"required"  gorm:"type:varchar(255)"`
+	LastName             string     `json:"last_name" valid:"required"  gorm:"type:varchar(255)"`
+	Username             string     `json:"username" valid:"required"     gorm:"type:varchar(255)"`
+	Email                string     `json:"email" valid:"required,email"  gorm:"type:varchar(255)"`
+	PhoneNumber          string     `json:"phone_number" valid:"required"  gorm:"type:varchar(255)"`
 	BirthDate            *time.Time `json:"birth_date"`
 	PhoneNumberConfirmed bool       `json:"-"`
 	EmailConfirmed       bool       `json:"-"`
-	Password             string     `json:"password"`
+	Password             string     `json:"password"  gorm:"type:varchar(255)"`
 	CityId               int        `json:"city_id"`
 	City                 *City      `json:"city" valid:"-"`
 	Gender               Gender     `json:"gender" valid:"required"`
-	PassportNumber       string     `json:"passport_number"`
-	NationalId           string     `json:"national_id" valid:"required"`
 	Address              string     `json:"address"`
 	IsActive             bool       `json:"is_active"`
 }

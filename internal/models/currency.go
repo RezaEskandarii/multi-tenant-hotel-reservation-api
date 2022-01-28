@@ -7,8 +7,8 @@ import (
 
 type Currency struct {
 	BaseModel
-	Name   string `json:"name" valid:"required"`
-	Symbol string `json:"symbol" valid:"required"`
+	Name   string `json:"name" valid:"required"    gorm:"type:varchar(50)"`
+	Symbol string `json:"symbol" valid:"required"  gorm:"type:varchar(50)"`
 }
 
 // Validate validates currency struct
