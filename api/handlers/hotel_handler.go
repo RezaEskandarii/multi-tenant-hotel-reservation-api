@@ -22,7 +22,6 @@ func (handler *HotelHandler) Register(input *dto.HandlerInput, service *domain_s
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/hotels")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -33,10 +32,10 @@ func (handler *HotelHandler) Register(input *dto.HandlerInput, service *domain_s
 /*====================================================================================*/
 func (handler *HotelHandler) create(c echo.Context) error {
 
-	model := &models.Hotel{}
+	createDto := dto.HotelCreateDto{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&createDto); err != nil {
 		handler.Input.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -45,8 +44,10 @@ func (handler *HotelHandler) create(c echo.Context) error {
 			Message:      message_keys.BadRequest,
 		})
 	}
+	model := createDto.Data
+	///	model.Thumbnails = createDto.Thumbnails
 
-	result, err := handler.Service.Create(model)
+	result, err := handler.Service.Create(&model)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{

@@ -51,15 +51,11 @@ func getHttpRouter() *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
 
-	corsCfg := middleware.CORSConfig{
-		Skipper: func(context echo.Context) bool {
-			return true
-		},
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
-	}
-
-	e.Use(middleware.CORSWithConfig(corsCfg))
+	}))
 
 	return e
 }

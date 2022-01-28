@@ -37,21 +37,22 @@ func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
 		var wg sync.WaitGroup
 		errorsCh := make(chan error, 0)
 
-		for _, thumbnail := range hotel.Thumbnails {
-			if thumbnail.File != nil {
+		for _, file := range hotel.Thumbnails {
+			if file != nil {
 				wg.Add(1)
 				go func() {
-					result, err := r.FileTransferService.Upload(config.HotelsBucketName, "", thumbnail.File, &wg)
+					result, err := r.FileTransferService.Upload(config.HotelsBucketName, "", file, &wg)
 					if err != nil {
 						errorsCh <- err
 						return
 					}
-
-					thumbnail.VersionID = result.VersionID
-					thumbnail.HotelId = hotel.Id
-					thumbnail.BucketName = result.BucketName
-					thumbnail.FileName = result.FileName
-					thumbnail.FileSize = result.FileSize
+					thumbnail := models.Thumbnail{
+						VersionID:  result.VersionID,
+						HotelId:    hotel.Id,
+						BucketName: result.BucketName,
+						FileName:   result.FileName,
+						FileSize:   result.FileSize,
+					}
 
 					if err := r.DB.Create(&thumbnail).Error; err != nil {
 						errorsCh <- err

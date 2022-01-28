@@ -1,5 +1,10 @@
 package dto
 
+import (
+	"os"
+	"reservation-api/internal/models"
+)
+
 type HotelUpdateDto struct {
 	Name         string  `json:"name" valid:"required"`
 	PhoneNumber1 string  `json:"phone_number1" valid:"required"`
@@ -16,4 +21,9 @@ type HotelUpdateDto struct {
 	Description  string  `json:"description"`
 	HotelTypeId  uint64  `json:"hotel_type_id" valid:"required"`
 	HotelGradeId uint64  `json:"hotel_grade_id" valid:"required"`
+}
+
+type HotelCreateDto struct {
+	Data       models.Hotel `json:"data"`
+	Thumbnails os.File      `json:"thumbnails"`
 }
