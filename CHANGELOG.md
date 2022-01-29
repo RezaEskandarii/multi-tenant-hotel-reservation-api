@@ -2,6 +2,9 @@
 ## [Unreleased]
 
 ### Doc
+- add document to fileTransferService struct
+- add document to fileTransferService struct
+- add document to createReservationRequest function
 - add comment to handlers
 - add comment
 - change readme file content.
@@ -20,6 +23,12 @@
 - regenerate changelog file
 
 ### Feat
+- implement remove and download function in file_transfer_service
+- implement upload function in file_transfer_service
+- add new fields to baseModel
+- add changeStatus function to reservation_handler
+- implement update reservation function
+- implement update function in reservation_repository
 - add rateCodePrice field to reservation model
 - seed roomTypes on application startup
 - add seed function to room_type_repository
@@ -141,6 +150,7 @@
 - add user service
 
 ### Fix
+- fix location value in reservationRequest checkin and checkout date
 - implement ChangeStatus function in reservation_repository and reservation_service
 - prevent to add new reservation for past dates
 - prevent to add new reservation for past dates
@@ -156,6 +166,14 @@
 - register rate group handler in service registry
 
 ### Refactor
+- add gorm varchar to models string fields
+- refactor hotelHandler codes
+- refactor fileTransferService codes
+- refactor handlers name
+- refactor rateCodeHandler
+- set reservation request checkin and checkout date to 12:00
+- check reservation request checkin and checkout date null value
+- refactor reservationHandler codes
 - refactor reservationRepository
 - refactor reservationRepository
 - refactor createReservation function
