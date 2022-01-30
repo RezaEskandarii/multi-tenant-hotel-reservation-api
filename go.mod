@@ -51,6 +51,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/onatm/clockwerk v0.0.0-20190910145222-354c9bd6cf28 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/procyon-projects/chrono v1.0.0 // indirect
 	github.com/rs/xid v1.2.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
