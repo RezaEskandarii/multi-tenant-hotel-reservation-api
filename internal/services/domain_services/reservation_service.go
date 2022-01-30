@@ -67,3 +67,8 @@ func (s *ReservationService) Find(id uint64) (*models.Reservation, error) {
 func (s *ReservationService) FindReservationRequest(requestKey string) (*models.ReservationRequest, error) {
 	return s.Repository.FindReservationRequest(requestKey)
 }
+
+// RemoveExpiredReservationRequests removes expired reservation requests.
+func (s *ReservationService) RemoveExpiredReservationRequests() error {
+	return s.Repository.RemoveExpiredReservationRequests()
+}

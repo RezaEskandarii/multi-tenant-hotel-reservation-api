@@ -264,6 +264,14 @@ func (r *ReservationRepository) FindReservationRequest(requestKey string) (*mode
 	return &reservationRequest, nil
 }
 
+func (r *ReservationRepository) RemoveExpiredReservationRequests() error {
+	err := r.DB.Where("expire_time < ?", time.Now()).Delete(&models.ReservationRequest{}).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 /*================= private functions ===========================================================*/
 
 func (r *ReservationRepository) preloadReservationRelations(query *gorm.DB) *gorm.DB {
