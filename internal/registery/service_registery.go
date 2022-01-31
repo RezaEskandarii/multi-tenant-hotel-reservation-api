@@ -104,6 +104,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
 
 	reservationHandler.Register(handlerInput, reservationService)
+
+	scheduleRemoveExpiredReservationRequests(reservationService, logger)
 }
 
 // set repository dependency
