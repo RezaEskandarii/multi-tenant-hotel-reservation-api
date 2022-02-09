@@ -5,7 +5,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
-	"reservation-api/api/middlewares"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/repositories"
@@ -75,7 +74,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 	authHandler.Register(handlerInput, userService)
 
 	// add authentication middleware to all routes.
-	router.Use( /**middlewares.JWTAuthMiddleware, */ middlewares.AuditMiddleware(userService, auditService, handlerInput.AuditChannel))
+	router.Use( /**middlewares.JWTAuthMiddleware, */ )
 
 	countryHandler.Register(handlerInput, countryService)
 
