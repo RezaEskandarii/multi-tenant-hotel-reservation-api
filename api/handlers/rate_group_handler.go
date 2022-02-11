@@ -54,7 +54,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditChannel <- result
+
 	return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
 		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
@@ -97,7 +97,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	}
 
 	if result, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditChannel <- result
+
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,

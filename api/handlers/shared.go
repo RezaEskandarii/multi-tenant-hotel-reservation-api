@@ -1,6 +1,9 @@
 package handlers
 
-import "github.com/labstack/echo/v4"
+import (
+	"fmt"
+	"github.com/labstack/echo/v4"
+)
 
 var (
 	paginationInput = "paginationInput"
@@ -16,4 +19,9 @@ func getAcceptLanguage(c echo.Context) string {
 		lang = "en"
 	}
 	return lang
+}
+
+// returns authenticated user from http Context
+func getCurrentUser(c echo.Context) string {
+	return fmt.Sprintf("%s", c.Get("username"))
 }

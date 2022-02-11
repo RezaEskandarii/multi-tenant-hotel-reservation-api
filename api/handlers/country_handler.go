@@ -53,7 +53,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditChannel <- output
+
 	return c.JSON(http.StatusBadRequest, ApiResponse{
 		ResponseCode: http.StatusOK,
 		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
@@ -96,7 +96,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if output, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditChannel <- output
+
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,

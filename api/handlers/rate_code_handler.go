@@ -60,7 +60,6 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditChannel <- result
 
 	return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
@@ -106,7 +105,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 
 	if result, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditChannel <- result
+
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,

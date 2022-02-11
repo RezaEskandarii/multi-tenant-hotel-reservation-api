@@ -49,8 +49,6 @@ func (handler *GuestHandler) create(c echo.Context) error {
 		})
 	}
 
-	handler.Input.AuditChannel <- model
-
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,
 		Message: handler.Input.Translator.Localize(lang, message_keys.Created),
@@ -88,8 +86,6 @@ func (handler *GuestHandler) update(c echo.Context) error {
 			Message: handler.Input.Translator.Localize(lang, err.Error()),
 		})
 	}
-
-	handler.Input.AuditChannel <- model
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,

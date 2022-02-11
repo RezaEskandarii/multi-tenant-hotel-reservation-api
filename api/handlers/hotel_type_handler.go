@@ -22,7 +22,6 @@ func (handler *HotelTypeHandler) Register(input *dto.HandlerInput, service *doma
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/hotel-types")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -57,8 +56,6 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 			Message:      "",
 		})
 	}
-
-	handler.Input.AuditChannel <- result
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
@@ -104,8 +101,6 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
-
-	handler.Input.AuditChannel <- updatedModel
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         updatedModel,

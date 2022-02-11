@@ -33,6 +33,7 @@ var (
 	auditService          = domain_services.NewAuditService()
 	rateCodeDetailService = domain_services.NewRateCodeDetailService()
 	reservationService    = domain_services.NewReservationService()
+	paymentService        = domain_services.NewPaymentService()
 )
 
 // handlers
@@ -52,6 +53,7 @@ var (
 	rateCodeHandler    = handlers.RateCodeHandler{}
 	authHandler        = handlers.AuthHandler{}
 	reservationHandler = handlers.ReservationHandler{}
+	paymentHandler     = handlers.PaymentHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -103,6 +105,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
 
 	reservationHandler.Register(handlerInput, reservationService)
+
+	paymentHandler.Register(handlerInput, paymentService)
 
 	scheduleRemoveExpiredReservationRequests(reservationService, logger)
 }

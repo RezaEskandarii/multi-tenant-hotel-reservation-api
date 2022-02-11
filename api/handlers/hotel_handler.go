@@ -57,8 +57,6 @@ func (handler *HotelHandler) create(c echo.Context) error {
 		})
 	}
 
-	handler.Input.AuditChannel <- result
-
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
@@ -116,8 +114,6 @@ func (handler *HotelHandler) update(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
-
-	handler.Input.AuditChannel <- updatedModel
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         updatedModel,

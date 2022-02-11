@@ -7,7 +7,7 @@ database:
   name: hotel_reservation
   engine: postgres
 application:
-  port: 8080
+  port: 80
   cluster_name: cluster1
   ignore_migration: false
   sql_debug: true

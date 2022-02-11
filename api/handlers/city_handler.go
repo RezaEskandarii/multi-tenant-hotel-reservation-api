@@ -31,7 +31,12 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *domain_se
 // create new city
 func (handler *CityHandler) create(c echo.Context) error {
 
+	currentUser := getCurrentUser(c)
+
 	model := models.City{}
+	model.CreatedBy = currentUser
+	model.UpdatedBy = currentUser
+
 	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&model); err != nil {
@@ -44,7 +49,6 @@ func (handler *CityHandler) create(c echo.Context) error {
 	}
 
 	if _, err := handler.Service.Create(&model); err == nil {
-		handler.Input.AuditChannel <- model
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -76,6 +80,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 
 	lang := getAcceptLanguage(c)
+	currentUser := getCurrentUser(c)
 	model, err := handler.Service.Find(id)
 
 	if err != nil {
@@ -104,9 +109,8 @@ func (handler *CityHandler) update(c echo.Context) error {
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
-
+	model.UpdatedBy = currentUser
 	if output, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditChannel <- output
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,

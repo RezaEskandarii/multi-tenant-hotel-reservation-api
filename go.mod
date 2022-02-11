@@ -55,6 +55,7 @@ require (
 	github.com/procyon-projects/chrono v1.0.0 // indirect
 	github.com/rs/xid v1.2.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stripe/stripe-go/v72 v72.86.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	go.uber.org/atomic v1.7.0 // indirect

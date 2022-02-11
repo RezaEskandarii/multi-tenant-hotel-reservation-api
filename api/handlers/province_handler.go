@@ -50,11 +50,10 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	}
 
 	if result, err := handler.Service.Create(model); err == nil {
-		handler.Input.AuditChannel <- result
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         model,
+				Data:         result,
 				ResponseCode: http.StatusOK,
 				Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
 			})
@@ -110,7 +109,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	}
 
 	if result, err := handler.Service.Update(model); err == nil {
-		handler.Input.AuditChannel <- result
+
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,

@@ -21,9 +21,7 @@ type RoomHandler struct {
 func (handler *RoomHandler) Register(input *dto.HandlerInput, service *domain_services.RoomService) {
 	handler.Service = service
 	handler.Input = input
-
 	routeGroup := input.Router.Group("/room")
-
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -56,7 +54,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditChannel <- result
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
@@ -98,7 +96,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
-	handler.Input.AuditChannel <- updatedModel
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         updatedModel,
 		ResponseCode: http.StatusOK,
