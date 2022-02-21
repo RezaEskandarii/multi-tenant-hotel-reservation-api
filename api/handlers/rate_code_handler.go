@@ -226,7 +226,7 @@ func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 			Message:      err.Error(),
 		})
 	}
-	handler.Input.AuditChannel <- result
+
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,

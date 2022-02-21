@@ -66,10 +66,9 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 	i18nTranslator := translator.New()
 
 	handlerInput := &dto.HandlerInput{
-		Router:       router,
-		Translator:   i18nTranslator,
-		Logger:       logger,
-		AuditChannel: make(chan interface{}, 1),
+		Router:     router,
+		Translator: i18nTranslator,
+		Logger:     logger,
 	}
 
 	// authHandler does bot need to authMiddleware.
