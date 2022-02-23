@@ -1,0 +1,22 @@
+[
+  {
+    "name": "ریال ایران",
+    "symbol": "IRR"
+  },
+  {
+    "name": "usa dollar",
+    "symbol": "USD"
+  },
+  {
+    "name": "Canada dollar",
+    "symbol": "CAD"
+  },
+  {
+    "name": "british Pound",
+    "symbol": "GBP"
+  },
+  {
+    "name": "United Arab Emirates dirham",
+    "symbol": "AED"
+  }
+]

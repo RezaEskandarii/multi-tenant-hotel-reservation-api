@@ -5,6 +5,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/utils"
 )
 
 type CurrencyRepository struct {
@@ -70,4 +71,26 @@ func (r *CurrencyRepository) FindBySymbol(symbol string) (*models.Currency, erro
 	}
 
 	return &model, nil
+}
+
+func (r *CurrencyRepository) Seed(jsonFilePath string) error {
+
+	currencies := make([]models.Currency, 0)
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &currencies); err == nil {
+		for _, currency := range currencies {
+			var count int64 = 0
+			if err := r.DB.Model(models.Currency{}).Where("symbol", currency.Symbol).Count(&count).Error; err != nil {
+				return err
+			} else {
+				if count == 0 {
+					if err := r.DB.Create(&currency).Error; err != nil {
+						return err
+					}
+				}
+			}
+		}
+	} else {
+		return err
+	}
+	return nil
 }

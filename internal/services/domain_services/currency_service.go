@@ -45,3 +45,9 @@ func (s *CurrencyService) FindBySymbol(symbol string) (*models.Currency, error) 
 
 	return s.Repository.FindBySymbol(symbol)
 }
+
+// Seed
+func (s *CurrencyService) Seed(jsonFilePath string) error {
+
+	return s.Repository.Seed(jsonFilePath)
+}
