@@ -1,6 +1,9 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="dev"></a>
+## dev - 2022-02-23
 ### Doc
 - add document to fileTransferService struct
 - add document to fileTransferService struct
@@ -21,8 +24,19 @@
 - regenerate changelog file
 - add some comments
 - regenerate changelog file
+- add document to province service functions
+- add document to currency service functions
+- add document to country service functions
+- add document to city service functions
+- add changelog file
+- add document and comments
+- add document
 
 ### Feat
+- add seed function to currency_service
+- add charge model
+- add scheduleRemoveExpiredReservationRequests function to schedule remove expired reservation requests
+- add RemoveExpiredReservationRequests in reservation_service
 - implement remove and download function in file_transfer_service
 - implement upload function in file_transfer_service
 - add new fields to baseModel
@@ -148,8 +162,40 @@
 - add findByUsername function in userService
 - add user handler
 - add user service
+- add user reository
+- add i18n translator to city handler
+- add i18n translator to city handler
+- add message_keys module to hold translation message files keys
+- add message_keys module to hold translation message files keys
+- add localized message translator module
+- add user model
+- add currency handler
+- add currency service
+- add currency repository
+- add currency model
+- implement province handler
+- add province service
+- add province repository
+- add province struct
+- implement generic findAll function in repository layer
+- add get cities handler in country_handler
+- add get cities function in country_repository
+- register city handler
+- implement city handler
+- implement city respository
+- implement pagination in country repository
+- implement update and find function in country handler
+- add some middlewares to echo router
+- implement country handler's create method
+- implement country handler
+- implement paginated_list's methods
+- implement application config struct
+- add country_repository
+- add country and city model
+- add project structure and folders
 
 ### Fix
+- check authenticated user exists in jwt_auth_middleware
 - fix location value in reservationRequest checkin and checkout date
 - implement ChangeStatus function in reservation_repository and reservation_service
 - prevent to add new reservation for past dates
@@ -164,8 +210,11 @@
 - regenerate gmo mod file
 - regenerate gmo mod file
 - register rate group handler in service registry
+- fix check error in create city handler
 
 ### Refactor
+- remove extra fields from handler_input model
+- change task scheduler library with gocron
 - add gorm varchar to models string fields
 - refactor hotelHandler codes
 - refactor fileTransferService codes
@@ -217,60 +266,6 @@
 - rename some structs
 - add logs file to gitignore
 - refactor services dependencies
-
-### Test
-- refactor country_service_test
-- add country service test
-
-
-<a name="v0.1"></a>
-## v0.1 - 2021-06-29
-### Doc
-- add document to province service functions
-- add document to currency service functions
-- add document to country service functions
-- add document to city service functions
-- add changelog file
-- add document and comments
-- add document
-
-### Feat
-- add user reository
-- add i18n translator to city handler
-- add i18n translator to city handler
-- add message_keys module to hold translation message files keys
-- add message_keys module to hold translation message files keys
-- add localized message translator module
-- add user model
-- add currency handler
-- add currency service
-- add currency repository
-- add currency model
-- implement province handler
-- add province service
-- add province repository
-- add province struct
-- implement generic findAll function in repository layer
-- add get cities handler in country_handler
-- add get cities function in country_repository
-- register city handler
-- implement city handler
-- implement city respository
-- implement pagination in country repository
-- implement update and find function in country handler
-- add some middlewares to echo router
-- implement country handler's create method
-- implement country handler
-- implement paginated_list's methods
-- implement application config struct
-- add country_repository
-- add country and city model
-- add project structure and folders
-
-### Fix
-- fix check error in create city handler
-
-### Refactor
 - change localizer directory name to translator
 - remove main to cmd directory
 - rename data field to records in paginates list struct
@@ -278,5 +273,9 @@
 - refactor migration function
 - add yaml package to go mod
 
+### Test
+- refactor country_service_test
+- add country service test
 
-[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/v0.1...HEAD
+
+[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/dev...HEAD
