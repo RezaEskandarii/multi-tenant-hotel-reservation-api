@@ -16,3 +16,6 @@ minio:
   access_key_id: minioadmin
   secret_access_key: minioadmin
   use_ssl: false
+messabebroker:
+  url: amqp://guest:guest@localhost:5672/
+  management: http://localhost:15672/

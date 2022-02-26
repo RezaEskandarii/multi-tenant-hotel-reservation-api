@@ -32,6 +32,9 @@ type Config struct {
 		SecretAccessKey string `yaml:"secret_access_key"`
 		UseSSL          bool   `yaml:"use_ssl"`
 	}
+	MessageBroker struct {
+		Url string `yaml:"url"`
+	}
 }
 
 // NewConfig reads config from yml file copies to config struct and returns config struct
