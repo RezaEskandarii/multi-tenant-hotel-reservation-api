@@ -2,6 +2,7 @@ package registery
 
 import (
 	"context"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
@@ -12,6 +13,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/cache"
+	"reservation-api/pkg/rabbitmq"
 	"reservation-api/pkg/translator"
 )
 
@@ -71,6 +73,16 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 		Logger:     logger,
 	}
 
+	q := rabbitmq.New(cfg.MessageBroker.Url, logger)
+
+	h := func(s interface{}) {
+		fmt.Println(fmt.Sprintf("%s", s))
+	}
+
+	go func() {
+		er := q.Consume("email", h)
+		fmt.Println(er)
+	}()
 	// authHandler does bot need to authMiddleware.
 	authHandler.Register(handlerInput, userService)
 

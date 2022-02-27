@@ -1,14 +1,18 @@
 package domain_services
 
 import (
+	"fmt"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/pkg/rabbitmq"
 	"time"
 )
 
 type ReservationService struct {
-	Repository *repositories.ReservationRepository
+	Repository           *repositories.ReservationRepository
+	MessageBrokerManager rabbitmq.MessageBrokerManager
 }
 
 // NewReservationService returns new ReservationService
@@ -19,7 +23,12 @@ func NewReservationService() *ReservationService {
 // Create creates new Reservation.
 func (s *ReservationService) Create(model *models.Reservation) (*models.Reservation, error) {
 
-	return s.Repository.Create(model)
+	result, err := s.Repository.Create(model)
+	if err != nil {
+		fmt.Println(result.ToJson())
+		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, result.ToJson())
+	}
+	return result, err
 }
 
 // ChangeStatus changes the reservation check status.
