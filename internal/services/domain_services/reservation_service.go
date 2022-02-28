@@ -6,13 +6,13 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
-	"reservation-api/pkg/rabbitmq"
+	"reservation-api/pkg/message_broker"
 	"time"
 )
 
 type ReservationService struct {
 	Repository           *repositories.ReservationRepository
-	MessageBrokerManager rabbitmq.MessageBrokerManager
+	MessageBrokerManager message_broker.MessageBrokerManager
 }
 
 // NewReservationService returns new ReservationService

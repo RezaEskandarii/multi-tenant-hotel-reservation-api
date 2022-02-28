@@ -13,7 +13,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/cache"
-	"reservation-api/pkg/rabbitmq"
+	"reservation-api/pkg/message_broker"
 	"reservation-api/pkg/translator"
 )
 
@@ -73,7 +73,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 		Logger:     logger,
 	}
 
-	q := rabbitmq.New(cfg.MessageBroker.Url, logger)
+	q := message_broker.New(cfg.MessageBroker.Url, logger)
 
 	h := func(s interface{}) {
 		fmt.Println(fmt.Sprintf("%s", s))
