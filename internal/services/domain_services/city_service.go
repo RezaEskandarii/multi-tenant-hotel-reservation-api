@@ -21,16 +21,19 @@ func NewCityService() *CityService {
 
 // Create creates new city.
 func (s *CityService) Create(city *models.City) (*models.City, error) {
+
 	city, err := s.Repository.Create(city)
+
 	if err != nil && city != nil {
-		s.CacheManager.Set(utils.GenerateCacheKey(city.Id, city.Name), city, nil)
+		s.CacheManager.Set(getCityCacheKey(city), city, nil)
 	}
+
 	return city, err
 }
 
 // Update updates city.
 func (s *CityService) Update(city *models.City) (*models.City, error) {
-	s.CacheManager.Update(utils.GenerateCacheKey(city.Id, city.Name), city)
+	s.CacheManager.Update(getCityCacheKey(city), city)
 	return s.Repository.Update(city)
 }
 
@@ -40,8 +43,25 @@ func (s *CityService) Find(id uint64) (*models.City, error) {
 	return s.Repository.Find(id)
 }
 
+// Delete delete city by given id.
+func (s *CityService) Delete(id uint64) error {
+
+	city, err := s.Find(id)
+
+	if err == nil {
+		s.CacheManager.Del(getCityCacheKey(city))
+		return s.Repository.Delete(id)
+	}
+	return err
+}
+
 // FindAll returns paginates list of cities.
 func (s *CityService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
+
+}
+
+func getCityCacheKey(city *models.City) string {
+	return utils.GenerateCacheKey(city.Id, city.Name, city.ProvinceId)
 }

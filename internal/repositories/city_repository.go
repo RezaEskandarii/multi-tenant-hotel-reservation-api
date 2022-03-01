@@ -44,6 +44,16 @@ func (r *CityRepository) Update(city *models.City) (*models.City, error) {
 	return city, nil
 }
 
+func (r *CityRepository) Delete(id uint64) error {
+
+	if err := r.DB.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
+
+		return err
+	}
+
+	return nil
+}
+
 func (r *CityRepository) Find(id uint64) (*models.City, error) {
 
 	model := models.City{}
