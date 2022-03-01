@@ -1,4 +1,4 @@
-package common_services
+package dto
 
 type FileTransferResponse struct {
 	Message    string `json:"message"`

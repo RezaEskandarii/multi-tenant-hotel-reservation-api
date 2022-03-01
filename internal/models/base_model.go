@@ -1,7 +1,6 @@
 package models
 
 import (
-	"encoding/json"
 	"time"
 )
 
@@ -14,12 +13,4 @@ type BaseModel struct {
 	TenantId  uint64     `json:"tenant_id"`
 	CreatedBy string     `json:"created_by"`
 	UpdatedBy string     `json:"updated_by"`
-}
-
-func (b BaseModel) ToJson() []byte {
-	result, err := json.Marshal(&b)
-
-	if err != nil {
-		return result
-	}
 }

@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reservation-api/internal/dto"
 	"reservation-api/internal/utils"
 	"sync"
 	"time"
@@ -18,7 +19,7 @@ import (
 // FileTransferer interface is related to file management,
 // which includes three upload and delete upload methods
 type FileTransferer interface {
-	Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*FileTransferResponse, error)
+	Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*dto.FileTransferResponse, error)
 	Remove(fileName, bucketName, versionID string) error
 	Download(fileName, bucketName string) error
 }
@@ -48,7 +49,7 @@ func (s *FileTransferService) New(endpoint, accessKeyID, secretAccessKey string,
 }
 
 // Upload uploads files via minion with FileDto input.
-func (s *FileTransferService) Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*FileTransferResponse, error) {
+func (s *FileTransferService) Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*dto.FileTransferResponse, error) {
 
 	if file == nil {
 		wg.Done()
@@ -86,7 +87,7 @@ func (s *FileTransferService) Upload(bucketName, serverName string, file *os.Fil
 		return nil, err
 	}
 	wg.Done()
-	return &FileTransferResponse{
+	return &dto.FileTransferResponse{
 		Message:    "Successfully uploaded.",
 		BucketName: result.Bucket,
 		FileName:   fileName,

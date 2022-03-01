@@ -6,6 +6,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal/utils"
 	"reservation-api/pkg/message_broker"
 	"time"
 )
@@ -25,8 +26,8 @@ func (s *ReservationService) Create(model *models.Reservation) (*models.Reservat
 
 	result, err := s.Repository.Create(model)
 	if err != nil {
-		fmt.Println(result.ToJson())
-		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, result.ToJson())
+		fmt.Println(utils.ToJson(result))
+		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(result))
 	}
 	return result, err
 }

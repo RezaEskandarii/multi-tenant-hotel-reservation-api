@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -34,4 +35,14 @@ func GenerateCacheKey(keys ...interface{}) string {
 		strBuilder.Write([]byte(str))
 	}
 	return GenerateSHA256(strBuilder.String())
+}
+
+// ToJson converts given model to json and returns as a byte array.
+func ToJson(model interface{}) []byte {
+	result, err := json.Marshal(&model)
+
+	if err == nil {
+		return result
+	}
+	return nil
 }
