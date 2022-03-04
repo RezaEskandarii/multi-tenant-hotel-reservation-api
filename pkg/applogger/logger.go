@@ -97,6 +97,5 @@ func (l *AppLogger) LogDebug(message string) {
 // LogError Logs in Error level.
 func (l *AppLogger) LogError(err interface{}) {
 
-	message := err.(string)
-	writeLog(errorLevel, message)
+	writeLog(errorLevel, fmt.Sprintf("%s", err))
 }

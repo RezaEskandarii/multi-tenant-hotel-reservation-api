@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"reservation-api/internal/registery"
+	"reservation-api/internal/service_registry"
 	"reservation-api/pkg/database"
 )
 
@@ -27,7 +27,7 @@ func loadFlags() {
 
 	if seed {
 		fmt.Println("seed started...")
-		if err := registery.ApplySeed(db); err != nil {
+		if err := service_registry.ApplySeed(db); err != nil {
 			logger.LogError(err)
 			os.Exit(1)
 		}

@@ -32,8 +32,16 @@ type Config struct {
 		SecretAccessKey string `yaml:"secret_access_key"`
 		UseSSL          bool   `yaml:"use_ssl"`
 	}
+	// Message broker config
 	MessageBroker struct {
 		Url string `yaml:"url"`
+	}
+	// Smtp config
+	Smtp struct {
+		Username string `yaml:"username"`
+		Password string `yaml:"password"`
+		Host     string `yaml:"host"`
+		Port     int    `yaml:"port"`
 	}
 }
 

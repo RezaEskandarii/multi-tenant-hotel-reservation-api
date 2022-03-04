@@ -8,20 +8,20 @@ import (
 
 type EventService struct {
 	MessageBrokerManager message_broker.MessageBrokerManager
-	EmailService         *EmailService
+	EmailSender          EmailSender
 }
 
-func NewEventService(broker message_broker.MessageBrokerManager, emailService *EmailService) *EventService {
+func NewEventService(broker message_broker.MessageBrokerManager, emailSender EmailSender) *EventService {
 
 	return &EventService{
 		MessageBrokerManager: broker,
-		EmailService:         emailService,
+		EmailSender:          emailSender,
 	}
 }
 
 func (e *EventService) SendEmailToGuestOnReservation() {
 
-	e.MessageBrokerManager.Consume(config.ReservationQueueName, func(payload interface{}) {
-		fmt.Println(payload)
+	e.MessageBrokerManager.Consume(config.ReservationQueueName, func(payload []byte) {
+		fmt.Println(string(payload))
 	})
 }

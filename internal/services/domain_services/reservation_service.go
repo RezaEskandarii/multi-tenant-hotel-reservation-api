@@ -25,9 +25,9 @@ func (s *ReservationService) Create(model *models.Reservation) (*models.Reservat
 
 	result, err := s.Repository.Create(model)
 	if err != nil {
-		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(result))
+		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(model))
 	}
-	return result, err
+	return result, nil
 }
 
 // ChangeStatus changes the reservation check status.

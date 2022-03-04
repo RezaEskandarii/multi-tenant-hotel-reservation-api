@@ -19,3 +19,8 @@ minio:
 messagebroker:
   url: amqp://guest:guest@localhost:5672/
   management: http://localhost:15672/
+  smtp:
+    host: smt.p.test
+    username: test
+    password: test
+    port: 857

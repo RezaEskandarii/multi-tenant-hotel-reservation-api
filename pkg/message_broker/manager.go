@@ -10,7 +10,7 @@ type MessageBrokerManager interface {
 	// PublishMessage publish message in given queue name
 	PublishMessage(qName string, payload []byte) error
 	// Consume consumes message in given queue name
-	Consume(qName string, fn func(payload interface{})) error
+	Consume(qName string, fn func(payload []byte)) error
 }
 
 // RabbitMQManager implements MessageBrokerManager interface.
@@ -56,7 +56,7 @@ func (m *RabbitMQManager) PublishMessage(qName string, payload []byte) error {
 
 // Consume consumes message firm given queue name
 // and runs given function after consume message.
-func (m RabbitMQManager) Consume(qName string, fn func(payload interface{})) error {
+func (m RabbitMQManager) Consume(qName string, fn func(payload []byte)) error {
 
 	ch, err := getChannel(qName, m.Connection)
 	defer ch.Close()
@@ -74,7 +74,7 @@ func (m RabbitMQManager) Consume(qName string, fn func(payload interface{})) err
 
 	go func() {
 		for msg := range delivery {
-			fn(msg)
+			fn(msg.Body)
 		}
 	}()
 

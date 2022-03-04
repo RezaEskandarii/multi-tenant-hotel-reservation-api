@@ -39,6 +39,11 @@ func GenerateCacheKey(keys ...interface{}) string {
 
 // ToJson converts given model to json and returns as a byte array.
 func ToJson(model interface{}) []byte {
+
+	if model == nil {
+		return nil
+	}
+
 	result, err := json.Marshal(&model)
 
 	if err == nil {

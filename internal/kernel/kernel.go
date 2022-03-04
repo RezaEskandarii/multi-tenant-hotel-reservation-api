@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
 	"reservation-api/internal/config"
-	"reservation-api/internal/registery"
+	"reservation-api/internal/service_registry"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/database"
 )
@@ -37,7 +37,7 @@ func Run() error {
 		db = db.Debug()
 	}
 
-	registery.RegisterServices(db, v1RouterGroup, cfg)
+	service_registry.RegisterServices(db, v1RouterGroup, cfg)
 	httpRouter.Logger.Fatal(httpRouter.Start(fmt.Sprintf(":%s", cfg.Application.Port)))
 
 	return nil

@@ -31,8 +31,8 @@ type FileTransferService struct {
 	Ctx    context.Context
 }
 
-// New returns new instance of FileTransferService struct and gives minio client's config.
-func (s *FileTransferService) New(endpoint, accessKeyID, secretAccessKey string, useSSL bool, ctx context.Context) *FileTransferService {
+// NewFileTransferService returns new instance of FileTransferService struct and gives minio client's config.
+func NewFileTransferService(endpoint, accessKeyID, secretAccessKey string, useSSL bool, ctx context.Context) *FileTransferService {
 	minioClient, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
 		Secure: useSSL,

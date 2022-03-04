@@ -1,4 +1,4 @@
-package registery
+package service_registry
 
 import (
 	"github.com/jasonlvhit/gocron"
