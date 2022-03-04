@@ -1,0 +1,18 @@
+{
+  "name": "",
+  "phone_number1": "",
+  "phone_number2": "",
+  "province_id": 0,
+  "city_id": 0,
+  "address": "",
+  "postal_code": "",
+  "longitude": 0,
+  "latitude": 0,
+  "fax_number": "",
+  "website": "",
+  "email_address": "",
+  "owner_id": 0,
+  "description": "",
+  "hotel_type_id": "",
+  "hotel_grade_id": ""
+}

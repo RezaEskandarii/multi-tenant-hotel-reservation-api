@@ -1,0 +1,22 @@
+[
+  {
+    "name": "hotel",
+    "grades": [
+      {
+        "name": "OneStar"
+      },
+      {
+        "name": "TwoStar"
+      },
+      {
+        "name": "ThreeStar"
+      },
+      {
+        "name": "FourStar"
+      },
+      {
+        "name": "FiveStar"
+      }
+    ]
+  }
+]
