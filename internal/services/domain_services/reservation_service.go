@@ -1,7 +1,6 @@
 package domain_services
 
 import (
-	"fmt"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -26,7 +25,6 @@ func (s *ReservationService) Create(model *models.Reservation) (*models.Reservat
 
 	result, err := s.Repository.Create(model)
 	if err != nil {
-		fmt.Println(utils.ToJson(result))
 		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(result))
 	}
 	return result, err
