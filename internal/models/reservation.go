@@ -19,7 +19,7 @@ type Reservation struct {
 	HotelId      uint64                 `json:"hotel_id" valid:"-"`
 	Hotel        *Hotel                 `json:"hotel" valid:"-"  gorm:"foreignKey:HotelId;references:id"`
 	SupervisorId uint64                 `json:"supervisor_id" valid:"required"`
-	Supervisor   Guest                  `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
+	Supervisor   *Guest                 `json:"supervisor" valid:"-"   gorm:"foreignKey:SupervisorId;references:id"`
 	CheckinDate  *time.Time             `json:"checkin_date" valid:"required"`
 	CheckoutDate *time.Time             `json:"checkout_date" valid:"required"`
 	RoomId       uint64                 `json:"room_id" valid:"required"`

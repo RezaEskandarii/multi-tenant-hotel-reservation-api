@@ -1,6 +1,6 @@
 module reservation-api
 
-go 1.17
+go 1.18
 
 require (
 	github.com/andskur/argon2-hashing v0.1.3
