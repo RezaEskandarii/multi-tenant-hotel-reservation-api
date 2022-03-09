@@ -2,9 +2,12 @@ package common_services
 
 import (
 	"crypto/tls"
+	"github.com/avast/retry-go/v4"
 	"gopkg.in/gomail.v2"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"strings"
+	"time"
 )
 
 type EmailSender interface {
@@ -29,6 +32,22 @@ func (s *EmailService) Send(dto *dto.SendEmailDto) error {
 		dto.ContentType = "text/plain"
 	}
 
+	err := retry.Do(
+
+		func() error {
+			if err := s.sendEmail(dto); err != nil {
+				return err
+			}
+			return nil
+		}, retry.Attempts(config.SendEmailRetryCount),
+
+		retry.Delay(2000*time.Millisecond),
+	)
+
+	return err
+}
+
+func (s *EmailService) sendEmail(dto *dto.SendEmailDto) error {
 	m := gomail.NewMessage()
 
 	m.SetHeader("From", dto.From)
