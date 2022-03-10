@@ -27,3 +27,7 @@ func (r *RateCode) SetAudit(username string) {
 	r.CreatedBy = username
 	r.UpdatedBy = username
 }
+
+func (r *RateCode) SetUpdatedBy(username string) {
+	r.UpdatedBy = username
+}

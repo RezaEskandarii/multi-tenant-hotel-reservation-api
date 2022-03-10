@@ -3,10 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
-	"github.com/andskur/argon2-hashing"
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 	"reservation-api/internal/message_keys"
 	"time"
 )
@@ -46,36 +43,16 @@ func (u *User) Validate() (bool, error) {
 		return false, err
 	}
 
-	return ok, nil
-}
-
-// BeforeCreate validates user struct and change user's password to bcrypt.
-func (u *User) BeforeCreate(tx *gorm.DB) error {
-	_, err := u.Validate()
-
-	if err != nil {
-		tx.AddError(err)
-		return err
-	}
 	hasWringGender := true
 	if u.Gender == Male || u.Gender == Female || u.Gender == Other {
 		hasWringGender = false
 	}
 
 	if hasWringGender {
-		tx.AddError(InvalidGenderError)
-		return InvalidGenderError
+		return false, InvalidCleanStatusErr
 	}
 
-	hash, err := argon2.GenerateFromPassword([]byte(u.Password), argon2.DefaultParams)
-
-	if err != nil {
-		tx.AddError(err)
-		return err
-	}
-
-	u.Password = fmt.Sprintf("%s", hash)
-	return nil
+	return ok, nil
 }
 
 //MarshalJSON prevents to show user's password in json serializations.
@@ -88,5 +65,9 @@ func (u User) MarshalJSON() ([]byte, error) {
 
 func (u *User) SetAudit(username string) {
 	u.CreatedBy = username
+	u.UpdatedBy = username
+}
+
+func (u *User) SetUpdatedBy(username string) {
 	u.UpdatedBy = username
 }

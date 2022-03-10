@@ -52,3 +52,7 @@ func (r *Room) SetAudit(username string) {
 	r.CreatedBy = username
 	r.UpdatedBy = username
 }
+
+func (r *Room) SetUpdatedBy(username string) {
+	r.UpdatedBy = username
+}

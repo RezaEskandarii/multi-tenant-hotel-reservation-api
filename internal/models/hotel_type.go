@@ -19,3 +19,7 @@ func (h *HotelType) SetAudit(username string) {
 	h.CreatedBy = username
 	h.UpdatedBy = username
 }
+
+func (h *HotelType) SetUpdatedBy(username string) {
+	h.UpdatedBy = username
+}

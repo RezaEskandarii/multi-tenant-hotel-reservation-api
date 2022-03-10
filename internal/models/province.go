@@ -23,3 +23,7 @@ func (p *Province) SetAudit(username string) {
 	p.CreatedBy = username
 	p.UpdatedBy = username
 }
+
+func (p *Province) SetUpdatedBy(username string) {
+	p.UpdatedBy = username
+}

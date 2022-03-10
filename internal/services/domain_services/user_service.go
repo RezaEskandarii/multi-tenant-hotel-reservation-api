@@ -1,6 +1,8 @@
 package domain_services
 
 import (
+	"fmt"
+	"github.com/andskur/argon2-hashing"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -18,6 +20,14 @@ func NewUserService() *UserService {
 
 // Create creates new User.
 func (s *UserService) Create(user *models.User) (*models.User, error) {
+
+	hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user.Password = fmt.Sprintf("%s", hash)
 
 	return s.Repository.Create(user)
 }

@@ -22,3 +22,7 @@ func (r *RateGroup) SetAudit(username string) {
 	r.CreatedBy = username
 	r.UpdatedBy = username
 }
+
+func (r *RateGroup) SetUpdatedBy(username string) {
+	r.UpdatedBy = username
+}

@@ -20,3 +20,7 @@ func (r *HotelGrade) SetAudit(username string) {
 	r.CreatedBy = username
 	r.UpdatedBy = username
 }
+
+func (r *HotelGrade) SetUpdatedBy(username string) {
+	r.UpdatedBy = username
+}

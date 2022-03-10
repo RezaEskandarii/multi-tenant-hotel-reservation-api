@@ -20,3 +20,6 @@ func (c *Currency) SetAudit(username string) {
 	c.CreatedBy = username
 	c.UpdatedBy = username
 }
+func (c *Currency) SetUpdatedBy(username string) {
+	c.UpdatedBy = username
+}

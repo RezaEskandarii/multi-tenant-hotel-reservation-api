@@ -6,6 +6,7 @@ import (
 
 type Entity interface {
 	SetAudit(username string)
+	SetUpdatedBy(username string)
 }
 
 // BaseModel base model to other models

@@ -21,3 +21,7 @@ func (c *Country) SetAudit(username string) {
 	c.CreatedBy = username
 	c.UpdatedBy = username
 }
+
+func (c *Country) SetUpdatedBy(username string) {
+	c.UpdatedBy = username
+}

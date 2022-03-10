@@ -30,7 +30,11 @@ func (g *Guest) Validate() (bool, error) {
 	return govalidator.ValidateStruct(g)
 }
 
-func (c *Guest) SetAudit(username string) {
-	c.CreatedBy = username
-	c.UpdatedBy = username
+func (g *Guest) SetAudit(username string) {
+	g.CreatedBy = username
+	g.UpdatedBy = username
+}
+
+func (g *Guest) SetUpdatedBy(username string) {
+	g.UpdatedBy = username
 }

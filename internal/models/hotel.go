@@ -31,12 +31,16 @@ type Hotel struct {
 	Thumbnails   []*os.File  `json:"thumbnails" gorm:"-"`
 }
 
-func (r *Hotel) Validate() (bool, error) {
+func (h *Hotel) Validate() (bool, error) {
 
-	return govalidator.ValidateStruct(r)
+	return govalidator.ValidateStruct(h)
 }
 
-func (c *Hotel) SetAudit(username string) {
-	c.CreatedBy = username
-	c.UpdatedBy = username
+func (h *Hotel) SetAudit(username string) {
+	h.CreatedBy = username
+	h.UpdatedBy = username
+}
+
+func (h *Hotel) SetUpdatedBy(username string) {
+	h.UpdatedBy = username
 }

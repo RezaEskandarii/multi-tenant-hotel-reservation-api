@@ -34,9 +34,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 	currentUser := getCurrentUser(c)
 
 	city := models.City{}
-	city.CreatedBy = currentUser
-	city.UpdatedBy = currentUser
-	setAudit(city)
+	city.SetAudit(currentUser)
 	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&city); err != nil {

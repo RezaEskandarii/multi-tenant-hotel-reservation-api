@@ -18,3 +18,7 @@ func (r *ReservationRequest) SetAudit(username string) {
 	r.CreatedBy = username
 	r.UpdatedBy = username
 }
+
+func (r *ReservationRequest) SetUpdatedBy(username string) {
+	r.UpdatedBy = username
+}
