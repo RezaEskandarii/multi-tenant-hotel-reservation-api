@@ -15,7 +15,7 @@ var (
 	db, dbErr     = database.GetDb(false)
 	logger        = applogger.New(nil)
 	httpRouter    = getHttpRouter()
-	v1RouterGroup = httpRouter.Group("/v1")
+	v1RouterGroup = httpRouter.Group("/api/v1")
 )
 
 // Run run application

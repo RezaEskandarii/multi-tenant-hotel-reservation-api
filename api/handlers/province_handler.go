@@ -34,10 +34,10 @@ func (handler *ProvinceHandler) Register(input *dto.HandlerInput, service *domai
 /*====================================================================================*/
 func (handler *ProvinceHandler) create(c echo.Context) error {
 
-	model := &models.Province{}
+	province := &models.Province{}
 	lang := c.Request().Header.Get(acceptLanguage)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&province); err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
 
@@ -49,7 +49,16 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	}
 
-	if result, err := handler.Service.Create(model); err == nil {
+	if ok, err := province.Validate(); !ok {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Data:         nil,
+				ResponseCode: http.StatusBadRequest,
+				Message:      err.Error(),
+			})
+	}
+
+	if result, err := handler.Service.Create(province); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -80,7 +89,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	province, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -94,7 +103,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	}
 
-	if model == nil {
+	if province == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -102,13 +111,22 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		})
 	}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&province); err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(model); err == nil {
+	if ok, err := province.Validate(); !ok {
+		return c.JSON(http.StatusBadRequest,
+			commons.ApiResponse{
+				Data:         nil,
+				ResponseCode: http.StatusBadRequest,
+				Message:      err.Error(),
+			})
+	}
+
+	if result, err := handler.Service.Update(province); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,

@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
-	"math/rand"
 	"net/http"
 	middlewares2 "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
@@ -12,7 +10,6 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/message_broker"
 )
 
 // CityHandler City endpoint handler
@@ -29,14 +26,6 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *domain_se
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
-
-	routeGroup.GET("/rabbit", func(context echo.Context) error {
-
-		x := message_broker.New("amqp://guest:guest@localhost:5672/", handler.Input.Logger)
-		rnd := rand.Float64()
-		x.PublishMessage("email", []byte(fmt.Sprintf("message published ... %f", rnd)))
-		return context.String(200, fmt.Sprintf("%f", rnd))
-	})
 }
 
 // create new city
