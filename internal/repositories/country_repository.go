@@ -51,7 +51,7 @@ func (r *CountryRepository) Update(country *models.Country) (*models.Country, er
 func (r *CountryRepository) Find(id uint64) (*models.Country, error) {
 
 	model := models.Country{}
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := r.DB.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
 	}
