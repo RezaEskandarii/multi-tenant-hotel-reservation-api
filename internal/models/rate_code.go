@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 type RateCode struct {
@@ -24,10 +23,7 @@ func (r *RateCode) Validate() (bool, error) {
 	return govalidator.ValidateStruct(r)
 }
 
-func (r *RateCode) BeforeCreate(tx *gorm.DB) error {
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (r *RateCode) SetAudit(username string) {
+	r.CreatedBy = username
+	r.UpdatedBy = username
 }

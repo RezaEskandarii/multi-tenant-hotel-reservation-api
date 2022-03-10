@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 type Currency struct {
@@ -17,10 +16,7 @@ func (c *Currency) Validate() (bool, error) {
 	return govalidator.ValidateStruct(c)
 }
 
-func (c *Currency) BeforeCreate(tx *gorm.DB) error {
-	if _, err := c.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (c *Currency) SetAudit(username string) {
+	c.CreatedBy = username
+	c.UpdatedBy = username
 }

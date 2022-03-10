@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 // Country country struct
@@ -18,10 +17,7 @@ func (c *Country) Validate() (bool, error) {
 	return govalidator.ValidateStruct(c)
 }
 
-func (c *Country) BeforeCreate(tx *gorm.DB) error {
-	if _, err := c.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (c *Country) SetAudit(username string) {
+	c.CreatedBy = username
+	c.UpdatedBy = username
 }

@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 // RateGroup is struct for rating group of reservations rate price.
@@ -19,10 +18,7 @@ func (r *RateGroup) Validate() (bool, error) {
 	return govalidator.ValidateStruct(r)
 }
 
-func (r *RateGroup) BeforeCreate(tx *gorm.DB) error {
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (r *RateGroup) SetAudit(username string) {
+	r.CreatedBy = username
+	r.UpdatedBy = username
 }

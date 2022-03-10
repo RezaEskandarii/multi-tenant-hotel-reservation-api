@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 type HotelGrade struct {
@@ -17,10 +16,7 @@ func (r *HotelGrade) Validate() (bool, error) {
 	return govalidator.ValidateStruct(r)
 }
 
-func (r *HotelGrade) BeforeCreate(tx *gorm.DB) error {
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (r *HotelGrade) SetAudit(username string) {
+	r.CreatedBy = username
+	r.UpdatedBy = username
 }

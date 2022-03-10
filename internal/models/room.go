@@ -47,3 +47,8 @@ func (r *Room) Validate() (bool, error) {
 
 	return ok, err
 }
+
+func (r *Room) SetAudit(username string) {
+	r.CreatedBy = username
+	r.UpdatedBy = username
+}

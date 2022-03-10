@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 	"os"
 )
 
@@ -37,10 +36,7 @@ func (r *Hotel) Validate() (bool, error) {
 	return govalidator.ValidateStruct(r)
 }
 
-func (r *Hotel) BeforeCreate(tx *gorm.DB) error {
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (c *Hotel) SetAudit(username string) {
+	c.CreatedBy = username
+	c.UpdatedBy = username
 }

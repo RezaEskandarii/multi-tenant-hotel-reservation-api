@@ -85,3 +85,8 @@ func (u User) MarshalJSON() ([]byte, error) {
 	x.Password = ""
 	return json.Marshal(x)
 }
+
+func (u *User) SetAudit(username string) {
+	u.CreatedBy = username
+	u.UpdatedBy = username
+}

@@ -33,13 +33,13 @@ func (handler *CityHandler) create(c echo.Context) error {
 
 	currentUser := getCurrentUser(c)
 
-	model := models.City{}
-	model.CreatedBy = currentUser
-	model.UpdatedBy = currentUser
-
+	city := models.City{}
+	city.CreatedBy = currentUser
+	city.UpdatedBy = currentUser
+	setAudit(city)
 	lang := getAcceptLanguage(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&city); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -48,11 +48,11 @@ func (handler *CityHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := handler.Service.Create(&model); err == nil {
+	if _, err := handler.Service.Create(&city); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         model,
+				Data:         city,
 				ResponseCode: http.StatusOK,
 				Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
 			})

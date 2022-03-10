@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/asaskevich/govalidator"
-	"gorm.io/gorm"
 )
 
 type HotelType struct {
@@ -11,15 +10,12 @@ type HotelType struct {
 	Grades []*HotelGrade `json:"grades" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" valid:"-"`
 }
 
-func (r *HotelType) Validate() (bool, error) {
+func (h *HotelType) Validate() (bool, error) {
 
-	return govalidator.ValidateStruct(r)
+	return govalidator.ValidateStruct(h)
 }
 
-func (r *HotelType) BeforeCreate(tx *gorm.DB) error {
-	if _, err := r.Validate(); err != nil {
-		tx.AddError(err)
-		return err
-	}
-	return nil
+func (h *HotelType) SetAudit(username string) {
+	h.CreatedBy = username
+	h.UpdatedBy = username
 }

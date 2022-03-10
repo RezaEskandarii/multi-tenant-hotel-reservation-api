@@ -13,3 +13,8 @@ type ReservationRequest struct {
 	CheckInDate  *time.Time `json:"check_in_date"`
 	CheckOutDate *time.Time `json:"check_out_date"`
 }
+
+func (r *ReservationRequest) SetAudit(username string) {
+	r.CreatedBy = username
+	r.UpdatedBy = username
+}

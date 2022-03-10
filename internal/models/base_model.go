@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+type Entity interface {
+	SetAudit(username string)
+}
+
 // BaseModel base model to other models
 type BaseModel struct {
 	Id        uint64     `json:"id" gorm:"primarykey"`

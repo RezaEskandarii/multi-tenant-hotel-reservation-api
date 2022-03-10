@@ -18,3 +18,8 @@ func (p *Province) Validate() (bool, error) {
 
 	return govalidator.ValidateStruct(p)
 }
+
+func (p *Province) SetAudit(username string) {
+	p.CreatedBy = username
+	p.UpdatedBy = username
+}
