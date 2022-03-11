@@ -45,15 +45,3 @@ func (s *GuestService) ReservationsCount(guestId uint64) (error, uint64) {
 
 	return s.Repository.ReservationsCount(guestId)
 }
-
-// CheckIn checkin guest
-func (s *GuestService) CheckIn(guestId uint64) error {
-
-	return s.Repository.CheckIn(guestId)
-}
-
-// CheckOut checkout guest
-func (s *GuestService) CheckOut(guestId uint64) error {
-
-	return s.Repository.CheckOut(guestId)
-}

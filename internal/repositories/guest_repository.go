@@ -82,15 +82,11 @@ func (r *GuestRepository) FindByPassportNumber(passNumber string) (*models.Guest
 }
 
 func (r *GuestRepository) ReservationsCount(guestId uint64) (error, uint64) {
-	panic("not implemented")
-}
-
-func (r *GuestRepository) CheckIn(guestId uint64) error {
-	panic("not implemented")
-}
-
-func (r *GuestRepository) CheckOut(guestId uint64) error {
-	panic("not implemented")
+	var count int64 = 0
+	if err := r.DB.Model(&models.Reservation{}).Where("supervisor_id=?", guestId).Count(&count).Error; err != nil {
+		return err, 0
+	}
+	return nil, uint64(count)
 }
 
 func (r *GuestRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
