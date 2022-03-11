@@ -66,7 +66,7 @@ func (r HotelGradeRepository) Delete(id uint64) error {
 	}
 
 	if count > 0 {
-		return GradeHashotel
+		return GradeHasHotel
 	}
 
 	if query := r.DB.Model(&models.HotelGrade{}).Where("id=?", id).Delete(&models.HotelGrade{}); query.Error != nil {

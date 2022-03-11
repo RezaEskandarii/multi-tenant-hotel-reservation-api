@@ -63,7 +63,7 @@ func (r HotelTypeRepository) Delete(id uint64) error {
 	}
 
 	if count > 0 {
-		return TypeHashotelError
+		return TypeHasHotelError
 	}
 
 	if query := r.DB.Model(&models.HotelType{}).Where("id=?", id).Delete(&models.HotelType{}); query.Error != nil {

@@ -132,7 +132,12 @@ func (r ReservationRepository) ChangeStatus(id uint64, status models.Reservation
 		return nil, nil
 	}
 
-	if err := r.DB.Model(&models.Reservation{}).Where("id=?", id).Update("CheckStatus", status).Error; err != nil {
+	if status == models.Checkout && reservation.CheckoutDate.After(time.Now()) {
+		checkoutDate := time.Now()
+		reservation.CheckoutDate = &checkoutDate
+	}
+
+	if err := r.DB.Model(&models.Reservation{}).Where("id=?", id).Update("check_status", status).Error; err != nil {
 		return nil, err
 	}
 	return &reservation, nil
