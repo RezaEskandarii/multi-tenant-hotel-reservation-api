@@ -34,6 +34,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 
 	model := &models.RoomType{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -44,6 +45,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
@@ -67,6 +69,8 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -91,7 +95,7 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	// prevent to edit other fields by client.
 	name := c.FormValue("name")
 	result.Name = name
-
+	result.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {

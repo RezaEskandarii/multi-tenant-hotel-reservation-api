@@ -33,6 +33,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
 	lang := getAcceptLanguage(c)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -44,6 +45,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			})
 	}
 
+	model.SetAudit(user)
 	if result, err := handler.Service.Create(model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
@@ -74,6 +76,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
+	user := getCurrentUser(c)
 	model, err := handler.Service.Find(id)
 	lang := getAcceptLanguage(c)
 
@@ -94,6 +97,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		})
 	}
 
+	model.SetUpdatedBy(user)
 	if err := c.Bind(&model); err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}

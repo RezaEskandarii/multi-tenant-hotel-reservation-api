@@ -34,6 +34,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 
 	model := &models.Room{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -44,6 +45,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
@@ -66,7 +68,9 @@ func (handler *RoomHandler) create(c echo.Context) error {
 func (handler *RoomHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 	id, err := utils.ConvertToUint(c.Param("id"))
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -89,7 +93,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 
 	name := c.FormValue("name")
 	result.Name = name
-
+	result.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {

@@ -34,6 +34,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 
 	createDto := dto.HotelCreateDto{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&createDto); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -46,7 +47,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 	}
 	model := createDto.Data
 	///	model.Thumbnails = createDto.Thumbnails
-
+	model.SetAudit(user)
 	result, err := handler.Service.Create(&model)
 
 	if err != nil {
@@ -69,6 +70,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
 
 	if err != nil {
 
@@ -108,6 +110,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 
 	// map client request fields.
 	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
+	modelToUpdate.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(modelToUpdate)
 
 	if err != nil {

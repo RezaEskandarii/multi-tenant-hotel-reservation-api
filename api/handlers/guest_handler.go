@@ -33,6 +33,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -42,6 +43,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	if _, err := handler.Service.Create(&model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -60,7 +62,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
 	lang := c.Request().Header.Get(acceptLanguage)
-
+	user := getCurrentUser(c)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
 	guest, _ := handler.Service.Find(id)
@@ -80,6 +82,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 		})
 	}
 
+	model.SetUpdatedBy(user)
 	if _, err := handler.Service.Update(&model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{

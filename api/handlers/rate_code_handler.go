@@ -36,7 +36,7 @@ func (handler *RateCodeHandler) Register(input *dto.HandlerInput, service *domai
 func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
-
+	user := getCurrentUser(c)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
@@ -50,7 +50,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
-
+	model.SetAudit(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
@@ -72,6 +72,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -96,7 +97,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
-
+	model.SetUpdatedBy(user)
 	if err := c.Bind(&model); err != nil {
 
 		handler.Input.Logger.LogError(err.Error())

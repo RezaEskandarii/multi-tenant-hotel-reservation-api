@@ -34,6 +34,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 	model := models.User{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -67,6 +68,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	if result, err := handler.Service.Create(&model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
@@ -92,6 +94,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 func (handler *UserHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -127,6 +130,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	}
 
+	model.SetUpdatedBy(user)
 	if result, err := handler.Service.Update(model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{

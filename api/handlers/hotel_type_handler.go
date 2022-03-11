@@ -34,6 +34,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 
 	model := &models.HotelType{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -46,6 +47,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
@@ -69,6 +71,8 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -93,6 +97,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	// prevent to update other fields by client.
 	name := c.FormValue("name")
 	result.Name = name
+	result.SetUpdatedBy(user)
 
 	updatedModel, err := handler.Service.Update(result)
 

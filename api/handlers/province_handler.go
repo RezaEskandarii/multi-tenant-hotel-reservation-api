@@ -35,6 +35,7 @@ func (handler *ProvinceHandler) Register(input *dto.HandlerInput, service *domai
 func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	province := &models.Province{}
+	user := getCurrentUser(c)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&province); err != nil {
@@ -58,6 +59,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	}
 
+	province.SetAudit(user)
 	if result, err := handler.Service.Create(province); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
@@ -88,6 +90,8 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
+	user := getCurrentUser(c)
 
 	province, err := handler.Service.Find(id)
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -125,7 +129,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 				Message:      err.Error(),
 			})
 	}
-
+	province.SetUpdatedBy(user)
 	if result, err := handler.Service.Update(province); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{

@@ -34,6 +34,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 
 	model := &models.Country{}
 	lang := getAcceptLanguage(c)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -44,7 +45,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
-
+	model.SetAudit(user)
 	output, err := handler.Service.Create(model)
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -71,6 +72,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
+	user := getCurrentUser(c)
 	model, err := handler.Service.Find(id)
 	lang := getAcceptLanguage(c)
 
@@ -95,6 +97,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
+	model.SetUpdatedBy(user)
 	if output, err := handler.Service.Update(model); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{

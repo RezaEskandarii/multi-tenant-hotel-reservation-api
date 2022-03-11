@@ -121,6 +121,8 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	}
 
 	lang := getAcceptLanguage(c)
+	user := getCurrentUser(c)
+
 	invalidReservationRequestKeyErr := handler.Input.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
 		return c.JSON(http.StatusBadRequest,
@@ -168,6 +170,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 	handler.setReservationFields(&reservation, reservationRequest)
+	reservation.SetAudit(user)
 	// create new reservation.
 	result, err := handler.Service.Create(&reservation)
 	if err != nil {
@@ -189,6 +192,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -262,6 +266,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
+	reservation.SetUpdatedBy(user)
 	handler.setReservationFields(&reservation, reservationRequest)
 	// create new reservation.
 	result, err := handler.Service.Update(id, &reservation)

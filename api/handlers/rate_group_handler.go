@@ -34,6 +34,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 
 	model := &models.RateGroup{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -45,6 +46,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 			})
 	}
 
+	model.SetUpdatedBy(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {

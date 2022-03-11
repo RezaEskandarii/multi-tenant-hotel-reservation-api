@@ -32,7 +32,6 @@ func (handler *CityHandler) Register(input *dto.HandlerInput, service *domain_se
 func (handler *CityHandler) create(c echo.Context) error {
 
 	currentUser := getCurrentUser(c)
-
 	city := models.City{}
 	city.SetAudit(currentUser)
 	lang := getAcceptLanguage(c)
@@ -107,7 +106,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
-	model.UpdatedBy = currentUser
+	model.SetUpdatedBy(currentUser)
 	if output, err := handler.Service.Update(model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{

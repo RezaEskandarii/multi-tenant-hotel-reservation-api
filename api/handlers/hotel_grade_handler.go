@@ -34,6 +34,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 
 	model := &models.HotelGrade{}
 	lang := c.Request().Header.Get(acceptLanguage)
+	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -46,6 +47,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 		})
 	}
 
+	model.SetAudit(user)
 	result, err := handler.Service.Create(model)
 
 	if err != nil {
@@ -71,6 +73,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
+	user := getCurrentUser(c)
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -108,6 +111,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 
 	// prevent to edit other fields.
 	result.Name = tmpModel.Name
+	result.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(result)
 
 	if err != nil {
