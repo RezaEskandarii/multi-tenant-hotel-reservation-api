@@ -144,7 +144,7 @@ func (s *FileTransferService) generateRandomFileName(filename string) string {
 	// get file extension
 	fileExtension := filepath.Ext(filename)
 	// generate random string
-	randomStr := fmt.Sprintf("%s%s%s", filename, time.Now().String(), time.Now().UnixNano())
+	randomStr := fmt.Sprintf("%s%s%d", filename, time.Now().String(), time.Now().UnixNano())
 	// convert generated random string to SHA256 hash.
 	randomStr = utils.GenerateSHA256(randomStr)
 

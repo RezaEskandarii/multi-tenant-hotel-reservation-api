@@ -44,8 +44,8 @@ type Config struct {
 		Port     int    `yaml:"port"`
 	}
 	Authentication struct {
-		JwtKey         string
-		TokenAliveTime int // minute
+		JwtKey         string `yaml:"jwt_key"`
+		TokenAliveTime int    `yaml:"token_alive_time"` // minute
 	}
 }
 

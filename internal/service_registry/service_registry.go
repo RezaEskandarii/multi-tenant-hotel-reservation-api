@@ -155,8 +155,7 @@ func setServicesDependencies(db *gorm.DB, cfg *config.Config, logger applogger.L
 	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
 	reservationService.Repository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
 
-	authService.UserService = userService
-	authService.Config = cfg
+	authService = *domain_services.NewAuthService(userService, cfg)
 
 	reservationService.MessageBrokerManager = rabbitMqManager
 

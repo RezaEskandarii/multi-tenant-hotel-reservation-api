@@ -24,3 +24,6 @@ messagebroker:
     username: test
     password: test
     port: 857
+authentication:
+  jwt_key: test123$%!@@#%%&YU&*
+  token_alive_time: 20
