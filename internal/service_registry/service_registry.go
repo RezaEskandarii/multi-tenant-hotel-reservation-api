@@ -62,6 +62,7 @@ var (
 // RegisterServices register dependencies for services and handlers
 func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
+	// logger
 	logger := applogger.New(nil)
 
 	// set service layer repository and database object.
@@ -69,6 +70,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	i18nTranslator := translator.New()
 
+	// fill handlers shared dependencies in handlerInput struct and pass this
+	// struct to handlers inserted of pass many duplicated objects
 	handlerInput := &dto.HandlerInput{
 		Router:     router,
 		Translator: i18nTranslator,
@@ -111,8 +114,10 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	paymentHandler.Register(handlerInput, paymentService)
 
+	// schedule to remove expired reservation requests.
 	scheduleRemoveExpiredReservationRequests(reservationService, logger)
 
+	// listen to message broker on reservation event and send email in background.
 	go eventService.SendEmailToGuestOnReservation()
 }
 
@@ -125,6 +130,7 @@ func setServicesDependencies(db *gorm.DB, cfg *config.Config, logger applogger.L
 
 	ctx := context.Background()
 
+	// prevent to panic in seed.
 	if usesInSeed == false {
 
 		emailService := common_services.NewEmailService(cfg.Smtp.Host,
@@ -134,9 +140,11 @@ func setServicesDependencies(db *gorm.DB, cfg *config.Config, logger applogger.L
 		eventService = common_services.NewEventService(rabbitMqManager, emailService)
 
 		// fileTransferService context for minio
-		fileService = common_services.NewFileTransferService(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID, cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
+		fileService = common_services.NewFileTransferService(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID,
+			cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
 	}
 
+	// set services repository dependency.
 	countryService.Repository = repositories.NewCountryRepository(db)
 	provinceService.Repository = repositories.NewProvinceRepository(db)
 	cityService.Repository = repositories.NewCityRepository(db)
