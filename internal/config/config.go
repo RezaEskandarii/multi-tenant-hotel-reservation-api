@@ -43,6 +43,10 @@ type Config struct {
 		Host     string `yaml:"host"`
 		Port     int    `yaml:"port"`
 	}
+	Authentication struct {
+		JwtKey         string
+		TokenAliveTime int // minute
+	}
 }
 
 // NewConfig reads config from yml file copies to config struct and returns config struct

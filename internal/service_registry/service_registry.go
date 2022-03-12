@@ -35,6 +35,7 @@ var (
 	rateCodeDetailService = domain_services.NewRateCodeDetailService()
 	reservationService    = domain_services.NewReservationService()
 	paymentService        = domain_services.NewPaymentService()
+	authService           = domain_services.AuthService{}
 	eventService          = &common_services.EventService{}
 )
 
@@ -75,7 +76,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 	}
 
 	// authHandler does bot need to authMiddleware.
-	authHandler.Register(handlerInput, userService)
+	authHandler.Register(handlerInput, userService, authService)
 
 	// add authentication middleware to all routes.
 	router.Use( /**middlewares.JWTAuthMiddleware, */ )
@@ -153,6 +154,10 @@ func setServicesDependencies(db *gorm.DB, cfg *config.Config, logger applogger.L
 	auditService.Repository = repositories.NewAuditRepository(db)
 	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
 	reservationService.Repository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
+
+	authService.UserService = userService
+	authService.Config = cfg
+
 	reservationService.MessageBrokerManager = rabbitMqManager
 
 }
