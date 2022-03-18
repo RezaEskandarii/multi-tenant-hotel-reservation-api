@@ -36,7 +36,7 @@ func (s *HotelService) Find(id uint64) (*models.Hotel, error) {
 }
 
 // FindAll returns paginates list of hotels
-func (s *HotelService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (s *HotelService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
 }

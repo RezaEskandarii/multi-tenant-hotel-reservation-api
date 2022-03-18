@@ -47,9 +47,9 @@ func (r *RateCodeRepository) Find(id uint64) (*models.RateCode, error) {
 	return &model, nil
 }
 
-func (r *RateCodeRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (r *RateCodeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return finAll(&models.RateCode{}, r.DB, input)
+	return paginate(&models.RateCode{}, r.DB, input)
 }
 
 func (r RateCodeRepository) Delete(id uint64) error {

@@ -124,7 +124,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 	page, _ := utils.ConvertToUint(c.Param("page"))
 	perPage, _ := utils.ConvertToUint(c.Param("perPage"))
 
-	input := &dto.PaginationInput{
+	input := &dto.PaginationFilter{
 		Page:    int(page),
 		PerPage: int(perPage),
 	}

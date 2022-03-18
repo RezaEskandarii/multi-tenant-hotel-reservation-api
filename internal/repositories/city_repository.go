@@ -15,7 +15,7 @@ type CityRepository struct {
 //	Create(city *models.City) (*models.City, error)
 //	Update(city *models.City) (*models.City, error)
 //	Find(city *models.City) (*models.City, error)
-//	FindAll(input *dto.PaginationInput) (commons.PaginatedList, error)
+//	FindAll(input *dto.PaginationFilter) (commons.PaginatedList, error)
 //	Delete(id uint64) error
 //}
 
@@ -69,7 +69,7 @@ func (r *CityRepository) Find(id uint64) (*models.City, error) {
 	return &model, nil
 }
 
-func (r *CityRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (r *CityRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return finAll(&models.City{}, r.DB, input)
+	return paginate(&models.City{}, r.DB, input)
 }

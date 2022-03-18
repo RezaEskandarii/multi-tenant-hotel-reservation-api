@@ -35,7 +35,7 @@ func (s *RateGroupService) Find(id uint64) (*models.RateGroup, error) {
 }
 
 // FindAll returns paginates list of RateGroups.
-func (s *RateGroupService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (s *RateGroupService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
 }

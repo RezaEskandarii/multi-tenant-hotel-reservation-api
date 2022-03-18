@@ -162,7 +162,7 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 /*====================================================================================*/
 func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 
-	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
+	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 	list, err := handler.Service.FindAll(paginationInput)
 
 	if err != nil {

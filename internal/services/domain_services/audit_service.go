@@ -21,7 +21,7 @@ func (s *AuditService) Save(model *models.Audit) (*models.Audit, error) {
 }
 
 //FindAll returns paginated list of audits.
-func (s *AuditService) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (s *AuditService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
 	return s.Repository.FindAll(input)
 }

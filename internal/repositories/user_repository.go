@@ -136,9 +136,9 @@ func (r *UserRepository) Delete(id uint64) error {
 	return nil
 }
 
-func (r *UserRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (r *UserRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return finAll(&models.User{}, r.DB, input)
+	return paginate(&models.User{}, r.DB, input)
 }
 
 func (r *UserRepository) Seed(jsonFilePath string) error {

@@ -53,9 +53,9 @@ func (r *CurrencyRepository) Find(id uint64) (*models.Currency, error) {
 	return &model, nil
 }
 
-func (r *CurrencyRepository) FindAll(input *dto.PaginationInput) (*commons.PaginatedList, error) {
+func (r *CurrencyRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return finAll(&models.Currency{}, r.DB, input)
+	return paginate(&models.Currency{}, r.DB, input)
 }
 
 func (r *CurrencyRepository) FindBySymbol(symbol string) (*models.Currency, error) {

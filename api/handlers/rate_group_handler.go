@@ -150,7 +150,7 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 /*====================================================================================*/
 func (handler *RateGroupHandler) findAll(c echo.Context) error {
 
-	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
+	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
 	list, err := handler.Service.FindAll(paginationInput)
 

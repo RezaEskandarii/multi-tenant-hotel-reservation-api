@@ -146,7 +146,7 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 /*====================================================================================*/
 func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 
-	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
+	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
 	list, err := handler.Service.FindAll(paginationInput)
 

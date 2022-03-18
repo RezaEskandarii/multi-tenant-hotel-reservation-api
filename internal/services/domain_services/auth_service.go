@@ -93,11 +93,11 @@ func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.TokenRespon
 	}
 
 	if !tkn.Valid {
-		return errors.New("invalid Token"), nil
+		return InvalidTokenError, nil
 	}
 
 	if time.Unix(claims.ExpiresAt, 0).Sub(time.Now()) > time.Duration(s.Config.Authentication.TokenAliveTime)*time.Second {
-		return errors.New("invalid Token"), nil
+		return InvalidTokenError, nil
 	}
 
 	// Now, create a new token for the current use, with a renewed expiration time

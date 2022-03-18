@@ -9,7 +9,7 @@ import (
 
 var (
 	db, _      = database.GetDb(true)
-	pagination = dto.PaginationInput{
+	pagination = dto.PaginationFilter{
 		Page:    1,
 		PerPage: 20,
 	}

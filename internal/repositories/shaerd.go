@@ -7,8 +7,8 @@ import (
 	"reservation-api/internal/dto"
 )
 
-//finAll
-func finAll(model interface{}, db *gorm.DB, input *dto.PaginationInput) (*commons.PaginatedList, error) {
+//paginate
+func paginate(model interface{}, db *gorm.DB, input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
 	var total int64
 
@@ -31,4 +31,9 @@ func finAll(model interface{}, db *gorm.DB, input *dto.PaginationInput) (*common
 
 	result.Records = modelSlice.Interface()
 	return result, nil
+}
+
+func paginateQuery(db *gorm.DB, page, pageSize int) *gorm.DB {
+	offset := (page - 1) * pageSize
+	return db.Offset(offset).Limit(pageSize)
 }

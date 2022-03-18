@@ -184,7 +184,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 /*====================================================================================*/
 func (handler *UserHandler) findAll(c echo.Context) error {
 
-	paginationInput := c.Get(paginationInput).(*dto.PaginationInput)
+	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 	list, err := handler.Service.FindAll(paginationInput)
 
 	if err != nil {
