@@ -50,7 +50,7 @@ func (r *RoomRepository) Find(id uint64) (*models.Room, error) {
 
 func (r *RoomRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.Room{}, r.DB, input)
+	return paginatedList(&models.Room{}, r.DB, input)
 }
 
 func (r RoomRepository) Delete(id uint64) error {

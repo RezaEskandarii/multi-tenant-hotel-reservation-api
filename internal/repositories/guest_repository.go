@@ -91,5 +91,5 @@ func (r *GuestRepository) ReservationsCount(guestId uint64) (error, uint64) {
 
 func (r *GuestRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.Guest{}, r.DB, input)
+	return paginatedList(&models.Guest{}, r.DB, input)
 }

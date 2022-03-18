@@ -53,7 +53,7 @@ func (r *HotelGradeRepository) Find(id uint64) (*models.HotelGrade, error) {
 
 func (r *HotelGradeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.HotelGrade{}, r.DB, input)
+	return paginatedList(&models.HotelGrade{}, r.DB, input)
 }
 
 func (r HotelGradeRepository) Delete(id uint64) error {

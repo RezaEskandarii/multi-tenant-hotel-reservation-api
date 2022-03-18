@@ -8,10 +8,12 @@ import (
 	"gorm.io/gorm"
 	"math"
 	"math/big"
+	"reservation-api/internal/commons"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
+	"strings"
 	"time"
 )
 
@@ -277,6 +279,21 @@ func (r *ReservationRepository) RemoveExpiredReservationRequests() error {
 	return nil
 }
 
+func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedList) {
+
+	reservations := make([]*models.Reservation, 0)
+
+	query := r.DB.Model(&models.Reservation{})
+	query = r.getReservationFilteredQuery(query, filter)
+
+	if err := query.Scan(&reservations).Error; err != nil {
+		return err, nil
+	}
+
+	return nil, paginateWithFilter(query, reservations, filter, filter.Page, filter.PerPage)
+
+}
+
 /*================= private functions ===========================================================*/
 
 func (r *ReservationRepository) preloadReservationRelations(query *gorm.DB) *gorm.DB {
@@ -320,4 +337,44 @@ func (r *ReservationRepository) setReservationCalcFields(reservation *models.Res
 	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
 	reservation.GuestCount = uint64(len(reservation.Sharers))
 	reservation.Price = r.calculatePrice(reservation)
+}
+
+func (r *ReservationRepository) getReservationFilteredQuery(query *gorm.DB, filter *dto.ReservationFilter) *gorm.DB {
+
+	if filter.CreatedFrom != nil {
+		query = query.Where("created_at >= ?", filter.CreatedFrom)
+	}
+
+	if filter.CreatedTo != nil {
+		query = query.Where("created_at <= ?", filter.CreatedTo)
+	}
+
+	if filter.CheckInFrom != nil {
+		query = query.Where("checkin_date >= ?", filter.CheckInFrom)
+	}
+
+	if filter.CheckInTo != nil {
+		query = query.Where("checkin_date >= ?", filter.CheckInTo)
+	}
+
+	if strings.TrimSpace(filter.GuestName) != "" {
+		query = query.Where("supervisor.first_name LIKE '%?%' OR "+
+			"supervisor.middle_name LIKE '%?%' OR "+
+			"supervisor.last_name LIKE '%?%'",
+			filter.GuestName, filter.GuestName, filter.GuestName)
+	}
+
+	if filter.RateCodeId != 0 {
+		query = query.Where("rate_code_id=?", filter.RateCodeId)
+	}
+
+	if filter.RoomId != 0 {
+		query = query.Where("room_id=?", filter.RateCodeId)
+	}
+
+	if filter.CheckStatus != nil {
+		query = query.Where("check_status=?", filter.CheckStatus)
+	}
+
+	return query
 }

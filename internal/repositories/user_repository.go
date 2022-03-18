@@ -138,7 +138,7 @@ func (r *UserRepository) Delete(id uint64) error {
 
 func (r *UserRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.User{}, r.DB, input)
+	return paginatedList(&models.User{}, r.DB, input)
 }
 
 func (r *UserRepository) Seed(jsonFilePath string) error {

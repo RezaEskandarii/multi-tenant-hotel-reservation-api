@@ -13,6 +13,7 @@ type PaginatedList struct {
 	PerPage      uint        `json:"per_page"`
 	TotalRecords uint        `json:"total_records"`
 	TotalPages   uint        `json:"total_pages"`
+	Filters      interface{} `json:"filters"`
 }
 
 // NewPaginatedList it returns new paginatesList struct and fills fields.

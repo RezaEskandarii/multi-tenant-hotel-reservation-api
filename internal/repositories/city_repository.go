@@ -71,5 +71,5 @@ func (r *CityRepository) Find(id uint64) (*models.City, error) {
 
 func (r *CityRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.City{}, r.DB, input)
+	return paginatedList(&models.City{}, r.DB, input)
 }

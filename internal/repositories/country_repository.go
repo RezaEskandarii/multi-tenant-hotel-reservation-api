@@ -65,7 +65,7 @@ func (r *CountryRepository) Find(id uint64) (*models.Country, error) {
 
 func (r *CountryRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
 
-	return paginate(&models.Country{}, r.DB, input)
+	return paginatedList(&models.Country{}, r.DB, input)
 }
 
 func (r *CountryRepository) GetProvinces(countryId uint64) ([]*models.Province, error) {
