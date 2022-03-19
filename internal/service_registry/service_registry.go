@@ -57,6 +57,7 @@ var (
 	authHandler        = handlers.AuthHandler{}
 	reservationHandler = handlers.ReservationHandler{}
 	paymentHandler     = handlers.PaymentHandler{}
+	metricHandler      = handlers.MetricHandler{}
 )
 
 // RegisterServices register dependencies for services and handlers
@@ -83,6 +84,8 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	// add authentication middleware to all routes.
 	router.Use( /**middlewares.JWTAuthMiddleware, */ )
+
+	metricHandler.Register(cfg)
 
 	countryHandler.Register(handlerInput, countryService)
 
@@ -119,6 +122,7 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	// listen to message broker on reservation event and send email in background.
 	go eventService.SendEmailToGuestOnReservation()
+
 }
 
 // set repository dependency

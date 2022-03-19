@@ -20,10 +20,11 @@ type Config struct {
 
 	// Application is application config
 	Application struct {
-		Port            string `yaml:"port"`
-		ClusterName     string `yaml:"cluster_name"`
-		IgnoreMigration bool   `yaml:"ignore_migration"`
-		SqlDebug        bool   `yaml:"sql_debug"`
+		Port               string `yaml:"port"`
+		ClusterName        string `yaml:"cluster_name"`
+		IgnoreMigration    bool   `yaml:"ignore_migration"`
+		SqlDebug           bool   `yaml:"sql_debug"`
+		MetricEndPointPort int    `yaml:"metric_end_point_port"`
 	}
 	// Minio file management
 	Minio struct {

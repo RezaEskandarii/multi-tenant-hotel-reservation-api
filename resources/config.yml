@@ -7,10 +7,11 @@ database:
   name: hotel_reservation
   engine: postgres
 application:
-  port: 80
+  port: 8080
   cluster_name: cluster1
   ignore_migration: false
   sql_debug: true
+  metric_end_point_port: 8081
 minio:
   endpoint: 127.0.0.1:9000
   access_key_id: minioadmin
