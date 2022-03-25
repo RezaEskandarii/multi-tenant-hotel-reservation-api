@@ -28,3 +28,8 @@ messagebroker:
 authentication:
   jwt_key: test123$%!@@#%%&YU&*
   token_alive_time: 20
+
+redis:
+  addr: localhost:6379
+  password:
+  cache_db: 0

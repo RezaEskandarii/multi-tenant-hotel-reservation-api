@@ -12,8 +12,8 @@ type HotelGradeService struct {
 }
 
 // NewHotelGradeService returns new HotelGradeService
-func NewHotelGradeService() *HotelGradeService {
-	return &HotelGradeService{}
+func NewHotelGradeService(r *repositories.HotelGradeRepository) *HotelGradeService {
+	return &HotelGradeService{Repository: r}
 }
 
 // Create creates new HotelGrade.

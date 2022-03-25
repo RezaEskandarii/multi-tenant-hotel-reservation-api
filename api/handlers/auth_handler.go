@@ -14,13 +14,13 @@ import (
 type AuthHandler struct {
 	Router      *echo.Group
 	Service     *domain_services.UserService
-	AuthService domain_services.AuthService
+	AuthService *domain_services.AuthService
 	translator  *translator.Translator
 	logger      applogger.Logger
 }
 
 func (handler *AuthHandler) Register(input *dto.HandlerInput, service *domain_services.UserService,
-	authService domain_services.AuthService) {
+	authService *domain_services.AuthService) {
 
 	handler.Router = input.Router
 	handler.Service = service

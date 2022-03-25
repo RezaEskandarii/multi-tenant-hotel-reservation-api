@@ -12,8 +12,8 @@ type RateGroupService struct {
 }
 
 // NewRateGroupService returns new RateGroupService
-func NewRateGroupService() *RateGroupService {
-	return &RateGroupService{}
+func NewRateGroupService(r *repositories.RateGroupRepository) *RateGroupService {
+	return &RateGroupService{Repository: r}
 }
 
 // Create creates new RateGroup.

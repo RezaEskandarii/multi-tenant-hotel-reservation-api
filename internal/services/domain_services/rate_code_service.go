@@ -12,8 +12,8 @@ type RateCodeService struct {
 }
 
 // NewRateCodeService returns new RateCodeService
-func NewRateCodeService() *RateCodeService {
-	return &RateCodeService{}
+func NewRateCodeService(r *repositories.RateCodeRepository) *RateCodeService {
+	return &RateCodeService{Repository: r}
 }
 
 // Create creates new RateCode.

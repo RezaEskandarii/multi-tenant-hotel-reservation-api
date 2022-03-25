@@ -12,8 +12,8 @@ type GuestService struct {
 }
 
 // NewGuestService returns new GuestService
-func NewGuestService() *GuestService {
-	return &GuestService{}
+func NewGuestService(r *repositories.GuestRepository) *GuestService {
+	return &GuestService{Repository: r}
 }
 
 // Create creates new Guest.

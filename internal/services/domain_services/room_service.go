@@ -11,8 +11,8 @@ type RoomService struct {
 	Repository *repositories.RoomRepository
 }
 
-func NewRoomService() *RoomService {
-	return &RoomService{}
+func NewRoomService(r *repositories.RoomRepository) *RoomService {
+	return &RoomService{Repository: r}
 }
 
 // Create creates new Room.

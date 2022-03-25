@@ -14,8 +14,8 @@ type UserService struct {
 }
 
 // NewUserService returns new UserService
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(r *repositories.UserRepository) *UserService {
+	return &UserService{Repository: r}
 }
 
 // Create creates new User.

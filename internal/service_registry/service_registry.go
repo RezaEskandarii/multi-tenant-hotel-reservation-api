@@ -11,32 +11,8 @@ import (
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
-	"reservation-api/pkg/cache"
 	"reservation-api/pkg/message_broker"
 	"reservation-api/pkg/translator"
-)
-
-// services
-var (
-	countryService        = domain_services.NewCountryService()
-	provinceService       = domain_services.NewProvinceService()
-	cityService           = domain_services.NewCityService()
-	currencyService       = domain_services.NewCurrencyService()
-	userService           = domain_services.NewUserService()
-	hotelTypeService      = domain_services.NewHotelTypeService()
-	hotelGradeService     = domain_services.NewHotelGradeService()
-	hotelService          = domain_services.NewHotelService()
-	roomTypeService       = domain_services.NewRoomTypeService()
-	roomService           = domain_services.NewRoomService()
-	guestService          = domain_services.NewGuestService()
-	rateGroupService      = domain_services.NewRateGroupService()
-	rateCodeService       = domain_services.NewRateCodeService()
-	auditService          = domain_services.NewAuditService()
-	rateCodeDetailService = domain_services.NewRateCodeDetailService()
-	reservationService    = domain_services.NewReservationService()
-	paymentService        = domain_services.NewPaymentService()
-	authService           = domain_services.AuthService{}
-	eventService          = &common_services.EventService{}
 )
 
 // handlers
@@ -60,15 +36,12 @@ var (
 	metricHandler      = handlers.MetricHandler{}
 )
 
-// RegisterServices register dependencies for services and handlers
-func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
+// RegisterServicesAndRoutes register dependencies for services and handlers
+func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	// logger
 	logger := applogger.New(nil)
-
-	// set service layer repository and database object.
-	setServicesDependencies(db, cfg, logger, false)
-
+	// i18n translator
 	i18nTranslator := translator.New()
 
 	// fill handlers shared dependencies in handlerInput struct and pass this
@@ -78,6 +51,47 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 		Translator: i18nTranslator,
 		Logger:     logger,
 	}
+
+	/****************************************** register services ***********************************************************/
+	ctx := context.Background()
+
+	// gomail implementation
+	emailService := common_services.NewEmailService(cfg.Smtp.Host,
+		cfg.Smtp.Username, cfg.Smtp.Password, cfg.Smtp.Port,
+	)
+	// rabbitmq implementation
+	rabbitMqManager := message_broker.New(cfg.MessageBroker.Url, logger)
+	// minio implementation
+	fileService := common_services.NewFileTransferService(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID,
+		cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
+	// redis implementation
+	cacheService := common_services.NewCacheService(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.CacheDB, ctx)
+
+	eventService := common_services.NewEventService(rabbitMqManager, emailService)
+	var (
+		countryService    = domain_services.NewCountryService(repositories.NewCountryRepository(db))
+		provinceService   = domain_services.NewProvinceService(repositories.NewProvinceRepository(db))
+		cityService       = domain_services.NewCityService(repositories.NewCityRepository(db), cacheService)
+		currencyService   = domain_services.NewCurrencyService(repositories.NewCurrencyRepository(db))
+		userService       = domain_services.NewUserService(repositories.NewUserRepository(db))
+		hotelTypeService  = domain_services.NewHotelTypeService(repositories.NewHotelTypeRepository(db))
+		hotelGradeService = domain_services.NewHotelGradeService(repositories.NewHotelGradeRepository(db))
+		hotelService      = domain_services.NewHotelService(repositories.NewHotelRepository(db, fileService))
+		roomTypeService   = domain_services.NewRoomTypeService(repositories.NewRoomTypeRepository(db))
+		roomService       = domain_services.NewRoomService(repositories.NewRoomRepository(db))
+		guestService      = domain_services.NewGuestService(repositories.NewGuestRepository(db))
+		rateGroupService  = domain_services.NewRateGroupService(repositories.NewRateGroupRepository(db))
+		rateCodeService   = domain_services.NewRateCodeService(repositories.NewRateCodeRepository(db))
+		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(db))
+		rateCodeDetailService = domain_services.NewRateCodeDetailService(repositories.NewRateCodeDetailRepository(db))
+
+		reservationRepository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
+		reservationService    = domain_services.NewReservationService(reservationRepository, rabbitMqManager)
+		paymentService        = domain_services.NewPaymentService()
+		authService           = domain_services.NewAuthService(userService, cfg)
+	)
+
+	/****************************************** end register services ***********************************************************/
 
 	// authHandler does bot need to authMiddleware.
 	authHandler.Register(handlerInput, userService, authService)
@@ -122,53 +136,5 @@ func RegisterServices(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
 	// listen to message broker on reservation event and send email in background.
 	go eventService.SendEmailToGuestOnReservation()
-
-}
-
-// set repository dependency
-func setServicesDependencies(db *gorm.DB, cfg *config.Config, logger applogger.Logger, usesInSeed bool) {
-
-	var cacheManager *cache.Manager
-	var fileService *common_services.FileTransferService
-	var rabbitMqManager *message_broker.RabbitMQManager
-
-	ctx := context.Background()
-
-	// prevent to panic in seed.
-	if usesInSeed == false {
-
-		emailService := common_services.NewEmailService(cfg.Smtp.Host,
-			cfg.Smtp.Username, cfg.Smtp.Password, cfg.Smtp.Port,
-		)
-		rabbitMqManager = message_broker.New(cfg.MessageBroker.Url, logger)
-		eventService = common_services.NewEventService(rabbitMqManager, emailService)
-
-		// fileTransferService context for minio
-		fileService = common_services.NewFileTransferService(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID,
-			cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
-	}
-
-	// set services repository dependency.
-	countryService.Repository = repositories.NewCountryRepository(db)
-	provinceService.Repository = repositories.NewProvinceRepository(db)
-	cityService.Repository = repositories.NewCityRepository(db)
-	cityService.CacheManager = cacheManager
-	currencyService.Repository = repositories.NewCurrencyRepository(db)
-	userService.Repository = repositories.NewUserRepository(db)
-	hotelTypeService.Repository = repositories.NewHotelTypeRepository(db)
-	hotelGradeService.Repository = repositories.NewHotelGradeRepository(db)
-	hotelService.Repository = repositories.NewHotelRepository(db, fileService)
-	roomTypeService.Repository = repositories.NewRoomTypeRepository(db)
-	roomService.Repository = repositories.NewRoomRepository(db)
-	guestService.Repository = repositories.NewGuestRepository(db)
-	rateGroupService.Repository = repositories.NewRateGroupRepository(db)
-	rateCodeService.Repository = repositories.NewRateCodeRepository(db)
-	auditService.Repository = repositories.NewAuditRepository(db)
-	rateCodeDetailService.Repository = repositories.NewRateCodeDetailRepository(db)
-	reservationService.Repository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
-
-	authService = *domain_services.NewAuthService(userService, cfg)
-
-	reservationService.MessageBrokerManager = rabbitMqManager
 
 }

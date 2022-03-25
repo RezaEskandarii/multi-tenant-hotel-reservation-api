@@ -5,18 +5,21 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/cache"
 )
 
 type CityService struct {
 	Repository   *repositories.CityRepository
-	CacheManager *cache.Manager
+	CacheManager common_services.CacheManager
 }
 
 // NewCityService returns new CityService
-func NewCityService() *CityService {
-	return &CityService{}
+func NewCityService(repository *repositories.CityRepository, cm common_services.CacheManager) *CityService {
+	return &CityService{
+		Repository:   repository,
+		CacheManager: cm,
+	}
 }
 
 // Create creates new city.

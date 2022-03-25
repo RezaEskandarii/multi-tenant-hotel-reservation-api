@@ -48,6 +48,12 @@ type Config struct {
 		JwtKey         string `yaml:"jwt_key"`
 		TokenAliveTime int    `yaml:"token_alive_time"` // minute
 	}
+
+	Redis struct {
+		Addr     string `yaml:"addr"`
+		Password string `yaml:"password"`
+		CacheDB  int    `yaml:"cache_db"`
+	}
 }
 
 // NewConfig reads config from yml file copies to config struct and returns config struct

@@ -12,8 +12,8 @@ type HotelTypeService struct {
 }
 
 // NewHotelTypeService returns new HotelTypeService
-func NewHotelTypeService() *HotelTypeService {
-	return &HotelTypeService{}
+func NewHotelTypeService(r *repositories.HotelTypeRepository) *HotelTypeService {
+	return &HotelTypeService{Repository: r}
 }
 
 // Create creates new HotelType.

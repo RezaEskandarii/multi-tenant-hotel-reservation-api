@@ -11,7 +11,7 @@ type RoomTypeService struct {
 	Repository *repositories.RoomTypeRepository
 }
 
-func NewRoomTypeService() *RoomTypeService {
+func NewRoomTypeService(r *repositories.RoomTypeRepository) *RoomTypeService {
 	return &RoomTypeService{}
 }
 

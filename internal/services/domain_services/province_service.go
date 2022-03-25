@@ -12,8 +12,8 @@ type ProvinceService struct {
 }
 
 // NewProvinceService returns new ProvinceService
-func NewProvinceService() *ProvinceService {
-	return &ProvinceService{}
+func NewProvinceService(r *repositories.ProvinceRepository) *ProvinceService {
+	return &ProvinceService{Repository: r}
 }
 
 // Create creates new province.

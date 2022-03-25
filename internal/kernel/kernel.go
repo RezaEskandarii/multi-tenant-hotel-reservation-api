@@ -37,7 +37,7 @@ func Run() error {
 		db = db.Debug()
 	}
 
-	service_registry.RegisterServices(db, v1RouterGroup, cfg)
+	service_registry.RegisterServicesAndRoutes(db, v1RouterGroup, cfg)
 	httpRouter.Logger.Fatal(httpRouter.Start(fmt.Sprintf(":%s", cfg.Application.Port)))
 
 	return nil

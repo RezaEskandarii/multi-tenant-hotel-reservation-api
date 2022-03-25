@@ -11,8 +11,8 @@ type AuditService struct {
 	Repository *repositories.AuditRepository
 }
 
-func NewAuditService() *AuditService {
-	return &AuditService{}
+func NewAuditService(repository *repositories.AuditRepository) *AuditService {
+	return &AuditService{Repository: repository}
 }
 
 // Save creates new audit.

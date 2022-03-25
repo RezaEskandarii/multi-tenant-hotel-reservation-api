@@ -12,8 +12,8 @@ type CountryService struct {
 }
 
 // NewCountryService returns new CountryService
-func NewCountryService() *CountryService {
-	return &CountryService{}
+func NewCountryService(r *repositories.CountryRepository) *CountryService {
+	return &CountryService{Repository: r}
 }
 
 // Create creates new country.

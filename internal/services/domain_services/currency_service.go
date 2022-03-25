@@ -12,8 +12,8 @@ type CurrencyService struct {
 }
 
 // NewCurrencyService returns new CurrencyService
-func NewCurrencyService() *CurrencyService {
-	return &CurrencyService{}
+func NewCurrencyService(r *repositories.CurrencyRepository) *CurrencyService {
+	return &CurrencyService{Repository: r}
 }
 
 // Create creates new currency.

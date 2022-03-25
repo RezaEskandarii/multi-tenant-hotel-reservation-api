@@ -16,8 +16,12 @@ type ReservationService struct {
 }
 
 // NewReservationService returns new ReservationService
-func NewReservationService() *ReservationService {
-	return &ReservationService{}
+func NewReservationService(repository *repositories.ReservationRepository,
+	messageBroker message_broker.MessageBrokerManager) *ReservationService {
+	return &ReservationService{
+		Repository:           repository,
+		MessageBrokerManager: messageBroker,
+	}
 }
 
 // Create creates new Reservation.
