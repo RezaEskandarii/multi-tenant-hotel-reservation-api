@@ -37,13 +37,9 @@ func getEncoder() zapcore.Encoder {
 
 // getLogWriter returns zapcore WriteSyncer
 func getLogWriter() zapcore.WriteSyncer {
-	dir, err := os.Getwd()
-	fileName := "./logs/application.log"
-	if err != nil {
-		fileName = fmt.Sprintf("%s/%s", dir, "logs/application.log")
-	}
+
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   fileName,
+		Filename:   getLogFileName(),
 		MaxSize:    1,
 		MaxBackups: 5,
 		MaxAge:     30,
@@ -98,4 +94,14 @@ func (l *AppLogger) LogDebug(message string) {
 func (l *AppLogger) LogError(err interface{}) {
 
 	writeLog(errorLevel, fmt.Sprintf("%s", err))
+}
+
+func getLogFileName() string {
+	fileName := "./logs/application.log"
+
+	dir, err := os.Getwd()
+	if err == nil {
+		return fmt.Sprintf("%s/%s", dir, "logs/application.log")
+	}
+	return fileName
 }
