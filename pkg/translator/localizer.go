@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+type TranslateService interface {
+	Localize(lang string, key string) string
+}
+
 type Translator struct {
 	bundle i18n.Bundle
 }
@@ -19,11 +23,13 @@ func New() *Translator {
 
 	bundle := *i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
-	_, err := bundle.LoadMessageFile("resources/en.json")
-	_, err = bundle.LoadMessageFile("resources/fa.json")
 
-	if err != nil {
-		panic(err)
+	if _, err := bundle.LoadMessageFile("resources/translations/en.json"); err != nil {
+		panic(err.Error())
+	}
+
+	if _, err := bundle.LoadMessageFile("resources/translations/fa.json"); err != nil {
+		panic(err.Error())
 	}
 
 	return &Translator{bundle: bundle}
@@ -37,12 +43,14 @@ func (t *Translator) Localize(lang string, key string) string {
 	}
 
 	loc := i18n.NewLocalizer(&t.bundle, lang)
+
 	msg, err := loc.Localize(&i18n.LocalizeConfig{
 		MessageID: key,
 	})
 
 	if err != nil || strings.Trim(msg, " ") == "" {
-		msg = key
+		return ""
 	}
+
 	return msg
 }
