@@ -1,4 +1,5 @@
 {
+  "AppName": "reservation-api",
   "RoomBusy": "This room is reserved.",
   "CrudMessages": {
     "Created": "The creation operation was successful.",
