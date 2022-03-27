@@ -19,3 +19,4 @@ where details.room_id = 1
   and details.date_start >= '2019-02-02'
   and details.date_end <= '2025-01-01'
 
+#mockgen reservation-api/internal/repositories  CountryRepository

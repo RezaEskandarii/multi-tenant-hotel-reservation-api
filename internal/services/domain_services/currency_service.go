@@ -40,7 +40,7 @@ func (s *CurrencyService) FindAll(input *dto.PaginationFilter) (*commons.Paginat
 	return s.Repository.FindAll(input)
 }
 
-// FindBySymbol returns currency by symbol name.
+// FindBySymbol returns currency by alias name.
 func (s *CurrencyService) FindBySymbol(symbol string) (*models.Currency, error) {
 
 	return s.Repository.FindBySymbol(symbol)

@@ -8,11 +8,11 @@ import (
 )
 
 type CountryService struct {
-	Repository *repositories.CountryRepository
+	Repository repositories.CountryRepository
 }
 
 // NewCountryService returns new CountryService
-func NewCountryService(r *repositories.CountryRepository) *CountryService {
+func NewCountryService(r repositories.CountryRepository) *CountryService {
 	return &CountryService{Repository: r}
 }
 
