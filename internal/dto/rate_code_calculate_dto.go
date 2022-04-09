@@ -15,11 +15,7 @@ type GetRatePriceDto struct {
 }
 
 func (d *GetRatePriceDto) Validate() (bool, error) {
-	ok, err := govalidator.ValidateStruct(d)
-	if err != nil {
-		return false, err
-	}
-	return ok, nil
+	return govalidator.ValidateStruct(d)
 }
 
 type RateCodePricesDto struct {
