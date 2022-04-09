@@ -43,7 +43,7 @@ func NewAuthService(service *UserService, cfg *config.Config) *AuthService {
 
 // SignIn finds user with given username and password and
 // generates JWT token for user.
-func (s AuthService) SignIn(username, password string) (error, *commons.TokenResponse) {
+func (s AuthService) SignIn(username, password string) (error, *commons.JWTTokenResponse) {
 
 	// Get the expected password from our in memory map
 	user, err := s.UserService.FindByUsernameAndPassword(username, password)
@@ -74,13 +74,13 @@ func (s AuthService) SignIn(username, password string) (error, *commons.TokenRes
 	jwtKey := s.Config.Authentication.JwtKey
 
 	tokenString, err := token.SignedString([]byte(jwtKey))
-	return nil, &commons.TokenResponse{
+	return nil, &commons.JWTTokenResponse{
 		ExpireAt:    expirationTime,
 		AccessToken: tokenString,
 	}
 }
 
-func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.TokenResponse) {
+func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.JWTTokenResponse) {
 
 	jwtKey := s.Config.Authentication.JwtKey
 	claims := &Claims{}
@@ -110,7 +110,7 @@ func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.TokenRespon
 		return err, nil
 	}
 
-	return nil, &commons.TokenResponse{
+	return nil, &commons.JWTTokenResponse{
 		ExpireAt:    expirationTime,
 		AccessToken: result,
 	}

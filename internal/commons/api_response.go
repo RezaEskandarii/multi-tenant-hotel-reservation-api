@@ -9,8 +9,8 @@ type ApiResponse struct {
 	Message      string      `json:"message"`
 }
 
-// TokenResponse returns authentication token and expire time.
-type TokenResponse struct {
+// JWTTokenResponse returns authentication token and expire time.
+type JWTTokenResponse struct {
 	ExpireAt    time.Time `json:"expire_at"`
 	AccessToken string    `json:"access_token"`
 }
