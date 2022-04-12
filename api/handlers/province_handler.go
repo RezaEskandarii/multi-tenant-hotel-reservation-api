@@ -212,11 +212,9 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
-		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
-			ResponseCode: http.StatusInternalServerError,
-			Message:      "server error",
-		})
+		return c.JSON(http.StatusInternalServerError, commons.NewApiResponse().
+			SetResponseCode(http.StatusInternalServerError).SetMessage("bad request"),
+		)
 
 	}
 
