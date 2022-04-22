@@ -1,16 +1,45 @@
 {
-  "RoomBusy": "این اتاق رزرو شده است.",
+  "AppName": "reservation-api",
+  "RoomBusy": "این اتاق رزرو شده است",
   "CrudMessages": {
-    "Created": "درج با موفقیت انجام شد.",
-    "Updated": "ویرایش با موفقیت انجام شد.",
-    "Deleted": "حذف با موفقیت انجام شد."
+    "Created": "درج اطلاعات با موفقت انجام شد.",
+    "Updated": "ویرایش اطلاعات با موفقیت انجام شد.",
+    "Deleted": "عملیات حذف انجام شد."
   },
   "Errors": {
-    "NotFound": "هیچ رکوردی پیدا نشد.",
-    "InternalServerError": "ارور",
-    "BadRequest": "درخواست با فرمت اشتباه"
+    "NotFound": "داده ای جهت نمایش وجود ندارد.",
+    "InternalServerError": "InternalServerError",
+    "BadRequest": "BadRequest"
   },
   "Users": {
     "DuplicatedUsername": "نام کاربری تکراری است."
+  },
+  "Rooms": {
+    "HasReservationRequest": "ایت اتاق دارای درخواست رزرو در تاریخ ورود %s و تاریخ خروج %s است."
+  },
+  "Reservation": {
+    "InvalidReservationRequestKey": "کلید ارسال شده نامعتبر است.",
+    "EmptySharerError": "لیست میمانان خالی است.",
+    "ReservationConflictError": "تاریخ ورود و خروج رزرو با یک رزرو دیگر تداخل دارد.",
+    "ImpossibleReservationLatDateError": "ثبت رزرو برای تاریخ سپری شده امکان پذیر نیست.",
+    "CheckinDateEmptyError": "تاریخ ورود خالی است.",
+    "CheckOutDateEmptyError": "تاریخ خروج خالی است."
+  },
+  "Report": {
+    "Name": "نام",
+    "OwnerName": "نام مالک",
+    "Symbol": "سمبل",
+    "GuestName": "نام میهمان",
+    "SupervisorName": "نام سرپرست",
+    "FirstName": "نام",
+    "LastName": "نام خانوداگی",
+    "MiddleName": "نام میانی",
+    "Gender": "جنسیت",
+    "CountryName": "نام کشور",
+    "ProvinceName": "نام استان",
+    "Price": "قیمت",
+    "DiscountAmount": "مقدار تخفیف",
+    "CurrencyName": "واحد پول",
+    "GuestCount": "تعداد میهمان"
   }
 }
