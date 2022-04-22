@@ -24,5 +24,22 @@
     "ImpossibleReservationLatDateError": "It is not possible to reserve for the past date.",
     "CheckinDateEmptyError": "checkInDate is empty.",
     "CheckOutDateEmptyError": "checkOutDate is empty."
+  },
+  "Report": {
+    "Name": "Name",
+    "OwnerName": "OwnerName",
+    "Symbol": "Symbol",
+    "GuestName": "GuestName",
+    "SupervisorName": "SupervisorName",
+    "FirstName": "FirstName",
+    "LastName": "LastName",
+    "MiddleName": "MiddleName",
+    "Gender": "Gender",
+    "CountryName": "CountryName",
+    "ProvinceName": "ProvinceName",
+    "Price": "Price",
+    "DiscountAmount": "DiscountAmount",
+    "CurrencyName": "CurrencyName",
+    "GuestCount": "GuestCount"
   }
 }

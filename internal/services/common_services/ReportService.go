@@ -7,6 +7,6 @@ func NewReportService() *ReportService {
 	return &ReportService{}
 }
 
-func (r *ReportService) ExportToExcel() (error, []byte) {
-	panic("not implemented")
+func (r *ReportService) ExportToExcel(data interface{}, lang string) (error, []byte) {
+
 }
