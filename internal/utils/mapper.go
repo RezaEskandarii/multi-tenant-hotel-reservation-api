@@ -49,3 +49,23 @@ func Map(givenModel interface{}, returnModel interface{}) (interface{}, error) {
 
 	return returnModel, nil
 }
+
+// ConvertToInterfaceSlice converts given input to slice of interface.
+func ConvertToInterfaceSlice(input interface{}) (error, []interface{}) {
+
+	value := reflect.ValueOf(input)
+	if value.Kind() != reflect.Slice {
+		panic("InterfaceSlice() given a non-input type")
+	}
+	if value.IsNil() {
+		return errors.New("input is not slice"), nil
+	}
+
+	result := make([]interface{}, value.Len())
+
+	for i := 0; i < value.Len(); i++ {
+		result[i] = value.Index(i).Interface()
+	}
+
+	return nil, result
+}
