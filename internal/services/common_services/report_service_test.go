@@ -11,22 +11,22 @@ func TestCanGetExcelOutput(t *testing.T) {
 	reportService := NewReportService(nil)
 
 	columnTestCases := []struct {
-		given  int
-		wanted string
+		given int
+		want  string
 	}{
 		{
-			given: 1, wanted: "A",
+			given: 1, want: "A",
 		},
 		{
-			given: 2, wanted: "B",
+			given: 2, want: "B",
 		},
 		{
-			given: 3, wanted: "C",
+			given: 3, want: "C",
 		},
 		{
-			given: 111, wanted: "AAA",
+			given: 111, want: "AAA",
 		},
-		{given: 112, wanted: "AAB"},
+		{given: 112, want: "AAB"},
 	}
 
 	t.Run("test_can_get_excel_output_for_slice_of_users", func(t *testing.T) {
@@ -65,7 +65,7 @@ func TestCanGetExcelOutput(t *testing.T) {
 		for _, testCase := range columnTestCases {
 
 			column := getColName(testCase.given)
-			assert.Equal(t, column, testCase.wanted)
+			assert.Equal(t, column, testCase.want)
 		}
 	})
 }
