@@ -64,7 +64,7 @@ func TestCanGetExcelOutput(t *testing.T) {
 
 		for _, testCase := range columnTestCases {
 
-			column := getColName(testCase.given)
+			column := reportService.getColName(testCase.given)
 			assert.Equal(t, column, testCase.want)
 		}
 	})

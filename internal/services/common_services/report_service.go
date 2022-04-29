@@ -41,7 +41,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 	}
 
 	// convert input to slice of structs
-	err, slice := utils.ConvertToInterfaceSlice(input)
+	slice, err := utils.ConvertToInterfaceSlice(input)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 
 	for i := 0; i < reflect.TypeOf(item1).NumField(); i++ {
 		// excel output headers col name
-		colName := fmt.Sprintf("%s%d", getColName(i), rowIdx)
+		colName := fmt.Sprintf("%s%d", r.getColName(i), rowIdx)
 		f.SetCellValue(sheetName, colName, reflect.TypeOf(item1).Field(i).Name)
 	}
 
@@ -81,7 +81,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 					value = row.Field(j)
 				}
 				// get excel column column name to put data
-				colName := fmt.Sprintf("%s%d", getColName(j), rowIdx)
+				colName := fmt.Sprintf("%s%d", r.getColName(j), rowIdx)
 
 				if value == nil || strings.Contains(fmt.Sprintf("%s", value), "<nil>") {
 					value = ""
@@ -109,7 +109,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 // or if input is 12, output will be AB
 // or if input is 2, output will be B
 // or if input is 11, output will be AA
-func getColName(i int) string {
+func (r *ReportService) getColName(i int) string {
 
 	str := fmt.Sprintf("%d", i)
 	strResult := strings.Builder{}
