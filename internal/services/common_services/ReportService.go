@@ -57,7 +57,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 	item1 := slice[0]
 
 	for i := 0; i < reflect.TypeOf(item1).NumField(); i++ {
-		// excel output header name
+		// excel output headers col name
 		colName := fmt.Sprintf("%s%d", getColName(i), rowIdx)
 		f.SetCellValue(sheetName, colName, reflect.TypeOf(item1).Field(i).Name)
 	}
