@@ -117,7 +117,7 @@ func getColName(i int) string {
 	for _, chr := range str {
 		char := fmt.Sprintf("%c", chr)
 		number, _ := utils.ConvertToUint(char)
-
+		// generate output result
 		strResult.Write([]byte(fmt.Sprintf("%c", rune('A'-1+number))))
 	}
 
