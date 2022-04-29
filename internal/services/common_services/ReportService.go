@@ -18,68 +18,81 @@ func NewReportService(translateService translator.TranslateService) *ReportServi
 	return &ReportService{Translator: translateService}
 }
 
+// ExportToExcel gives a slice of structs
+// this method's output is byte array and error
 func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, error) {
 
 	itemsValue := reflect.ValueOf(input)
+	// return error if input type is struct
 	if itemsValue.Kind() != reflect.Slice {
 		return nil, errors.New("input is not type of interface")
 	}
 
+	// check input length
 	if itemsValue.Len() == 0 {
 		return nil, errors.New("input data length is 0")
 	}
 
+	// check if input contains none struct item
 	for i := 0; i < itemsValue.Len(); i++ {
 		if itemsValue.Index(i).Kind() != reflect.Struct {
 			return nil, errors.New(fmt.Sprintf("the number of item {%d} type is not struct", i))
 		}
 	}
 
+	// convert input to slice of structs
 	err, slice := utils.ConvertToInterfaceSlice(input)
 	if err != nil {
 		return nil, err
 	}
 
 	f := excelize.NewFile()
-
 	defer f.Close()
 
 	sheetName := "Sheet1"
 	index := f.NewSheet(sheetName)
 	rowIdx := 1
 
+	// get index 0 of slice to read fields of  struct and put field names as a Excel output's header.
 	item1 := slice[0]
+
 	for i := 0; i < reflect.TypeOf(item1).NumField(); i++ {
+		// excel output header name
 		colName := fmt.Sprintf("%s%d", getColName(i), rowIdx)
 		f.SetCellValue(sheetName, colName, reflect.TypeOf(item1).Field(i).Name)
 	}
 
+	// get each item of given input
 	for i := 0; i < itemsValue.Len(); i++ {
+
 		item := reflect.Indirect(itemsValue.Index(i))
 		if item.Kind() == reflect.Struct {
+
 			row := reflect.Indirect(item)
 			rowIdx++
+
 			for j := 0; j < row.NumField(); j++ {
+				// put field value into value field
 				var value any
+
 				if row.CanInterface() {
 					value = row.Field(j).Interface()
 				} else {
 					value = row.Field(j)
 				}
+				// get excel column column name to put data
 				colName := fmt.Sprintf("%s%d", getColName(j), rowIdx)
+
 				if value == nil || strings.Contains(fmt.Sprintf("%s", value), "<nil>") {
 					value = ""
 				}
+
 				f.SetCellValue(sheetName, colName, value)
 			}
 		}
 	}
 
 	f.SetActiveSheet(index)
-	// Save spreadsheet by the given path.
-	if err := f.SaveAs("Book1.xlsx"); err != nil {
-		fmt.Println(err)
-	}
 
 	buffer, err := f.WriteToBuffer()
 
@@ -91,10 +104,16 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 
 }
 
+// getColName returns excel column name per given column number
+// For example, if input is 1, output will be A
+// or if input is 1, output will be AB
+// or if input is 2, output will be B
+// or if input is 11, output will be AA
 func getColName(i int) string {
 
 	str := fmt.Sprintf("%d", i)
 	strResult := strings.Builder{}
+
 	for _, chr := range str {
 		char := fmt.Sprintf("%c", chr)
 		number, _ := utils.ConvertToUint(char)
