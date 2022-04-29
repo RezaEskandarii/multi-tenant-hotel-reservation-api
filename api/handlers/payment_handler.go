@@ -9,11 +9,11 @@ import (
 )
 
 type PaymentHandler struct {
-	Input          *dto.HandlerInput
+	Input          *dto.HandlersSharedObjects
 	PaymentService *domain_services.PaymentService
 }
 
-func (handler *PaymentHandler) Register(input *dto.HandlerInput, service *domain_services.PaymentService) {
+func (handler *PaymentHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.PaymentService) {
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/payment")
 	handler.PaymentService = service

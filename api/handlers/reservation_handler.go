@@ -16,11 +16,11 @@ import (
 
 type ReservationHandler struct {
 	Service *domain_services.ReservationService
-	Input   *dto.HandlerInput
+	Input   *dto.HandlersSharedObjects
 	Router  *echo.Group
 }
 
-func (handler *ReservationHandler) Register(input *dto.HandlerInput, service *domain_services.ReservationService) {
+func (handler *ReservationHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.ReservationService) {
 	handler.Router = input.Router
 	routerGroup := handler.Router.Group("/reservation")
 	handler.Input = input

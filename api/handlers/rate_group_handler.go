@@ -15,10 +15,10 @@ import (
 // RateGroupHandler RateGroup endpoint handler
 type RateGroupHandler struct {
 	Service *domain_services.RateGroupService
-	Input   *dto.HandlerInput
+	Input   *dto.HandlersSharedObjects
 }
 
-func (handler *RateGroupHandler) Register(input *dto.HandlerInput, service *domain_services.RateGroupService) {
+func (handler *RateGroupHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.RateGroupService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := handler.Input.Router.Group("/rate-groups")

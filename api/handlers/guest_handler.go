@@ -14,10 +14,10 @@ import (
 // GuestHandler  Currency endpoint handler
 type GuestHandler struct {
 	Service *domain_services.GuestService
-	Input   *dto.HandlerInput
+	Input   *dto.HandlersSharedObjects
 }
 
-func (handler *GuestHandler) Register(input *dto.HandlerInput, service *domain_services.GuestService) {
+func (handler *GuestHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.GuestService) {
 	handler.Input = input
 	handler.Service = service
 	routeGroup := handler.Input.Router.Group("/guests")
