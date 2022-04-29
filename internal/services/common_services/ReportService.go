@@ -18,29 +18,32 @@ func NewReportService(translateService translator.TranslateService) *ReportServi
 	return &ReportService{Translator: translateService}
 }
 
-func (r *ReportService) ExportToExcel(input interface{}, lang string) (error, []byte) {
+func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, error) {
 
 	itemsValue := reflect.ValueOf(input)
 	if itemsValue.Kind() != reflect.Slice {
-		return errors.New("input is not type of interface"), nil
+		return nil, errors.New("input is not type of interface")
 	}
 
 	if itemsValue.Len() == 0 {
-		return errors.New("input data length is 0"), nil
+		return nil, errors.New("input data length is 0")
 	}
 
 	for i := 0; i < itemsValue.Len(); i++ {
 		if itemsValue.Index(i).Kind() != reflect.Struct {
-			return errors.New(fmt.Sprintf("the number of item {%d} type is not struct", i)), nil
+			return nil, errors.New(fmt.Sprintf("the number of item {%d} type is not struct", i))
 		}
 	}
 
 	err, slice := utils.ConvertToInterfaceSlice(input)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	f := excelize.NewFile()
+
+	defer f.Close()
+
 	sheetName := "Sheet1"
 	index := f.NewSheet(sheetName)
 	rowIdx := 1
@@ -78,7 +81,14 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) (error, []
 		fmt.Println(err)
 	}
 
-	return nil, nil
+	buffer, err := f.WriteToBuffer()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
+
 }
 
 func getColName(i int) string {
