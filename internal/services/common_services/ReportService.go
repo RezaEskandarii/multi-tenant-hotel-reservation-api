@@ -106,7 +106,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 
 // getColName returns excel column name per given column number
 // For example, if input is 1, output will be A
-// or if input is 1, output will be AB
+// or if input is 12, output will be AB
 // or if input is 2, output will be B
 // or if input is 11, output will be AA
 func getColName(i int) string {
