@@ -1,6 +1,70 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+### Doc
+- add some comment
+- add some comment
+- add some comment
+- add document to service_registry
+- add document to queueManager
+
+### Feat
+- implement exportToExcel function with excelize library
+- add exportToExcel function
+- add new persian translations for report outputs
+- add new fields translations for report files
+- add reportService
+- add setter to api_response
+- add metrics handler
+- implement reservation report repository
+- add VerifyToken function to
+- implement authService
+- implement ReservationsCount function in guest_repository
+- fill audit fields in handlers
+- add setUpdatedBy function to entities
+- add set audit function
+- preload loaded country province list
+- add retry pattern to send mail function
+- add convertWithGeneric function
+- add event service
+- implement redis cache in city_service
+- implement email sender
+- add SmsSender interface
+- add notification manager module
+- implement messageBroker manager
+- add rabbitmq implementation
+- add ReportRepository
+
+### Refactor
+- report_service_test
+- remove some extra files
+- change ExportToExcel function return type to byte array and error
+- remove extra files
+- change some codes
+- change seed structure
+- clean translate service some codes
+- clean register services
+- refactor findAll function in reservation_repository
+- verify jwt token by authService in jwt middleware
+- remove some extra codes
+- refactor some codes
+- check checkout date in reservationCheckStatus function
+- refactor province handler
+- refactor service_registry
+- refactor service_registry
+- change makefile
+- move ToJson function into utils module
+
+### Test
+- add unit test for utils package
+- add unit test for ReportService
+- implement integration test for redis client
+- add integration test for redis
+- unit test for country service
+- unit test for translation service
+- add logger module integration testing
+- add database integration testing
+
 
 <a name="dev"></a>
 ## dev - 2022-02-23
