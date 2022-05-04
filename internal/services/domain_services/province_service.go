@@ -35,7 +35,7 @@ func (s *ProvinceService) Find(id uint64) (*models.Province, error) {
 }
 
 // FindAll returns paginates list of provinces.
-func (s *ProvinceService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *ProvinceService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

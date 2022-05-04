@@ -72,7 +72,7 @@ func (r *RateCodeDetailRepository) Find(id uint64) (*models.RateCodeDetail, erro
 	return &model, nil
 }
 
-func (r *RateCodeDetailRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *RateCodeDetailRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.RateCodeDetail{}, r.DB, input)
 }

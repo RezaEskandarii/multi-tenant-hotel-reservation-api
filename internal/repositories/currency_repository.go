@@ -53,7 +53,7 @@ func (r *CurrencyRepository) Find(id uint64) (*models.Currency, error) {
 	return &model, nil
 }
 
-func (r *CurrencyRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *CurrencyRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.Currency{}, r.DB, input)
 }

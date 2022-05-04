@@ -98,7 +98,7 @@ func (r *HotelRepository) Find(id uint64) (*models.Hotel, error) {
 	return &model, nil
 }
 
-func (r *HotelRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *HotelRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.Hotel{}, r.DB, input)
 }

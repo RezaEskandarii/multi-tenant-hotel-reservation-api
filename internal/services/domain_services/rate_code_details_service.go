@@ -35,7 +35,7 @@ func (s *RateCodeDetailService) Find(id uint64) (*models.RateCodeDetail, error) 
 }
 
 // FindAll returns paginates list of RateCodeDetails.
-func (s *RateCodeDetailService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *RateCodeDetailService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

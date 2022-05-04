@@ -48,7 +48,7 @@ func (r *RoomRepository) Find(id uint64) (*models.Room, error) {
 	return &model, nil
 }
 
-func (r *RoomRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *RoomRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.Room{}, r.DB, input)
 }

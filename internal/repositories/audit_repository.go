@@ -24,7 +24,7 @@ func (r *AuditRepository) Create(model *models.Audit) (*models.Audit, error) {
 	return model, nil
 }
 
-func (r *AuditRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *AuditRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.City{}, r.DB, input)
 }

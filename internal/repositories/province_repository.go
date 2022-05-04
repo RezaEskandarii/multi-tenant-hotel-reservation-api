@@ -52,7 +52,7 @@ func (r *ProvinceRepository) Find(id uint64) (*models.Province, error) {
 	return &model, nil
 }
 
-func (r *ProvinceRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *ProvinceRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.Province{}, r.DB, input)
 }

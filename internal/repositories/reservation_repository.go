@@ -279,7 +279,7 @@ func (r *ReservationRepository) RemoveExpiredReservationRequests() error {
 	return nil
 }
 
-func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedList) {
+func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedResult) {
 
 	reservations := make([]*models.Reservation, 0)
 

@@ -55,7 +55,7 @@ func (r *RoomTypeRepository) Find(id uint64) (*models.RoomType, error) {
 	return &model, nil
 }
 
-func (r *RoomTypeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *RoomTypeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.RoomType{}, r.DB, input)
 }

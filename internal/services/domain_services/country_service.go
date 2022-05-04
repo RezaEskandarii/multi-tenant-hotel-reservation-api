@@ -35,7 +35,7 @@ func (s *CountryService) Find(id uint64) (*models.Country, error) {
 }
 
 // FindAll returns paginates list of countries.
-func (s *CountryService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *CountryService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

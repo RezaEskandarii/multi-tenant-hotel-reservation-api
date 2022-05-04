@@ -57,7 +57,7 @@ func (s *UserService) Delete(id uint64) error {
 }
 
 // FindAll returns paginated list of cities.
-func (s *UserService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *UserService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

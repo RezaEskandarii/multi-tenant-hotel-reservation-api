@@ -35,7 +35,7 @@ func (s *GuestService) Find(id uint64) (*models.Guest, error) {
 }
 
 // FindAll returns paginates list of cities.
-func (s *GuestService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *GuestService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

@@ -9,7 +9,7 @@ import (
 )
 
 // paginatedList
-func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	var total int64
 
@@ -34,13 +34,13 @@ func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) 
 	return result, nil
 }
 
-func paginateWithFilter(query *gorm.DB, result interface{}, filters interface{}, pageNumber, pageSize int) *commons.PaginatedList {
+func paginateWithFilter(query *gorm.DB, result interface{}, filters interface{}, pageNumber, pageSize int) *commons.PaginatedResult {
 
 	var count int64 = 0
 	query.Count(&count)
 	paginateQuery(query, pageSize, pageNumber).Scan(&result)
 
-	return &commons.PaginatedList{
+	return &commons.PaginatedResult{
 		Records:      result,
 		Page:         uint(pageNumber),
 		PerPage:      uint(pageSize),

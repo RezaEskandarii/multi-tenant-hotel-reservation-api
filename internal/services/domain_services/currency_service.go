@@ -35,7 +35,7 @@ func (s *CurrencyService) Find(id uint64) (*models.Currency, error) {
 }
 
 // FindAll returns paginates list of currencies
-func (s *CurrencyService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (s *CurrencyService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return s.Repository.FindAll(input)
 }

@@ -63,10 +63,10 @@ func (mr *MockCountryRepositoryMockRecorder) Find(arg0 interface{}) *gomock.Call
 }
 
 // FindAll mocks base method.
-func (m *MockCountryRepository) FindAll(arg0 *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (m *MockCountryRepository) FindAll(arg0 *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAll", arg0)
-	ret0, _ := ret[0].(*commons.PaginatedList)
+	ret0, _ := ret[0].(*commons.PaginatedResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -12,7 +12,7 @@ type CountryRepository interface {
 	Create(country *models.Country) (*models.Country, error)
 	Update(country *models.Country) (*models.Country, error)
 	Find(id uint64) (*models.Country, error)
-	FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error)
+	FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error)
 	GetProvinces(countryId uint64) ([]*models.Province, error)
 }
 
@@ -71,7 +71,7 @@ func (r *CountryRepositoryImpl) Find(id uint64) (*models.Country, error) {
 	return &model, nil
 }
 
-func (r *CountryRepositoryImpl) FindAll(input *dto.PaginationFilter) (*commons.PaginatedList, error) {
+func (r *CountryRepositoryImpl) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	return paginatedList(&models.Country{}, r.DB, input)
 }

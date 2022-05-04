@@ -6,8 +6,8 @@ var (
 	defaultSize uint = 20
 )
 
-// PaginatedList paginate list
-type PaginatedList struct {
+// PaginatedResult paginate list
+type PaginatedResult struct {
 	Records      interface{} `json:"records"`
 	Page         uint        `json:"page"`
 	PerPage      uint        `json:"per_page"`
@@ -17,9 +17,9 @@ type PaginatedList struct {
 }
 
 // NewPaginatedList it returns new paginatesList struct and fills fields.
-func NewPaginatedList(totalTableRows uint, page uint, perPage uint) *PaginatedList {
+func NewPaginatedList(totalTableRows uint, page uint, perPage uint) *PaginatedResult {
 
-	p := &PaginatedList{}
+	p := &PaginatedResult{}
 
 	if perPage == 0 {
 		perPage = defaultSize
