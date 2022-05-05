@@ -19,7 +19,7 @@ type AuthHandler struct {
 	logger      applogger.Logger
 }
 
-func (handler *AuthHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.UserService,
+func (handler *AuthHandler) Register(input *dto.HandlersShared, service *domain_services.UserService,
 	authService *domain_services.AuthService) {
 
 	handler.Router = input.Router

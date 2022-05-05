@@ -14,10 +14,10 @@ import (
 // GuestHandler  Currency endpoint handler
 type GuestHandler struct {
 	Service *domain_services.GuestService
-	Input   *dto.HandlersSharedObjects
+	Input   *dto.HandlersShared
 }
 
-func (handler *GuestHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.GuestService) {
+func (handler *GuestHandler) Register(input *dto.HandlersShared, service *domain_services.GuestService) {
 	handler.Input = input
 	handler.Service = service
 	routeGroup := handler.Input.Router.Group("/guests")
@@ -123,11 +123,14 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	page, _ := utils.ConvertToUint(c.Param("page"))
 	perPage, _ := utils.ConvertToUint(c.Param("perPage"))
+	output := getOutputQueryParamVal(c)
 
 	input := &dto.PaginationFilter{
 		Page:    int(page),
 		PerPage: int(perPage),
 	}
+
+	input.IgnorePagination = output != ""
 
 	result, err := handler.Service.FindAll(input)
 
@@ -135,6 +138,19 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: handler.Input.Translator.Localize(lang, err.Error()),
 		})
+	}
+
+	if output != "" {
+		if output == EXCEL {
+			report, err := handler.Input.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			if err != nil {
+				handler.Input.Logger.LogError(err.Error())
+				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
+			}
+			writeBinaryHeaders(c, "balance-sheet", EXCEL_OUTPUT)
+			c.Response().Write(report)
+			return nil
+		}
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{

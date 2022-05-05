@@ -15,10 +15,10 @@ import (
 // HotelHandler Province endpoint handler
 type HotelHandler struct {
 	Service *domain_services.HotelService
-	Input   *dto.HandlersSharedObjects
+	Input   *dto.HandlersShared
 }
 
-func (handler *HotelHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.HotelService) {
+func (handler *HotelHandler) Register(input *dto.HandlersShared, service *domain_services.HotelService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/hotels")

@@ -38,7 +38,7 @@ func paginateWithFilter(query *gorm.DB, result interface{}, filters interface{},
 
 	var count int64 = 0
 	query.Count(&count)
-	paginateQuery(query, pageSize, pageNumber).Scan(&result)
+	query = paginateQuery(query, pageSize, pageNumber).Scan(&result)
 
 	return &commons.PaginatedResult{
 		Records:      result,

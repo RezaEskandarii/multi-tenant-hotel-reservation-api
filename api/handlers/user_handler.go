@@ -15,10 +15,10 @@ import (
 // UserHandler User endpoint handler
 type UserHandler struct {
 	Service *domain_services.UserService
-	Input   *dto.HandlersSharedObjects
+	Input   *dto.HandlersShared
 }
 
-func (handler *UserHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.UserService) {
+func (handler *UserHandler) Register(input *dto.HandlersShared, service *domain_services.UserService) {
 	handler.Service = service
 	handler.Input = input
 	routeGroup := input.Router.Group("/users")

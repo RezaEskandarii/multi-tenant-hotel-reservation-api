@@ -16,10 +16,10 @@ import (
 type RateCodeHandler struct {
 	Service               *domain_services.RateCodeService
 	RateCodeDetailService *domain_services.RateCodeDetailService
-	Input                 *dto.HandlersSharedObjects
+	Input                 *dto.HandlersShared
 }
 
-func (handler *RateCodeHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.RateCodeService, rateCodeDetailService *domain_services.RateCodeDetailService) {
+func (handler *RateCodeHandler) Register(input *dto.HandlersShared, service *domain_services.RateCodeService, rateCodeDetailService *domain_services.RateCodeDetailService) {
 	handler.Service = service
 	handler.RateCodeDetailService = rateCodeDetailService
 	handler.Input = input

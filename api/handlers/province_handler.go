@@ -15,10 +15,10 @@ import (
 // ProvinceHandler Province endpoint handler
 type ProvinceHandler struct {
 	Service *domain_services.ProvinceService
-	Input   *dto.HandlersSharedObjects
+	Input   *dto.HandlersShared
 }
 
-func (handler *ProvinceHandler) Register(input *dto.HandlersSharedObjects, service *domain_services.ProvinceService) {
+func (handler *ProvinceHandler) Register(input *dto.HandlersShared, service *domain_services.ProvinceService) {
 	handler.Service = service
 	handler.Input = input
 
