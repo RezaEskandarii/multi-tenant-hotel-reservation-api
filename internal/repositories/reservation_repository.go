@@ -290,7 +290,7 @@ func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *
 		return err, nil
 	}
 
-	return nil, paginateWithFilter(query, reservations, filter, filter.Page, filter.PerPage)
+	return nil, paginateWithFilter(query, reservations, filter, filter.Page, filter.PerPage, filter.IgnorePagination)
 
 }
 

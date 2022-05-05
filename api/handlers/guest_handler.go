@@ -147,7 +147,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 				handler.Input.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
-			writeBinaryHeaders(c, "balance-sheet", EXCEL_OUTPUT)
+			writeBinaryHeaders(c, "guests", EXCEL_OUTPUT)
 			c.Response().Write(report)
 			return nil
 		}

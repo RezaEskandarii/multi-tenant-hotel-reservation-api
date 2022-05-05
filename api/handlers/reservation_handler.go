@@ -30,6 +30,7 @@ func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *
 	routerGroup.DELETE("/cancel", handler.cancelRequest)
 	routerGroup.POST("/recommend-rate-codes", handler.recommendRateCodes)
 	routerGroup.GET("/:id", handler.find)
+	routerGroup.GET("", handler.findAll)
 	routerGroup.PUT("/:id", handler.update)
 	routerGroup.PUT("/change-status/:id", handler.changeStatus)
 
@@ -395,4 +396,42 @@ func (handler *ReservationHandler) setReservationFields(reservation *models.Rese
 	reservation.CheckinDate = reservationRequest.CheckInDate
 	reservation.CheckoutDate = reservationRequest.CheckOutDate
 	reservation.RoomId = reservationRequest.RoomId
+}
+
+func (handler *ReservationHandler) findAll(c echo.Context) error {
+	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
+	output := getOutputQueryParamVal(c)
+
+	filter := dto.ReservationFilter{}
+	filter.PaginationFilter = *paginationInput
+	filter.IgnorePagination = output != ""
+
+	if err := c.Bind(&filter); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	result, err := handler.Service.FindAll(&filter)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	if output != "" {
+		if output == EXCEL {
+			report, err := handler.Input.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			if err != nil {
+				handler.Input.Logger.LogError(err.Error())
+				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
+			}
+			writeBinaryHeaders(c, "reservations", EXCEL_OUTPUT)
+			c.Response().Write(report)
+			return nil
+		}
+	}
+
+	return c.JSON(http.StatusOK, commons.ApiResponse{
+		Data:         result,
+		ResponseCode: http.StatusOK,
+		Message:      "",
+	})
 }

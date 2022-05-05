@@ -34,11 +34,14 @@ func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) 
 	return result, nil
 }
 
-func paginateWithFilter(query *gorm.DB, result interface{}, filters interface{}, pageNumber, pageSize int) *commons.PaginatedResult {
+func paginateWithFilter(query *gorm.DB, result interface{}, filters interface{}, pageNumber, pageSize int, ignorePagination bool) *commons.PaginatedResult {
 
 	var count int64 = 0
 	query.Count(&count)
-	query = paginateQuery(query, pageSize, pageNumber).Scan(&result)
+
+	if ignorePagination == false {
+		query = paginateQuery(query, pageSize, pageNumber).Scan(&result)
+	}
 
 	return &commons.PaginatedResult{
 		Records:      result,

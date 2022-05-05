@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"reservation-api/internal/commons"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -83,4 +84,10 @@ func (s *ReservationService) FindReservationRequest(requestKey string) (*models.
 // RemoveExpiredReservationRequests removes expired reservation requests.
 func (s *ReservationService) RemoveExpiredReservationRequests() error {
 	return s.Repository.RemoveExpiredReservationRequests()
+}
+
+// FindAll returns paginated list of reservations with some filters like
+// guestname, fromDate,toDate etc.
+func (s *ReservationService) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedResult) {
+	return s.Repository.FindAll(filter)
 }
