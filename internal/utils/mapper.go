@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"reflect"
 )
@@ -27,4 +28,32 @@ func ConvertToInterfaceSlice(input interface{}) ([]interface{}, error) {
 	}
 
 	return result, nil
+}
+
+func Map[T any](source interface{}, dest T) T {
+
+	var data []byte
+	var err error
+
+	if reflect.ValueOf(source).Kind() == reflect.Pointer {
+		data, err = json.Marshal(source)
+	} else {
+		data, err = json.Marshal(source)
+	}
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if reflect.ValueOf(dest).Kind() == reflect.Pointer {
+		err = json.Unmarshal(data, dest)
+	} else {
+		err = json.Unmarshal(data, &dest)
+	}
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return dest
 }
