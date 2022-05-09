@@ -47,12 +47,11 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 	// fill handlers shared dependencies in handlerInput struct and pass this
 	// struct to handlers inserted of pass many duplicated objects
 	handlerInput := &dto.HandlersShared{
-		Router:        router,
-		Translator:    i18nTranslator,
-		Logger:        logger,
-		ReportService: common_services.NewReportService(i18nTranslator),
+		Router:     router,
+		Translator: i18nTranslator,
+		Logger:     logger,
 	}
-
+	reportService := common_services.NewReportService(i18nTranslator)
 	/****************************************** register services ***********************************************************/
 	ctx := context.Background()
 
@@ -122,13 +121,13 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 
 	roomHandler.Register(handlerInput, roomService)
 
-	guestHandler.Register(handlerInput, guestService)
+	guestHandler.Register(handlerInput, guestService, reportService)
 
 	rateGroupHandler.Register(handlerInput, rateGroupService)
 
 	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
 
-	reservationHandler.Register(handlerInput, reservationService)
+	reservationHandler.Register(handlerInput, reservationService, reportService)
 
 	paymentHandler.Register(handlerInput, paymentService)
 

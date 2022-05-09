@@ -7,17 +7,21 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
 
 // GuestHandler  Currency endpoint handler
 type GuestHandler struct {
-	Service *domain_services.GuestService
-	Input   *dto.HandlersShared
+	Service       *domain_services.GuestService
+	Input         *dto.HandlersShared
+	ReportService *common_services.ReportService
 }
 
-func (handler *GuestHandler) Register(input *dto.HandlersShared, service *domain_services.GuestService) {
+func (handler *GuestHandler) Register(input *dto.HandlersShared,
+	service *domain_services.GuestService, reportService *common_services.ReportService) {
+	handler.ReportService = reportService
 	handler.Input = input
 	handler.Service = service
 	routeGroup := handler.Input.Router.Group("/guests")
@@ -142,7 +146,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	if output != "" {
 		if output == EXCEL {
-			report, err := handler.Input.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
 			if err != nil {
 				handler.Input.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})

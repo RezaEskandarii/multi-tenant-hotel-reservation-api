@@ -8,6 +8,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 	"strings"
@@ -15,13 +16,16 @@ import (
 )
 
 type ReservationHandler struct {
-	Service *domain_services.ReservationService
-	Input   *dto.HandlersShared
-	Router  *echo.Group
+	Service       *domain_services.ReservationService
+	Input         *dto.HandlersShared
+	Router        *echo.Group
+	ReportService *common_services.ReportService
 }
 
-func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *domain_services.ReservationService) {
+func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *domain_services.ReservationService,
+	reportService *common_services.ReportService) {
 	handler.Router = input.Router
+	handler.ReportService = reportService
 	routerGroup := handler.Router.Group("/reservation")
 	handler.Input = input
 	handler.Service = service
@@ -418,7 +422,7 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 
 	if output != "" {
 		if output == EXCEL {
-			report, err := handler.Input.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
 			if err != nil {
 				handler.Input.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
