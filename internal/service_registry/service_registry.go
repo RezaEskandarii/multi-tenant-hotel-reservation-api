@@ -39,9 +39,7 @@ var (
 // RegisterServicesAndRoutes register dependencies for services and handlers
 func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Config) {
 
-	// logger
 	logger := applogger.New(nil)
-	// i18n translator
 	i18nTranslator := translator.New()
 
 	// fill handlers shared dependencies in handlerInput struct and pass this
@@ -51,8 +49,8 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 		Translator: i18nTranslator,
 		Logger:     logger,
 	}
+
 	reportService := common_services.NewReportService(i18nTranslator)
-	/****************************************** register services ***********************************************************/
 	ctx := context.Background()
 
 	// gomail implementation
@@ -66,32 +64,29 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 		cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
 	// redis implementation
 	cacheService := common_services.NewCacheService(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.CacheDB, ctx)
-
 	eventService := common_services.NewEventService(rabbitMqManager, emailService)
-	var (
-		countryService    = domain_services.NewCountryService(repositories.NewCountryRepository(db))
-		provinceService   = domain_services.NewProvinceService(repositories.NewProvinceRepository(db))
-		cityService       = domain_services.NewCityService(repositories.NewCityRepository(db), cacheService)
-		currencyService   = domain_services.NewCurrencyService(repositories.NewCurrencyRepository(db))
-		userService       = domain_services.NewUserService(repositories.NewUserRepository(db))
-		hotelTypeService  = domain_services.NewHotelTypeService(repositories.NewHotelTypeRepository(db))
-		hotelGradeService = domain_services.NewHotelGradeService(repositories.NewHotelGradeRepository(db))
-		hotelService      = domain_services.NewHotelService(repositories.NewHotelRepository(db, fileService))
-		roomTypeService   = domain_services.NewRoomTypeService(repositories.NewRoomTypeRepository(db))
-		roomService       = domain_services.NewRoomService(repositories.NewRoomRepository(db))
-		guestService      = domain_services.NewGuestService(repositories.NewGuestRepository(db))
-		rateGroupService  = domain_services.NewRateGroupService(repositories.NewRateGroupRepository(db))
-		rateCodeService   = domain_services.NewRateCodeService(repositories.NewRateCodeRepository(db))
-		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(db))
-		rateCodeDetailService = domain_services.NewRateCodeDetailService(repositories.NewRateCodeDetailRepository(db))
 
+	var (
+		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(db))
+		provinceService       = domain_services.NewProvinceService(repositories.NewProvinceRepository(db))
+		cityService           = domain_services.NewCityService(repositories.NewCityRepository(db), cacheService)
+		currencyService       = domain_services.NewCurrencyService(repositories.NewCurrencyRepository(db))
+		userService           = domain_services.NewUserService(repositories.NewUserRepository(db))
+		hotelTypeService      = domain_services.NewHotelTypeService(repositories.NewHotelTypeRepository(db))
+		hotelGradeService     = domain_services.NewHotelGradeService(repositories.NewHotelGradeRepository(db))
+		hotelService          = domain_services.NewHotelService(repositories.NewHotelRepository(db, fileService))
+		roomTypeService       = domain_services.NewRoomTypeService(repositories.NewRoomTypeRepository(db))
+		roomService           = domain_services.NewRoomService(repositories.NewRoomRepository(db))
+		guestService          = domain_services.NewGuestService(repositories.NewGuestRepository(db))
+		rateGroupService      = domain_services.NewRateGroupService(repositories.NewRateGroupRepository(db))
+		rateCodeService       = domain_services.NewRateCodeService(repositories.NewRateCodeRepository(db))
+		rateCodeDetailService = domain_services.NewRateCodeDetailService(repositories.NewRateCodeDetailRepository(db))
 		reservationRepository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
 		reservationService    = domain_services.NewReservationService(reservationRepository, rabbitMqManager)
 		paymentService        = domain_services.NewPaymentService()
 		authService           = domain_services.NewAuthService(userService, cfg)
+		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(db))
 	)
-
-	/****************************************** end register services ***********************************************************/
 
 	// authHandler does bot need to authMiddleware.
 	authHandler.Register(handlerInput, userService, authService)
@@ -100,7 +95,6 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 	router.Use( /**middlewares.JWTAuthMiddleware, */ )
 
 	metricHandler.Register(cfg)
-
 	countryHandler.Register(handlerInput, countryService)
 
 	provinceHandler.Register(handlerInput, provinceService)
