@@ -83,7 +83,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 		rateCodeDetailService = domain_services.NewRateCodeDetailService(repositories.NewRateCodeDetailRepository(db))
 		reservationRepository = repositories.NewReservationRepository(db, rateCodeDetailService.Repository)
 		reservationService    = domain_services.NewReservationService(reservationRepository, rabbitMqManager)
-		paymentService        = domain_services.NewPaymentService()
+		paymentService        = domain_services.NewPaymentService(repositories.NewPaymentRepository(db))
 		authService           = domain_services.NewAuthService(userService, cfg)
 		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(db))
 	)
