@@ -1,36 +1,39 @@
 package domain_services
 
 import (
-	"github.com/stripe/stripe-go/v72"
-	"github.com/stripe/stripe-go/v72/charge"
 	"reservation-api/internal/models"
+	"reservation-api/internal/repositories"
 )
 
 type PaymentService struct {
+	Repository *repositories.PaymentRepository
 }
 
-func NewPaymentService() *PaymentService {
-	return &PaymentService{}
+func NewPaymentService(repository *repositories.PaymentRepository) *PaymentService {
+	return &PaymentService{Repository: repository}
 }
 
-func (p *PaymentService) Pay() interface{} {
+func (s *PaymentService) Create(payment *models.Payment) (*models.Payment, error) {
 
-	var payment models.Charge
-	payment.ReceiptEmail = "rezaesskandari@gmail.com"
-	apiKey := ""
+	return s.Repository.Create(payment)
+}
 
-	stripe.Key = apiKey
-	result, err := charge.New(&stripe.ChargeParams{
-		Amount:       stripe.Int64(2111111000000033),
-		Currency:     stripe.String(string(stripe.CurrencyUSD)),
-		Description:  stripe.String("hotel reservation"),
-		Source:       &stripe.SourceParams{Token: stripe.String("tok_visa")},
-		ReceiptEmail: stripe.String(payment.ReceiptEmail),
-	})
+func (s *PaymentService) Find(id uint64) (*models.Payment, error) {
 
-	if err != nil {
-		return err
-	}
+	return s.Repository.Find(id)
+}
 
-	return result
+func (s *PaymentService) Delete(id uint64) error {
+
+	return s.Repository.Delete(id)
+}
+
+func (s *PaymentService) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType) ([]*models.Payment, error) {
+
+	return s.Repository.GetListByReservationID(reservationID, paymentType)
+}
+
+func (s *PaymentService) GetBalance(reservationID uint64, paymentType *models.PaymentType) (float64, error) {
+
+	return s.Repository.GetBalance(reservationID, paymentType)
 }
