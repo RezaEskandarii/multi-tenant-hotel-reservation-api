@@ -12,7 +12,7 @@ type RoomTypeService struct {
 }
 
 func NewRoomTypeService(r *repositories.RoomTypeRepository) *RoomTypeService {
-	return &RoomTypeService{}
+	return &RoomTypeService{Repository: r}
 }
 
 // Create creates new RoomType.

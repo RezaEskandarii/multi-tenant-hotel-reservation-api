@@ -11,6 +11,7 @@ import (
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
+	"reservation-api/pkg/database"
 	"reservation-api/pkg/message_broker"
 	"reservation-api/pkg/translator"
 )
@@ -38,7 +39,7 @@ var (
 
 // RegisterServicesAndRoutes register dependencies for services and handlers
 func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Config) {
-
+	database.ApplySeed(db)
 	logger := applogger.New(nil)
 	i18nTranslator := translator.New()
 
