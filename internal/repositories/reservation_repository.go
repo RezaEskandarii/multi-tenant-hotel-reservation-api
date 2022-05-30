@@ -249,14 +249,17 @@ func (r *ReservationRepository) DeleteReservationRequest(requestKey string) erro
 
 func (r *ReservationRepository) Find(id uint64) (*models.Reservation, error) {
 	reservation := models.Reservation{}
-	db := r.DB.Model(models.Reservation{})
-	db = r.preloadReservationRelations(db)
-	if err := db.Where("id=?", id).Find(&reservation).Error; err != nil {
+	query := r.DB.Model(models.Reservation{})
+	query = r.preloadReservationRelations(query)
+
+	if err := query.Where("id=?", id).Find(&reservation).Error; err != nil {
 		return nil, err
 	}
+
 	if reservation.Id == 0 {
 		return nil, nil
 	}
+
 	return &reservation, nil
 }
 
@@ -265,9 +268,11 @@ func (r *ReservationRepository) FindReservationRequest(requestKey string) (*mode
 	if err := r.DB.Where("request_key=?", requestKey).Find(&reservationRequest).Error; err != nil {
 		return nil, err
 	}
+
 	if reservationRequest.Id == 0 {
 		return nil, nil
 	}
+
 	return &reservationRequest, nil
 }
 
