@@ -55,7 +55,7 @@ func writeLog(level string, message string) {
 
 	switch strings.TrimSpace(level) {
 	case "errorLevel":
-		sugarLogger.Info(message)
+		sugarLogger.Error(message)
 		break
 	case "infoLevel":
 		sugarLogger.Info(message)
