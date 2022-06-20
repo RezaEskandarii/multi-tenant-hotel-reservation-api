@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
 	"reservation-api/internal/config"
 	"reservation-api/internal/service_registry"
@@ -46,6 +47,7 @@ func Run() error {
 // return new instance of echo.
 func getHttpRouter() *echo.Echo {
 	e := echo.New()
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())

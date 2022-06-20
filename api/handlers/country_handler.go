@@ -8,6 +8,8 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+
+	_ "reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 )
@@ -29,7 +31,14 @@ func (handler *CountryHandler) Register(input *dto.HandlersShared, service *doma
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary create new Country
+// @Tags Country
+// @Accept json
+// @Produce json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param  country body  models.Country true "Country"
+// @Success 200 {object} models.Country
+// @Router /countries [post]
 func (handler *CountryHandler) create(c echo.Context) error {
 
 	model := &models.Country{}

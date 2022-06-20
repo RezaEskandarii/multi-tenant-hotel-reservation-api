@@ -1,0 +1,122 @@
+basePath: /api/v1
+definitions:
+  models.City:
+    properties:
+      alias:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      province:
+        $ref: '#/definitions/models.Province'
+      province_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Country:
+    properties:
+      alias:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      provinces:
+        items:
+          $ref: '#/definitions/models.Province'
+        type: array
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Province:
+    properties:
+      alias:
+        type: string
+      cities:
+        items:
+          $ref: '#/definitions/models.City'
+        type: array
+      country:
+        $ref: '#/definitions/models.Country'
+      country_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+host: petstore.swagger.io
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: MIT
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Reservation API
+  version: "1.0"
+paths:
+  /countries:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Country
+        in: body
+        name: country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: create new Country
+      tags:
+      - Country
+swagger: "2.0"
