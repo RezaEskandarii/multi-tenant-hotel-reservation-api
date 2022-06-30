@@ -7,9 +7,10 @@ import (
 // Country country struct
 type Country struct {
 	BaseModel
-	Name      string      `json:"name" valid:"required"  gorm:"type:varchar(50)"`
-	Alias     string      `json:"alias" valid:"required"  gorm:"type:varchar(50)"`
-	Provinces []*Province `json:"provinces" gorm:"foreignKey:CountryId" valid:"-"`
+	Name  string `json:"name" valid:"required"  gorm:"type:varchar(50)"`
+	Alias string `json:"alias" valid:"required"  gorm:"type:varchar(50)"`
+	// swagger:ignore
+	Provinces []*Province `json:"provinces" gorm:"foreignKey:CountryId" valid:"-" swagger:ignore`
 }
 
 func (c *Country) Validate() (bool, error) {

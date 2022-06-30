@@ -23,7 +23,7 @@ type Config struct {
 		Port               string `yaml:"port"`
 		ClusterName        string `yaml:"cluster_name"`
 		IgnoreMigration    bool   `yaml:"ignore_migration"`
-		SqlDebug           bool   `yaml:"sql_debug"`
+		DebugMode          bool   `yaml:"debug_mode"`
 		MetricEndPointPort int    `yaml:"metric_end_point_port"`
 	}
 	// Minio file management

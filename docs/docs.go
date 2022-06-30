@@ -10,15 +10,9 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "license": {
-            "name": "MIT",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "MIT"
         },
         "version": "{{.Version}}"
     },
@@ -26,6 +20,38 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/countries": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "findAll Countries",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Country"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -60,6 +86,139 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Country by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "update Country",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Country",
+                        "name": "Country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    },
+                    {
+                        "description": "Country",
+                        "name": "country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}/provinces": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Provinces by country ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Province"
+                            }
                         }
                     }
                 }
@@ -127,6 +286,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "provinces": {
+                    "description": "swagger:ignore",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Province"
@@ -193,11 +353,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "petstore.swagger.io",
+	Host:             "",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Reservation API",
-	Description:      "This is a sample server.",
+	Description:      "Swagger documentation for reservation API .",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

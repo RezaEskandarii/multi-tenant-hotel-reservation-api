@@ -1,24 +1,49 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server.",
+        "description": "Swagger documentation for reservation API .",
         "title": "Reservation API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "license": {
-            "name": "MIT",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "MIT"
         },
         "version": "1.0"
     },
-    "host": "petstore.swagger.io",
     "basePath": "/api/v1",
     "paths": {
         "/countries": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "findAll Countries",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Country"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -53,6 +78,139 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Country by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "update Country",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Country",
+                        "name": "Country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    },
+                    {
+                        "description": "Country",
+                        "name": "country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}/provinces": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Provinces by country ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Province"
+                            }
                         }
                     }
                 }
@@ -120,6 +278,7 @@
                     "type": "string"
                 },
                 "provinces": {
+                    "description": "swagger:ignore",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Province"

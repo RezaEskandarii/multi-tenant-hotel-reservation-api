@@ -84,7 +84,7 @@ func (l *AppLogger) LogWarning(message string) {
 	writeLog(warningLevel, message)
 }
 
-// LogDebug Logs in Debug level.
+// LogDebug Logs in DebugMode level.
 func (l *AppLogger) LogDebug(message string) {
 
 	writeLog(debugLevel, message)

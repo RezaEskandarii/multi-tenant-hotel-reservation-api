@@ -34,7 +34,7 @@ func Run() error {
 		return err
 	}
 
-	if cfg.Application.SqlDebug {
+	if cfg.Application.DebugMode {
 		db = db.Debug()
 	}
 

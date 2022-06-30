@@ -40,6 +40,7 @@ definitions:
       name:
         type: string
       provinces:
+        description: swagger:ignore
         items:
           $ref: '#/definitions/models.Province'
         type: array
@@ -79,21 +80,36 @@ definitions:
       updated_by:
         type: string
     type: object
-host: petstore.swagger.io
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server.
+  contact: {}
+  description: Swagger documentation for reservation API .
   license:
     name: MIT
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
   title: Reservation API
   version: "1.0"
 paths:
   /countries:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Country'
+            type: array
+      summary: findAll Countries
+      tags:
+      - Country
     post:
       consumes:
       - application/json
@@ -117,6 +133,94 @@ paths:
           schema:
             $ref: '#/definitions/models.Country'
       summary: create new Country
+      tags:
+      - Country
+  /countries/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: find Country by id
+      tags:
+      - Country
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Country
+        in: body
+        name: Country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      - description: Country
+        in: body
+        name: country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: update Country
+      tags:
+      - Country
+  /countries/{id}/provinces:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Province'
+            type: array
+      summary: find Provinces by country ID
       tags:
       - Country
 swagger: "2.0"

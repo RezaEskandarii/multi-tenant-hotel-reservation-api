@@ -1,6 +1,6 @@
 database:
   username: postgres
-  password: 1234
+  password: boofhichkas
   port: 5432
   ssl_mode: disable
   host: 127.0.0.1
@@ -10,7 +10,7 @@ application:
   port: 8080
   cluster_name: cluster1
   ignore_migration: false
-  sql_debug: true
+  debug_mode: true
   metric_end_point_port: 8081
 minio:
   endpoint: 127.0.0.1:9000

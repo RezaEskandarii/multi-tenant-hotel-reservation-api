@@ -71,7 +71,16 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update Country
+// @Tags Country
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Country body models.Country true "Country"
+// @Produce json
+// @Param  country body  models.Country true "Country"
+// @Success 200 {object} models.Country
+// @Router /countries/{id} [put]
 func (handler *CountryHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -120,7 +129,14 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary find Country by id
+// @Tags Country
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.Country
+// @Router /countries/{id} [get]
 func (handler *CountryHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -156,7 +172,13 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Countries
+// @Tags Country
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Country
+// @Router /countries [get]
 func (handler *CountryHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -174,8 +196,14 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
-// get provinces by countryId.
+// @Summary find Provinces by country ID
+// @Tags Country
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {array} models.Province
+// @Router /countries/{id}/provinces [get]
 func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

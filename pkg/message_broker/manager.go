@@ -28,7 +28,6 @@ func New(url string, logger applogger.Logger) *RabbitMQManager {
 
 	if err != nil {
 		logger.LogError(err.Error())
-		panic(err.Error())
 	}
 
 	return &RabbitMQManager{
