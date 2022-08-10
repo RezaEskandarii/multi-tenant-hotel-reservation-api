@@ -39,7 +39,7 @@ func (handler *GuestHandler) Register(input *dto.HandlersShared,
 // @Param X-TenantID header int true "X-TenantID"
 // @Param  Guest body  models.Guest true "Guest"
 // @Success 200 {object} models.Guest
-// @Router /countries [post]
+// @Router /guests [post]
 func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
@@ -77,7 +77,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 // @Produce json
 // @Param  Guest body  models.Guest true "Guest"
 // @Success 200 {object} models.Guest
-// @Router /countries/{id} [put]
+// @Router /guests/{id} [put]
 func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
@@ -123,7 +123,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Guest
-// @Router /countries/{id} [get]
+// @Router /guests/{id} [get]
 func (handler *GuestHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -149,7 +149,7 @@ func (handler *GuestHandler) find(c echo.Context) error {
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
 // @Success 200 {array} models.Guest
-// @Router /countries [get]
+// @Router /guests [get]
 func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)

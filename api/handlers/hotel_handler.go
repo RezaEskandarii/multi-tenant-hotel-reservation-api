@@ -36,7 +36,7 @@ func (handler *HotelHandler) Register(input *dto.HandlersShared, service *domain
 // @Param X-TenantID header int true "X-TenantID"
 // @Param  Hotel body  models.Hotel true "Hotel"
 // @Success 200 {object} models.Hotel
-// @Router /countries [post]
+// @Router /hotels [post]
 func (handler *HotelHandler) create(c echo.Context) error {
 
 	createDto := dto.HotelCreateDto{}
@@ -81,7 +81,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 // @Produce json
 // @Param  Hotel body  models.Hotel true "Hotel"
 // @Success 200 {object} models.Hotel
-// @Router /countries/{id} [put]
+// @Router /hotels/{id} [put]
 func (handler *HotelHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -147,7 +147,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Hotel
-// @Router /countries/{id} [get]
+// @Router /hotels/{id} [get]
 func (handler *HotelHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -190,7 +190,7 @@ func (handler *HotelHandler) find(c echo.Context) error {
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
 // @Success 200 {array} models.Hotel
-// @Router /countries [get]
+// @Router /hotels [get]
 func (handler *HotelHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -214,7 +214,7 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
 // @Success 200 {array} models.Hotel
-// @Router /countries [del]
+// @Router /hotels [del]
 func (handler *HotelHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

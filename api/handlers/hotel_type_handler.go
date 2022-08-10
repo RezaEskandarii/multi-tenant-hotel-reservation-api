@@ -29,7 +29,14 @@ func (handler *HotelTypeHandler) Register(input *dto.HandlersShared, service *do
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary create new HotelType
+// @Tags HotelType
+// @Accept json
+// @Produce json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param  HotelType body  models.HotelType true "HotelType"
+// @Success 200 {object} models.HotelType
+// @Router /hotel-types [post]
 func (handler *HotelTypeHandler) create(c echo.Context) error {
 
 	model := &models.HotelType{}
@@ -66,7 +73,16 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update HotelType
+// @Tags HotelType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param HotelType body models.HotelType true "HotelType"
+// @Produce json
+// @Param  HotelType body  models.HotelType true "HotelType"
+// @Success 200 {object} models.HotelType
+// @Router /hotel-types/{id} [put]
 func (handler *HotelTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -113,7 +129,14 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary find HotelType by id
+// @Tags HotelType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.HotelType
+// @Router /hotel-types/{id} [get]
 func (handler *HotelTypeHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -149,7 +172,13 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll HotelTypes
+// @Tags HotelType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.HotelType
+// @Router /hotel-types [get]
 func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -167,7 +196,13 @@ func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary Delete HotelType
+// @Tags HotelType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.HotelType
+// @Router /hotel-types [del]
 func (handler *HotelTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
