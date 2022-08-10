@@ -22,6 +22,14 @@ func (handler *PaymentHandler) Register(input *dto.HandlersShared, service *doma
 	routeGroup.DELETE("/:id", handler.delete)
 }
 
+// @Summary create new Payment
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param  Payment body  models.Payment true "Payment"
+// @Success 200 {object} models.Payment
+// @Router /payments [post]
 func (handler *PaymentHandler) create(c echo.Context) error {
 
 	payment := models.Payment{}
@@ -37,6 +45,13 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 	}
 }
 
+// @Summary Delete Payment
+// @Tags Payment
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Payment
+// @Router /payments [del]
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Get("id"))
