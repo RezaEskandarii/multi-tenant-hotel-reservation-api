@@ -214,7 +214,7 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
 // @Success 200 {array} models.Hotel
-// @Router /hotels [del]
+// @Router /hotels [delete]
 func (handler *HotelHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

@@ -90,14 +90,16 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 }
 
-// @Summary find Province by id
+// @Summary update Province
 // @Tags Province
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
 // @Param Id path int true "Id"
+// @Param Province body models.Province true "Province"
 // @Produce json
+// @Param  Province body  models.Province true "Province"
 // @Success 200 {object} models.Province
-// @Router /provinces/{id} [get]
+// @Router /provinces/{id} [put]
 func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -160,13 +162,14 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary findAll Countries
+// @Summary find Province by id
 // @Tags Province
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
 // @Produce json
-// @Success 200 {array} models.Province
-// @Router /provinces [get]
+// @Success 200 {object} models.Province
+// @Router /provinces/{id} [get]
 func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -202,14 +205,13 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary find Provinces by Province ID
+// @Summary findAll Provinces
 // @Tags Province
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
-// @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.Province
-// @Router /provinces/{id}/provinces [get]
+// @Router /provinces [get]
 func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)

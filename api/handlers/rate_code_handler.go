@@ -32,7 +32,16 @@ func (handler *RateCodeHandler) Register(input *dto.HandlersShared, service *dom
 	routeGroup.POST("/add-details/:id", handler.addDetails)
 }
 
-/*====================================================================================*/
+// @Summary update Province
+// @Tags Province
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Province body models.Province true "Province"
+// @Produce json
+// @Param  Province body  models.Province true "Province"
+// @Success 200 {object} models.Province
+// @Router /provinces/{id} [put]
 func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
@@ -68,7 +77,16 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update Country
+// @Tags Country
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Country body models.Country true "Country"
+// @Produce json
+// @Param  country body  models.Country true "Country"
+// @Success 200 {object} models.Country
+// @Router /countries/{id} [put]
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -119,7 +137,13 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary findAll Countries
+// @Tags Province
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Province
+// @Router /provinces [get]
 func (handler *RateCodeHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -154,7 +178,13 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Provinces
+// @Tags Province
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Province
+// @Router /provinces [get]
 func (handler *RateCodeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -172,7 +202,6 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
 func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

@@ -51,7 +51,7 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
 // @Success 200 {array} models.Payment
-// @Router /payments [del]
+// @Router /payments [delete]
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Get("id"))
