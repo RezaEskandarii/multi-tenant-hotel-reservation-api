@@ -12,7 +12,7 @@ import (
 	"reservation-api/internal/utils"
 )
 
-// GuestHandler  Currency endpoint handler
+// GuestHandler  Guest endpoint handler
 type GuestHandler struct {
 	Service       *domain_services.GuestService
 	Input         *dto.HandlersShared
@@ -32,13 +32,13 @@ func (handler *GuestHandler) Register(input *dto.HandlersShared,
 	//routeGroup.DELETE("", handler)
 }
 
-// @Summary create new Currency
-// @Tags Currency
+// @Summary create new Guest
+// @Tags Guest
 // @Accept json
 // @Produce json
 // @Param X-TenantID header int true "X-TenantID"
-// @Param  Currency body  models.Currency true "Currency"
-// @Success 200 {object} models.Currency
+// @Param  Guest body  models.Guest true "Guest"
+// @Success 200 {object} models.Guest
 // @Router /countries [post]
 func (handler *GuestHandler) create(c echo.Context) error {
 
@@ -68,7 +68,16 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update Guest
+// @Tags Guest
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Guest body models.Guest true "Guest"
+// @Produce json
+// @Param  Guest body  models.Guest true "Guest"
+// @Success 200 {object} models.Guest
+// @Router /countries/{id} [put]
 func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
@@ -107,7 +116,14 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary find Guest by id
+// @Tags Guest
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.Guest
+// @Router /countries/{id} [get]
 func (handler *GuestHandler) find(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
@@ -127,7 +143,13 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Guests
+// @Tags Guest
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Guest
+// @Router /countries [get]
 func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
