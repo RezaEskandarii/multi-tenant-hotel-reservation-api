@@ -28,7 +28,14 @@ func (handler *CurrencyHandler) Register(input *dto.HandlersShared, service *dom
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary create new Currency
+// @Tags Currency
+// @Accept json
+// @Produce json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param  Currency body  models.Currency true "Currency"
+// @Success 200 {object} models.Currency
+// @Router /countries [post]
 func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
@@ -68,7 +75,16 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary update Currency
+// @Tags Currency
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Currency body models.Currency true "Currency"
+// @Produce json
+// @Param  Currency body  models.Currency true "Currency"
+// @Success 200 {object} models.Currency
+// @Router /countries/{id} [put]
 func (handler *CurrencyHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -116,7 +132,14 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary find Currency by id
+// @Tags Currency
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.Currency
+// @Router /countries/{id} [get]
 func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -153,7 +176,13 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Currencies
+// @Tags Currency
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Currency
+// @Router /countries [get]
 func (handler *CurrencyHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)

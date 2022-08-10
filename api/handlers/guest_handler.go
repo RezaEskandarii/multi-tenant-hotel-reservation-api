@@ -32,7 +32,14 @@ func (handler *GuestHandler) Register(input *dto.HandlersShared,
 	//routeGroup.DELETE("", handler)
 }
 
-/*====================================================================================*/
+// @Summary create new Currency
+// @Tags Currency
+// @Accept json
+// @Produce json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param  Currency body  models.Currency true "Currency"
+// @Success 200 {object} models.Currency
+// @Router /countries [post]
 func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
