@@ -32,16 +32,14 @@ func (handler *RateCodeHandler) Register(input *dto.HandlersShared, service *dom
 	routeGroup.POST("/add-details/:id", handler.addDetails)
 }
 
-// @Summary update Province
-// @Tags Province
+// @Summary create RateCode
+// @Tags RateCode
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
-// @Param Id path int true "Id"
-// @Param Province body models.Province true "Province"
 // @Produce json
-// @Param  Province body  models.Province true "Province"
-// @Success 200 {object} models.Province
-// @Router /provinces/{id} [put]
+// @Param  RateCode body  models.RateCode true "RateCode"
+// @Success 200 {object} models.RateCode
+// @Router /rate-codes/{id} [post]
 func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
@@ -77,16 +75,15 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update Country
-// @Tags Country
+// @Summary update RateCode
+// @Tags RateCode
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
 // @Param Id path int true "Id"
-// @Param Country body models.Country true "Country"
 // @Produce json
-// @Param  country body  models.Country true "Country"
-// @Success 200 {object} models.Country
-// @Router /countries/{id} [put]
+// @Param  RateCode body  models.RateCode true "RateCode"
+// @Success 200 {object} models.RateCode
+// @Router /rate-codes/{id} [put]
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -137,13 +134,14 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary findAll Countries
-// @Tags Province
+// @Summary find RateCode
+// @Tags RateCode
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
 // @Produce json
-// @Success 200 {array} models.Province
-// @Router /provinces [get]
+// @Success 200 {array} models.RateCode
+// @Router /rate-codes/{id} [get]
 func (handler *RateCodeHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
@@ -178,13 +176,13 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Provinces
-// @Tags Province
+// @Summary findAll rate-codes
+// @Tags RateCode
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
-// @Success 200 {array} models.Province
-// @Router /provinces [get]
+// @Success 200 {array} models.RateCode
+// @Router /rate-codes [get]
 func (handler *RateCodeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -202,6 +200,14 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 	})
 }
 
+// @Summary Delete RateCode
+// @Tags RateCode
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {array} models.RateCode
+// @Router /rate-codes [delete]
 func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -233,7 +239,16 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary Add RateCode Details
+// @Tags RateCode
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param RateCode body models.RateCodeDetail true "RateCode"
+// @Produce json
+// @Param  RateCode body  models.RateCodeDetail true "RateCode"
+// @Success 200 {object} models.RateCodeDetail
+// @Router /rate-codes/add-details/{id} [post]
 func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Get("id"))

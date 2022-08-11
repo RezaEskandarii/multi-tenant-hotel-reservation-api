@@ -29,7 +29,14 @@ func (handler *RateGroupHandler) Register(input *dto.HandlersShared, service *do
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary Create RateGroup
+// @Tags RateGroup
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  RateGroup body  models.RateGroup true "RateGroup"
+// @Success 200 {object} models.RateGroup
+// @Router /rate-groups/{id} [post]
 func (handler *RateGroupHandler) create(c echo.Context) error {
 
 	model := &models.RateGroup{}
@@ -64,7 +71,15 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update RateGroup
+// @Tags RateGroup
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Param  RateGroup body  models.RateGroup true "RateGroup"
+// @Success 200 {object} models.RateGroup
+// @Router /rate-groups/{id} [put]
 func (handler *RateGroupHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -112,7 +127,14 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary find RateGroup
+// @Tags RateGroup
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {array} models.RateGroup
+// @Router /rate-groups/{id} [get]
 func (handler *RateGroupHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
@@ -147,7 +169,13 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll rate-codes
+// @Tags RateGroup
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.RateGroup
+// @Router /rate-groups [get]
 func (handler *RateGroupHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -165,7 +193,14 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary Delete RateGroup
+// @Tags RateGroup
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {array} models.RateGroup
+// @Router /rate-groups [delete]
 func (handler *RateGroupHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))

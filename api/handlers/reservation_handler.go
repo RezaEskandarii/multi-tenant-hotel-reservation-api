@@ -40,7 +40,14 @@ func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *
 
 }
 
-/*=====================================================================================================*/
+// @Summary Create Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  Reservation body  models.Reservation true "Reservation"
+// @Success 200 {object} models.Reservation
+// @Router /reservations/{id} [post]
 func (handler *ReservationHandler) createRequest(c echo.Context) error {
 
 	lang := getAcceptLanguage(c)
@@ -116,8 +123,14 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	})
 }
 
-/*==========================================================================================================*/
-
+// @Summary Create Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  Reservation body  models.Reservation true "Reservation"
+// @Success 200 {object} models.Reservation
+// @Router /reservations/{id} [post]
 func (handler *ReservationHandler) create(c echo.Context) error {
 
 	reservation := models.Reservation{}
@@ -192,8 +205,15 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	})
 }
 
-/*===================================================================================*/
-
+// @Summary update Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Param  Reservation body  models.Reservation true "Reservation"
+// @Success 200 {object} models.Reservation
+// @Router /reservations/{id} [put]
 func (handler *ReservationHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -289,9 +309,16 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	})
 }
 
-/*===================================================================================*/
-
 // If the client cancels the reservation request, they can call this endpoint to delete the reservation request.
+
+// @Summary Delete Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200
+// @Router /reservations/cancel/{id} [delete]
 func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	requestKey := c.QueryParam("requestKey")
 	if err := handler.Service.RemoveReservationRequest(requestKey); err != nil {
@@ -300,7 +327,14 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-/*===================================================================================*/
+// @Summary Create Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  Reservation body  dto.GetRatePriceDto
+// @Success 200 {object} dto.RateCodePricesDto
+// @Router /reservations/recommend-rate-codes/{id} [post]
 func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 
 	priceDto := dto.GetRatePriceDto{}
@@ -327,7 +361,14 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 	})
 }
 
-/*===================================================================================*/
+// @Summary Delete Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {array} models.Reservation
+// @Router /reservations/{id} [get]
 func (handler *ReservationHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
@@ -351,7 +392,15 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 	})
 }
 
-/*===================================================================================*/
+// @Summary update Reservation
+// @Tags Reservation
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param status query int true "status"
+// @Produce json
+// @Param  Reservation body  models.Reservation true "Reservation"
+// @Success 200 {object} models.Reservation
+// @Router /reservations/change-status/{id} [put]
 func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
