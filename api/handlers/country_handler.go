@@ -54,6 +54,11 @@ func (handler *CountryHandler) create(c echo.Context) error {
 				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
+
+	if _, err := model.Validate(); err != nil {
+
+	}
+
 	model.SetAudit(user)
 	output, err := handler.Service.Create(model)
 	if err != nil {

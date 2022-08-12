@@ -332,7 +332,7 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
 // @Produce json
-// @Param  Reservation body  dto.GetRatePriceDto
+// @Param  GetRatePriceDto body  dto.GetRatePriceDto true "GetRatePriceDto"
 // @Success 200 {object} dto.RateCodePricesDto
 // @Router /reservations/recommend-rate-codes/{id} [post]
 func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
