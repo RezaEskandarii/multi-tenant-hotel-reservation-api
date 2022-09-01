@@ -1,0 +1,3017 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Swagger documentation for reservation API .",
+        "title": "Reservation API",
+        "contact": {},
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/countries": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "findAll Countries",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Country"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "create new Country",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Country",
+                        "name": "country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Country by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "update Country",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Country",
+                        "name": "Country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    },
+                    {
+                        "description": "Country",
+                        "name": "country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Country"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/{id}/provinces": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Country"
+                ],
+                "summary": "find Provinces by country ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Province"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/currencies": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "findAll Currencies",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Currency"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "create new Currency",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Currency",
+                        "name": "Currency",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    }
+                }
+            }
+        },
+        "/currencies/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "find Currency by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "update Currency",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Currency",
+                        "name": "Currency",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    },
+                    {
+                        "description": "Currency",
+                        "name": "Currency",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Currency"
+                        }
+                    }
+                }
+            }
+        },
+        "/guests": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "findAll Guests",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Guest"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "create new Guest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Guest",
+                        "name": "Guest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    }
+                }
+            }
+        },
+        "/guests/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "find Guest by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "update Guest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Guest",
+                        "name": "Guest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    },
+                    {
+                        "description": "Guest",
+                        "name": "Guest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Guest"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotel-grades": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelGrade"
+                ],
+                "summary": "findAll HotelGrades",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.HotelGrade"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelGrade"
+                ],
+                "summary": "create new HotelGrade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "HotelGrade",
+                        "name": "HotelGrade",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelGrade"
+                ],
+                "summary": "Delete HotelGrade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.HotelGrade"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hotel-grades/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelGrade"
+                ],
+                "summary": "find HotelGrade by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelGrade"
+                ],
+                "summary": "update HotelGrade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "HotelGrade",
+                        "name": "HotelGrade",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    },
+                    {
+                        "description": "HotelGrade",
+                        "name": "HotelGrade",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelGrade"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotel-types": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelType"
+                ],
+                "summary": "findAll HotelTypes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.HotelType"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelType"
+                ],
+                "summary": "create new HotelType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "HotelType",
+                        "name": "HotelType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelType"
+                ],
+                "summary": "Delete HotelType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.HotelType"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hotel-types/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelType"
+                ],
+                "summary": "find HotelType by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HotelType"
+                ],
+                "summary": "update HotelType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "HotelType",
+                        "name": "HotelType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    },
+                    {
+                        "description": "HotelType",
+                        "name": "HotelType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HotelType"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotels": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "findAll Hotels",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Hotel"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "create new Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Hotel",
+                        "name": "Hotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Delete Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Hotel"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hotels/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "find Hotel by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "update Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Hotel",
+                        "name": "Hotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    },
+                    {
+                        "description": "Hotel",
+                        "name": "Hotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Hotel"
+                        }
+                    }
+                }
+            }
+        },
+        "/payments": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "create new Payment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Payment",
+                        "name": "Payment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Payment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Payment"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Delete Payment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Payment"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Province"
+                ],
+                "summary": "findAll Provinces",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Province"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Province"
+                ],
+                "summary": "find Province by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Province"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Province"
+                ],
+                "summary": "update Province",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Province",
+                        "name": "Province",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Province"
+                        }
+                    },
+                    {
+                        "description": "Province",
+                        "name": "Province",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Province"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Province"
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces/{id}/cities": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Province"
+                ],
+                "summary": "find Province cities by Province ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Province"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rate-codes": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "findAll rate-codes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateCode"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "Delete RateCode",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateCode"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rate-codes/add-details/{id}": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "Add RateCode Details",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "RateCode",
+                        "name": "RateCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCodeDetail"
+                        }
+                    },
+                    {
+                        "description": "RateCode",
+                        "name": "RateCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCodeDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCodeDetail"
+                        }
+                    }
+                }
+            }
+        },
+        "/rate-codes/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "find RateCode",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateCode"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "update RateCode",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "RateCode",
+                        "name": "RateCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCode"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateCode"
+                ],
+                "summary": "create RateCode",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "RateCode",
+                        "name": "RateCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RateCode"
+                        }
+                    }
+                }
+            }
+        },
+        "/rate-groups": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateGroup"
+                ],
+                "summary": "findAll rate-codes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateGroup"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateGroup"
+                ],
+                "summary": "Delete RateGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateGroup"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rate-groups/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateGroup"
+                ],
+                "summary": "find RateGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RateGroup"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateGroup"
+                ],
+                "summary": "update RateGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "RateGroup",
+                        "name": "RateGroup",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateGroup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RateGroup"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RateGroup"
+                ],
+                "summary": "Create RateGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "RateGroup",
+                        "name": "RateGroup",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RateGroup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RateGroup"
+                        }
+                    }
+                }
+            }
+        },
+        "/reservations/cancel/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Delete Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/reservations/change-status/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "update Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Reservation",
+                        "name": "Reservation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                }
+            }
+        },
+        "/reservations/recommend-rate-codes/{id}": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Create Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "GetRatePriceDto",
+                        "name": "GetRatePriceDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetRatePriceDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RateCodePricesDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/reservations/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Delete Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Reservation"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "update Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Reservation",
+                        "name": "Reservation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Create Reservation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-TenantID",
+                        "name": "X-TenantID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Reservation",
+                        "name": "Reservation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Reservation"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.GetRatePriceDto": {
+            "type": "object",
+            "properties": {
+                "date_end": {
+                    "type": "string"
+                },
+                "date_start": {
+                    "type": "string"
+                },
+                "guest_count": {
+                    "type": "integer"
+                },
+                "night_count": {
+                    "type": "number"
+                },
+                "rate_code_id": {
+                    "type": "integer"
+                },
+                "room_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.RateCodePricesDto": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "date_end": {
+                    "type": "string"
+                },
+                "date_start": {
+                    "type": "string"
+                },
+                "detail_id": {
+                    "type": "integer"
+                },
+                "guest_count": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "rate_code_id": {
+                    "type": "integer"
+                },
+                "rate_code_name": {
+                    "type": "string"
+                },
+                "rate_price_id": {
+                    "type": "integer"
+                },
+                "room_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.City": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "province": {
+                    "$ref": "#/definitions/models.Province"
+                },
+                "province_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Country": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "provinces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Province"
+                    }
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Currency": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Guest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "cell_number": {
+                    "type": "string"
+                },
+                "country": {
+                    "$ref": "#/definitions/models.Country"
+                },
+                "country_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "middle_name": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "string"
+                },
+                "passport_date_of_issue": {
+                    "type": "string"
+                },
+                "passport_expire_date": {
+                    "type": "string"
+                },
+                "passport_number": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Hotel": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "$ref": "#/definitions/models.City"
+                },
+                "city_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "email_address": {
+                    "type": "string"
+                },
+                "fax_number": {
+                    "type": "string"
+                },
+                "hotel_grade": {
+                    "$ref": "#/definitions/models.HotelGrade"
+                },
+                "hotel_grade_id": {
+                    "type": "integer"
+                },
+                "hotel_type": {
+                    "$ref": "#/definitions/models.HotelType"
+                },
+                "hotel_type_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "phone_number1": {
+                    "type": "string"
+                },
+                "phone_number2": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "province": {
+                    "$ref": "#/definitions/models.Province"
+                },
+                "province_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "thumbnails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/os.File"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "website": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.HotelGrade": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "hotel_type": {
+                    "$ref": "#/definitions/models.HotelType"
+                },
+                "hotel_type_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.HotelType": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "grades": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.HotelGrade"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Payment": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "payer": {
+                    "$ref": "#/definitions/models.Guest"
+                },
+                "payer_id": {
+                    "type": "integer"
+                },
+                "payment_date": {
+                    "type": "string"
+                },
+                "payment_type": {
+                    "type": "integer"
+                },
+                "reservation": {
+                    "$ref": "#/definitions/models.Reservation"
+                },
+                "reservation_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Province": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "cities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.City"
+                    }
+                },
+                "country": {
+                    "$ref": "#/definitions/models.Country"
+                },
+                "country_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RateCode": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "currency": {
+                    "$ref": "#/definitions/models.Currency"
+                },
+                "currency_id": {
+                    "type": "integer"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "hotel": {
+                    "$ref": "#/definitions/models.Hotel"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rate_group": {
+                    "$ref": "#/definitions/models.RateGroup"
+                },
+                "rate_group_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "Guest       Guest     `json:\"guest\"  valid:\"-\"`\nGuestId     uint64    `json:\"guest_id\"  valid:\"required\"`",
+                    "type": "boolean"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RateCodeDetail": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "date_end": {
+                    "type": "string"
+                },
+                "date_start": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "max_nights": {
+                    "type": "integer"
+                },
+                "min_nights": {
+                    "type": "integer"
+                },
+                "rate_code": {
+                    "$ref": "#/definitions/models.RateCode"
+                },
+                "rate_code_id": {
+                    "type": "integer"
+                },
+                "rate_prices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.RateCodeDetailPrice"
+                    }
+                },
+                "room": {
+                    "$ref": "#/definitions/models.Room"
+                },
+                "room_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RateCodeDetailPrice": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "guest_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "rate_code_detail": {
+                    "$ref": "#/definitions/models.RateCodeDetail"
+                },
+                "rate_code_detail_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RateGroup": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hotel": {
+                    "$ref": "#/definitions/models.Hotel"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Reservation": {
+            "type": "object",
+            "properties": {
+                "check_status": {
+                    "type": "integer"
+                },
+                "checkin_date": {
+                    "type": "string"
+                },
+                "checkout_date": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "guest_count": {
+                    "type": "integer"
+                },
+                "hotel": {
+                    "$ref": "#/definitions/models.Hotel"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nights": {
+                    "type": "number"
+                },
+                "parent": {
+                    "$ref": "#/definitions/models.Reservation"
+                },
+                "parent_id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "rate_code": {
+                    "$ref": "#/definitions/models.RateCode"
+                },
+                "rate_code_id": {
+                    "type": "integer"
+                },
+                "request_key": {
+                    "type": "string"
+                },
+                "room": {
+                    "$ref": "#/definitions/models.Room"
+                },
+                "room_id": {
+                    "type": "integer"
+                },
+                "sharers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Sharer"
+                    }
+                },
+                "supervisor": {
+                    "$ref": "#/definitions/models.Guest"
+                },
+                "supervisor_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Room": {
+            "type": "object",
+            "properties": {
+                "clean_status": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "max_beds": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "room_type": {
+                    "$ref": "#/definitions/models.RoomType"
+                },
+                "room_type_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.RoomType": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hotel": {
+                    "$ref": "#/definitions/models.Hotel"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "max_guest_count": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Sharer": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "guest": {
+                    "$ref": "#/definitions/models.Guest"
+                },
+                "guest_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "reservation_id": {
+                    "type": "integer"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "city": {
+                    "$ref": "#/definitions/models.City"
+                },
+                "city_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "tenant_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "os.File": {
+            "type": "object"
+        }
+    }
+}

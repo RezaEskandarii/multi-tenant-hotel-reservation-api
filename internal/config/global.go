@@ -9,4 +9,5 @@ var (
 	EmailQueueName                  = "email_queue"
 	ReservationQueueName            = "reservation_queue"
 	SendEmailRetryCount     uint    = 3
+	TenantID                        = "TenantID"
 )

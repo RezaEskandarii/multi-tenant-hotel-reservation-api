@@ -1,0 +1,1990 @@
+basePath: /api/v1
+definitions:
+  dto.GetRatePriceDto:
+    properties:
+      date_end:
+        type: string
+      date_start:
+        type: string
+      guest_count:
+        type: integer
+      night_count:
+        type: number
+      rate_code_id:
+        type: integer
+      room_id:
+        type: integer
+    type: object
+  dto.RateCodePricesDto:
+    properties:
+      created_at:
+        type: string
+      date_end:
+        type: string
+      date_start:
+        type: string
+      detail_id:
+        type: integer
+      guest_count:
+        type: integer
+      price:
+        type: number
+      rate_code_id:
+        type: integer
+      rate_code_name:
+        type: string
+      rate_price_id:
+        type: integer
+      room_id:
+        type: integer
+    type: object
+  models.City:
+    properties:
+      alias:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      province:
+        $ref: '#/definitions/models.Province'
+      province_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Country:
+    properties:
+      alias:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      provinces:
+        items:
+          $ref: '#/definitions/models.Province'
+        type: array
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Currency:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      symbol:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Guest:
+    properties:
+      address:
+        type: string
+      cell_number:
+        type: string
+      country:
+        $ref: '#/definitions/models.Country'
+      country_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      date_of_birth:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      middle_name:
+        type: string
+      national_id:
+        type: string
+      passport_date_of_issue:
+        type: string
+      passport_expire_date:
+        type: string
+      passport_number:
+        type: string
+      phone_number:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Hotel:
+    properties:
+      address:
+        type: string
+      city:
+        $ref: '#/definitions/models.City'
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      email_address:
+        type: string
+      fax_number:
+        type: string
+      hotel_grade:
+        $ref: '#/definitions/models.HotelGrade'
+      hotel_grade_id:
+        type: integer
+      hotel_type:
+        $ref: '#/definitions/models.HotelType'
+      hotel_type_id:
+        type: integer
+      id:
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/models.User'
+      owner_id:
+        type: integer
+      phone_number1:
+        type: string
+      phone_number2:
+        type: string
+      postal_code:
+        type: string
+      province:
+        $ref: '#/definitions/models.Province'
+      province_id:
+        type: integer
+      tenant_id:
+        type: integer
+      thumbnails:
+        items:
+          $ref: '#/definitions/os.File'
+        type: array
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      website:
+        type: string
+    type: object
+  models.HotelGrade:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      hotel_type:
+        $ref: '#/definitions/models.HotelType'
+      hotel_type_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.HotelType:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      grades:
+        items:
+          $ref: '#/definitions/models.HotelGrade'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Payment:
+    properties:
+      amount:
+        type: number
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      payer:
+        $ref: '#/definitions/models.Guest'
+      payer_id:
+        type: integer
+      payment_date:
+        type: string
+      payment_type:
+        type: integer
+      reservation:
+        $ref: '#/definitions/models.Reservation'
+      reservation_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Province:
+    properties:
+      alias:
+        type: string
+      cities:
+        items:
+          $ref: '#/definitions/models.City'
+        type: array
+      country:
+        $ref: '#/definitions/models.Country'
+      country_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.RateCode:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      currency:
+        $ref: '#/definitions/models.Currency'
+      currency_id:
+        type: integer
+      deleted_at:
+        type: string
+      hotel:
+        $ref: '#/definitions/models.Hotel'
+      hotel_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      rate_group:
+        $ref: '#/definitions/models.RateGroup'
+      rate_group_id:
+        type: integer
+      status:
+        description: |-
+          Guest       Guest     `json:"guest"  valid:"-"`
+          GuestId     uint64    `json:"guest_id"  valid:"required"`
+        type: boolean
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.RateCodeDetail:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      date_end:
+        type: string
+      date_start:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      max_nights:
+        type: integer
+      min_nights:
+        type: integer
+      rate_code:
+        $ref: '#/definitions/models.RateCode'
+      rate_code_id:
+        type: integer
+      rate_prices:
+        items:
+          $ref: '#/definitions/models.RateCodeDetailPrice'
+        type: array
+      room:
+        $ref: '#/definitions/models.Room'
+      room_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.RateCodeDetailPrice:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      guest_count:
+        type: integer
+      id:
+        type: integer
+      price:
+        type: number
+      rate_code_detail:
+        $ref: '#/definitions/models.RateCodeDetail'
+      rate_code_detail_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.RateGroup:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      hotel:
+        $ref: '#/definitions/models.Hotel'
+      hotel_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Reservation:
+    properties:
+      check_status:
+        type: integer
+      checkin_date:
+        type: string
+      checkout_date:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      guest_count:
+        type: integer
+      hotel:
+        $ref: '#/definitions/models.Hotel'
+      hotel_id:
+        type: integer
+      id:
+        type: integer
+      nights:
+        type: number
+      parent:
+        $ref: '#/definitions/models.Reservation'
+      parent_id:
+        type: integer
+      price:
+        type: number
+      rate_code:
+        $ref: '#/definitions/models.RateCode'
+      rate_code_id:
+        type: integer
+      request_key:
+        type: string
+      room:
+        $ref: '#/definitions/models.Room'
+      room_id:
+        type: integer
+      sharers:
+        items:
+          $ref: '#/definitions/models.Sharer'
+        type: array
+      supervisor:
+        $ref: '#/definitions/models.Guest'
+      supervisor_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Room:
+    properties:
+      clean_status:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      max_beds:
+        type: integer
+      name:
+        type: string
+      room_type:
+        $ref: '#/definitions/models.RoomType'
+      room_type_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.RoomType:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      hotel:
+        $ref: '#/definitions/models.Hotel'
+      hotel_id:
+        type: integer
+      id:
+        type: integer
+      max_guest_count:
+        type: integer
+      name:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.Sharer:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      guest:
+        $ref: '#/definitions/models.Guest'
+      guest_id:
+        type: integer
+      id:
+        type: integer
+      reservation_id:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  models.User:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      city:
+        $ref: '#/definitions/models.City'
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      last_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      username:
+        type: string
+    type: object
+  os.File:
+    type: object
+info:
+  contact: {}
+  description: Swagger documentation for reservation API .
+  license:
+    name: MIT
+  title: Reservation API
+  version: "1.0"
+paths:
+  /countries:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Country'
+            type: array
+      summary: findAll Countries
+      tags:
+      - Country
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Country
+        in: body
+        name: country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: create new Country
+      tags:
+      - Country
+  /countries/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: find Country by id
+      tags:
+      - Country
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Country
+        in: body
+        name: Country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      - description: Country
+        in: body
+        name: country
+        required: true
+        schema:
+          $ref: '#/definitions/models.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Country'
+      summary: update Country
+      tags:
+      - Country
+  /countries/{id}/provinces:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Province'
+            type: array
+      summary: find Provinces by country ID
+      tags:
+      - Country
+  /currencies:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Currency'
+            type: array
+      summary: findAll Currencies
+      tags:
+      - Currency
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Currency
+        in: body
+        name: Currency
+        required: true
+        schema:
+          $ref: '#/definitions/models.Currency'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Currency'
+      summary: create new Currency
+      tags:
+      - Currency
+  /currencies/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Currency'
+      summary: find Currency by id
+      tags:
+      - Currency
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Currency
+        in: body
+        name: Currency
+        required: true
+        schema:
+          $ref: '#/definitions/models.Currency'
+      - description: Currency
+        in: body
+        name: Currency
+        required: true
+        schema:
+          $ref: '#/definitions/models.Currency'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Currency'
+      summary: update Currency
+      tags:
+      - Currency
+  /guests:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Guest'
+            type: array
+      summary: findAll Guests
+      tags:
+      - Guest
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Guest
+        in: body
+        name: Guest
+        required: true
+        schema:
+          $ref: '#/definitions/models.Guest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Guest'
+      summary: create new Guest
+      tags:
+      - Guest
+  /guests/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Guest'
+      summary: find Guest by id
+      tags:
+      - Guest
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Guest
+        in: body
+        name: Guest
+        required: true
+        schema:
+          $ref: '#/definitions/models.Guest'
+      - description: Guest
+        in: body
+        name: Guest
+        required: true
+        schema:
+          $ref: '#/definitions/models.Guest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Guest'
+      summary: update Guest
+      tags:
+      - Guest
+  /hotel-grades:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HotelGrade'
+            type: array
+      summary: Delete HotelGrade
+      tags:
+      - HotelGrade
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HotelGrade'
+            type: array
+      summary: findAll HotelGrades
+      tags:
+      - HotelGrade
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: HotelGrade
+        in: body
+        name: HotelGrade
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelGrade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelGrade'
+      summary: create new HotelGrade
+      tags:
+      - HotelGrade
+  /hotel-grades/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelGrade'
+      summary: find HotelGrade by id
+      tags:
+      - HotelGrade
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: HotelGrade
+        in: body
+        name: HotelGrade
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelGrade'
+      - description: HotelGrade
+        in: body
+        name: HotelGrade
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelGrade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelGrade'
+      summary: update HotelGrade
+      tags:
+      - HotelGrade
+  /hotel-types:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HotelType'
+            type: array
+      summary: Delete HotelType
+      tags:
+      - HotelType
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HotelType'
+            type: array
+      summary: findAll HotelTypes
+      tags:
+      - HotelType
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: HotelType
+        in: body
+        name: HotelType
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelType'
+      summary: create new HotelType
+      tags:
+      - HotelType
+  /hotel-types/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelType'
+      summary: find HotelType by id
+      tags:
+      - HotelType
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: HotelType
+        in: body
+        name: HotelType
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelType'
+      - description: HotelType
+        in: body
+        name: HotelType
+        required: true
+        schema:
+          $ref: '#/definitions/models.HotelType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HotelType'
+      summary: update HotelType
+      tags:
+      - HotelType
+  /hotels:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Hotel'
+            type: array
+      summary: Delete Hotel
+      tags:
+      - Hotel
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Hotel'
+            type: array
+      summary: findAll Hotels
+      tags:
+      - Hotel
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Hotel
+        in: body
+        name: Hotel
+        required: true
+        schema:
+          $ref: '#/definitions/models.Hotel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Hotel'
+      summary: create new Hotel
+      tags:
+      - Hotel
+  /hotels/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Hotel'
+      summary: find Hotel by id
+      tags:
+      - Hotel
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Hotel
+        in: body
+        name: Hotel
+        required: true
+        schema:
+          $ref: '#/definitions/models.Hotel'
+      - description: Hotel
+        in: body
+        name: Hotel
+        required: true
+        schema:
+          $ref: '#/definitions/models.Hotel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Hotel'
+      summary: update Hotel
+      tags:
+      - Hotel
+  /payments:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Payment'
+            type: array
+      summary: Delete Payment
+      tags:
+      - Payment
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Payment
+        in: body
+        name: Payment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Payment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Payment'
+      summary: create new Payment
+      tags:
+      - Payment
+  /provinces:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Province'
+            type: array
+      summary: findAll Provinces
+      tags:
+      - Province
+  /provinces/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Province'
+      summary: find Province by id
+      tags:
+      - Province
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Province
+        in: body
+        name: Province
+        required: true
+        schema:
+          $ref: '#/definitions/models.Province'
+      - description: Province
+        in: body
+        name: Province
+        required: true
+        schema:
+          $ref: '#/definitions/models.Province'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Province'
+      summary: update Province
+      tags:
+      - Province
+  /provinces/{id}/cities:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Province'
+            type: array
+      summary: find Province cities by Province ID
+      tags:
+      - Province
+  /rate-codes:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateCode'
+            type: array
+      summary: Delete RateCode
+      tags:
+      - RateCode
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateCode'
+            type: array
+      summary: findAll rate-codes
+      tags:
+      - RateCode
+  /rate-codes/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateCode'
+            type: array
+      summary: find RateCode
+      tags:
+      - RateCode
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: RateCode
+        in: body
+        name: RateCode
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RateCode'
+      summary: create RateCode
+      tags:
+      - RateCode
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: RateCode
+        in: body
+        name: RateCode
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RateCode'
+      summary: update RateCode
+      tags:
+      - RateCode
+  /rate-codes/add-details/{id}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: RateCode
+        in: body
+        name: RateCode
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateCodeDetail'
+      - description: RateCode
+        in: body
+        name: RateCode
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateCodeDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RateCodeDetail'
+      summary: Add RateCode Details
+      tags:
+      - RateCode
+  /rate-groups:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateGroup'
+            type: array
+      summary: Delete RateGroup
+      tags:
+      - RateGroup
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateGroup'
+            type: array
+      summary: findAll rate-codes
+      tags:
+      - RateGroup
+  /rate-groups/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RateGroup'
+            type: array
+      summary: find RateGroup
+      tags:
+      - RateGroup
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: RateGroup
+        in: body
+        name: RateGroup
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateGroup'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RateGroup'
+      summary: Create RateGroup
+      tags:
+      - RateGroup
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: RateGroup
+        in: body
+        name: RateGroup
+        required: true
+        schema:
+          $ref: '#/definitions/models.RateGroup'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RateGroup'
+      summary: update RateGroup
+      tags:
+      - RateGroup
+  /reservations/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Reservation'
+            type: array
+      summary: Delete Reservation
+      tags:
+      - Reservation
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Reservation
+        in: body
+        name: Reservation
+        required: true
+        schema:
+          $ref: '#/definitions/models.Reservation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Reservation'
+      summary: Create Reservation
+      tags:
+      - Reservation
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: Reservation
+        in: body
+        name: Reservation
+        required: true
+        schema:
+          $ref: '#/definitions/models.Reservation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Reservation'
+      summary: update Reservation
+      tags:
+      - Reservation
+  /reservations/cancel/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete Reservation
+      tags:
+      - Reservation
+  /reservations/change-status/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: status
+        in: query
+        name: status
+        required: true
+        type: integer
+      - description: Reservation
+        in: body
+        name: Reservation
+        required: true
+        schema:
+          $ref: '#/definitions/models.Reservation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Reservation'
+      summary: update Reservation
+      tags:
+      - Reservation
+  /reservations/recommend-rate-codes/{id}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-TenantID
+        in: header
+        name: X-TenantID
+        required: true
+        type: integer
+      - description: GetRatePriceDto
+        in: body
+        name: GetRatePriceDto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GetRatePriceDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RateCodePricesDto'
+      summary: Create Reservation
+      tags:
+      - Reservation
+swagger: "2.0"

@@ -57,13 +57,13 @@ func (handler *AuthHandler) refreshToken(c echo.Context) error {
 	}
 
 	authToken := strings.Split(tokenStr, "Bearer ")
-
 	tokenStr = authToken[1]
 
 	if err, result := handler.AuthService.RefreshToken(tokenStr); err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: err.Error(),
 		})
+
 	} else {
 		return c.JSON(http.StatusOK, result)
 	}

@@ -55,8 +55,8 @@ func (handler *CountryHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := model.Validate(); err != nil {
-
+	if ok, err := model.Validate(); err != nil && ok == false {
+		return c.JSON(http.StatusBadRequest, ApiResponse{Message: err.Error()})
 	}
 
 	model.SetAudit(user)
@@ -143,6 +143,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 // @Success 200 {object} models.Country
 // @Router /countries/{id} [get]
 func (handler *CountryHandler) find(c echo.Context) error {
+
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -153,9 +154,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
-
 		handler.Input.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
