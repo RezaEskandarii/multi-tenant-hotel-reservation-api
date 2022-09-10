@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"reservation-api/api/handlers"
+	"reservation-api/api/middlewares"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/repositories"
@@ -12,6 +13,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/database"
+	"reservation-api/pkg/database/connection_resolver"
 	"reservation-api/pkg/message_broker"
 	"reservation-api/pkg/translator"
 )
@@ -39,8 +41,10 @@ var (
 
 // RegisterServicesAndRoutes register dependencies for services and handlers
 func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Config) {
+
 	database.ApplySeed(db)
 	logger := applogger.New(nil)
+
 	i18nTranslator := translator.New()
 
 	// fill handlers shared dependencies in handlerInput struct and pass this
@@ -54,23 +58,23 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 	reportService := common_services.NewReportService(i18nTranslator)
 	ctx := context.Background()
 
-	// gomail implementation
 	emailService := common_services.NewEmailService(cfg.Smtp.Host,
 		cfg.Smtp.Username, cfg.Smtp.Password, cfg.Smtp.Port,
 	)
-	// rabbitmq implementation
+
 	rabbitMqManager := message_broker.New(cfg.MessageBroker.Url, logger)
-	// minio implementation
+
 	fileService := common_services.NewFileTransferService(cfg.Minio.Endpoint, cfg.Minio.AccessKeyID,
 		cfg.Minio.SecretAccessKey, cfg.Minio.UseSSL, ctx)
-	// redis implementation
+
 	cacheService := common_services.NewCacheService(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.CacheDB, ctx)
 	eventService := common_services.NewEventService(rabbitMqManager, emailService)
+	connectionResolver := connection_resolver.NewConnectionResolver()
 
 	var (
-		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(db))
+		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(connectionResolver))
 		provinceService       = domain_services.NewProvinceService(repositories.NewProvinceRepository(db))
-		cityService           = domain_services.NewCityService(repositories.NewCityRepository(db), cacheService)
+		cityService           = domain_services.NewCityService(repositories.NewCityRepository(nil), cacheService)
 		currencyService       = domain_services.NewCurrencyService(repositories.NewCurrencyRepository(db))
 		userService           = domain_services.NewUserService(repositories.NewUserRepository(db))
 		hotelTypeService      = domain_services.NewHotelTypeService(repositories.NewHotelTypeRepository(db))
@@ -94,6 +98,8 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 
 	// add authentication middleware to all routes.
 	router.Use( /**middlewares.JWTAuthMiddleware, */ )
+
+	router.Use(middlewares.TenantMiddleware)
 
 	metricHandler.Register(cfg)
 	countryHandler.Register(handlerInput, countryService)

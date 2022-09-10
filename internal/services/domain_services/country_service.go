@@ -8,11 +8,11 @@ import (
 )
 
 type CountryService struct {
-	Repository repositories.CountryRepository
+	Repository *repositories.CountryRepository
 }
 
 // NewCountryService returns new CountryService
-func NewCountryService(r repositories.CountryRepository) *CountryService {
+func NewCountryService(r *repositories.CountryRepository) *CountryService {
 	return &CountryService{Repository: r}
 }
 
@@ -29,9 +29,9 @@ func (s *CountryService) Update(country *models.Country) (*models.Country, error
 }
 
 // Find returns country and if it does not find the country, it returns nil.
-func (s *CountryService) Find(id uint64) (*models.Country, error) {
+func (s *CountryService) Find(tenantId uint64, id uint64) (*models.Country, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(tenantId, id)
 }
 
 // FindAll returns paginates list of countries.
@@ -41,7 +41,7 @@ func (s *CountryService) FindAll(input *dto.PaginationFilter) (*commons.Paginate
 }
 
 // GetProvinces returns provinces by given countryId.
-func (s *CountryService) GetProvinces(countryId uint64) ([]*models.Province, error) {
+func (s *CountryService) GetProvinces(tenantId uint64, countryId uint64) ([]*models.Province, error) {
 
-	return s.Repository.GetProvinces(countryId)
+	return s.Repository.GetProvinces(tenantId, countryId)
 }

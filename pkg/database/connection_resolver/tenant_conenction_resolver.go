@@ -1,4 +1,4 @@
-package database
+package connection_resolver
 
 import (
 	"fmt"
@@ -8,10 +8,84 @@ import (
 	"log"
 	"os"
 	config2 "reservation-api/internal/config"
+	"reservation-api/internal/models"
 	"strings"
 	"time"
 )
 
+type ConnectionResolver struct {
+	cache map[uint64]*gorm.DB
+}
+
+func NewConnectionResolver() *ConnectionResolver {
+	return &ConnectionResolver{
+		cache: make(map[uint64]*gorm.DB),
+	}
+}
+
+func (c *ConnectionResolver) Resolve(tenantID uint64) *gorm.DB {
+
+	dbName := ""
+	if tenantID != 0 {
+		dbName = fmt.Sprintf("hotel_reservation_%d", tenantID)
+	}
+
+	if c.cache[tenantID] == nil {
+		cn, err := getDB(false, dbName)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		c.cache[tenantID] = cn
+		return cn
+	}
+
+	return c.cache[tenantID]
+
+}
+
+func (c *ConnectionResolver) CreateDbForTenant(db *gorm.DB, tenantId uint64) {
+
+	dbName := fmt.Sprintf("hotel_reservation_%d", tenantId)
+
+	db.Exec(fmt.Sprintf("CREATE DATABASE %s ENCODING 'UTF8';", dbName))
+}
+
+func (c *ConnectionResolver) Migrate(db *gorm.DB, tenantId uint64) {
+
+	var (
+		entities = []interface{}{
+			models.Country{},
+			models.City{},
+			models.Province{},
+			models.Currency{},
+			models.User{},
+			models.Hotel{},
+			models.Room{},
+			models.RoomType{},
+			models.Guest{},
+			models.RateGroup{},
+			models.RateCode{},
+			models.HotelGrade{},
+			models.HotelType{},
+			models.ReservationRequest{},
+			models.Reservation{},
+			models.Audit{},
+			models.RateCodeDetail{},
+			models.RateCodeDetailPrice{},
+			models.Sharer{},
+			models.Thumbnail{},
+		}
+	)
+
+	for _, entity := range entities {
+		if err := db.AutoMigrate(entity); err != nil {
+			panic(err.Error())
+		}
+	}
+}
+
+/*==========================================================================================*/
 var dbLogger = logger.New(
 	log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 	logger.Config{
@@ -21,6 +95,7 @@ var dbLogger = logger.New(
 	},
 )
 
+/*============================================================================================*/
 // generate database connection string
 func getDSN(tenantDbName string) (string, error) {
 	dbCfg, err := config2.NewConfig()
@@ -65,7 +140,8 @@ func getDSN(tenantDbName string) (string, error) {
 	}
 }
 
-func GetDb(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
+/*========================================================================================*/
+func getDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 
 	if usesInTestEnv {
 		os.Setenv("CONFIG_PATH", "../resources/config.yml")

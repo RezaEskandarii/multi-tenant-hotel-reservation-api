@@ -76,7 +76,6 @@ func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
 func (r *HotelRepository) Update(hotel *models.Hotel) (*models.Hotel, error) {
 
 	if tx := r.DB.Updates(&hotel); tx.Error != nil {
-
 		return nil, tx.Error
 	}
 

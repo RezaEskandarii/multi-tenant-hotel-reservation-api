@@ -1,35 +1,33 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
-type CountryRepository interface {
-	Create(country *models.Country) (*models.Country, error)
-	Update(country *models.Country) (*models.Country, error)
-	Find(id uint64) (*models.Country, error)
-	FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error)
-	GetProvinces(countryId uint64) ([]*models.Province, error)
+//type CountryRepository interface {
+//	Create(country *models.Country) (*models.Country, error)
+//	Update(country *models.Country) (*models.Country, error)
+//	Find(id uint64) (*models.Country, error)
+//	FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error)
+//	GetProvinces(countryId uint64) ([]*models.Province, error)
+//}
+
+type CountryRepository struct {
+	ConnectionResolver *connection_resolver.ConnectionResolver
 }
 
-type CountryRepositoryImpl struct {
-	DB *gorm.DB
+func NewCountryRepository(connectionResolver *connection_resolver.ConnectionResolver) *CountryRepository {
+	return &CountryRepository{ConnectionResolver: connectionResolver}
 }
 
-func NewCountryRepository(db *gorm.DB) *CountryRepositoryImpl {
-	return &CountryRepositoryImpl{
-		DB: db,
-	}
-}
-
-func (r *CountryRepositoryImpl) Create(country *models.Country) (*models.Country, error) {
+func (r *CountryRepository) Create(country *models.Country) (*models.Country, error) {
 
 	valid, err := country.Validate()
-
+	db := r.ConnectionResolver.Resolve(country.TenantId)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +36,7 @@ func (r *CountryRepositoryImpl) Create(country *models.Country) (*models.Country
 		return nil, nil
 	}
 
-	if tx := r.DB.Create(&country); tx.Error != nil {
+	if tx := db.Create(&country); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -46,9 +44,10 @@ func (r *CountryRepositoryImpl) Create(country *models.Country) (*models.Country
 	return country, nil
 }
 
-func (r *CountryRepositoryImpl) Update(country *models.Country) (*models.Country, error) {
+func (r *CountryRepository) Update(country *models.Country) (*models.Country, error) {
 
-	if tx := r.DB.Updates(&country); tx.Error != nil {
+	db := r.ConnectionResolver.Resolve(country.TenantId)
+	if tx := db.Updates(&country); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -56,10 +55,12 @@ func (r *CountryRepositoryImpl) Update(country *models.Country) (*models.Country
 	return country, nil
 }
 
-func (r *CountryRepositoryImpl) Find(id uint64) (*models.Country, error) {
+func (r *CountryRepository) Find(tenantId uint64, id uint64) (*models.Country, error) {
 
 	model := models.Country{}
-	if tx := r.DB.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.Resolve(tenantId)
+
+	if tx := db.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -71,15 +72,18 @@ func (r *CountryRepositoryImpl) Find(id uint64) (*models.Country, error) {
 	return &model, nil
 }
 
-func (r *CountryRepositoryImpl) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (r *CountryRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Country{}, r.DB, input)
+	db := r.ConnectionResolver.Resolve(input.TenantID)
+	return paginatedList(&models.Country{}, db, input)
 }
 
-func (r *CountryRepositoryImpl) GetProvinces(countryId uint64) ([]*models.Province, error) {
+func (r *CountryRepository) GetProvinces(tenantId uint64, countryId uint64) ([]*models.Province, error) {
 	var result []*models.Province
 
-	query := r.DB.Model(&models.Province{}).
+	db := r.ConnectionResolver.Resolve(tenantId)
+
+	query := db.Model(&models.Province{}).
 		Where("country_id=?", countryId).Find(&result)
 
 	if query.Error != nil {
@@ -89,17 +93,19 @@ func (r *CountryRepositoryImpl) GetProvinces(countryId uint64) ([]*models.Provin
 	return result, nil
 }
 
-func (r *CountryRepositoryImpl) Seed(jsonFilePath string) error {
+func (r *CountryRepository) Seed(tenantId uint64, jsonFilePath string) error {
+
+	db := r.ConnectionResolver.Resolve(tenantId)
 
 	countries := make([]models.Country, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {
 		for _, country := range countries {
 			var count int64 = 0
-			if err := r.DB.Model(models.Country{}).Where("name", country.Name).Count(&count).Error; err != nil {
+			if err := db.Model(models.Country{}).Where("name", country.Name).Count(&count).Error; err != nil {
 				return err
 			} else {
 				if count == 0 {
-					if err := r.DB.Create(&country).Error; err != nil {
+					if err := db.Create(&country).Error; err != nil {
 						return err
 					}
 				}

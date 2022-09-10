@@ -4,6 +4,7 @@ type PaginationFilter struct {
 	Page             int `json:"page"`
 	PerPage          int `json:"per_page"`
 	IgnorePagination bool
+	TenantID         uint64
 }
 
 type Operator string

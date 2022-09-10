@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"github.com/labstack/echo/v4"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/utils"
 )
@@ -23,6 +24,9 @@ func PaginationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		input := dto.NewPaginatedInput(page, perPage)
+
+		tenantID, _ := utils.ConvertToUint(c.Get(config.TenantID))
+		input.TenantID = tenantID
 
 		c.Set("paginationInput", input)
 

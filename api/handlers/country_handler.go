@@ -61,8 +61,10 @@ func (handler *CountryHandler) create(c echo.Context) error {
 
 	model.SetAudit(user)
 	output, err := handler.Service.Create(model)
+
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
+
 		return c.JSON(http.StatusBadRequest, ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
@@ -96,7 +98,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	user := getCurrentUser(c)
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(getCurrentTenant(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -150,7 +152,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(getCurrentTenant(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -217,7 +219,7 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	provinces, err := handler.Service.GetProvinces(id)
+	provinces, err := handler.Service.GetProvinces(getCurrentTenant(c), id)
 
 	if err != nil {
 

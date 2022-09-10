@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	db, dbErr     = database.GetDb(false)
+	db, _         = database.GetDb(false, "")
 	logger        = applogger.New(nil)
 	httpRouter    = getHttpRouter()
 	v1RouterGroup = httpRouter.Group("/api/v1")
@@ -24,9 +24,8 @@ func Run() error {
 
 	loadFlags()
 
-	if dbErr != nil {
-		return dbErr
-	}
+	//connectionResolver := database.NewConnectionResolver()
+	//db := connectionResolver.Resolve("")
 
 	cfg, err := config.NewConfig()
 

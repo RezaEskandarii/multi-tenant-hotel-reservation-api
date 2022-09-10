@@ -36,13 +36,8 @@ func Migrate(db *gorm.DB) error {
 	logger := applogger.New(nil)
 	logger.LogInfo("migration started ...")
 
-	err := db.AutoMigrate(&models.City{})
-	if err != nil {
-		logger.LogDebug(err.Error())
-	}
-
 	for _, entity := range entities {
-		err = db.AutoMigrate(entity)
+		err := db.AutoMigrate(entity)
 
 		if err != nil {
 			logger.LogError(err.Error())
