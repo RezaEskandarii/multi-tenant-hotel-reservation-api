@@ -1,14 +1,14 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type CityRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.ConnectionResolver
 }
 
 //type CityRepository interface {
@@ -19,15 +19,16 @@ type CityRepository struct {
 //	Delete(id uint64) error
 //}
 
-func NewCityRepository(db *gorm.DB) *CityRepository {
+func NewCityRepository(connectionResolver *connection_resolver.ConnectionResolver) *CityRepository {
 	return &CityRepository{
-		DB: db,
+		ConnectionResolver: connectionResolver,
 	}
 }
 
 func (r *CityRepository) Create(city *models.City) (*models.City, error) {
+	db := r.ConnectionResolver.GetDB(city.TenantId)
 
-	if tx := r.DB.Create(&city); tx.Error != nil {
+	if tx := db.Create(&city); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -36,7 +37,8 @@ func (r *CityRepository) Create(city *models.City) (*models.City, error) {
 
 func (r *CityRepository) Update(city *models.City) (*models.City, error) {
 
-	if tx := r.DB.Updates(&city); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(city.TenantId)
+	if tx := db.Updates(&city); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -44,9 +46,10 @@ func (r *CityRepository) Update(city *models.City) (*models.City, error) {
 	return city, nil
 }
 
-func (r *CityRepository) Delete(id uint64) error {
+func (r *CityRepository) Delete(id uint64, tenantID uint64) error {
 
-	if err := r.DB.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+	if err := db.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
 
 		return err
 	}
@@ -54,10 +57,12 @@ func (r *CityRepository) Delete(id uint64) error {
 	return nil
 }
 
-func (r *CityRepository) Find(id uint64) (*models.City, error) {
+func (r *CityRepository) Find(id uint64, tenantID uint64) (*models.City, error) {
 
 	model := models.City{}
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -70,6 +75,6 @@ func (r *CityRepository) Find(id uint64) (*models.City, error) {
 }
 
 func (r *CityRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-
-	return paginatedList(&models.City{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.City{}, db, input)
 }

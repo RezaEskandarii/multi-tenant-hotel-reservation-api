@@ -23,7 +23,7 @@ func NewConnectionResolver() *ConnectionResolver {
 	}
 }
 
-func (c *ConnectionResolver) Resolve(tenantID uint64) *gorm.DB {
+func (c *ConnectionResolver) GetDB(tenantID uint64) *gorm.DB {
 
 	dbName := ""
 	if tenantID != 0 {
@@ -31,7 +31,7 @@ func (c *ConnectionResolver) Resolve(tenantID uint64) *gorm.DB {
 	}
 
 	if c.cache[tenantID] == nil {
-		cn, err := getDB(false, dbName)
+		cn, err := db(false, dbName)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -141,7 +141,7 @@ func getDSN(tenantDbName string) (string, error) {
 }
 
 /*========================================================================================*/
-func getDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
+func db(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 
 	if usesInTestEnv {
 		os.Setenv("CONFIG_PATH", "../resources/config.yml")

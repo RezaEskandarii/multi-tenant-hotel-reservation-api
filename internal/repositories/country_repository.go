@@ -27,7 +27,7 @@ func NewCountryRepository(connectionResolver *connection_resolver.ConnectionReso
 func (r *CountryRepository) Create(country *models.Country) (*models.Country, error) {
 
 	valid, err := country.Validate()
-	db := r.ConnectionResolver.Resolve(country.TenantId)
+	db := r.ConnectionResolver.GetDB(country.TenantId)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (r *CountryRepository) Create(country *models.Country) (*models.Country, er
 
 func (r *CountryRepository) Update(country *models.Country) (*models.Country, error) {
 
-	db := r.ConnectionResolver.Resolve(country.TenantId)
+	db := r.ConnectionResolver.GetDB(country.TenantId)
 	if tx := db.Updates(&country); tx.Error != nil {
 
 		return nil, tx.Error
@@ -58,7 +58,7 @@ func (r *CountryRepository) Update(country *models.Country) (*models.Country, er
 func (r *CountryRepository) Find(tenantId uint64, id uint64) (*models.Country, error) {
 
 	model := models.Country{}
-	db := r.ConnectionResolver.Resolve(tenantId)
+	db := r.ConnectionResolver.GetDB(tenantId)
 
 	if tx := db.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
 
@@ -74,14 +74,14 @@ func (r *CountryRepository) Find(tenantId uint64, id uint64) (*models.Country, e
 
 func (r *CountryRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.Resolve(input.TenantID)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
 	return paginatedList(&models.Country{}, db, input)
 }
 
 func (r *CountryRepository) GetProvinces(tenantId uint64, countryId uint64) ([]*models.Province, error) {
 	var result []*models.Province
 
-	db := r.ConnectionResolver.Resolve(tenantId)
+	db := r.ConnectionResolver.GetDB(tenantId)
 
 	query := db.Model(&models.Province{}).
 		Where("country_id=?", countryId).Find(&result)
@@ -95,7 +95,7 @@ func (r *CountryRepository) GetProvinces(tenantId uint64, countryId uint64) ([]*
 
 func (r *CountryRepository) Seed(tenantId uint64, jsonFilePath string) error {
 
-	db := r.ConnectionResolver.Resolve(tenantId)
+	db := r.ConnectionResolver.GetDB(tenantId)
 
 	countries := make([]models.Country, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {

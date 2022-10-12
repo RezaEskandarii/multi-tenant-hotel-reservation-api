@@ -36,6 +36,7 @@ var (
 	authHandler        = handlers.AuthHandler{}
 	reservationHandler = handlers.ReservationHandler{}
 	paymentHandler     = handlers.PaymentHandler{}
+	tenantHandler      = handlers.TenantHandler{}
 	metricHandler      = handlers.MetricHandler{}
 )
 
@@ -90,6 +91,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 		reservationService    = domain_services.NewReservationService(reservationRepository, rabbitMqManager)
 		paymentService        = domain_services.NewPaymentService(repositories.NewPaymentRepository(db))
 		authService           = domain_services.NewAuthService(userService, cfg)
+		tenantService         = domain_services.NewTenantService(repositories.NewTenantDatabaseRepository(db))
 		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(db))
 	)
 
@@ -132,6 +134,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 
 	paymentHandler.Register(handlerInput, paymentService)
 
+	tenantHandler.Register(handlerInput, tenantService)
 	// schedule to remove expired reservation requests.
 	scheduleRemoveExpiredReservationRequests(reservationService, logger)
 

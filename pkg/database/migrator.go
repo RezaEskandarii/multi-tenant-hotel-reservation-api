@@ -8,6 +8,7 @@ import (
 
 var (
 	entities = []interface{}{
+		models.Tenant{},
 		models.Country{},
 		models.City{},
 		models.Province{},
@@ -37,7 +38,7 @@ func Migrate(db *gorm.DB) error {
 	logger.LogInfo("migration started ...")
 
 	for _, entity := range entities {
-		err := db.AutoMigrate(entity)
+		err := db.Debug().AutoMigrate(entity)
 
 		if err != nil {
 			logger.LogError(err.Error())

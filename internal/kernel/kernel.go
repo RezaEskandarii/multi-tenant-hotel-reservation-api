@@ -25,7 +25,7 @@ func Run() error {
 	loadFlags()
 
 	//connectionResolver := database.NewConnectionResolver()
-	//db := connectionResolver.Resolve("")
+	//db := connectionResolver.GetDB("")
 
 	cfg, err := config.NewConfig()
 

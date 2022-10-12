@@ -1,30 +1,29 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type AuditRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.ConnectionResolver
 }
 
-func NewAuditRepository(Db *gorm.DB) *AuditRepository {
-	return &AuditRepository{
-		DB: Db,
-	}
+func NewAuditRepository(r *connection_resolver.ConnectionResolver) *AuditRepository {
+	return &AuditRepository{ConnectionResolver: r}
 }
 
 func (r *AuditRepository) Create(model *models.Audit) (*models.Audit, error) {
-	if err := r.DB.Create(&model).Error; err != nil {
+	db := r.ConnectionResolver.GetDB(model.TenantId)
+	if err := db.Create(&model).Error; err != nil {
 		return nil, err
 	}
 	return model, nil
 }
 
 func (r *AuditRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-
-	return paginatedList(&models.City{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.City{}, db, input)
 }
