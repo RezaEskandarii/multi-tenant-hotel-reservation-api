@@ -43,10 +43,10 @@ func NewAuthService(service *UserService, cfg *config.Config) *AuthService {
 
 // SignIn finds user with given username and password and
 // generates JWT token for user.
-func (s AuthService) SignIn(username, password string) (error, *commons.JWTTokenResponse) {
+func (s AuthService) SignIn(username, password string, tenantID uint64) (error, *commons.JWTTokenResponse) {
 
 	// Get the expected password from our in memory map
-	user, err := s.UserService.FindByUsernameAndPassword(username, password)
+	user, err := s.UserService.FindByUsernameAndPassword(username, password, tenantID)
 
 	if user == nil || err != nil {
 		return err, nil
@@ -116,7 +116,7 @@ func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.JWTTokenRes
 	}
 }
 
-func (s *AuthService) VerifyToken(jwtToken string) (error, *Claims) {
+func (s *AuthService) VerifyToken(jwtToken string, tenantID uint64) (error, *Claims) {
 
 	token, _ := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 
@@ -134,7 +134,7 @@ func (s *AuthService) VerifyToken(jwtToken string) (error, *Claims) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 
 		username := claims["username"]
-		user, err := s.UserService.FindByUsername(fmt.Sprintf("%s", username))
+		user, err := s.UserService.FindByUsername(fmt.Sprintf("%s", username), tenantID)
 
 		if err != nil {
 			return err, nil

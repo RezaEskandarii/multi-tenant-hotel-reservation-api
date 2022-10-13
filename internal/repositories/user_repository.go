@@ -2,48 +2,52 @@ package repositories
 
 import (
 	"github.com/andskur/argon2-hashing"
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type UserRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(r *connection_resolver.TenantConnectionResolver) *UserRepository {
 	return &UserRepository{
-		DB: db,
+		ConnectionResolver: r,
 	}
 }
 
-func (r *UserRepository) Create(user *models.User) (*models.User, error) {
+func (r *UserRepository) Create(user *models.User, tenantID uint64) (*models.User, error) {
 
-	if tx := r.DB.Create(&user); tx.Error != nil {
-
+	db := r.ConnectionResolver.GetDB(tenantID)
+	user.TenantId = tenantID
+	if tx := db.Create(&user); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return user, nil
 }
 
-func (r *UserRepository) Update(user *models.User) (*models.User, error) {
+func (r *UserRepository) Update(user *models.User, tenantID uint64) (*models.User, error) {
 
-	if tx := r.DB.Updates(&user); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+	user.TenantId = tenantID
 
+	if tx := db.Updates(&user); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return user, nil
 }
 
-func (r *UserRepository) Find(id uint64) (*models.User, error) {
+func (r *UserRepository) Find(id uint64, tenantID uint64) (*models.User, error) {
 
 	model := models.User{}
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -54,11 +58,12 @@ func (r *UserRepository) Find(id uint64) (*models.User, error) {
 	return &model, nil
 }
 
-func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
+func (r *UserRepository) FindByUsername(username string, tenantID uint64) (*models.User, error) {
 
+	db := r.ConnectionResolver.GetDB(tenantID)
 	model := models.User{Username: username}
-	if tx := r.DB.Where(model).Find(&model); tx.Error != nil {
 
+	if tx := db.Where(model).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -68,10 +73,12 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 
 	return &model, nil
 }
-func (r *UserRepository) FindByUsernameAndPassword(username string, password string) (*models.User, error) {
+func (r *UserRepository) FindByUsernameAndPassword(username string, password string, tenantID uint64) (*models.User, error) {
 
 	model := models.User{}
-	if tx := r.DB.Where("username=?", username).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Where("username=?", username).Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -88,11 +95,12 @@ func (r *UserRepository) FindByUsernameAndPassword(username string, password str
 	return &model, nil
 }
 
-func (r *UserRepository) Deactivate(id uint64) (*models.User, error) {
+func (r *UserRepository) Deactivate(id uint64, tenantID uint64) (*models.User, error) {
 
 	user := models.User{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	query := r.DB.Model(&models.User{}).Where("id=?", id).Find(&user)
+	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
 	if query.Error != nil {
 		return nil, query.Error
@@ -100,19 +108,19 @@ func (r *UserRepository) Deactivate(id uint64) (*models.User, error) {
 
 	user.IsActive = false
 
-	if tx := r.DB.Model(&models.User{}).Updates(user); tx.Error != nil {
-
+	if tx := db.Model(&models.User{}).Updates(user); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return &user, nil
 }
 
-func (r *UserRepository) Activate(id uint64) (*models.User, error) {
+func (r *UserRepository) Activate(id uint64, tenantID uint64) (*models.User, error) {
 
 	user := models.User{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	query := r.DB.Model(&models.User{}).Where("id=?", id).Find(&user)
+	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
 	if query.Error != nil {
 		return nil, query.Error
@@ -120,7 +128,7 @@ func (r *UserRepository) Activate(id uint64) (*models.User, error) {
 
 	user.IsActive = true
 
-	if tx := r.DB.Model(&models.User{}).Updates(user); tx.Error != nil {
+	if tx := db.Model(&models.User{}).Updates(user); tx.Error != nil {
 
 		return nil, tx.Error
 	}
@@ -128,8 +136,11 @@ func (r *UserRepository) Activate(id uint64) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *UserRepository) Delete(id uint64) error {
-	if tx := r.DB.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
+func (r *UserRepository) Delete(id uint64, tenantID uint64) error {
+
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error
 	}
 
@@ -138,20 +149,23 @@ func (r *UserRepository) Delete(id uint64) error {
 
 func (r *UserRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.User{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.User{}, db, input)
 }
 
-func (r *UserRepository) Seed(jsonFilePath string) error {
+func (r *UserRepository) Seed(jsonFilePath string, tenantID uint64) error {
+
+	db := r.ConnectionResolver.GetDB(tenantID)
 
 	users := make([]models.User, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {
 		for _, user := range users {
 			var count int64 = 0
-			if err := r.DB.Model(models.User{}).Where("username", user.Username).Count(&count).Error; err != nil {
+			if err := db.Model(models.User{}).Where("username", user.Username).Count(&count).Error; err != nil {
 				return err
 			} else {
 				if count == 0 {
-					if err := r.DB.Create(&user).Error; err != nil {
+					if err := db.Create(&user).Error; err != nil {
 						return err
 					}
 				}

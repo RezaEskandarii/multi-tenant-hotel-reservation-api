@@ -17,21 +17,21 @@ func NewRateCodeService(r *repositories.RateCodeRepository) *RateCodeService {
 }
 
 // Create creates new RateCode.
-func (s *RateCodeService) Create(model *models.RateCode) (*models.RateCode, error) {
+func (s *RateCodeService) Create(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
 
-	return s.Repository.Create(model)
+	return s.Repository.Create(model, tenantID)
 }
 
 // Update updates RateCode.
-func (s *RateCodeService) Update(model *models.RateCode) (*models.RateCode, error) {
+func (s *RateCodeService) Update(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
 
-	return s.Repository.Update(model)
+	return s.Repository.Update(model, tenantID)
 }
 
 // Find returns RateCode and if it does not find the RateCode, it returns nil.
-func (s *RateCodeService) Find(id uint64) (*models.RateCode, error) {
+func (s *RateCodeService) Find(id uint64, tenantID uint64) (*models.RateCode, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of RateCodes.
@@ -41,7 +41,7 @@ func (s *RateCodeService) FindAll(input *dto.PaginationFilter) (*commons.Paginat
 }
 
 // Delete removes RateCode  by given id.
-func (s *RateCodeService) Delete(id uint64) error {
+func (s *RateCodeService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }

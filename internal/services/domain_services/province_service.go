@@ -17,21 +17,21 @@ func NewProvinceService(r *repositories.ProvinceRepository) *ProvinceService {
 }
 
 // Create creates new province.
-func (s *ProvinceService) Create(Province *models.Province) (*models.Province, error) {
+func (s *ProvinceService) Create(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	return s.Repository.Create(Province)
+	return s.Repository.Create(province, tenantID)
 }
 
 // Update updates province.
-func (s *ProvinceService) Update(Province *models.Province) (*models.Province, error) {
+func (s *ProvinceService) Update(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	return s.Repository.Update(Province)
+	return s.Repository.Update(province, tenantID)
 }
 
 // Find returns province and if it does not find the province, it returns nil.
-func (s *ProvinceService) Find(id uint64) (*models.Province, error) {
+func (s *ProvinceService) Find(id uint64, tenantID uint64) (*models.Province, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of provinces.
@@ -41,7 +41,7 @@ func (s *ProvinceService) FindAll(input *dto.PaginationFilter) (*commons.Paginat
 }
 
 // GetCities returns the list of cities that belong to the given province ID.
-func (s *ProvinceService) GetCities(ProvinceId uint64) ([]*models.City, error) {
+func (s *ProvinceService) GetCities(provinceId uint64, tenantID uint64) ([]*models.City, error) {
 
-	return s.Repository.GetCities(ProvinceId)
+	return s.Repository.GetCities(provinceId, tenantID)
 }

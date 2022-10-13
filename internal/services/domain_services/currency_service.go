@@ -17,21 +17,21 @@ func NewCurrencyService(r *repositories.CurrencyRepository) *CurrencyService {
 }
 
 // Create creates new currency.
-func (s *CurrencyService) Create(currency *models.Currency) (*models.Currency, error) {
+func (s *CurrencyService) Create(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	return s.Repository.Create(currency)
+	return s.Repository.Create(currency, tenantID)
 }
 
 // Update updates currency.
-func (s *CurrencyService) Update(currency *models.Currency) (*models.Currency, error) {
+func (s *CurrencyService) Update(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	return s.Repository.Update(currency)
+	return s.Repository.Update(currency, tenantID)
 }
 
 // Find returns currency and if it does not find the currency, it returns nil.
-func (s *CurrencyService) Find(id uint64) (*models.Currency, error) {
+func (s *CurrencyService) Find(id uint64, tenantID uint64) (*models.Currency, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of currencies
@@ -41,13 +41,13 @@ func (s *CurrencyService) FindAll(input *dto.PaginationFilter) (*commons.Paginat
 }
 
 // FindBySymbol returns currency by alias name.
-func (s *CurrencyService) FindBySymbol(symbol string) (*models.Currency, error) {
+func (s *CurrencyService) FindBySymbol(symbol string, tenantID uint64) (*models.Currency, error) {
 
-	return s.Repository.FindBySymbol(symbol)
+	return s.Repository.FindBySymbol(symbol, tenantID)
 }
 
 // Seed
-func (s *CurrencyService) Seed(jsonFilePath string) error {
+func (s *CurrencyService) Seed(jsonFilePath string, tenantID uint64) error {
 
-	return s.Repository.Seed(jsonFilePath)
+	return s.Repository.Seed(jsonFilePath, tenantID)
 }

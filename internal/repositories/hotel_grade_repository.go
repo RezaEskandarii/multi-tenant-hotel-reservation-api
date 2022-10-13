@@ -1,46 +1,48 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type HotelGradeRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewHotelGradeRepository(db *gorm.DB) *HotelGradeRepository {
-	return &HotelGradeRepository{DB: db}
+func NewHotelGradeRepository(r *connection_resolver.TenantConnectionResolver) *HotelGradeRepository {
+	return &HotelGradeRepository{ConnectionResolver: r}
 }
 
-func (r *HotelGradeRepository) Create(hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
+func (r *HotelGradeRepository) Create(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	if tx := r.DB.Create(&hotelGrade); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Create(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return hotelGrade, nil
 }
 
-func (r *HotelGradeRepository) Update(hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
+func (r *HotelGradeRepository) Update(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	if tx := r.DB.Updates(&hotelGrade); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Updates(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return hotelGrade, nil
 }
 
-func (r *HotelGradeRepository) Find(id uint64) (*models.HotelGrade, error) {
+func (r *HotelGradeRepository) Find(id uint64, tenantID uint64) (*models.HotelGrade, error) {
 
 	model := models.HotelGrade{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if tx := r.DB.Where("id=?", id).Preload("HotelType").Find(&model); tx.Error != nil {
-
+	if tx := db.Where("id=?", id).Preload("HotelType").Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -53,15 +55,16 @@ func (r *HotelGradeRepository) Find(id uint64) (*models.HotelGrade, error) {
 
 func (r *HotelGradeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.HotelGrade{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.HotelGrade{}, db, input)
 }
 
-func (r HotelGradeRepository) Delete(id uint64) error {
+func (r HotelGradeRepository) Delete(id uint64, tenantID uint64) error {
 
 	var count int64 = 0
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if query := r.DB.Model(&models.Hotel{}).Where(&models.Hotel{HotelGradeId: id}).Count(&count); query.Error != nil {
-
+	if query := db.Model(&models.Hotel{}).Where(&models.Hotel{HotelGradeId: id}).Count(&count); query.Error != nil {
 		return query.Error
 	}
 
@@ -69,8 +72,7 @@ func (r HotelGradeRepository) Delete(id uint64) error {
 		return GradeHasHotel
 	}
 
-	if query := r.DB.Model(&models.HotelGrade{}).Where("id=?", id).Delete(&models.HotelGrade{}); query.Error != nil {
-
+	if query := db.Model(&models.HotelGrade{}).Where("id=?", id).Delete(&models.HotelGrade{}); query.Error != nil {
 		return query.Error
 	}
 

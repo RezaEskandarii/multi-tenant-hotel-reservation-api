@@ -17,21 +17,21 @@ func NewRateCodeDetailService(repository *repositories.RateCodeDetailRepository)
 }
 
 // Create creates new RateCodeDetail.
-func (s *RateCodeDetailService) Create(model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
+func (s *RateCodeDetailService) Create(model *models.RateCodeDetail, tenantID uint64) (*models.RateCodeDetail, error) {
 
-	return s.Repository.Create(model)
+	return s.Repository.Create(model, tenantID)
 }
 
 // Update updates RateCodeDetail.
-func (s *RateCodeDetailService) Update(model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
+func (s *RateCodeDetailService) Update(model *models.RateCodeDetail, tenantID uint64) (*models.RateCodeDetail, error) {
 
-	return s.Repository.Update(model)
+	return s.Repository.Update(model, tenantID)
 }
 
 // Find returns RateCodeDetail and if it does not find the RateCodeDetail, it returns nil.
-func (s *RateCodeDetailService) Find(id uint64) (*models.RateCodeDetail, error) {
+func (s *RateCodeDetailService) Find(id uint64, tenantID uint64) (*models.RateCodeDetail, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of RateCodeDetails.
@@ -41,13 +41,13 @@ func (s *RateCodeDetailService) FindAll(input *dto.PaginationFilter) (*commons.P
 }
 
 // Delete removes RateCodeDetail  by given id.
-func (s *RateCodeDetailService) Delete(id uint64) error {
+func (s *RateCodeDetailService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }
 
 // FindPrice returns RateCodePrice by given id.
-func (s *RateCodeDetailService) FindPrice(id uint64) (*models.RateCodeDetailPrice, error) {
+func (s *RateCodeDetailService) FindPrice(id uint64, tenantID uint64) (*models.RateCodeDetailPrice, error) {
 
-	return s.Repository.FindPrice(id)
+	return s.Repository.FindPrice(id, tenantID)
 }

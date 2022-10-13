@@ -23,37 +23,37 @@ func NewCityService(repository *repositories.CityRepository, cm common_services.
 }
 
 // Create creates new city.
-func (s *CityService) Create(city *models.City) (*models.City, error) {
+func (s *CityService) Create(city *models.City, tenantID uint64) (*models.City, error) {
 
-	city, err := s.Repository.Create(city)
+	city, err := s.Repository.Create(city, tenantID)
 
 	if err != nil && city != nil {
-		s.CacheManager.Set(getCityCacheKey(city), city, nil)
+		s.CacheManager.Set(getCityCacheKey(city, tenantID), city, nil)
 	}
 
 	return city, err
 }
 
 // Update updates city.
-func (s *CityService) Update(city *models.City) (*models.City, error) {
-	s.CacheManager.Update(getCityCacheKey(city), city)
-	return s.Repository.Update(city)
+func (s *CityService) Update(city *models.City, tenantID uint64) (*models.City, error) {
+	s.CacheManager.Update(getCityCacheKey(city, tenantID), city)
+	return s.Repository.Update(city, tenantID)
 }
 
 // Find returns city and if it does not find the city, it returns nil.
-func (s *CityService) Find(id uint64) (*models.City, error) {
+func (s *CityService) Find(id uint64, tenantID uint64) (*models.City, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // Delete delete city by given id.
-func (s *CityService) Delete(id uint64) error {
+func (s *CityService) Delete(id uint64, tenantID uint64) error {
 
-	city, err := s.Find(id)
+	city, err := s.Find(id, tenantID)
 
 	if err == nil {
-		s.CacheManager.Del(getCityCacheKey(city))
-		return s.Repository.Delete(id)
+		s.CacheManager.Del(getCityCacheKey(city, tenantID))
+		return s.Repository.Delete(id, tenantID)
 	}
 	return err
 }
@@ -65,6 +65,6 @@ func (s *CityService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedRe
 
 }
 
-func getCityCacheKey(city *models.City) string {
-	return utils.GenerateCacheKey(city.Id, city.Name, city.ProvinceId)
+func getCityCacheKey(city *models.City, tenantID uint64) string {
+	return utils.GenerateCacheKey(city.Id, city.Name, city.ProvinceId, tenantID)
 }

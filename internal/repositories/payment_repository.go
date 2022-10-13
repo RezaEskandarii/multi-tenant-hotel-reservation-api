@@ -1,62 +1,77 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 // PaymentRepository
 type PaymentRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewPaymentRepository(DB *gorm.DB) *PaymentRepository {
-	return &PaymentRepository{DB: DB}
+func NewPaymentRepository(r *connection_resolver.TenantConnectionResolver) *PaymentRepository {
+	return &PaymentRepository{r}
 }
 
-func (p *PaymentRepository) Create(payment *models.Payment) (*models.Payment, error) {
+func (p *PaymentRepository) Create(payment *models.Payment, tenantID uint64) (*models.Payment, error) {
 
-	if err := p.DB.Create(payment).Error; err != nil {
+	db := p.ConnectionResolver.GetDB(tenantID)
+
+	if err := db.Create(payment).Error; err != nil {
 		return nil, err
 	}
+
 	return payment, nil
 }
 
-func (p *PaymentRepository) Find(id uint64) (*models.Payment, error) {
+func (p *PaymentRepository) Find(id uint64, tenantID uint64) (*models.Payment, error) {
 
+	db := p.ConnectionResolver.GetDB(tenantID)
 	result := models.Payment{}
-	if err := p.DB.Where("id=?").Find(&result).
+
+	if err := db.Where("id=?").Find(&result).
 		Preload("Reservation").Preload("Payer").Error; err != nil {
 		return nil, err
 	}
+
 	return &result, nil
 }
 
-func (p *PaymentRepository) Delete(id uint64) error {
+func (p *PaymentRepository) Delete(id uint64, tenantID uint64) error {
 
-	if err := p.DB.Model(&models.Payment{}).Where("id=?", id).Delete(&models.Payment{}).Error; err != nil {
+	db := p.ConnectionResolver.GetDB(tenantID)
+
+	if err := db.Model(&models.Payment{}).Where("id=?", id).Delete(&models.Payment{}).Error; err != nil {
 		return err
 	}
+
 	return nil
 }
 
-func (p *PaymentRepository) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType) ([]*models.Payment, error) {
+func (p *PaymentRepository) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) ([]*models.Payment, error) {
 
 	result := make([]*models.Payment, 0)
-	query := p.DB.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
+	db := p.ConnectionResolver.GetDB(tenantID)
+	query := db.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
+
 	if paymentType != nil {
 		query = query.Where("payment_type=?", paymentType)
 	}
+
 	if err := query.Scan(&result).Error; err != nil {
 		return nil, err
 	}
+
 	return result, nil
 }
 
-func (p *PaymentRepository) GetBalance(reservationID uint64, paymentType *models.PaymentType) (float64, error) {
+func (p *PaymentRepository) GetBalance(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) (float64, error) {
 
 	var result float64
-	query := p.DB.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
+	db := p.ConnectionResolver.GetDB(tenantID)
+
+	query := db.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
 
 	if paymentType != nil {
 		query = query.Where("payment_type=?", paymentType)
@@ -65,5 +80,6 @@ func (p *PaymentRepository) GetBalance(reservationID uint64, paymentType *models
 	if err := query.Select("SUM(amount)").Scan(&result).Error; err != nil {
 		return 0, err
 	}
+
 	return result, nil
 }

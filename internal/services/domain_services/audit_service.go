@@ -16,8 +16,8 @@ func NewAuditService(repository *repositories.AuditRepository) *AuditService {
 }
 
 // Save creates new audit.
-func (s *AuditService) Save(model *models.Audit) (*models.Audit, error) {
-	return s.Repository.Create(model)
+func (s *AuditService) Save(model *models.Audit, tenantID uint64) (*models.Audit, error) {
+	return s.Repository.Create(model, tenantID)
 }
 
 //FindAll returns paginated list of audits.

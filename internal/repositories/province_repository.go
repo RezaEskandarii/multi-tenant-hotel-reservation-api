@@ -1,47 +1,50 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type ProvinceRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewProvinceRepository(db *gorm.DB) *ProvinceRepository {
+func NewProvinceRepository(r *connection_resolver.TenantConnectionResolver) *ProvinceRepository {
 	return &ProvinceRepository{
-		DB: db,
+		ConnectionResolver: r,
 	}
 }
 
-func (r *ProvinceRepository) Create(province *models.Province) (*models.Province, error) {
+func (r *ProvinceRepository) Create(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	if tx := r.DB.Create(&province); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Create(&province); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return province, nil
 }
 
-func (r *ProvinceRepository) Update(province *models.Province) (*models.Province, error) {
+func (r *ProvinceRepository) Update(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	if tx := r.DB.Updates(&province); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Updates(&province); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return province, nil
 }
 
-func (r *ProvinceRepository) Find(id uint64) (*models.Province, error) {
+func (r *ProvinceRepository) Find(id uint64, tenantID uint64) (*models.Province, error) {
 
 	model := models.Province{}
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -54,14 +57,17 @@ func (r *ProvinceRepository) Find(id uint64) (*models.Province, error) {
 
 func (r *ProvinceRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Province{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.Province{}, db, input)
 }
 
-func (r *ProvinceRepository) GetCities(ProvinceId uint64) ([]*models.City, error) {
-	var result []*models.City
+func (r *ProvinceRepository) GetCities(provinceId uint64, tenantID uint64) ([]*models.City, error) {
 
-	query := r.DB.Model(&models.City{}).
-		Where("province_id=?", ProvinceId).Find(&result)
+	var result []*models.City
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	query := db.Model(&models.City{}).
+		Where("province_id=?", provinceId).Find(&result)
 
 	if query.Error != nil {
 		return nil, query.Error

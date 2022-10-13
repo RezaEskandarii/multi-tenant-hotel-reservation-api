@@ -70,7 +70,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 
 	cacheService := common_services.NewCacheService(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.CacheDB, ctx)
 	eventService := common_services.NewEventService(rabbitMqManager, emailService)
-	connectionResolver := connection_resolver.NewConnectionResolver()
+	connectionResolver := connection_resolver.NewTenantConnectionResolver()
 
 	var (
 		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(connectionResolver))

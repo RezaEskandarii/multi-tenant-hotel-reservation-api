@@ -2,12 +2,12 @@ package repositories
 
 import (
 	"errors"
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 var (
@@ -15,36 +15,41 @@ var (
 )
 
 type RoomTypeRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewRoomTypeRepository(db *gorm.DB) *RoomTypeRepository {
-	return &RoomTypeRepository{DB: db}
+func NewRoomTypeRepository(r *connection_resolver.TenantConnectionResolver) *RoomTypeRepository {
+	return &RoomTypeRepository{ConnectionResolver: r}
 }
 
-func (r *RoomTypeRepository) Create(roomType *models.RoomType) (*models.RoomType, error) {
+func (r *RoomTypeRepository) Create(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	if tx := r.DB.Create(&roomType); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Create(&roomType); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return roomType, nil
 }
 
-func (r *RoomTypeRepository) Update(roomType *models.RoomType) (*models.RoomType, error) {
+func (r *RoomTypeRepository) Update(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	if tx := r.DB.Updates(&roomType); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Updates(&roomType); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return roomType, nil
 }
 
-func (r *RoomTypeRepository) Find(id uint64) (*models.RoomType, error) {
+func (r *RoomTypeRepository) Find(id uint64, tenantID uint64) (*models.RoomType, error) {
 
+	db := r.ConnectionResolver.GetDB(tenantID)
 	model := models.RoomType{}
 
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -57,14 +62,16 @@ func (r *RoomTypeRepository) Find(id uint64) (*models.RoomType, error) {
 
 func (r *RoomTypeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.RoomType{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.RoomType{}, db, input)
 }
 
-func (r RoomTypeRepository) Delete(id uint64) error {
+func (r RoomTypeRepository) Delete(id uint64, tenantID uint64) error {
 
 	var count int64 = 0
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if query := r.DB.Model(&models.Room{}).Where(&models.Room{RoomTypeId: id}).Count(&count); query.Error != nil {
+	if query := db.Model(&models.Room{}).Where(&models.Room{RoomTypeId: id}).Count(&count); query.Error != nil {
 
 		return query.Error
 	}
@@ -73,7 +80,7 @@ func (r RoomTypeRepository) Delete(id uint64) error {
 		return RoomTypeHasRoomErr
 	}
 
-	if query := r.DB.Model(&models.RoomType{}).Where("id=?", id).Delete(&models.RoomType{}); query.Error != nil {
+	if query := db.Model(&models.RoomType{}).Where("id=?", id).Delete(&models.RoomType{}); query.Error != nil {
 
 		return query.Error
 	}
@@ -81,17 +88,19 @@ func (r RoomTypeRepository) Delete(id uint64) error {
 	return nil
 }
 
-func (r *RoomTypeRepository) Seed(jsonFilePath string) error {
+func (r *RoomTypeRepository) Seed(jsonFilePath string, tenantID uint64) error {
+
+	db := r.ConnectionResolver.GetDB(tenantID)
 
 	roomTypes := make([]models.RoomType, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err == nil {
 		for _, roomType := range roomTypes {
 			var count int64 = 0
-			if err := r.DB.Model(models.RoomType{}).Count(&count).Error; err != nil {
+			if err := db.Model(models.RoomType{}).Count(&count).Error; err != nil {
 				return err
 			} else {
 				if count == 0 {
-					if err := r.DB.Create(&roomType).Error; err != nil {
+					if err := db.Create(&roomType).Error; err != nil {
 						return err
 					}
 				}

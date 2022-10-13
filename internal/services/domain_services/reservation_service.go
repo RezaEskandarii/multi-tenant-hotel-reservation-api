@@ -26,9 +26,9 @@ func NewReservationService(repository *repositories.ReservationRepository,
 }
 
 // Create creates new Reservation.
-func (s *ReservationService) Create(model *models.Reservation) (*models.Reservation, error) {
+func (s *ReservationService) Create(model *models.Reservation, tenantID uint64) (*models.Reservation, error) {
 
-	result, err := s.Repository.Create(model)
+	result, err := s.Repository.Create(model, tenantID)
 	if err != nil {
 		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(model))
 	}
@@ -36,54 +36,54 @@ func (s *ReservationService) Create(model *models.Reservation) (*models.Reservat
 }
 
 // ChangeStatus changes the reservation check status.
-func (s *ReservationService) ChangeStatus(id uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
+func (s *ReservationService) ChangeStatus(id uint64, tenantID uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
 
-	return s.Repository.ChangeStatus(id, status)
+	return s.Repository.ChangeStatus(id, tenantID, status)
 }
 
 // Update updates Reservation.
-func (s *ReservationService) Update(id uint64, model *models.Reservation) (*models.Reservation, error) {
+func (s *ReservationService) Update(id uint64, tenantID uint64, model *models.Reservation) (*models.Reservation, error) {
 
-	return s.Repository.Update(id, model)
+	return s.Repository.Update(id, tenantID, model)
 }
 
 // CreateReservationRequest creates reservation request for given room to prevent concurrent request for specific room.
-func (s *ReservationService) CreateReservationRequest(requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
+func (s *ReservationService) CreateReservationRequest(requestDto *dto.RoomRequestDto, tenantID uint64) (*models.ReservationRequest, error) {
 
-	return s.Repository.CreateReservationRequest(requestDto)
+	return s.Repository.CreateReservationRequest(requestDto, tenantID)
 }
 
-func (s *ReservationService) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation) (bool, error) {
-	return s.Repository.HasConflict(request, reservation)
+func (s *ReservationService) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation, tenantID uint64) (bool, error) {
+	return s.Repository.HasConflict(request, reservation, tenantID)
 }
 
-func (s *ReservationService) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
-	return s.Repository.HasReservationConflict(checkInDate, checkOutDate, roomId)
+func (s *ReservationService) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64, tenantID uint64) (bool, error) {
+	return s.Repository.HasReservationConflict(checkInDate, checkOutDate, roomId, tenantID)
 }
 
 // RemoveReservationRequest this function remove reservation request bt given requestKey param.
-func (s *ReservationService) RemoveReservationRequest(requestKey string) error {
-	return s.Repository.DeleteReservationRequest(requestKey)
+func (s *ReservationService) RemoveReservationRequest(requestKey string, tenantID uint64) error {
+	return s.Repository.DeleteReservationRequest(requestKey, tenantID)
 }
 
 // GetRecommendedRateCodes returns list of recommended rateCodeDetails price per reservation condition.
-func (s *ReservationService) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
-	return s.Repository.GetRecommendedRateCodes(priceDto)
+func (s *ReservationService) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto, tenantID uint64) ([]*dto.RateCodePricesDto, error) {
+	return s.Repository.GetRecommendedRateCodes(priceDto, tenantID)
 }
 
 // Find find and returns reservation by id.
-func (s *ReservationService) Find(id uint64) (*models.Reservation, error) {
-	return s.Repository.Find(id)
+func (s *ReservationService) Find(id uint64, tenantID uint64) (*models.Reservation, error) {
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindReservationRequest find and returns reservationRequest by  given roomId and requestKey.
-func (s *ReservationService) FindReservationRequest(requestKey string) (*models.ReservationRequest, error) {
-	return s.Repository.FindReservationRequest(requestKey)
+func (s *ReservationService) FindReservationRequest(requestKey string, tenantID uint64) (*models.ReservationRequest, error) {
+	return s.Repository.FindReservationRequest(requestKey, tenantID)
 }
 
 // RemoveExpiredReservationRequests removes expired reservation requests.
-func (s *ReservationService) RemoveExpiredReservationRequests() error {
-	return s.Repository.RemoveExpiredReservationRequests()
+func (s *ReservationService) RemoveExpiredReservationRequests(tenantID uint64) error {
+	return s.Repository.RemoveExpiredReservationRequests(tenantID)
 }
 
 // FindAll returns paginated list of reservations with some filters like

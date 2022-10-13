@@ -16,21 +16,21 @@ func NewRoomService(r *repositories.RoomRepository) *RoomService {
 }
 
 // Create creates new Room.
-func (s *RoomService) Create(room *models.Room) (*models.Room, error) {
+func (s *RoomService) Create(room *models.Room, tenantID uint64) (*models.Room, error) {
 
-	return s.Repository.Create(room)
+	return s.Repository.Create(room, tenantID)
 }
 
 // Update updates Room.
-func (s *RoomService) Update(room *models.Room) (*models.Room, error) {
+func (s *RoomService) Update(room *models.Room, tenantID uint64) (*models.Room, error) {
 
-	return s.Repository.Update(room)
+	return s.Repository.Update(room, tenantID)
 }
 
 // Find returns Room and if it does not find the Room, it returns nil.
-func (s *RoomService) Find(id uint64) (*models.Room, error) {
+func (s *RoomService) Find(id uint64, tenantID uint64) (*models.Room, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of rooms.
@@ -40,7 +40,7 @@ func (s *RoomService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedRe
 }
 
 // Delete removes room  by given id.
-func (s *RoomService) Delete(id uint64) error {
+func (s *RoomService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }

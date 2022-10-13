@@ -1,43 +1,48 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type RateCodeRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
 // NewRateCodeRepository returns new RateCodeRepository.
-func NewRateCodeRepository(db *gorm.DB) *RateCodeRepository {
+func NewRateCodeRepository(r *connection_resolver.TenantConnectionResolver) *RateCodeRepository {
 
-	return &RateCodeRepository{DB: db}
+	return &RateCodeRepository{ConnectionResolver: r}
 }
 
-func (r *RateCodeRepository) Create(model *models.RateCode) (*models.RateCode, error) {
+func (r *RateCodeRepository) Create(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
 
-	if tx := r.DB.Create(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return model, nil
 }
 
-func (r *RateCodeRepository) Update(model *models.RateCode) (*models.RateCode, error) {
+func (r *RateCodeRepository) Update(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
 
-	if tx := r.DB.Updates(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Updates(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return model, nil
 }
 
-func (r *RateCodeRepository) Find(id uint64) (*models.RateCode, error) {
+func (r *RateCodeRepository) Find(id uint64, tenantID uint64) (*models.RateCode, error) {
 
 	model := models.RateCode{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -49,12 +54,15 @@ func (r *RateCodeRepository) Find(id uint64) (*models.RateCode, error) {
 
 func (r *RateCodeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.RateCode{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.RateCode{}, db, input)
 }
 
-func (r RateCodeRepository) Delete(id uint64) error {
+func (r RateCodeRepository) Delete(id uint64, tenantID uint64) error {
 
-	if query := r.DB.Model(&models.RateCode{}).Where("id=?", id).Delete(&models.RateCode{}); query.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if query := db.Model(&models.RateCode{}).Where("id=?", id).Delete(&models.RateCode{}); query.Error != nil {
 		return query.Error
 	}
 	return nil

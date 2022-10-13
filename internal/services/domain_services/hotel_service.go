@@ -18,21 +18,21 @@ func NewHotelService(r *repositories.HotelRepository) *HotelService {
 }
 
 // Create creates new Hotel.
-func (s *HotelService) Create(hotel *models.Hotel) (*models.Hotel, error) {
+func (s *HotelService) Create(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	return s.Repository.Create(hotel)
+	return s.Repository.Create(hotel, tenantID)
 }
 
 // Update updates Hotel.
-func (s *HotelService) Update(hotel *models.Hotel) (*models.Hotel, error) {
+func (s *HotelService) Update(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	return s.Repository.Update(hotel)
+	return s.Repository.Update(hotel, tenantID)
 }
 
 // Find returns Hotel and if it does not find the Hotel, it returns nil.
-func (s *HotelService) Find(id uint64) (*models.Hotel, error) {
+func (s *HotelService) Find(id uint64, tenantID uint64) (*models.Hotel, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of hotels
@@ -42,9 +42,9 @@ func (s *HotelService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedR
 }
 
 // Delete removes hotel type by given id.
-func (s *HotelService) Delete(id uint64) error {
+func (s *HotelService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }
 
 func (s HotelService) Map(givenModel *models.Hotel, returnModel *models.Hotel) *models.Hotel {

@@ -1,43 +1,48 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type RoomRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewRoomRepository(db *gorm.DB) *RoomRepository {
-	return &RoomRepository{DB: db}
+func NewRoomRepository(r *connection_resolver.TenantConnectionResolver) *RoomRepository {
+	return &RoomRepository{r}
 }
 
-func (r *RoomRepository) Create(room *models.Room) (*models.Room, error) {
+func (r *RoomRepository) Create(room *models.Room, tenantID uint64) (*models.Room, error) {
 
-	if tx := r.DB.Create(&room); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Create(&room); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return room, nil
 }
 
-func (r *RoomRepository) Update(room *models.Room) (*models.Room, error) {
+func (r *RoomRepository) Update(room *models.Room, tenantID uint64) (*models.Room, error) {
 
-	if tx := r.DB.Updates(&room); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Updates(&room); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return room, nil
 }
 
-func (r *RoomRepository) Find(id uint64) (*models.Room, error) {
+func (r *RoomRepository) Find(id uint64, tenantID uint64) (*models.Room, error) {
 
 	model := models.Room{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -50,12 +55,14 @@ func (r *RoomRepository) Find(id uint64) (*models.Room, error) {
 
 func (r *RoomRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Room{}, r.DB, input)
+	return paginatedList(&models.Room{}, r.ConnectionResolver.GetDB(input.TenantID), input)
 }
 
-func (r RoomRepository) Delete(id uint64) error {
+func (r RoomRepository) Delete(id uint64, tenantID uint64) error {
 
-	if query := r.DB.Model(&models.Room{}).Where("id=?", id).Delete(&models.Room{}); query.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if query := db.Model(&models.Room{}).Where("id=?", id).Delete(&models.Room{}); query.Error != nil {
 		return query.Error
 	}
 

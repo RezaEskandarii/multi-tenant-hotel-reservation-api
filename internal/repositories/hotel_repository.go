@@ -2,33 +2,34 @@ package repositories
 
 import (
 	"errors"
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
+	"reservation-api/pkg/database/connection_resolver"
 	"sync"
 )
 
 type HotelRepository struct {
-	DB                  *gorm.DB
+	ConnectionResolver  *connection_resolver.TenantConnectionResolver
 	FileTransferService common_services.FileTransferer
 }
 
-func NewHotelRepository(db *gorm.DB, fileTransferService common_services.FileTransferer) *HotelRepository {
+func NewHotelRepository(r *connection_resolver.TenantConnectionResolver, fileTransferService common_services.FileTransferer) *HotelRepository {
 
 	return &HotelRepository{
-		DB:                  db,
+		ConnectionResolver:  r,
 		FileTransferService: fileTransferService,
 	}
 }
 
-func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
+func (r *HotelRepository) Create(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	if tx := r.DB.Create(&hotel); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Create(&hotel); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -54,7 +55,7 @@ func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
 						FileSize:   result.FileSize,
 					}
 
-					if err := r.DB.Create(&thumbnail).Error; err != nil {
+					if err := db.Create(&thumbnail).Error; err != nil {
 						errorsCh <- err
 					}
 				}()
@@ -73,20 +74,23 @@ func (r *HotelRepository) Create(hotel *models.Hotel) (*models.Hotel, error) {
 	return hotel, nil
 }
 
-func (r *HotelRepository) Update(hotel *models.Hotel) (*models.Hotel, error) {
+func (r *HotelRepository) Update(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	if tx := r.DB.Updates(&hotel); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Updates(&hotel); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return hotel, nil
 }
 
-func (r *HotelRepository) Find(id uint64) (*models.Hotel, error) {
+func (r *HotelRepository) Find(id uint64, tenantID uint64) (*models.Hotel, error) {
+
 	model := models.Hotel{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if tx := r.DB.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
-
+	if tx := db.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -98,22 +102,27 @@ func (r *HotelRepository) Find(id uint64) (*models.Hotel, error) {
 }
 
 func (r *HotelRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-
-	return paginatedList(&models.Hotel{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.Hotel{}, db, input)
 }
 
-func (r HotelRepository) Delete(id uint64) error {
-	if query := r.DB.Model(&models.Hotel{}).Where("id=?", id).Delete(&models.Hotel{}); query.Error != nil {
+func (r HotelRepository) Delete(id uint64, tenantID uint64) error {
+
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if query := db.Model(&models.Hotel{}).Where("id=?", id).Delete(&models.Hotel{}); query.Error != nil {
 		return query.Error
 	}
 
 	return nil
 }
 
-func (r *HotelRepository) hasRepeatData(hotel *models.Hotel) error {
-	var countByName int64 = 0
+func (r *HotelRepository) hasRepeatData(hotel *models.Hotel, tenantID uint64) error {
 
-	if tx := *r.DB.Model(&models.Hotel{}).Where(&models.Hotel{Name: hotel.Name}).Count(&countByName); tx.Error != nil {
+	var countByName int64 = 0
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := *db.Model(&models.Hotel{}).Where(&models.Hotel{Name: hotel.Name}).Count(&countByName); tx.Error != nil {
 		return tx.Error
 	}
 

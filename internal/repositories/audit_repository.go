@@ -8,15 +8,17 @@ import (
 )
 
 type AuditRepository struct {
-	ConnectionResolver *connection_resolver.ConnectionResolver
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewAuditRepository(r *connection_resolver.ConnectionResolver) *AuditRepository {
+func NewAuditRepository(r *connection_resolver.TenantConnectionResolver) *AuditRepository {
 	return &AuditRepository{ConnectionResolver: r}
 }
 
-func (r *AuditRepository) Create(model *models.Audit) (*models.Audit, error) {
-	db := r.ConnectionResolver.GetDB(model.TenantId)
+func (r *AuditRepository) Create(model *models.Audit, tenantID uint64) (*models.Audit, error) {
+
+	db := r.ConnectionResolver.GetDB(tenantID)
+
 	if err := db.Create(&model).Error; err != nil {
 		return nil, err
 	}

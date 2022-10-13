@@ -16,21 +16,21 @@ func NewRoomTypeService(r *repositories.RoomTypeRepository) *RoomTypeService {
 }
 
 // Create creates new RoomType.
-func (s *RoomTypeService) Create(roomType *models.RoomType) (*models.RoomType, error) {
+func (s *RoomTypeService) Create(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	return s.Repository.Create(roomType)
+	return s.Repository.Create(roomType, tenantID)
 }
 
 // Update updates RoomType.
-func (s *RoomTypeService) Update(roomType *models.RoomType) (*models.RoomType, error) {
+func (s *RoomTypeService) Update(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	return s.Repository.Update(roomType)
+	return s.Repository.Update(roomType, tenantID)
 }
 
 // Find returns RoomType and if it does not find the RoomType, it returns nil.
-func (s *RoomTypeService) Find(id uint64) (*models.RoomType, error) {
+func (s *RoomTypeService) Find(id uint64, tenantID uint64) (*models.RoomType, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of hotel types.
@@ -40,12 +40,12 @@ func (s *RoomTypeService) FindAll(input *dto.PaginationFilter) (*commons.Paginat
 }
 
 // Delete removes hotel type by given id.
-func (s *RoomTypeService) Delete(id uint64) error {
+func (s *RoomTypeService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }
 
 // Seed seed given json file data to roomTypes.
-func (s *RoomTypeService) Seed(jsonFilePath string) error {
-	return s.Repository.Seed(jsonFilePath)
+func (s *RoomTypeService) Seed(jsonFilePath string, tenantID uint64) error {
+	return s.Repository.Seed(jsonFilePath, tenantID)
 }

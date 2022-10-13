@@ -1,46 +1,50 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type GuestRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewGuestRepository(db *gorm.DB) *GuestRepository {
+func NewGuestRepository(r *connection_resolver.TenantConnectionResolver) *GuestRepository {
 	return &GuestRepository{
-		DB: db,
+		ConnectionResolver: r,
 	}
 }
 
-func (r *GuestRepository) Create(guest *models.Guest) (*models.Guest, error) {
+func (r *GuestRepository) Create(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
 
-	if tx := r.DB.Create(&guest); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Create(&guest); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return guest, nil
 }
 
-func (r *GuestRepository) Update(guest *models.Guest) (*models.Guest, error) {
+func (r *GuestRepository) Update(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
 
-	if tx := r.DB.Updates(&guest); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Updates(&guest); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return guest, nil
 }
 
-func (r *GuestRepository) Find(id uint64) (*models.Guest, error) {
+func (r *GuestRepository) Find(id uint64, tenantID uint64) (*models.Guest, error) {
 
 	model := models.Guest{}
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -51,11 +55,12 @@ func (r *GuestRepository) Find(id uint64) (*models.Guest, error) {
 	return &model, nil
 }
 
-func (r *GuestRepository) FindByNationalId(id string) (*models.Guest, error) {
+func (r *GuestRepository) FindByNationalId(id string, tenantID uint64) (*models.Guest, error) {
 
 	model := models.Guest{}
-	if tx := r.DB.Where(models.Guest{NationalId: id}).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Where(models.Guest{NationalId: id}).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -66,11 +71,12 @@ func (r *GuestRepository) FindByNationalId(id string) (*models.Guest, error) {
 	return &model, nil
 }
 
-func (r *GuestRepository) FindByPassportNumber(passNumber string) (*models.Guest, error) {
+func (r *GuestRepository) FindByPassportNumber(passNumber string, tenantID uint64) (*models.Guest, error) {
 
 	model := models.Guest{}
-	if tx := r.DB.Where(models.Guest{PassportNumber: passNumber}).Find(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if tx := db.Where(models.Guest{PassportNumber: passNumber}).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -81,15 +87,20 @@ func (r *GuestRepository) FindByPassportNumber(passNumber string) (*models.Guest
 	return &model, nil
 }
 
-func (r *GuestRepository) ReservationsCount(guestId uint64) (error, uint64) {
+func (r *GuestRepository) ReservationsCount(guestId uint64, tenantID uint64) (error, uint64) {
+
 	var count int64 = 0
-	if err := r.DB.Model(&models.Reservation{}).Where("supervisor_id=?", guestId).Count(&count).Error; err != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if err := db.Model(&models.Reservation{}).Where("supervisor_id=?", guestId).Count(&count).Error; err != nil {
 		return err, 0
 	}
+
 	return nil, uint64(count)
 }
 
 func (r *GuestRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Guest{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.Guest{}, db, input)
 }

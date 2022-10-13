@@ -8,25 +8,17 @@ import (
 )
 
 type CityRepository struct {
-	ConnectionResolver *connection_resolver.ConnectionResolver
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-//type CityRepository interface {
-//	Create(city *models.City) (*models.City, error)
-//	Update(city *models.City) (*models.City, error)
-//	Find(city *models.City) (*models.City, error)
-//	FindAll(input *dto.PaginationFilter) (commons.PaginatedResult, error)
-//	Delete(id uint64) error
-//}
-
-func NewCityRepository(connectionResolver *connection_resolver.ConnectionResolver) *CityRepository {
+func NewCityRepository(connectionResolver *connection_resolver.TenantConnectionResolver) *CityRepository {
 	return &CityRepository{
 		ConnectionResolver: connectionResolver,
 	}
 }
 
-func (r *CityRepository) Create(city *models.City) (*models.City, error) {
-	db := r.ConnectionResolver.GetDB(city.TenantId)
+func (r *CityRepository) Create(city *models.City, tenantID uint64) (*models.City, error) {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
 	if tx := db.Create(&city); tx.Error != nil {
 		return nil, tx.Error
@@ -35,9 +27,10 @@ func (r *CityRepository) Create(city *models.City) (*models.City, error) {
 	return city, nil
 }
 
-func (r *CityRepository) Update(city *models.City) (*models.City, error) {
+func (r *CityRepository) Update(city *models.City, tenantID uint64) (*models.City, error) {
 
-	db := r.ConnectionResolver.GetDB(city.TenantId)
+	db := r.ConnectionResolver.GetDB(tenantID)
+
 	if tx := db.Updates(&city); tx.Error != nil {
 
 		return nil, tx.Error

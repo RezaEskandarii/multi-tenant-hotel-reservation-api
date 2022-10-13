@@ -13,17 +13,17 @@ import (
 	"time"
 )
 
-type ConnectionResolver struct {
+type TenantConnectionResolver struct {
 	cache map[uint64]*gorm.DB
 }
 
-func NewConnectionResolver() *ConnectionResolver {
-	return &ConnectionResolver{
+func NewTenantConnectionResolver() *TenantConnectionResolver {
+	return &TenantConnectionResolver{
 		cache: make(map[uint64]*gorm.DB),
 	}
 }
 
-func (c *ConnectionResolver) GetDB(tenantID uint64) *gorm.DB {
+func (c *TenantConnectionResolver) GetDB(tenantID uint64) *gorm.DB {
 
 	dbName := ""
 	if tenantID != 0 {
@@ -44,14 +44,14 @@ func (c *ConnectionResolver) GetDB(tenantID uint64) *gorm.DB {
 
 }
 
-func (c *ConnectionResolver) CreateDbForTenant(db *gorm.DB, tenantId uint64) {
+func (c *TenantConnectionResolver) CreateDbForTenant(db *gorm.DB, tenantId uint64) {
 
 	dbName := fmt.Sprintf("hotel_reservation_%d", tenantId)
 
 	db.Exec(fmt.Sprintf("CREATE DATABASE %s ENCODING 'UTF8';", dbName))
 }
 
-func (c *ConnectionResolver) Migrate(db *gorm.DB, tenantId uint64) {
+func (c *TenantConnectionResolver) Migrate(db *gorm.DB, tenantId uint64) {
 
 	var (
 		entities = []interface{}{

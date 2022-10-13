@@ -13,27 +13,27 @@ func NewPaymentService(repository *repositories.PaymentRepository) *PaymentServi
 	return &PaymentService{Repository: repository}
 }
 
-func (s *PaymentService) Create(payment *models.Payment) (*models.Payment, error) {
+func (s *PaymentService) Create(payment *models.Payment, tenantID uint64) (*models.Payment, error) {
 
-	return s.Repository.Create(payment)
+	return s.Repository.Create(payment, tenantID)
 }
 
-func (s *PaymentService) Find(id uint64) (*models.Payment, error) {
+func (s *PaymentService) Find(id uint64, tenantID uint64) (*models.Payment, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
-func (s *PaymentService) Delete(id uint64) error {
+func (s *PaymentService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }
 
-func (s *PaymentService) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType) ([]*models.Payment, error) {
+func (s *PaymentService) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) ([]*models.Payment, error) {
 
-	return s.Repository.GetListByReservationID(reservationID, paymentType)
+	return s.Repository.GetListByReservationID(reservationID, paymentType, tenantID)
 }
 
-func (s *PaymentService) GetBalance(reservationID uint64, paymentType *models.PaymentType) (float64, error) {
+func (s *PaymentService) GetBalance(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) (float64, error) {
 
-	return s.Repository.GetBalance(reservationID, paymentType)
+	return s.Repository.GetBalance(reservationID, paymentType, tenantID)
 }

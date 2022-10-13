@@ -17,21 +17,21 @@ func NewGuestService(r *repositories.GuestRepository) *GuestService {
 }
 
 // Create creates new Guest.
-func (s *GuestService) Create(guest *models.Guest) (*models.Guest, error) {
+func (s *GuestService) Create(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
 
-	return s.Repository.Create(guest)
+	return s.Repository.Create(guest, tenantID)
 }
 
 // Update updates Guest.
-func (s *GuestService) Update(guest *models.Guest) (*models.Guest, error) {
+func (s *GuestService) Update(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
 
-	return s.Repository.Update(guest)
+	return s.Repository.Update(guest, tenantID)
 }
 
 // Find returns Guest and if it does not find the Guest, it returns nil.
-func (s *GuestService) Find(id uint64) (*models.Guest, error) {
+func (s *GuestService) Find(id uint64, tenantID uint64) (*models.Guest, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of cities.
@@ -41,7 +41,7 @@ func (s *GuestService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedR
 }
 
 // ReservationsCount returns guest reserves count
-func (s *GuestService) ReservationsCount(guestId uint64) (error, uint64) {
+func (s *GuestService) ReservationsCount(guestId uint64, tenantID uint64) (error, uint64) {
 
-	return s.Repository.ReservationsCount(guestId)
+	return s.Repository.ReservationsCount(guestId, tenantID)
 }

@@ -17,21 +17,21 @@ func NewHotelTypeService(r *repositories.HotelTypeRepository) *HotelTypeService 
 }
 
 // Create creates new HotelType.
-func (s *HotelTypeService) Create(hotelType *models.HotelType) (*models.HotelType, error) {
+func (s *HotelTypeService) Create(hotelType *models.HotelType, tenantID uint64) (*models.HotelType, error) {
 
-	return s.Repository.Create(hotelType)
+	return s.Repository.Create(hotelType, tenantID)
 }
 
 // Update updates HotelType.
-func (s *HotelTypeService) Update(hotelType *models.HotelType) (*models.HotelType, error) {
+func (s *HotelTypeService) Update(hotelType *models.HotelType, tenantID uint64) (*models.HotelType, error) {
 
-	return s.Repository.Update(hotelType)
+	return s.Repository.Update(hotelType, tenantID)
 }
 
 // Find returns HotelType and if it does not find the HotelType, it returns nil.
-func (s *HotelTypeService) Find(id uint64) (*models.HotelType, error) {
+func (s *HotelTypeService) Find(id uint64, tenantID uint64) (*models.HotelType, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of hotel types.
@@ -41,7 +41,7 @@ func (s *HotelTypeService) FindAll(input *dto.PaginationFilter) (*commons.Pagina
 }
 
 // Delete removes hotel type by given id.
-func (s *HotelTypeService) Delete(id uint64) error {
+func (s *HotelTypeService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }

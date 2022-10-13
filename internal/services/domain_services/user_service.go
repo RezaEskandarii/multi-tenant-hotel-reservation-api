@@ -19,7 +19,7 @@ func NewUserService(r *repositories.UserRepository) *UserService {
 }
 
 // Create creates new User.
-func (s *UserService) Create(user *models.User) (*models.User, error) {
+func (s *UserService) Create(user *models.User, tenantID uint64) (*models.User, error) {
 
 	hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
 
@@ -29,31 +29,31 @@ func (s *UserService) Create(user *models.User) (*models.User, error) {
 
 	user.Password = fmt.Sprintf("%s", hash)
 
-	return s.Repository.Create(user)
+	return s.Repository.Create(user, tenantID)
 }
 
 // Update updates User.
-func (s *UserService) Update(user *models.User) (*models.User, error) {
+func (s *UserService) Update(user *models.User, tenantID uint64) (*models.User, error) {
 
-	return s.Repository.Update(user)
+	return s.Repository.Update(user, tenantID)
 }
 
 // Find returns User and if it does not find the User, it returns nil.
-func (s *UserService) Find(id uint64) (*models.User, error) {
+func (s *UserService) Find(id uint64, tenantID uint64) (*models.User, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindByUsername returns User by username and if it does not find the User, it returns nil.
-func (s *UserService) FindByUsername(username string) (*models.User, error) {
+func (s *UserService) FindByUsername(username string, tenantID uint64) (*models.User, error) {
 
-	return s.Repository.FindByUsername(username)
+	return s.Repository.FindByUsername(username, tenantID)
 }
 
 // Delete removes user permanently;
-func (s *UserService) Delete(id uint64) error {
+func (s *UserService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }
 
 // FindAll returns paginated list of cities.
@@ -63,23 +63,23 @@ func (s *UserService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedRe
 }
 
 // Activate find user by id and activate.
-func (s *UserService) Activate(id uint64) (*models.User, error) {
+func (s *UserService) Activate(id uint64, tenantID uint64) (*models.User, error) {
 
-	return s.Repository.Activate(id)
+	return s.Repository.Activate(id, tenantID)
 }
 
 // Deactivate find and deactivates user by user id.
-func (s *UserService) Deactivate(id uint64) (*models.User, error) {
+func (s *UserService) Deactivate(id uint64, tenantID uint64) (*models.User, error) {
 
-	return s.Repository.Deactivate(id)
+	return s.Repository.Deactivate(id, tenantID)
 }
 
 // Seed seed given json file to database.
-func (s *UserService) Seed(jsonFilePath string) error {
-	return s.Repository.Seed(jsonFilePath)
+func (s *UserService) Seed(jsonFilePath string, tenantID uint64) error {
+	return s.Repository.Seed(jsonFilePath, tenantID)
 }
 
 // FindByUsernameAndPassword finds user by username and password.
-func (s *UserService) FindByUsernameAndPassword(username string, password string) (*models.User, error) {
-	return s.Repository.FindByUsernameAndPassword(username, password)
+func (s *UserService) FindByUsernameAndPassword(username string, password string, tenantID uint64) (*models.User, error) {
+	return s.Repository.FindByUsernameAndPassword(username, password, tenantID)
 }

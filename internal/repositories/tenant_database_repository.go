@@ -22,7 +22,7 @@ func (r *TenantRepository) Create(model *models.Tenant) (*models.Tenant, error) 
 		return nil, tx.Error
 	}
 
-	resolver := connection_resolver.NewConnectionResolver()
+	resolver := connection_resolver.NewTenantConnectionResolver()
 	db1 := resolver.GetDB(0)
 	tenantDB := resolver.GetDB(model.Id)
 

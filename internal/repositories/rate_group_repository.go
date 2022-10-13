@@ -1,45 +1,50 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/pkg/database/connection_resolver"
 )
 
 type RateGroupRepository struct {
-	DB *gorm.DB
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
 // NewRateGroupRepository returns new RateGroupRepository.
-func NewRateGroupRepository(db *gorm.DB) *RateGroupRepository {
+func NewRateGroupRepository(r *connection_resolver.TenantConnectionResolver) *RateGroupRepository {
 
-	return &RateGroupRepository{DB: db}
+	return &RateGroupRepository{ConnectionResolver: r}
 }
 
-func (r *RateGroupRepository) Create(model *models.RateGroup) (*models.RateGroup, error) {
+func (r *RateGroupRepository) Create(model *models.RateGroup, tenantID uint64) (*models.RateGroup, error) {
 
-	if tx := r.DB.Create(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return model, nil
 }
 
-func (r *RateGroupRepository) Update(model *models.RateGroup) (*models.RateGroup, error) {
+func (r *RateGroupRepository) Update(model *models.RateGroup, tenantID uint64) (*models.RateGroup, error) {
 
-	if tx := r.DB.Updates(&model); tx.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
+
+	if tx := db.Updates(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return model, nil
 }
 
-func (r *RateGroupRepository) Find(id uint64) (*models.RateGroup, error) {
+func (r *RateGroupRepository) Find(id uint64, tenantID uint64) (*models.RateGroup, error) {
 
 	model := models.RateGroup{}
+	db := r.ConnectionResolver.GetDB(tenantID)
 
-	if tx := r.DB.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -52,13 +57,15 @@ func (r *RateGroupRepository) Find(id uint64) (*models.RateGroup, error) {
 
 func (r *RateGroupRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.RateGroup{}, r.DB, input)
+	db := r.ConnectionResolver.GetDB(input.TenantID)
+	return paginatedList(&models.RateGroup{}, db, input)
 }
 
-func (r RateGroupRepository) Delete(id uint64) error {
+func (r RateGroupRepository) Delete(id uint64, tenantID uint64) error {
 
-	if query := r.DB.Model(&models.RateGroup{}).Where("id=?", id).Delete(&models.RateGroup{}); query.Error != nil {
+	db := r.ConnectionResolver.GetDB(tenantID)
 
+	if query := db.Model(&models.RateGroup{}).Where("id=?", id).Delete(&models.RateGroup{}); query.Error != nil {
 		return query.Error
 	}
 

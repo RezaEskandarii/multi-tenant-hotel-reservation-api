@@ -17,21 +17,21 @@ func NewHotelGradeService(r *repositories.HotelGradeRepository) *HotelGradeServi
 }
 
 // Create creates new HotelGrade.
-func (s *HotelGradeService) Create(hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Create(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	return s.Repository.Create(hotelGrade)
+	return s.Repository.Create(hotelGrade, tenantID)
 }
 
 // Update updates HotelGrade.
-func (s *HotelGradeService) Update(hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Update(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	return s.Repository.Update(hotelGrade)
+	return s.Repository.Update(hotelGrade, tenantID)
 }
 
 // Find returns HotelGrade and if it does not find the HotelGrade, it returns nil.
-func (s *HotelGradeService) Find(id uint64) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Find(id uint64, tenantID uint64) (*models.HotelGrade, error) {
 
-	return s.Repository.Find(id)
+	return s.Repository.Find(id, tenantID)
 }
 
 // FindAll returns paginates list of hotel grades.
@@ -41,7 +41,7 @@ func (s *HotelGradeService) FindAll(input *dto.PaginationFilter) (*commons.Pagin
 }
 
 // Delete removes hotel type by given id.
-func (s *HotelGradeService) Delete(id uint64) error {
+func (s *HotelGradeService) Delete(id uint64, tenantID uint64) error {
 
-	return s.Repository.Delete(id)
+	return s.Repository.Delete(id, tenantID)
 }

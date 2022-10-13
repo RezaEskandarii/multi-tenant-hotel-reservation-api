@@ -9,29 +9,30 @@ import (
 )
 
 type CurrencyRepository struct {
-	ConnectionResolver *connection_resolver.ConnectionResolver
+	ConnectionResolver *connection_resolver.TenantConnectionResolver
 }
 
-func NewCurrencyRepository(r *connection_resolver.ConnectionResolver) *CurrencyRepository {
+func NewCurrencyRepository(r *connection_resolver.TenantConnectionResolver) *CurrencyRepository {
 	return &CurrencyRepository{
 		ConnectionResolver: r,
 	}
 }
 
-func (r *CurrencyRepository) Create(currency *models.Currency) (*models.Currency, error) {
+func (r *CurrencyRepository) Create(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetDB(currency.TenantId)
+	db := r.ConnectionResolver.GetDB(tenantID)
+
 	if tx := db.Create(&currency); tx.Error != nil {
-
 		return nil, tx.Error
 	}
 
 	return currency, nil
 }
 
-func (r *CurrencyRepository) Update(currency *models.Currency) (*models.Currency, error) {
+func (r *CurrencyRepository) Update(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetDB(currency.TenantId)
+	db := r.ConnectionResolver.GetDB(tenantID)
+
 	if tx := db.Updates(&currency); tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -43,6 +44,7 @@ func (r *CurrencyRepository) Find(id uint64, tenantID uint64) (*models.Currency,
 
 	model := models.Currency{}
 	db := r.ConnectionResolver.GetDB(tenantID)
+
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
 		return nil, tx.Error
