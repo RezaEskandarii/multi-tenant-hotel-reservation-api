@@ -69,7 +69,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	}
 
 	province.SetAudit(user)
-	if result, err := handler.Service.Create(province); err == nil {
+	if result, err := handler.Service.Create(province, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -111,7 +111,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	user := getCurrentUser(c)
 
-	province, err := handler.Service.Find(id)
+	province, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -148,7 +148,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 			})
 	}
 	province.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(province); err == nil {
+	if result, err := handler.Service.Update(province, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -177,7 +177,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -245,7 +245,7 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	cities, err := handler.Service.GetCities(id)
+	cities, err := handler.Service.GetCities(id, getCurrentTenant(c))
 
 	if err != nil {
 

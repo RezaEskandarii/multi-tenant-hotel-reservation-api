@@ -46,7 +46,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	}
 
-	oldUser, err := handler.Service.FindByUsername(model.Username)
+	oldUser, err := handler.Service.FindByUsername(model.Username, getCurrentTenant(c))
 
 	if err != nil {
 
@@ -69,7 +69,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(&model); err == nil {
+	if result, err := handler.Service.Create(&model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -102,7 +102,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	lang := c.Request().Header.Get(acceptLanguage)
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -131,7 +131,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -154,7 +154,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -202,7 +202,7 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-	model, err := handler.Service.FindByUsername(username)
+	model, err := handler.Service.FindByUsername(username, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {

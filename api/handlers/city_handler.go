@@ -45,7 +45,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := handler.Service.Create(&city); err == nil {
+	if _, err := handler.Service.Create(&city, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -78,7 +78,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 
 	lang := getAcceptLanguage(c)
 	currentUser := getCurrentUser(c)
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 
 	if err != nil {
 
@@ -107,7 +107,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		})
 	}
 	model.SetUpdatedBy(currentUser)
-	if output, err := handler.Service.Update(model); err == nil {
+	if output, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
@@ -129,7 +129,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := getAcceptLanguage(c)
 
 	if err != nil {

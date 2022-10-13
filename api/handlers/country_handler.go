@@ -60,7 +60,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	output, err := handler.Service.Create(model)
+	output, err := handler.Service.Create(model, getCurrentTenant(c))
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -123,7 +123,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	if output, err := handler.Service.Update(model); err == nil {
+	if output, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,

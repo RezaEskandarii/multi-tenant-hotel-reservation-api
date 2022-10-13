@@ -55,7 +55,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	result, err := handler.Service.Create(model)
+	result, err := handler.Service.Create(model, getCurrentTenant(c))
 
 	if err != nil {
 
@@ -96,7 +96,8 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id)
+	result, err := handler.Service.Find(id, getCurrentTenant(c))
+
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -128,7 +129,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	// prevent to edit other fields.
 	result.Name = tmpModel.Name
 	result.SetUpdatedBy(user)
-	updatedModel, err := handler.Service.Update(result)
+	updatedModel, err := handler.Service.Update(result, getCurrentTenant(c))
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -159,7 +160,7 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id)
+	result, err := handler.Service.Find(id, getCurrentTenant(c))
 	if err != nil {
 
 		handler.Input.Logger.LogError(err.Error())
@@ -226,7 +227,7 @@ func (handler *HotelGradeHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(id)
+	err = handler.Service.Delete(id, getCurrentTenant(c))
 
 	if err != nil {
 		return c.JSON(http.StatusConflict, commons.ApiResponse{

@@ -53,7 +53,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(model); err == nil {
+	if result, err := handler.Service.Create(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -93,7 +93,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 
 	user := getCurrentUser(c)
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -118,7 +118,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         result,
@@ -148,7 +148,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := getAcceptLanguage(c)
 
 	if err != nil {

@@ -54,7 +54,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	result, err := handler.Service.Create(model)
+	result, err := handler.Service.Create(model, getCurrentTenant(c))
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
@@ -89,7 +89,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -113,7 +113,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(model); err == nil {
+	if result, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -143,7 +143,7 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id)
+	model, err := handler.Service.Find(id, getCurrentTenant(c))
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -215,7 +215,7 @@ func (handler *RateGroupHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(id)
+	err = handler.Service.Delete(id, getCurrentTenant(c))
 
 	if err != nil {
 
