@@ -1,10 +1,9 @@
 package main
 
 import (
-	"os"
+	"fmt"
 	_ "reservation-api/docs"
-	"reservation-api/internal/kernel"
-	"reservation-api/pkg/applogger"
+	"reservation-api/internal/utils"
 )
 
 // @title Reservation API
@@ -14,10 +13,15 @@ import (
 // @BasePath /api/v1
 func main() {
 
-	logger := applogger.New(nil)
+	//logger := applogger.New(nil)
+	//
+	//if err := kernel.Run(); err != nil {
+	//	logger.LogError(err)
+	//	os.Exit(1)
+	//}
 
-	if err := kernel.Run(); err != nil {
-		logger.LogError(err)
-		os.Exit(1)
-	}
+	bb := utils.Encrypt("REZAESS")
+	fmt.Println(string(bb))
+	fmt.Println("---------")
+	fmt.Println(utils.Decrypt(bb))
 }

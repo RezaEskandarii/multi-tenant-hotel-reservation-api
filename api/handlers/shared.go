@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/config"
+	"reservation-api/internal/utils"
 	"strings"
 	"time"
 )
@@ -30,7 +31,11 @@ func getAcceptLanguage(c echo.Context) string {
 }
 
 func getCurrentTenant(c echo.Context) uint64 {
-	return c.Get(config.TenantID).(uint64)
+	tenantID, err := utils.ConvertToUint(c.Get(config.TenantID))
+	if err != nil {
+		panic(err)
+	}
+	return tenantID
 }
 
 // returns authenticated user from http Context

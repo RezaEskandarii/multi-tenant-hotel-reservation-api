@@ -39,7 +39,8 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if err, token := handler.AuthService.SignIn(cerds.Username, cerds.Password, getCurrentTenant(c)); err != nil {
+	cx := getCurrentTenant(c)
+	if err, token := handler.AuthService.SignIn(cerds.Username, cerds.Password, cx); err != nil {
 
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {

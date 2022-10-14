@@ -18,11 +18,12 @@ type TenantHandler struct {
 func (handler *TenantHandler) Register(input *dto.HandlersShared, service *domain_services.TenantService) {
 	handler.TenantService = service
 	handler.Input = input
-	routeGroup := input.Router.Group("/tenant")
+	routeGroup := input.Router.Group("/tenants")
 	routeGroup.POST("", handler.create)
 }
 
 func (handler *TenantHandler) create(c echo.Context) error {
+
 	model := &models.Tenant{}
 	lang := c.Request().Header.Get(acceptLanguage)
 

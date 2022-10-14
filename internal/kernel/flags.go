@@ -7,6 +7,10 @@ import (
 	"reservation-api/pkg/database"
 )
 
+var (
+	defaultTenant = 1
+)
+
 // set application commands.
 func loadFlags() {
 	var migrate = false
@@ -32,11 +36,11 @@ func loadFlags() {
 	}
 
 	if seed {
-		fmt.Println("seed started...")
-		if err := database.ApplySeed(tx); err != nil {
-			logger.LogError(err)
-			os.Exit(1)
-		}
+		//fmt.Println("seed started...")
+		//if err := database.ApplySeed(tx); err != nil {
+		//	logger.LogError(err)
+		//	os.Exit(1)
+		//}
 	}
 
 	if err := tx.Commit(); err != nil {

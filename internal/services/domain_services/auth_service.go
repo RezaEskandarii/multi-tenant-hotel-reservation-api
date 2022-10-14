@@ -21,6 +21,7 @@ type Claims struct {
 	LastName    string `json:"last_name"`
 	Address     string `json:"address"`
 	PhoneNumber string `json:"phone_number"`
+	TenantID    uint64 `json:"tenant_id"`
 	jwt.StandardClaims
 }
 
@@ -57,6 +58,7 @@ func (s AuthService) SignIn(username, password string, tenantID uint64) (error, 
 	expirationTime := time.Now().Add(time.Duration(s.Config.Authentication.TokenAliveTime) * time.Minute)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
+		TenantID:    tenantID,
 		Username:    user.Username,
 		Email:       user.Email,
 		FirstName:   user.FirstName,
@@ -151,6 +153,7 @@ func (s *AuthService) VerifyToken(jwtToken string, tenantID uint64) (error, *Cla
 			LastName:    fmt.Sprintf("%s", claims["lastname"]),
 			Address:     fmt.Sprintf("%s", claims["address"]),
 			PhoneNumber: fmt.Sprintf("%s", claims["phonenumber"]),
+			TenantID:    tenantID,
 		}
 
 	} else {

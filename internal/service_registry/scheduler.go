@@ -10,9 +10,9 @@ import (
 func scheduleRemoveExpiredReservationRequests(s *domain_services.ReservationService, logger applogger.Logger) error {
 
 	task := func() {
-		if err := s.RemoveExpiredReservationRequests(); err != nil {
-			logger.LogError(err.Error())
-		}
+		//if err := s.RemoveExpiredReservationRequests(); err != nil {
+		//	logger.LogError(err.Error())
+		//}
 	}
 
 	return gocron.Every(1).Hour().Do(task)

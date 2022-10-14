@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/andskur/argon2-hashing"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
@@ -165,6 +166,15 @@ func (r *UserRepository) Seed(jsonFilePath string, tenantID uint64) error {
 				return err
 			} else {
 				if count == 0 {
+					user.TenantId = tenantID
+
+					hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
+
+					if err != nil {
+						return err
+					}
+					user.Password = fmt.Sprintf("%s", hash)
+
 					if err := db.Create(&user).Error; err != nil {
 						return err
 					}
