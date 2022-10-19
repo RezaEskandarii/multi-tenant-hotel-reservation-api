@@ -13,7 +13,7 @@ import (
 var (
 	paginationInput = "paginationInput"
 	acceptLanguage  = "Accept-Language" // accept language header.
-	tenantId        = "X-TenantID"      // this value uses in http header request as a selected business id.
+	tenantId        = "X-TenantIDKey"   // this value uses in http header request as a selected business id.
 
 	EXCEL        = "excel"
 	EXCEL_OUTPUT = "xlsx"
@@ -31,7 +31,8 @@ func getAcceptLanguage(c echo.Context) string {
 }
 
 func getCurrentTenant(c echo.Context) uint64 {
-	tenantID, err := utils.ConvertToUint(c.Get(config.TenantID))
+
+	tenantID, err := utils.ConvertToUint(utils.Decrypt(fmt.Sprintf("%s", c.Get(config.TenantIDKey))))
 	if err != nil {
 		panic(err)
 	}
@@ -50,10 +51,13 @@ func getOutputQueryParamVal(c echo.Context) string {
 
 // writeBinaryHeaders
 func writeBinaryHeaders(context echo.Context, fName string, format string) {
+
 	fileName := fmt.Sprintf("report-%s-%s.%s", fName, time.Now().Format("2006-01-02"), format)
+
 	context.Response().Header().Set(echo.HeaderContentType, echo.MIMEOctetStream)
 	context.Response().Header().Set(echo.HeaderContentDisposition, "attachment; filename="+fileName)
 	context.Response().Header().Set("Content-Transfer-Encoding", "binary")
 	context.Response().Header().Set("Expires", "0")
 	context.Response().WriteHeader(http.StatusOK)
+
 }

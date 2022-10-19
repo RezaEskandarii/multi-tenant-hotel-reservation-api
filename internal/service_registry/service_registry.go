@@ -73,7 +73,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 	var (
 		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(connectionResolver))
 		provinceService       = domain_services.NewProvinceService(repositories.NewProvinceRepository(connectionResolver))
-		cityService           = domain_services.NewCityService(repositories.NewCityRepository(nil), cacheService)
+		cityService           = domain_services.NewCityService(repositories.NewCityRepository(connectionResolver), cacheService)
 		currencyService       = domain_services.NewCurrencyService(repositories.NewCurrencyRepository(connectionResolver))
 		userService           = domain_services.NewUserService(repositories.NewUserRepository(connectionResolver))
 		hotelTypeService      = domain_services.NewHotelTypeService(repositories.NewHotelTypeRepository(connectionResolver))
@@ -94,13 +94,13 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 	)
 
 	tenantHandler.Register(handlerInput, tenantService)
-
-	router.Use(middlewares.TenantMiddleware)
 	// authHandler does bot need to authMiddleware.
 	authHandler.Register(handlerInput, userService, authService)
 
+	router.Use(middlewares.TenantMiddleware, middlewares.JWTAuthMiddleware(authService),
+		middlewares.TenantAccessMiddleware)
+
 	// add authentication middleware to all routes.
-	router.Use( /**middlewares.JWTAuthMiddleware, */ )
 
 	metricHandler.Register(cfg)
 	countryHandler.Register(handlerInput, countryService)

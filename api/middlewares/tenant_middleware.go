@@ -16,7 +16,7 @@ func TenantMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "X-Tenant-ID header is null")
 		}
 
-		c.Set(config.TenantID, tenant)
+		c.Set(config.TenantIDKey, tenant)
 		return next(c)
 	}
 }

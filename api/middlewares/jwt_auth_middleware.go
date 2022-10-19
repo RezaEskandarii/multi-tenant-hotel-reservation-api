@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"reservation-api/internal/config"
 	"reservation-api/internal/services/domain_services"
+	"reservation-api/internal/utils"
 	"strings"
 )
 
@@ -22,9 +23,12 @@ func JWTAuthMiddleware(s *domain_services.AuthService) echo.MiddlewareFunc {
 				if jwtToken == "" {
 					return echo.NewHTTPError(http.StatusUnauthorized, "")
 				}
-				if err, claims := s.VerifyToken(jwtToken, c.Get(config.TenantID).(uint64)); err == nil && claims != nil {
 
-					c.Set("claims", claims.Username)
+				tenantID, _ := utils.ConvertToUint(c.Get(config.TenantIDKey))
+				if err, claims := s.VerifyToken(jwtToken, tenantID); err == nil && claims != nil {
+
+					c.Set("user_claims", claims)
+					c.Set(config.ClaimsKey, claims.Username)
 					return next(c)
 				} else {
 

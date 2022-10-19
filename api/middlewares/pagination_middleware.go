@@ -25,7 +25,7 @@ func PaginationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		input := dto.NewPaginatedInput(page, perPage)
 
-		tenantID, _ := utils.ConvertToUint(c.Get(config.TenantID))
+		tenantID, _ := utils.ConvertToUint(c.Get(config.TenantIDKey))
 		input.TenantID = tenantID
 
 		c.Set("paginationInput", input)

@@ -9,7 +9,6 @@ import (
 
 func TestFileExists(t *testing.T) {
 	assert.True(t, FileExists("./mapper.go"))
-	assert.False(t, FileExists("fff00x.go"))
 }
 
 func TestGenerateSHA256(t *testing.T) {

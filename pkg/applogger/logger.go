@@ -97,11 +97,13 @@ func (l *AppLogger) LogError(err interface{}) {
 }
 
 func getLogFileName() string {
-	fileName := "./logs/application.log"
 
+	fileName := "./logs/application.log"
 	dir, err := os.Getwd()
+
 	if err == nil {
 		return fmt.Sprintf("%s/%s", dir, "logs/application.log")
 	}
+
 	return fileName
 }

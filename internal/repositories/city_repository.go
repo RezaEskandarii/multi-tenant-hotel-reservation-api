@@ -32,7 +32,6 @@ func (r *CityRepository) Update(city *models.City, tenantID uint64) (*models.Cit
 	db := r.ConnectionResolver.GetDB(tenantID)
 
 	if tx := db.Updates(&city); tx.Error != nil {
-
 		return nil, tx.Error
 	}
 
@@ -42,8 +41,8 @@ func (r *CityRepository) Update(city *models.City, tenantID uint64) (*models.Cit
 func (r *CityRepository) Delete(id uint64, tenantID uint64) error {
 
 	db := r.ConnectionResolver.GetDB(tenantID)
-	if err := db.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
 
+	if err := db.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
 		return err
 	}
 
