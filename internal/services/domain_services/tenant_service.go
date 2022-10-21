@@ -13,7 +13,7 @@ func NewTenantService(repository *repositories.TenantRepository) *TenantService 
 	return &TenantService{Repository: repository}
 }
 
-func (s *TenantService) Create(model *models.Tenant) (*models.Tenant, error) {
+func (s *TenantService) SetUp(model *models.Tenant) (*models.Tenant, error) {
 
 	return s.Repository.Create(model)
 }

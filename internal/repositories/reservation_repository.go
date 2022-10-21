@@ -13,18 +13,18 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 	"strings"
 	"time"
 )
 
 type ReservationRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 	RateCodeRepository *RateCodeDetailRepository
 }
 
 // NewReservationRepository returns new ReservationRepository
-func NewReservationRepository(r *connection_resolver.TenantConnectionResolver, rateCodeRepository *RateCodeDetailRepository) *ReservationRepository {
+func NewReservationRepository(r *tenant_database_resolver.TenantDatabaseResolver, rateCodeRepository *RateCodeDetailRepository) *ReservationRepository {
 	return &ReservationRepository{
 		ConnectionResolver: r,
 		RateCodeRepository: rateCodeRepository,
@@ -64,7 +64,7 @@ func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomReq
 		CheckInDate:  requestDto.CheckInDate,
 	}
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Create(&requestModel).Error; err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomReq
 func (r *ReservationRepository) Create(reservation *models.Reservation, tenantID uint64) (*models.Reservation, error) {
 
 	r.setReservationCalcFields(reservation, tenantID)
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	option := sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -104,7 +104,7 @@ func (r *ReservationRepository) Update(id uint64, tenantID uint64, reservation *
 
 	r.setReservationCalcFields(reservation, tenantID)
 	reservation.Id = id
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	tx := db.Begin()
 	// remove old sharers and replace with new sharers.
@@ -134,7 +134,7 @@ func (r *ReservationRepository) Update(id uint64, tenantID uint64, reservation *
 func (r ReservationRepository) ChangeStatus(id uint64, tenantID uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
 
 	reservation := models.Reservation{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Find(&reservation, id).Error; err != nil {
 		return nil, err
@@ -156,7 +156,7 @@ func (r ReservationRepository) ChangeStatus(id uint64, tenantID uint64, status m
 
 func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto, tenantID uint64) ([]*dto.RateCodePricesDto, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	ratePrices := make([]*dto.RateCodePricesDto, 0)
 
 	db.Table("rate_code_details details").Select(`
@@ -190,7 +190,7 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation, tenantID uint64) (bool, error) {
 
 	var reservationRequestCount int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Model(&models.ReservationRequest{}).
 		Where("room_id=? AND check_in_date >=? AND check_out_date<=? ",
@@ -232,7 +232,7 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reserva
 func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64, tenantID uint64) (bool, error) {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Model(&models.Reservation{}).
 		Where("room_id=? AND checkin_date >=? AND checkout_date<=?",
@@ -250,7 +250,7 @@ func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, c
 func (r *ReservationRepository) DeleteReservationRequest(requestKey string, tenantID uint64) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Model(models.ReservationRequest{}).Where("requestKey=?", requestKey).Count(&count).Error; err != nil {
 		return err
@@ -266,7 +266,7 @@ func (r *ReservationRepository) DeleteReservationRequest(requestKey string, tena
 func (r *ReservationRepository) Find(id uint64, tenantID uint64) (*models.Reservation, error) {
 
 	reservation := models.Reservation{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	query := db.Model(models.Reservation{})
 	query = r.preloadReservationRelations(query)
@@ -285,7 +285,7 @@ func (r *ReservationRepository) Find(id uint64, tenantID uint64) (*models.Reserv
 func (r *ReservationRepository) FindReservationRequest(requestKey string, tenantID uint64) (*models.ReservationRequest, error) {
 
 	reservationRequest := models.ReservationRequest{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Where("request_key=?", requestKey).Find(&reservationRequest).Error; err != nil {
 		return nil, err
@@ -300,7 +300,7 @@ func (r *ReservationRepository) FindReservationRequest(requestKey string, tenant
 
 func (r *ReservationRepository) RemoveExpiredReservationRequests(tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	err := db.Where("expire_time < ?", time.Now()).Delete(&models.ReservationRequest{}).Error
 	if err != nil {
@@ -312,7 +312,7 @@ func (r *ReservationRepository) RemoveExpiredReservationRequests(tenantID uint64
 
 func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedResult) {
 
-	db := r.ConnectionResolver.GetDB(filter.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(filter.TenantID)
 	reservations := make([]*models.Reservation, 0)
 
 	query := db.Model(&models.Reservation{})

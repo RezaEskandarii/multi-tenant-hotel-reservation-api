@@ -40,7 +40,7 @@ func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *
 
 }
 
-// @Summary Create Reservation
+// @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
@@ -123,7 +123,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	})
 }
 
-// @Summary Create Reservation
+// @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"
@@ -327,7 +327,7 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-// @Summary Create Reservation
+// @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"

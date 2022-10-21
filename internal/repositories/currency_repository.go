@@ -5,14 +5,14 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type CurrencyRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewCurrencyRepository(r *connection_resolver.TenantConnectionResolver) *CurrencyRepository {
+func NewCurrencyRepository(r *tenant_database_resolver.TenantDatabaseResolver) *CurrencyRepository {
 	return &CurrencyRepository{
 		ConnectionResolver: r,
 	}
@@ -20,7 +20,7 @@ func NewCurrencyRepository(r *connection_resolver.TenantConnectionResolver) *Cur
 
 func (r *CurrencyRepository) Create(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&currency); tx.Error != nil {
 		return nil, tx.Error
@@ -31,7 +31,7 @@ func (r *CurrencyRepository) Create(currency *models.Currency, tenantID uint64) 
 
 func (r *CurrencyRepository) Update(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&currency); tx.Error != nil {
 		return nil, tx.Error
@@ -43,7 +43,7 @@ func (r *CurrencyRepository) Update(currency *models.Currency, tenantID uint64) 
 func (r *CurrencyRepository) Find(id uint64, tenantID uint64) (*models.Currency, error) {
 
 	model := models.Currency{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
@@ -58,13 +58,13 @@ func (r *CurrencyRepository) Find(id uint64, tenantID uint64) (*models.Currency,
 }
 
 func (r *CurrencyRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.Currency{}, db, input)
 }
 
 func (r *CurrencyRepository) FindBySymbol(symbol string, tenantID uint64) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	model := models.Currency{}
 
 	if tx := db.Where("symbol=?", symbol).Find(&model); tx.Error != nil {
@@ -80,7 +80,7 @@ func (r *CurrencyRepository) FindBySymbol(symbol string, tenantID uint64) (*mode
 
 func (r *CurrencyRepository) Seed(jsonFilePath string, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	currencies := make([]models.Currency, 0)
 
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &currencies); err == nil {

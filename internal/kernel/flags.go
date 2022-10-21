@@ -7,43 +7,32 @@ import (
 	"reservation-api/pkg/database"
 )
 
-var (
-	defaultTenant = 1
-)
-
 // set application commands.
 func loadFlags() {
+
+	var setup = false
 	var migrate = false
-	var seed = false
-	flag.BoolVar(&migrate, "migrate", false, "migrate structs and struct changes to database.")
-	flag.BoolVar(&seed, "seed", false, "seed default data from json file into database.")
+
+	flag.BoolVar(&setup, "setup", false, "create and migrate tenant databases")
+	flag.BoolVar(&migrate, "migrate", false, "migrate database changes")
 	flag.Parse()
 
-	var tx = db.Begin()
+	if setup {
+		fmt.Println("setup started...")
+		if err := database.SetUp(); err != nil {
 
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	if migrate {
-		fmt.Println("migration started...")
-		if err := database.Migrate(tx); err != nil {
 			logger.LogError(err)
 			os.Exit(1)
 		}
 	}
 
-	if seed {
-		//fmt.Println("seed started...")
-		//if err := database.ApplySeed(tx); err != nil {
-		//	logger.LogError(err)
-		//	os.Exit(1)
-		//}
+	if migrate {
+		fmt.Println("migration started...")
+		if err := database.Migrate(); err != nil {
+
+			logger.LogError(err)
+			os.Exit(1)
+		}
 	}
 
-	if err := tx.Commit(); err != nil {
-		tx.Rollback()
-	}
 }

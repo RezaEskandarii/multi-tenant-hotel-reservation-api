@@ -4,20 +4,20 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type AuditRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewAuditRepository(r *connection_resolver.TenantConnectionResolver) *AuditRepository {
+func NewAuditRepository(r *tenant_database_resolver.TenantDatabaseResolver) *AuditRepository {
 	return &AuditRepository{ConnectionResolver: r}
 }
 
 func (r *AuditRepository) Create(model *models.Audit, tenantID uint64) (*models.Audit, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Create(&model).Error; err != nil {
 		return nil, err
@@ -26,6 +26,6 @@ func (r *AuditRepository) Create(model *models.Audit, tenantID uint64) (*models.
 }
 
 func (r *AuditRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.City{}, db, input)
 }

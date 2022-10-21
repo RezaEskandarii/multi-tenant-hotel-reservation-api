@@ -4,20 +4,20 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type HotelGradeRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewHotelGradeRepository(r *connection_resolver.TenantConnectionResolver) *HotelGradeRepository {
+func NewHotelGradeRepository(r *tenant_database_resolver.TenantDatabaseResolver) *HotelGradeRepository {
 	return &HotelGradeRepository{ConnectionResolver: r}
 }
 
 func (r *HotelGradeRepository) Create(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
@@ -28,7 +28,7 @@ func (r *HotelGradeRepository) Create(hotelGrade *models.HotelGrade, tenantID ui
 
 func (r *HotelGradeRepository) Update(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
@@ -40,7 +40,7 @@ func (r *HotelGradeRepository) Update(hotelGrade *models.HotelGrade, tenantID ui
 func (r *HotelGradeRepository) Find(id uint64, tenantID uint64) (*models.HotelGrade, error) {
 
 	model := models.HotelGrade{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Preload("HotelType").Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -55,14 +55,14 @@ func (r *HotelGradeRepository) Find(id uint64, tenantID uint64) (*models.HotelGr
 
 func (r *HotelGradeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.HotelGrade{}, db, input)
 }
 
 func (r HotelGradeRepository) Delete(id uint64, tenantID uint64) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if query := db.Model(&models.Hotel{}).Where(&models.Hotel{HotelGradeId: id}).Count(&count); query.Error != nil {
 		return query.Error

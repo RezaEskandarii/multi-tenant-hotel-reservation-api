@@ -29,7 +29,7 @@ func (handler *RateGroupHandler) Register(input *dto.HandlersShared, service *do
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-// @Summary Create RateGroup
+// @Summary SetUp RateGroup
 // @Tags RateGroup
 // @Accept json
 // @Param X-TenantID header int true "X-TenantID"

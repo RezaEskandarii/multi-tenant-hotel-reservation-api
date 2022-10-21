@@ -7,14 +7,14 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type UserRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewUserRepository(r *connection_resolver.TenantConnectionResolver) *UserRepository {
+func NewUserRepository(r *tenant_database_resolver.TenantDatabaseResolver) *UserRepository {
 	return &UserRepository{
 		ConnectionResolver: r,
 	}
@@ -22,7 +22,7 @@ func NewUserRepository(r *connection_resolver.TenantConnectionResolver) *UserRep
 
 func (r *UserRepository) Create(user *models.User, tenantID uint64) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	user.TenantId = tenantID
 	if tx := db.Create(&user); tx.Error != nil {
 		return nil, tx.Error
@@ -33,7 +33,7 @@ func (r *UserRepository) Create(user *models.User, tenantID uint64) (*models.Use
 
 func (r *UserRepository) Update(user *models.User, tenantID uint64) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	user.TenantId = tenantID
 
 	if tx := db.Updates(&user); tx.Error != nil {
@@ -46,7 +46,7 @@ func (r *UserRepository) Update(user *models.User, tenantID uint64) (*models.Use
 func (r *UserRepository) Find(id uint64, tenantID uint64) (*models.User, error) {
 
 	model := models.User{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -61,7 +61,7 @@ func (r *UserRepository) Find(id uint64, tenantID uint64) (*models.User, error) 
 
 func (r *UserRepository) FindByUsername(username string, tenantID uint64) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	model := models.User{Username: username}
 
 	if tx := db.Where(model).Find(&model); tx.Error != nil {
@@ -77,7 +77,7 @@ func (r *UserRepository) FindByUsername(username string, tenantID uint64) (*mode
 func (r *UserRepository) FindByUsernameAndPassword(username string, password string, tenantID uint64) (*models.User, error) {
 
 	model := models.User{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("username=?", username).Find(&model); tx.Error != nil {
 
@@ -99,7 +99,7 @@ func (r *UserRepository) FindByUsernameAndPassword(username string, password str
 func (r *UserRepository) Deactivate(id uint64, tenantID uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -119,7 +119,7 @@ func (r *UserRepository) Deactivate(id uint64, tenantID uint64) (*models.User, e
 func (r *UserRepository) Activate(id uint64, tenantID uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -139,7 +139,7 @@ func (r *UserRepository) Activate(id uint64, tenantID uint64) (*models.User, err
 
 func (r *UserRepository) Delete(id uint64, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error
@@ -150,13 +150,13 @@ func (r *UserRepository) Delete(id uint64, tenantID uint64) error {
 
 func (r *UserRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.User{}, db, input)
 }
 
 func (r *UserRepository) Seed(jsonFilePath string, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	users := make([]models.User, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {

@@ -35,7 +35,7 @@ func (m *MockCountryRepository) EXPECT() *MockCountryRepositoryMockRecorder {
 // Create mocks base method.
 func (m *MockCountryRepository) Create(arg0 *models.Country) (*models.Country, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", arg0)
+	ret := m.ctrl.Call(m, "SetUp", arg0)
 	ret0, _ := ret[0].(*models.Country)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -44,7 +44,7 @@ func (m *MockCountryRepository) Create(arg0 *models.Country) (*models.Country, e
 // Create indicates an expected call of Create.
 func (mr *MockCountryRepositoryMockRecorder) Create(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCountryRepository)(nil).Create), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetUp", reflect.TypeOf((*MockCountryRepository)(nil).Create), arg0)
 }
 
 // Find mocks base method.

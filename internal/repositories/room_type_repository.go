@@ -7,7 +7,7 @@ import (
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 var (
@@ -15,16 +15,16 @@ var (
 )
 
 type RoomTypeRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewRoomTypeRepository(r *connection_resolver.TenantConnectionResolver) *RoomTypeRepository {
+func NewRoomTypeRepository(r *tenant_database_resolver.TenantDatabaseResolver) *RoomTypeRepository {
 	return &RoomTypeRepository{ConnectionResolver: r}
 }
 
 func (r *RoomTypeRepository) Create(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&roomType); tx.Error != nil {
 		return nil, tx.Error
@@ -35,7 +35,7 @@ func (r *RoomTypeRepository) Create(roomType *models.RoomType, tenantID uint64) 
 
 func (r *RoomTypeRepository) Update(roomType *models.RoomType, tenantID uint64) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&roomType); tx.Error != nil {
 		return nil, tx.Error
@@ -46,7 +46,7 @@ func (r *RoomTypeRepository) Update(roomType *models.RoomType, tenantID uint64) 
 
 func (r *RoomTypeRepository) Find(id uint64, tenantID uint64) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 	model := models.RoomType{}
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
@@ -62,14 +62,14 @@ func (r *RoomTypeRepository) Find(id uint64, tenantID uint64) (*models.RoomType,
 
 func (r *RoomTypeRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.RoomType{}, db, input)
 }
 
 func (r RoomTypeRepository) Delete(id uint64, tenantID uint64) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if query := db.Model(&models.Room{}).Where(&models.Room{RoomTypeId: id}).Count(&count); query.Error != nil {
 
@@ -90,7 +90,7 @@ func (r RoomTypeRepository) Delete(id uint64, tenantID uint64) error {
 
 func (r *RoomTypeRepository) Seed(jsonFilePath string, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	roomTypes := make([]models.RoomType, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err == nil {

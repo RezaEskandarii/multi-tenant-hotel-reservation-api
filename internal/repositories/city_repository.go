@@ -4,21 +4,21 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type CityRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewCityRepository(connectionResolver *connection_resolver.TenantConnectionResolver) *CityRepository {
+func NewCityRepository(connectionResolver *tenant_database_resolver.TenantDatabaseResolver) *CityRepository {
 	return &CityRepository{
 		ConnectionResolver: connectionResolver,
 	}
 }
 
 func (r *CityRepository) Create(city *models.City, tenantID uint64) (*models.City, error) {
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&city); tx.Error != nil {
 		return nil, tx.Error
@@ -29,7 +29,7 @@ func (r *CityRepository) Create(city *models.City, tenantID uint64) (*models.Cit
 
 func (r *CityRepository) Update(city *models.City, tenantID uint64) (*models.City, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&city); tx.Error != nil {
 		return nil, tx.Error
@@ -40,7 +40,7 @@ func (r *CityRepository) Update(city *models.City, tenantID uint64) (*models.Cit
 
 func (r *CityRepository) Delete(id uint64, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err := db.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
 		return err
@@ -52,7 +52,7 @@ func (r *CityRepository) Delete(id uint64, tenantID uint64) error {
 func (r *CityRepository) Find(id uint64, tenantID uint64) (*models.City, error) {
 
 	model := models.City{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
@@ -67,6 +67,6 @@ func (r *CityRepository) Find(id uint64, tenantID uint64) (*models.City, error) 
 }
 
 func (r *CityRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.City{}, db, input)
 }

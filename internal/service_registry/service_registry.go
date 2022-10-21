@@ -3,7 +3,6 @@ package service_registry
 import (
 	"context"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
 	"reservation-api/internal/config"
@@ -12,7 +11,7 @@ import (
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 	"reservation-api/pkg/message_broker"
 	"reservation-api/pkg/translator"
 )
@@ -40,7 +39,7 @@ var (
 )
 
 // RegisterServicesAndRoutes register dependencies for services and handlers
-func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Config) {
+func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
 
 	logger := applogger.New(nil)
 
@@ -68,7 +67,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 
 	cacheService := common_services.NewCacheService(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.CacheDB, ctx)
 	eventService := common_services.NewEventService(rabbitMqManager, emailService)
-	connectionResolver := connection_resolver.NewTenantConnectionResolver()
+	connectionResolver := tenant_database_resolver.NewTenantDatabaseResolver()
 
 	var (
 		countryService        = domain_services.NewCountryService(repositories.NewCountryRepository(connectionResolver))
@@ -89,7 +88,7 @@ func RegisterServicesAndRoutes(db *gorm.DB, router *echo.Group, cfg *config.Conf
 		reservationService    = domain_services.NewReservationService(reservationRepository, rabbitMqManager)
 		paymentService        = domain_services.NewPaymentService(repositories.NewPaymentRepository(connectionResolver))
 		authService           = domain_services.NewAuthService(userService, cfg)
-		tenantService         = domain_services.NewTenantService(repositories.NewTenantDatabaseRepository(db))
+		tenantService         = domain_services.NewTenantService(repositories.NewTenantDatabaseRepository(connectionResolver))
 		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(connectionResolver))
 	)
 

@@ -57,7 +57,7 @@ func (s AuthService) SignIn(username, password string, tenantID uint64) (error, 
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
 	expirationTime := time.Now().Add(time.Duration(s.Config.Authentication.TokenAliveTime) * time.Minute)
-	// Create the JWT claims, which includes the username and expiry time
+	// SetUp the JWT claims, which includes the username and expiry time
 	claims := &Claims{
 		TenantID:    utils.Encrypt(fmt.Sprintf("%d", tenantID)),
 		Username:    user.Username,

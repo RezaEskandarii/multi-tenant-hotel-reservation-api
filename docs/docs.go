@@ -1800,7 +1800,7 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "Create RateGroup",
+                "summary": "SetUp RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1922,7 +1922,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Create Reservation",
+                "summary": "SetUp Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2046,7 +2046,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Create Reservation",
+                "summary": "SetUp Reservation",
                 "parameters": [
                     {
                         "type": "integer",

@@ -9,11 +9,9 @@ import (
 	"reservation-api/internal/config"
 	"reservation-api/internal/service_registry"
 	"reservation-api/pkg/applogger"
-	"reservation-api/pkg/database"
 )
 
 var (
-	db, _         = database.GetDb(false, "")
 	logger        = applogger.New(nil)
 	httpRouter    = getHttpRouter()
 	v1RouterGroup = httpRouter.Group("/api/v1")
@@ -25,7 +23,7 @@ func Run() error {
 	loadFlags()
 
 	//connectionResolver := database.NewConnectionResolver()
-	//db := connectionResolver.GetDB("")
+	//db := connectionResolver.GetTenantDB("")
 
 	cfg, err := config.NewConfig()
 
@@ -33,11 +31,7 @@ func Run() error {
 		return err
 	}
 
-	if cfg.Application.DebugMode {
-		db = db.Debug()
-	}
-
-	service_registry.RegisterServicesAndRoutes(db, v1RouterGroup, cfg)
+	service_registry.RegisterServicesAndRoutes(v1RouterGroup, cfg)
 	httpRouter.Logger.Fatal(httpRouter.Start(fmt.Sprintf(":%s", cfg.Application.Port)))
 
 	return nil

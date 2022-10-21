@@ -5,11 +5,11 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 //type CountryRepository interface {
-//	Create(country *models.Country) (*models.Country, error)
+//	SetUp(country *models.Country) (*models.Country, error)
 //	Update(country *models.Country) (*models.Country, error)
 //	Find(id uint64) (*models.Country, error)
 //	FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error)
@@ -17,17 +17,17 @@ import (
 //}
 
 type CountryRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewCountryRepository(connectionResolver *connection_resolver.TenantConnectionResolver) *CountryRepository {
+func NewCountryRepository(connectionResolver *tenant_database_resolver.TenantDatabaseResolver) *CountryRepository {
 	return &CountryRepository{ConnectionResolver: connectionResolver}
 }
 
 func (r *CountryRepository) Create(country *models.Country, tenantID uint64) (*models.Country, error) {
 
 	valid, err := country.Validate()
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (r *CountryRepository) Create(country *models.Country, tenantID uint64) (*m
 
 func (r *CountryRepository) Update(country *models.Country, tenantID uint64) (*models.Country, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&country); tx.Error != nil {
 		return nil, tx.Error
@@ -59,7 +59,7 @@ func (r *CountryRepository) Update(country *models.Country, tenantID uint64) (*m
 func (r *CountryRepository) Find(id uint64, tenantID uint64) (*models.Country, error) {
 
 	model := models.Country{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
 
@@ -75,14 +75,14 @@ func (r *CountryRepository) Find(id uint64, tenantID uint64) (*models.Country, e
 
 func (r *CountryRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.Country{}, db, input)
 }
 
 func (r *CountryRepository) GetProvinces(countryId uint64, tenantID uint64) ([]*models.Province, error) {
 	var result []*models.Province
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	query := db.Model(&models.Province{}).
 		Where("country_id=?", countryId).Find(&result)
@@ -96,7 +96,7 @@ func (r *CountryRepository) GetProvinces(countryId uint64, tenantID uint64) ([]*
 
 func (r *CountryRepository) Seed(jsonFilePath string, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	countries := make([]models.Country, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {

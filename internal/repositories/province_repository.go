@@ -4,14 +4,14 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type ProvinceRepository struct {
-	ConnectionResolver *connection_resolver.TenantConnectionResolver
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewProvinceRepository(r *connection_resolver.TenantConnectionResolver) *ProvinceRepository {
+func NewProvinceRepository(r *tenant_database_resolver.TenantDatabaseResolver) *ProvinceRepository {
 	return &ProvinceRepository{
 		ConnectionResolver: r,
 	}
@@ -19,7 +19,7 @@ func NewProvinceRepository(r *connection_resolver.TenantConnectionResolver) *Pro
 
 func (r *ProvinceRepository) Create(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&province); tx.Error != nil {
 		return nil, tx.Error
@@ -30,7 +30,7 @@ func (r *ProvinceRepository) Create(province *models.Province, tenantID uint64) 
 
 func (r *ProvinceRepository) Update(province *models.Province, tenantID uint64) (*models.Province, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&province); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +42,7 @@ func (r *ProvinceRepository) Update(province *models.Province, tenantID uint64) 
 func (r *ProvinceRepository) Find(id uint64, tenantID uint64) (*models.Province, error) {
 
 	model := models.Province{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -57,14 +57,14 @@ func (r *ProvinceRepository) Find(id uint64, tenantID uint64) (*models.Province,
 
 func (r *ProvinceRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.Province{}, db, input)
 }
 
 func (r *ProvinceRepository) GetCities(provinceId uint64, tenantID uint64) ([]*models.City, error) {
 
 	var result []*models.City
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	query := db.Model(&models.City{}).
 		Where("province_id=?", provinceId).Find(&result)

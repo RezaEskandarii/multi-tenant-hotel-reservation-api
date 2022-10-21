@@ -1,32 +1,36 @@
 package repositories
 
 import (
-	"gorm.io/gorm"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
 type TenantRepository struct {
-	DB *gorm.DB
+	DatabaseResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 // NewTenantDatabaseRepository returns new TenantRepository.
-func NewTenantDatabaseRepository(db *gorm.DB) *TenantRepository {
+func NewTenantDatabaseRepository(resolver *tenant_database_resolver.TenantDatabaseResolver) *TenantRepository {
 
-	return &TenantRepository{DB: db}
+	return &TenantRepository{DatabaseResolver: resolver}
 }
 
 func (r *TenantRepository) Create(tenant *models.Tenant) (*models.Tenant, error) {
 
-	if tx := r.DB.Create(&tenant); tx.Error != nil {
+	publicDB := r.DatabaseResolver.GetTenantDB(0).Debug()
+
+	if err := publicDB.AutoMigrate(&models.Tenant{}); err != nil {
+		return nil, err
+	}
+
+	if tx := publicDB.Create(&tenant); tx.Error != nil {
 		return nil, tx.Error
 	}
 
-	resolver := connection_resolver.NewTenantConnectionResolver()
-	db1 := resolver.GetDB(0)
-	tenantDB := resolver.GetDB(tenant.Id)
+	resolver := tenant_database_resolver.NewTenantDatabaseResolver()
+	tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
 
-	resolver.CreateDbForTenant(db1, tenant.Id)
+	resolver.CreateDbForTenant(publicDB, tenant.Id)
 	resolver.Migrate(tenantDB, tenant.Id)
 
 	userRepository := NewUserRepository(resolver)
@@ -53,7 +57,9 @@ func (r *TenantRepository) Create(tenant *models.Tenant) (*models.Tenant, error)
 func (r *TenantRepository) FindByTenantID(tenantID uint64) (*models.Tenant, error) {
 
 	entity := models.Tenant{}
-	if tx := r.DB.Where("tenant_id=?", tenantID).Find(&entity); tx.Error != nil {
+	db := r.DatabaseResolver.GetTenantDB(tenantID)
+
+	if tx := db.Where("tenant_id=?", tenantID).Find(&entity); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return &entity, nil

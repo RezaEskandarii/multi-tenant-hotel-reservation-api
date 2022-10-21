@@ -8,16 +8,16 @@ import (
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
-	"reservation-api/pkg/database/connection_resolver"
+	"reservation-api/pkg/database/tenant_database_resolver"
 	"sync"
 )
 
 type HotelRepository struct {
-	ConnectionResolver  *connection_resolver.TenantConnectionResolver
+	ConnectionResolver  *tenant_database_resolver.TenantDatabaseResolver
 	FileTransferService common_services.FileTransferer
 }
 
-func NewHotelRepository(r *connection_resolver.TenantConnectionResolver, fileTransferService common_services.FileTransferer) *HotelRepository {
+func NewHotelRepository(r *tenant_database_resolver.TenantDatabaseResolver, fileTransferService common_services.FileTransferer) *HotelRepository {
 
 	return &HotelRepository{
 		ConnectionResolver:  r,
@@ -27,7 +27,7 @@ func NewHotelRepository(r *connection_resolver.TenantConnectionResolver, fileTra
 
 func (r *HotelRepository) Create(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Create(&hotel); tx.Error != nil {
 		return nil, tx.Error
@@ -76,7 +76,7 @@ func (r *HotelRepository) Create(hotel *models.Hotel, tenantID uint64) (*models.
 
 func (r *HotelRepository) Update(hotel *models.Hotel, tenantID uint64) (*models.Hotel, error) {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Updates(&hotel); tx.Error != nil {
 		return nil, tx.Error
@@ -88,7 +88,7 @@ func (r *HotelRepository) Update(hotel *models.Hotel, tenantID uint64) (*models.
 func (r *HotelRepository) Find(id uint64, tenantID uint64) (*models.Hotel, error) {
 
 	model := models.Hotel{}
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -102,13 +102,13 @@ func (r *HotelRepository) Find(id uint64, tenantID uint64) (*models.Hotel, error
 }
 
 func (r *HotelRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
 	return paginatedList(&models.Hotel{}, db, input)
 }
 
 func (r HotelRepository) Delete(id uint64, tenantID uint64) error {
 
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if query := db.Model(&models.Hotel{}).Where("id=?", id).Delete(&models.Hotel{}); query.Error != nil {
 		return query.Error
@@ -120,7 +120,7 @@ func (r HotelRepository) Delete(id uint64, tenantID uint64) error {
 func (r *HotelRepository) hasRepeatData(hotel *models.Hotel, tenantID uint64) error {
 
 	var countByName int64 = 0
-	db := r.ConnectionResolver.GetDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenantID)
 
 	if tx := *db.Model(&models.Hotel{}).Where(&models.Hotel{Name: hotel.Name}).Count(&countByName); tx.Error != nil {
 		return tx.Error

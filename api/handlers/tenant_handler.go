@@ -36,7 +36,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 		})
 	}
 
-	result, err := handler.TenantService.Create(model)
+	result, err := handler.TenantService.SetUp(model)
 
 	if err != nil {
 		handler.Input.Logger.LogError(err.Error())
