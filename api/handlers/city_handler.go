@@ -45,7 +45,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 			})
 	}
 
-	if _, err := handler.Service.Create(getCurrentTenantContext(c), &city); err == nil {
+	if _, err := handler.Service.Create(tenantContext(c), &city); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -78,7 +78,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 
 	lang := getAcceptLanguage(c)
 	currentUser := getCurrentUser(c)
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
@@ -107,7 +107,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		})
 	}
 	model.SetUpdatedBy(currentUser)
-	if output, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
+	if output, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
@@ -129,7 +129,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -160,7 +160,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 func (handler *CityHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)

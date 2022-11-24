@@ -55,7 +55,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	if _, err := handler.Service.Create(getCurrentTenantContext(c), &model); err != nil {
+	if _, err := handler.Service.Create(tenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: handler.Config.Translator.Localize(lang, err.Error()),
@@ -85,7 +85,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	user := getCurrentUser(c)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
-	guest, _ := handler.Service.Find(getCurrentTenantContext(c), id)
+	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
@@ -103,7 +103,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	if _, err := handler.Service.Update(getCurrentTenantContext(c), &model); err != nil {
+	if _, err := handler.Service.Update(tenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: handler.Config.Translator.Localize(lang, err.Error()),
@@ -129,7 +129,7 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
-	guest, _ := handler.Service.Find(getCurrentTenantContext(c), id)
+	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
@@ -165,7 +165,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	input.IgnorePagination = output != ""
 
-	result, err := handler.Service.FindAll(getCurrentTenantContext(c), input)
+	result, err := handler.Service.FindAll(tenantContext(c), input)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{

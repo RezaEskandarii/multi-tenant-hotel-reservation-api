@@ -53,7 +53,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(getCurrentTenantContext(c), model); err == nil {
+	if result, err := handler.Service.Create(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -93,7 +93,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 
 	user := getCurrentUser(c)
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -118,7 +118,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         result,
@@ -148,7 +148,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -187,7 +187,7 @@ func (handler *CurrencyHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)

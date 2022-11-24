@@ -39,7 +39,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if err, token := handler.AuthService.SignIn(getCurrentTenantContext(c), cerds.Username, cerds.Password); err != nil {
+	if err, token := handler.AuthService.SignIn(tenantContext(c), cerds.Username, cerds.Password); err != nil {
 
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {

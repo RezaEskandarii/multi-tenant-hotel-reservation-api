@@ -54,7 +54,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	result, err := handler.Service.Create(getCurrentTenantContext(c), model)
+	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -89,7 +89,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -113,7 +113,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -143,7 +143,7 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -180,7 +180,7 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -215,7 +215,7 @@ func (handler *RateGroupHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(getCurrentTenantContext(c), id)
+	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
 

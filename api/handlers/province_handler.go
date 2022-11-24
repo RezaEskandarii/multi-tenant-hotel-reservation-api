@@ -67,7 +67,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	}
 
 	province.SetAudit(user)
-	if result, err := handler.Service.Create(getCurrentTenantContext(c), province); err == nil {
+	if result, err := handler.Service.Create(tenantContext(c), province); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -108,7 +108,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	}
 
 	user := getCurrentUser(c)
-	province, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	province, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
@@ -145,7 +145,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 			})
 	}
 	province.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(getCurrentTenantContext(c), province); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), province); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -174,7 +174,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -213,7 +213,7 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -242,7 +242,7 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	cities, err := handler.Service.GetCities(getCurrentTenantContext(c), id)
+	cities, err := handler.Service.GetCities(tenantContext(c), id)
 
 	if err != nil {
 

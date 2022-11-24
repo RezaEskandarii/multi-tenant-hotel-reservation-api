@@ -59,7 +59,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	if strings.TrimSpace(reservationIdStr) != "" {
 
 		reservationId, _ := utils.ConvertToUint(reservationIdStr)
-		reservationResult, err := handler.Service.Find(getCurrentTenantContext(c), reservationId)
+		reservationResult, err := handler.Service.Find(tenantContext(c), reservationId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, nil)
 		}
@@ -76,7 +76,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	// Checks if there is another reservation request for this room on the same check-in and check-out date,
 	// otherwise do not allow a booking request.
-	hasConflict, err := handler.Service.HasConflict(getCurrentTenantContext(c), &request, reservation)
+	hasConflict, err := handler.Service.HasConflict(tenantContext(c), &request, reservation)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -110,7 +110,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 
 	// create new reservation request for requested room.
-	result, err := handler.Service.CreateReservationRequest(getCurrentTenantContext(c), &request)
+	result, err := handler.Service.CreateReservationRequest(tenantContext(c), &request)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -150,7 +150,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(getCurrentTenantContext(c), reservation.RequestKey)
+	reservationRequest, err := handler.Service.FindReservationRequest(tenantContext(c), reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -176,7 +176,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
-	hasReservationConflict, err := handler.Service.HasReservationConflict(getCurrentTenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
+	hasReservationConflict, err := handler.Service.HasReservationConflict(tenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -191,7 +191,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	handler.setReservationFields(&reservation, reservationRequest)
 	reservation.SetAudit(user)
 	// create new reservation.
-	result, err := handler.Service.Create(getCurrentTenantContext(c), &reservation)
+	result, err := handler.Service.Create(tenantContext(c), &reservation)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -227,7 +227,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 		})
 	}
 
-	reservationModel, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	reservationModel, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
@@ -254,7 +254,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(getCurrentTenantContext(c), reservation.RequestKey)
+	reservationRequest, err := handler.Service.FindReservationRequest(tenantContext(c), reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -280,7 +280,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 			})
 	}
 
-	hasReservationConflict, err := handler.Service.HasReservationConflict(getCurrentTenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
+	hasReservationConflict, err := handler.Service.HasReservationConflict(tenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -295,7 +295,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	reservation.SetUpdatedBy(user)
 	handler.setReservationFields(&reservation, reservationRequest)
 	// create new reservation.
-	result, err := handler.Service.Update(getCurrentTenantContext(c), id, &reservation)
+	result, err := handler.Service.Update(tenantContext(c), id, &reservation)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
@@ -321,7 +321,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 // @Router /reservations/cancel/{id} [delete]
 func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	requestKey := c.QueryParam("requestKey")
-	if err := handler.Service.RemoveReservationRequest(getCurrentTenantContext(c), requestKey); err != nil {
+	if err := handler.Service.RemoveReservationRequest(tenantContext(c), requestKey); err != nil {
 		handler.Config.Logger.LogError(err.Error())
 	}
 	return c.JSON(http.StatusOK, nil)
@@ -350,7 +350,7 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 		})
 	}
 
-	result, err := handler.Service.GetRecommendedRateCodes(getCurrentTenantContext(c), &priceDto)
+	result, err := handler.Service.GetRecommendedRateCodes(tenantContext(c), &priceDto)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -377,7 +377,7 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -409,7 +409,7 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	reservation, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	reservation, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -429,7 +429,7 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 
 	if status == models.CheckIn || status == models.Checkout {
 		reservation.CheckStatus = status
-		_, err := handler.Service.ChangeStatus(getCurrentTenantContext(c), id, status)
+		_, err := handler.Service.ChangeStatus(tenantContext(c), id, status)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, nil)
@@ -463,7 +463,7 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	result, err := handler.Service.FindAll(getCurrentTenantContext(c), &filter)
+	result, err := handler.Service.FindAll(tenantContext(c), &filter)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)

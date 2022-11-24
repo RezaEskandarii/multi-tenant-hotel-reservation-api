@@ -55,7 +55,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	result, err := handler.Service.Create(getCurrentTenantContext(c), model)
+	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -93,7 +93,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 
 		handler.Config.Logger.LogError(err.Error())
@@ -115,7 +115,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	result.Name = name
 	result.SetUpdatedBy(user)
 
-	updatedModel, err := handler.Service.Update(getCurrentTenantContext(c), result)
+	updatedModel, err := handler.Service.Update(tenantContext(c), result)
 
 	if err != nil {
 
@@ -148,7 +148,7 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
@@ -183,7 +183,7 @@ func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -217,7 +217,7 @@ func (handler *HotelTypeHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(getCurrentTenantContext(c), id)
+	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
 

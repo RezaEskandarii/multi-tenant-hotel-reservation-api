@@ -37,7 +37,7 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.PaymentService.Create(getCurrentTenantContext(c), &payment); err != nil {
+	if result, err := handler.PaymentService.Create(tenantContext(c), &payment); err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {
@@ -55,7 +55,7 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Get("id"))
-	if err := handler.PaymentService.Delete(getCurrentTenantContext(c), id); err != nil {
+	if err := handler.PaymentService.Delete(tenantContext(c), id); err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}

@@ -55,7 +55,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 	model := createDto.Data
 	///	model.Thumbnails = createDto.Thumbnails
 	model.SetAudit(user)
-	result, err := handler.Service.Create(getCurrentTenantContext(c), &model)
+	result, err := handler.Service.Create(tenantContext(c), &model)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
@@ -94,7 +94,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	mainModel, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	mainModel, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -127,7 +127,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 	// map client request fields.
 	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
 	modelToUpdate.SetUpdatedBy(user)
-	updatedModel, err := handler.Service.Update(getCurrentTenantContext(c), modelToUpdate)
+	updatedModel, err := handler.Service.Update(tenantContext(c), modelToUpdate)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -159,7 +159,7 @@ func (handler *HotelHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
@@ -195,7 +195,7 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -228,7 +228,7 @@ func (handler *HotelHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(getCurrentTenantContext(c), id)
+	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

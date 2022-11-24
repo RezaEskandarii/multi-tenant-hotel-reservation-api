@@ -30,7 +30,8 @@ func getAcceptLanguage(c echo.Context) string {
 	return lang
 }
 
-func getCurrentTenantContext(c echo.Context) context.Context {
+// tenantContext function reads the tenant from the echo context and returns it
+func tenantContext(c echo.Context) context.Context {
 	return c.Get(config.TenantIDCtx).(context.Context)
 }
 
@@ -44,7 +45,9 @@ func getOutputQueryParamVal(c echo.Context) string {
 	return strings.TrimSpace(c.QueryParam("output"))
 }
 
-// writeBinaryHeaders
+// writeBinaryHeaders method uses to sent file to client,
+// where the headers for writing the file are set
+//
 func writeBinaryHeaders(context echo.Context, fName string, format string) {
 
 	fileName := fmt.Sprintf("report-%s-%s.%s", fName, time.Now().Format("2006-01-02"), format)

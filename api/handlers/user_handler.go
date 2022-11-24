@@ -46,7 +46,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	}
 
-	oldUser, err := handler.Service.FindByUsername(getCurrentTenantContext(c), model.Username)
+	oldUser, err := handler.Service.FindByUsername(tenantContext(c), model.Username)
 
 	if err != nil {
 
@@ -69,7 +69,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(getCurrentTenantContext(c), &model); err == nil {
+	if result, err := handler.Service.Create(tenantContext(c), &model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -102,7 +102,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	lang := c.Request().Header.Get(acceptLanguage)
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -131,7 +131,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	model.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -154,7 +154,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -185,7 +185,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 func (handler *UserHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -202,7 +202,7 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-	model, err := handler.Service.FindByUsername(getCurrentTenantContext(c), username)
+	model, err := handler.Service.FindByUsername(tenantContext(c), username)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {

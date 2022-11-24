@@ -55,7 +55,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	result, err := handler.Service.Create(getCurrentTenantContext(c), model)
+	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
 
@@ -96,7 +96,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -129,7 +129,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	// prevent to edit other fields.
 	result.Name = tmpModel.Name
 	result.SetUpdatedBy(user)
-	updatedModel, err := handler.Service.Update(getCurrentTenantContext(c), result)
+	updatedModel, err := handler.Service.Update(tenantContext(c), result)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -160,7 +160,7 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 
 		handler.Config.Logger.LogError(err.Error())
@@ -193,7 +193,7 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -227,7 +227,7 @@ func (handler *HotelGradeHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(getCurrentTenantContext(c), id)
+	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
 		return c.JSON(http.StatusConflict, commons.ApiResponse{

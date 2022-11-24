@@ -58,7 +58,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 			})
 	}
 	model.SetAudit(user)
-	result, err := handler.Service.Create(getCurrentTenantContext(c), model)
+	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -94,7 +94,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -120,7 +120,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	}
 
-	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -148,7 +148,7 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
@@ -187,7 +187,7 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
+	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -222,7 +222,7 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 		})
 	}
 
-	err = handler.Service.Delete(getCurrentTenantContext(c), id)
+	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
 
@@ -264,7 +264,7 @@ func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 		})
 	}
 	// create new rateCodeDetail.
-	result, err := handler.RateCodeDetailService.Create(getCurrentTenantContext(c), &requestBody)
+	result, err := handler.RateCodeDetailService.Create(tenantContext(c), &requestBody)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
