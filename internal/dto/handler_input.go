@@ -6,8 +6,8 @@ import (
 	"reservation-api/pkg/translator"
 )
 
-// HandlersShared contains shared handler dependencies.
-type HandlersShared struct {
+// HandlerConfig contains shared handler dependencies.
+type HandlerConfig struct {
 	Router     *echo.Group
 	Translator *translator.Translator
 	Logger     applogger.Logger

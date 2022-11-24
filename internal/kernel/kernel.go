@@ -42,7 +42,6 @@ func getHttpRouter() *echo.Echo {
 	e := echo.New()
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
 

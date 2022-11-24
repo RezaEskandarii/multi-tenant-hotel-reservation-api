@@ -15,13 +15,13 @@ import (
 // UserHandler User endpoint handler
 type UserHandler struct {
 	Service *domain_services.UserService
-	Input   *dto.HandlersShared
+	Config  *dto.HandlerConfig
 }
 
-func (handler *UserHandler) Register(input *dto.HandlersShared, service *domain_services.UserService) {
+func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService) {
 	handler.Service = service
-	handler.Input = input
-	routeGroup := input.Router.Group("/users")
+	handler.Config = config
+	routeGroup := config.Router.Group("/users")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -37,24 +37,24 @@ func (handler *UserHandler) create(c echo.Context) error {
 	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
 
-	oldUser, err := handler.Service.FindByUsername(model.Username, getCurrentTenant(c))
+	oldUser, err := handler.Service.FindByUsername(getCurrentTenantContext(c), model.Username)
 
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(lang, err.Error()),
+			Message:      handler.Config.Translator.Localize(lang, err.Error()),
 		})
 	}
 
@@ -64,27 +64,27 @@ func (handler *UserHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusConflict,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.UsernameDuplicated),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.UsernameDuplicated),
 		})
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(&model, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Create(getCurrentTenantContext(c), &model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         result,
 				ResponseCode: http.StatusOK,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
 			})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusInternalServerError,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 			})
 	}
 
@@ -97,19 +97,19 @@ func (handler *UserHandler) update(c echo.Context) error {
 	user := getCurrentUser(c)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	lang := c.Request().Header.Get(acceptLanguage)
-	model, err := handler.Service.Find(id, getCurrentTenant(c))
+	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 		})
 	}
 
@@ -117,30 +117,30 @@ func (handler *UserHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
 
 	model.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -150,19 +150,19 @@ func (handler *UserHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id, getCurrentTenant(c))
+	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 		})
 	}
 
@@ -170,7 +170,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -185,7 +185,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 func (handler *UserHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-	list, err := handler.Service.FindAll(paginationInput)
+	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -202,15 +202,15 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-	model, err := handler.Service.FindByUsername(username, getCurrentTenant(c))
+	model, err := handler.Service.FindByUsername(getCurrentTenantContext(c), username)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 		})
 	}
 
@@ -218,7 +218,7 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 

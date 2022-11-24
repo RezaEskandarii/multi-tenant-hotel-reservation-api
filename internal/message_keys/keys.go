@@ -4,7 +4,7 @@ package message_keys
 const (
 	/*********************** root keys ************************/
 	crudMessages = "CrudMessages."
-	errors       = "Errors."
+	errors       = "errors."
 	users        = "Users."
 	hotels       = "Hotels."
 	rooms        = "Rooms."

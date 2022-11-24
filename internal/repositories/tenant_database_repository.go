@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"reservation-api/internal/models"
 	"reservation-api/pkg/database/tenant_database_resolver"
 )
@@ -15,7 +16,7 @@ func NewTenantDatabaseRepository(resolver *tenant_database_resolver.TenantDataba
 	return &TenantRepository{DatabaseResolver: resolver}
 }
 
-func (r *TenantRepository) Create(tenant *models.Tenant) (*models.Tenant, error) {
+func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 
 	publicDB := r.DatabaseResolver.GetTenantDB(0).Debug()
 
@@ -26,6 +27,8 @@ func (r *TenantRepository) Create(tenant *models.Tenant) (*models.Tenant, error)
 	if tx := publicDB.Create(&tenant); tx.Error != nil {
 		return nil, tx.Error
 	}
+
+	ctx = context.WithValue(context.Background(), "TenantID", tenant.Id)
 
 	resolver := tenant_database_resolver.NewTenantDatabaseResolver()
 	tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
@@ -38,16 +41,16 @@ func (r *TenantRepository) Create(tenant *models.Tenant) (*models.Tenant, error)
 	currencyRepository := NewCurrencyRepository(resolver)
 
 	// seed users
-	if err := userRepository.Seed("./data/seed/users.json", tenant.Id); err != nil {
+	if err := userRepository.Seed(ctx, "./data/seed/users.json"); err != nil {
 		panic(err)
 	}
 	// seed roomTypes
-	if err := roomTypeRepository.Seed("./data/seed/room_types.json", tenant.Id); err != nil {
+	if err := roomTypeRepository.Seed(ctx, "./data/seed/room_types.json"); err != nil {
 		panic(err)
 	}
 
 	// seed currencies
-	if err := currencyRepository.Seed("./data/seed/currencies.json", tenant.Id); err != nil {
+	if err := currencyRepository.Seed(ctx, "./data/seed/currencies.json"); err != nil {
 		panic(err)
 	}
 

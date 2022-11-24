@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/config"
@@ -17,6 +18,9 @@ func TenantMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		c.Set(config.TenantIDKey, tenant)
+		ctx := context.WithValue(c.Request().Context(), "TenantID", tenant)
+		c.Set(config.TenantIDCtx, ctx)
+
 		return next(c)
 	}
 }

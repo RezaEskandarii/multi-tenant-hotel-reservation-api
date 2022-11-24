@@ -14,6 +14,18 @@ type Province struct {
 	Country   *Country `json:"country" valid:"-"`
 }
 
+type ProvinceCreateOrUpdate struct {
+	BaseModel
+	Name      string   `json:"name" valid:"required"`
+	Alias     string   `json:"alias" valid:"required"`
+	Cities    []*City  `json:"cities" valid:"-"`
+	CountryId uint64   `json:"country_id" valid:"required"`
+	Country   *Country `json:"country" valid:"-"`
+}
+
+type GetCity struct {
+}
+
 func (p *Province) Validate() (bool, error) {
 
 	return govalidator.ValidateStruct(p)

@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,31 +18,31 @@ func NewRateCodeService(r *repositories.RateCodeRepository) *RateCodeService {
 }
 
 // Create creates new RateCode.
-func (s *RateCodeService) Create(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
+func (s *RateCodeService) Create(ctx context.Context, model *models.RateCode) (*models.RateCode, error) {
 
-	return s.Repository.Create(model, tenantID)
+	return s.Repository.Create(ctx, model)
 }
 
 // Update updates RateCode.
-func (s *RateCodeService) Update(model *models.RateCode, tenantID uint64) (*models.RateCode, error) {
+func (s *RateCodeService) Update(ctx context.Context, model *models.RateCode) (*models.RateCode, error) {
 
-	return s.Repository.Update(model, tenantID)
+	return s.Repository.Update(ctx, model)
 }
 
 // Find returns RateCode and if it does not find the RateCode, it returns nil.
-func (s *RateCodeService) Find(id uint64, tenantID uint64) (*models.RateCode, error) {
+func (s *RateCodeService) Find(ctx context.Context, id uint64) (*models.RateCode, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of RateCodes.
-func (s *RateCodeService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *RateCodeService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // Delete removes RateCode  by given id.
-func (s *RateCodeService) Delete(id uint64, tenantID uint64) error {
+func (s *RateCodeService) Delete(ctx context.Context, id uint64) error {
 
-	return s.Repository.Delete(id, tenantID)
+	return s.Repository.Delete(ctx, id)
 }

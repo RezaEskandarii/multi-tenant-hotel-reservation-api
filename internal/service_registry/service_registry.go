@@ -45,9 +45,9 @@ func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
 
 	i18nTranslator := translator.New()
 
-	// fill handlers shared dependencies in handlerInput struct and pass this
+	// fill handlers shared dependencies in config struct and pass this
 	// struct to handlers inserted of pass many duplicated objects
-	handlerInput := &dto.HandlersShared{
+	config := &dto.HandlerConfig{
 		Router:     router,
 		Translator: i18nTranslator,
 		Logger:     logger,
@@ -92,45 +92,45 @@ func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
 		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(connectionResolver))
 	)
 
-	tenantHandler.Register(handlerInput, tenantService)
+	tenantHandler.Register(config, tenantService)
 	// authHandler does bot need to authMiddleware.
-	authHandler.Register(handlerInput, userService, authService)
-
-	router.Use(middlewares.TenantMiddleware, middlewares.JWTAuthMiddleware(authService),
-		middlewares.TenantAccessMiddleware)
+	router.Use(middlewares.LoggerMiddleware(logger))
+	authHandler.Register(config, userService, authService)
+	router.Use(middlewares.MetricsMiddleware, middlewares.TenantMiddleware, middlewares.JWTAuthMiddleware(authService),
+		middlewares.TenantAccessMiddleware, middlewares.PanicRecoveryMiddleware)
 
 	// add authentication middleware to all routes.
 
 	metricHandler.Register(cfg)
-	countryHandler.Register(handlerInput, countryService)
+	countryHandler.Register(config, countryService)
 
-	provinceHandler.Register(handlerInput, provinceService)
+	provinceHandler.Register(config, provinceService)
 
-	cityHandler.Register(handlerInput, cityService)
+	cityHandler.Register(config, cityService)
 
-	currencyHandler.Register(handlerInput, currencyService)
+	currencyHandler.Register(config, currencyService)
 
-	usersHandler.Register(handlerInput, userService)
+	usersHandler.Register(config, userService)
 
-	hotelTypeHandler.Register(handlerInput, hotelTypeService)
+	hotelTypeHandler.Register(config, hotelTypeService)
 
-	hotelGradeHandler.Register(handlerInput, hotelGradeService)
+	hotelGradeHandler.Register(config, hotelGradeService)
 
-	hotelHandler.Register(handlerInput, hotelService)
+	hotelHandler.Register(config, hotelService)
 
-	roomTypeHandler.Register(handlerInput, roomTypeService)
+	roomTypeHandler.Register(config, roomTypeService)
 
-	roomHandler.Register(handlerInput, roomService)
+	roomHandler.Register(config, roomService)
 
-	guestHandler.Register(handlerInput, guestService, reportService)
+	guestHandler.Register(config, guestService, reportService)
 
-	rateGroupHandler.Register(handlerInput, rateGroupService)
+	rateGroupHandler.Register(config, rateGroupService)
 
-	rateCodeHandler.Register(handlerInput, rateCodeService, rateCodeDetailService)
+	rateCodeHandler.Register(config, rateCodeService, rateCodeDetailService)
 
-	reservationHandler.Register(handlerInput, reservationService, reportService)
+	reservationHandler.Register(config, reservationService, reportService)
 
-	paymentHandler.Register(handlerInput, paymentService)
+	paymentHandler.Register(config, paymentService)
 
 	// schedule to remove expired reservation requests.
 	scheduleRemoveExpiredReservationRequests(reservationService, logger)

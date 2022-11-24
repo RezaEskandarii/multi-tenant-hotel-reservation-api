@@ -10,13 +10,13 @@ import (
 )
 
 type PaymentHandler struct {
-	Input          *dto.HandlersShared
+	Config         *dto.HandlerConfig
 	PaymentService *domain_services.PaymentService
 }
 
-func (handler *PaymentHandler) Register(input *dto.HandlersShared, service *domain_services.PaymentService) {
-	handler.Input = input
-	routeGroup := handler.Input.Router.Group("/payment")
+func (handler *PaymentHandler) Register(config *dto.HandlerConfig, service *domain_services.PaymentService) {
+	handler.Config = config
+	routeGroup := handler.Config.Router.Group("/payment")
 	handler.PaymentService = service
 	routeGroup.POST("", handler.create)
 	routeGroup.DELETE("/:id", handler.delete)
@@ -37,8 +37,8 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.PaymentService.Create(&payment, getCurrentTenant(c)); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+	if result, err := handler.PaymentService.Create(getCurrentTenantContext(c), &payment); err != nil {
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {
 		return c.JSON(http.StatusOK, result)
@@ -55,8 +55,8 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Get("id"))
-	if err := handler.PaymentService.Delete(id, getCurrentTenant(c)); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+	if err := handler.PaymentService.Delete(getCurrentTenantContext(c), id); err != nil {
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	return c.JSON(http.StatusOK, nil)

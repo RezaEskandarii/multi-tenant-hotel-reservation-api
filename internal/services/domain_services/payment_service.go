@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
 )
@@ -13,27 +14,27 @@ func NewPaymentService(repository *repositories.PaymentRepository) *PaymentServi
 	return &PaymentService{Repository: repository}
 }
 
-func (s *PaymentService) Create(payment *models.Payment, tenantID uint64) (*models.Payment, error) {
+func (s *PaymentService) Create(ctx context.Context, payment *models.Payment) (*models.Payment, error) {
 
-	return s.Repository.Create(payment, tenantID)
+	return s.Repository.Create(ctx, payment)
 }
 
-func (s *PaymentService) Find(id uint64, tenantID uint64) (*models.Payment, error) {
+func (s *PaymentService) Find(ctx context.Context, id uint64) (*models.Payment, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
-func (s *PaymentService) Delete(id uint64, tenantID uint64) error {
+func (s *PaymentService) Delete(ctx context.Context, id uint64) error {
 
-	return s.Repository.Delete(id, tenantID)
+	return s.Repository.Delete(ctx, id)
 }
 
-func (s *PaymentService) GetListByReservationID(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) ([]*models.Payment, error) {
+func (s *PaymentService) GetListByReservationID(ctx context.Context, reservationID uint64, paymentType *models.PaymentType) ([]*models.Payment, error) {
 
-	return s.Repository.GetListByReservationID(reservationID, paymentType, tenantID)
+	return s.Repository.GetListByReservationID(ctx, reservationID, paymentType)
 }
 
-func (s *PaymentService) GetBalance(reservationID uint64, paymentType *models.PaymentType, tenantID uint64) (float64, error) {
+func (s *PaymentService) GetBalance(ctx context.Context, reservationID uint64, paymentType *models.PaymentType) (float64, error) {
 
-	return s.Repository.GetBalance(reservationID, paymentType, tenantID)
+	return s.Repository.GetBalance(ctx, reservationID, paymentType)
 }

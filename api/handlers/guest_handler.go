@@ -15,16 +15,16 @@ import (
 // GuestHandler  Guest endpoint handler
 type GuestHandler struct {
 	Service       *domain_services.GuestService
-	Input         *dto.HandlersShared
+	Config        *dto.HandlerConfig
 	ReportService *common_services.ReportService
 }
 
-func (handler *GuestHandler) Register(input *dto.HandlersShared,
+func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 	service *domain_services.GuestService, reportService *common_services.ReportService) {
 	handler.ReportService = reportService
-	handler.Input = input
+	handler.Config = config
 	handler.Service = service
-	routeGroup := handler.Input.Router.Group("/guests")
+	routeGroup := handler.Config.Router.Group("/guests")
 	routeGroup.POST("", handler.create)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.GET("", handler.findAll)
@@ -50,21 +50,21 @@ func (handler *GuestHandler) create(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
 		})
 	}
 
 	model.SetAudit(user)
-	if _, err := handler.Service.Create(&model, getCurrentTenant(c)); err != nil {
+	if _, err := handler.Service.Create(getCurrentTenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, err.Error()),
+			Message: handler.Config.Translator.Localize(lang, err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,
-		Message: handler.Input.Translator.Localize(lang, message_keys.Created),
+		Message: handler.Config.Translator.Localize(lang, message_keys.Created),
 	})
 }
 
@@ -85,12 +85,12 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	user := getCurrentUser(c)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
-	guest, _ := handler.Service.Find(id, getCurrentTenant(c))
+	guest, _ := handler.Service.Find(getCurrentTenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message: handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -98,21 +98,21 @@ func (handler *GuestHandler) update(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
 		})
 	}
 
 	model.SetUpdatedBy(user)
-	if _, err := handler.Service.Update(&model, getCurrentTenant(c)); err != nil {
+	if _, err := handler.Service.Update(getCurrentTenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, err.Error()),
+			Message: handler.Config.Translator.Localize(lang, err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,
-		Message: handler.Input.Translator.Localize(lang, message_keys.Updated),
+		Message: handler.Config.Translator.Localize(lang, message_keys.Updated),
 	})
 }
 
@@ -129,12 +129,12 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
-	guest, _ := handler.Service.Find(id, getCurrentTenant(c))
+	guest, _ := handler.Service.Find(getCurrentTenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message: handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -165,11 +165,11 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	input.IgnorePagination = output != ""
 
-	result, err := handler.Service.FindAll(input)
+	result, err := handler.Service.FindAll(getCurrentTenantContext(c), input)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, err.Error()),
+			Message: handler.Config.Translator.Localize(lang, err.Error()),
 		})
 	}
 
@@ -177,7 +177,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 		if output == EXCEL {
 			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
 			if err != nil {
-				handler.Input.Logger.LogError(err.Error())
+				handler.Config.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
 			writeBinaryHeaders(c, "guests", EXCEL_OUTPUT)

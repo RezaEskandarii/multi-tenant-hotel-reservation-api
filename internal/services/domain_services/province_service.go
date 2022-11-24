@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,31 +18,31 @@ func NewProvinceService(r *repositories.ProvinceRepository) *ProvinceService {
 }
 
 // Create creates new province.
-func (s *ProvinceService) Create(province *models.Province, tenantID uint64) (*models.Province, error) {
+func (s *ProvinceService) Create(ctx context.Context, province *models.Province) (*models.Province, error) {
 
-	return s.Repository.Create(province, tenantID)
+	return s.Repository.Create(ctx, province)
 }
 
 // Update updates province.
-func (s *ProvinceService) Update(province *models.Province, tenantID uint64) (*models.Province, error) {
+func (s *ProvinceService) Update(ctx context.Context, province *models.Province) (*models.Province, error) {
 
-	return s.Repository.Update(province, tenantID)
+	return s.Repository.Update(ctx, province)
 }
 
 // Find returns province and if it does not find the province, it returns nil.
-func (s *ProvinceService) Find(id uint64, tenantID uint64) (*models.Province, error) {
+func (s *ProvinceService) Find(ctx context.Context, id uint64) (*models.Province, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of provinces.
-func (s *ProvinceService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *ProvinceService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // GetCities returns the list of cities that belong to the given province ID.
-func (s *ProvinceService) GetCities(provinceId uint64, tenantID uint64) ([]*models.City, error) {
+func (s *ProvinceService) GetCities(ctx context.Context, provinceId uint64) ([]*models.City, error) {
 
-	return s.Repository.GetCities(provinceId, tenantID)
+	return s.Repository.GetCities(ctx, provinceId)
 }

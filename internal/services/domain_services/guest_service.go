@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,31 +18,31 @@ func NewGuestService(r *repositories.GuestRepository) *GuestService {
 }
 
 // Create creates new Guest.
-func (s *GuestService) Create(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
+func (s *GuestService) Create(ctx context.Context, guest *models.Guest) (*models.Guest, error) {
 
-	return s.Repository.Create(guest, tenantID)
+	return s.Repository.Create(ctx, guest)
 }
 
 // Update updates Guest.
-func (s *GuestService) Update(guest *models.Guest, tenantID uint64) (*models.Guest, error) {
+func (s *GuestService) Update(ctx context.Context, guest *models.Guest) (*models.Guest, error) {
 
-	return s.Repository.Update(guest, tenantID)
+	return s.Repository.Update(ctx, guest)
 }
 
 // Find returns Guest and if it does not find the Guest, it returns nil.
-func (s *GuestService) Find(id uint64, tenantID uint64) (*models.Guest, error) {
+func (s *GuestService) Find(ctx context.Context, id uint64) (*models.Guest, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of cities.
-func (s *GuestService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *GuestService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // ReservationsCount returns guest reserves count
-func (s *GuestService) ReservationsCount(guestId uint64, tenantID uint64) (error, uint64) {
+func (s *GuestService) ReservationsCount(ctx context.Context, guestId uint64) (error, uint64) {
 
-	return s.Repository.ReservationsCount(guestId, tenantID)
+	return s.Repository.ReservationsCount(ctx, guestId)
 }

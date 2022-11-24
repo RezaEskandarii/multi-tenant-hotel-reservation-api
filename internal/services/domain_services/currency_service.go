@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,37 +18,37 @@ func NewCurrencyService(r *repositories.CurrencyRepository) *CurrencyService {
 }
 
 // Create creates new currency.
-func (s *CurrencyService) Create(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
+func (s *CurrencyService) Create(ctx context.Context, currency *models.Currency) (*models.Currency, error) {
 
-	return s.Repository.Create(currency, tenantID)
+	return s.Repository.Create(ctx, currency)
 }
 
 // Update updates currency.
-func (s *CurrencyService) Update(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
+func (s *CurrencyService) Update(ctx context.Context, currency *models.Currency) (*models.Currency, error) {
 
-	return s.Repository.Update(currency, tenantID)
+	return s.Repository.Update(ctx, currency)
 }
 
 // Find returns currency and if it does not find the currency, it returns nil.
-func (s *CurrencyService) Find(id uint64, tenantID uint64) (*models.Currency, error) {
+func (s *CurrencyService) Find(ctx context.Context, id uint64) (*models.Currency, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of currencies
-func (s *CurrencyService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *CurrencyService) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, input)
 }
 
 // FindBySymbol returns currency by alias name.
-func (s *CurrencyService) FindBySymbol(symbol string, tenantID uint64) (*models.Currency, error) {
+func (s *CurrencyService) FindBySymbol(ctx context.Context, symbol string) (*models.Currency, error) {
 
-	return s.Repository.FindBySymbol(symbol, tenantID)
+	return s.Repository.FindBySymbol(ctx, symbol)
 }
 
 // Seed
-func (s *CurrencyService) Seed(jsonFilePath string, tenantID uint64) error {
+func (s *CurrencyService) Seed(ctx context.Context, jsonFilePath string) error {
 
-	return s.Repository.Seed(jsonFilePath, tenantID)
+	return s.Repository.Seed(ctx, jsonFilePath)
 }

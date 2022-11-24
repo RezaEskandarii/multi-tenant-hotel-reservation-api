@@ -12,13 +12,13 @@ import (
 
 type TenantHandler struct {
 	TenantService *domain_services.TenantService
-	Input         *dto.HandlersShared
+	Config        *dto.HandlerConfig
 }
 
-func (handler *TenantHandler) Register(input *dto.HandlersShared, service *domain_services.TenantService) {
+func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domain_services.TenantService) {
 	handler.TenantService = service
-	handler.Input = input
-	routeGroup := input.Router.Group("/tenants")
+	handler.Config = config
+	routeGroup := config.Router.Group("/tenants")
 	routeGroup.POST("", handler.create)
 }
 
@@ -28,7 +28,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -36,10 +36,10 @@ func (handler *TenantHandler) create(c echo.Context) error {
 		})
 	}
 
-	result, err := handler.TenantService.SetUp(model)
+	result, err := handler.TenantService.SetUp(getCurrentTenantContext(c), model)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -50,6 +50,6 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
-		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
+		Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
 	})
 }

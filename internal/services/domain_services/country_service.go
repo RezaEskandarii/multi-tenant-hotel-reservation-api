@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,31 +18,34 @@ func NewCountryService(r *repositories.CountryRepository) *CountryService {
 }
 
 // Create creates new country.
-func (s *CountryService) Create(country *models.Country, tenantID uint64) (*models.Country, error) {
-
-	return s.Repository.Create(country, tenantID)
+func (s *CountryService) Create(ctx context.Context, country *models.CountryCreateUpdate) (*models.Country, error) {
+	model := &models.Country{
+		Name:  country.Name,
+		Alias: country.Alias,
+	}
+	return s.Repository.Create(ctx, model)
 }
 
 // Update updates country.
-func (s *CountryService) Update(country *models.Country, tenantID uint64) (*models.Country, error) {
+func (s *CountryService) Update(ctx context.Context, country *models.Country) (*models.Country, error) {
 
-	return s.Repository.Update(country, tenantID)
+	return s.Repository.Update(ctx, country)
 }
 
 // Find returns country and if it does not find the country, it returns nil.
-func (s *CountryService) Find(id uint64, tenantID uint64) (*models.Country, error) {
+func (s *CountryService) Find(ctx context.Context, id uint64) (*models.Country, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of countries.
-func (s *CountryService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *CountryService) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, input)
 }
 
 // GetProvinces returns provinces by given countryId.
-func (s *CountryService) GetProvinces(countryId uint64, tenantID uint64) ([]*models.Province, error) {
+func (s *CountryService) GetProvinces(ctx context.Context, countryId uint64) ([]*models.Province, error) {
 
-	return s.Repository.GetProvinces(countryId, tenantID)
+	return s.Repository.GetProvinces(ctx, countryId)
 }

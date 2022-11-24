@@ -15,13 +15,13 @@ import (
 // RoomTypeHandler Province endpoint handler
 type RoomTypeHandler struct {
 	Service *domain_services.RoomTypeService
-	Input   *dto.HandlersShared
+	Config  *dto.HandlerConfig
 }
 
-func (handler *RoomTypeHandler) Register(input *dto.HandlersShared, service *domain_services.RoomTypeService) {
+func (handler *RoomTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
 	handler.Service = service
-	handler.Input = input
-	routeGroup := input.Router.Group("/room-type")
+	handler.Config = config
+	routeGroup := config.Router.Group("/room-type")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -37,7 +37,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -46,10 +46,10 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	}
 
 	model.SetAudit(user)
-	result, err := handler.Service.Create(model, getCurrentTenant(c))
+	result, err := handler.Service.Create(getCurrentTenantContext(c), model)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -60,7 +60,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
-		Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
+		Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
 	})
 }
 
@@ -75,20 +75,20 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id, getCurrentTenant(c))
+	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
 
 	if result == nil || (result != nil && result.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -96,10 +96,10 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	name := c.FormValue("name")
 	result.Name = name
 	result.SetUpdatedBy(user)
-	updatedModel, err := handler.Service.Update(result, getCurrentTenant(c))
+	updatedModel, err := handler.Service.Update(getCurrentTenantContext(c), result)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -116,24 +116,24 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id, getCurrentTenant(c))
+	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
 
 	if result == nil || (result != nil && result.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -148,7 +148,7 @@ func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(paginationInput)
+	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -168,25 +168,25 @@ func (handler *RoomTypeHandler) delete(c echo.Context) error {
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 		})
 	}
 
-	err = handler.Service.Delete(id, getCurrentTenant(c))
+	err = handler.Service.Delete(getCurrentTenantContext(c), id)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
-			Message:      handler.Input.Translator.Localize(lang, err.Error()),
+			Message:      handler.Config.Translator.Localize(lang, err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
-		Message:      handler.Input.Translator.Localize(lang, message_keys.Deleted),
+		Message:      handler.Config.Translator.Localize(lang, message_keys.Deleted),
 	})
 }

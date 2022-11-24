@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -17,31 +18,31 @@ func NewHotelGradeService(r *repositories.HotelGradeRepository) *HotelGradeServi
 }
 
 // Create creates new HotelGrade.
-func (s *HotelGradeService) Create(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Create(ctx context.Context, hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
 
-	return s.Repository.Create(hotelGrade, tenantID)
+	return s.Repository.Create(ctx, hotelGrade)
 }
 
 // Update updates HotelGrade.
-func (s *HotelGradeService) Update(hotelGrade *models.HotelGrade, tenantID uint64) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Update(ctx context.Context, hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
 
-	return s.Repository.Update(hotelGrade, tenantID)
+	return s.Repository.Update(ctx, hotelGrade)
 }
 
 // Find returns HotelGrade and if it does not find the HotelGrade, it returns nil.
-func (s *HotelGradeService) Find(id uint64, tenantID uint64) (*models.HotelGrade, error) {
+func (s *HotelGradeService) Find(ctx context.Context, id uint64) (*models.HotelGrade, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of hotel grades.
-func (s *HotelGradeService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *HotelGradeService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // Delete removes hotel type by given id.
-func (s *HotelGradeService) Delete(id uint64, tenantID uint64) error {
+func (s *HotelGradeService) Delete(ctx context.Context, id uint64) error {
 
-	return s.Repository.Delete(id, tenantID)
+	return s.Repository.Delete(ctx, id)
 }

@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
 )
@@ -13,7 +14,7 @@ func NewTenantService(repository *repositories.TenantRepository) *TenantService 
 	return &TenantService{Repository: repository}
 }
 
-func (s *TenantService) SetUp(model *models.Tenant) (*models.Tenant, error) {
+func (s *TenantService) SetUp(ctx context.Context, model *models.Tenant) (*models.Tenant, error) {
 
-	return s.Repository.Create(model)
+	return s.Repository.Create(ctx, model)
 }

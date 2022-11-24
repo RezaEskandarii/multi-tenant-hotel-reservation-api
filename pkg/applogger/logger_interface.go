@@ -3,6 +3,7 @@ package applogger
 // Logger is logger base type
 type Logger interface {
 	LogInfo(message string)
+	LogInfoJSON(message interface{})
 	LogDebug(message string)
 	LogWarning(message string)
 	LogError(err interface{})

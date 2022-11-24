@@ -1,11 +1,13 @@
 package repositories
 
 import (
+	"context"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
 	"reservation-api/pkg/database/tenant_database_resolver"
 )
@@ -20,10 +22,10 @@ func NewUserRepository(r *tenant_database_resolver.TenantDatabaseResolver) *User
 	}
 }
 
-func (r *UserRepository) Create(user *models.User, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) Create(ctx context.Context, user *models.User) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
-	user.TenantId = tenantID
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
 	if tx := db.Create(&user); tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -31,10 +33,10 @@ func (r *UserRepository) Create(user *models.User, tenantID uint64) (*models.Use
 	return user, nil
 }
 
-func (r *UserRepository) Update(user *models.User, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) Update(ctx context.Context, user *models.User) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
-	user.TenantId = tenantID
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
 
 	if tx := db.Updates(&user); tx.Error != nil {
 		return nil, tx.Error
@@ -43,10 +45,10 @@ func (r *UserRepository) Update(user *models.User, tenantID uint64) (*models.Use
 	return user, nil
 }
 
-func (r *UserRepository) Find(id uint64, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) Find(ctx context.Context, id uint64) (*models.User, error) {
 
 	model := models.User{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -59,9 +61,9 @@ func (r *UserRepository) Find(id uint64, tenantID uint64) (*models.User, error) 
 	return &model, nil
 }
 
-func (r *UserRepository) FindByUsername(username string, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	model := models.User{Username: username}
 
 	if tx := db.Where(model).Find(&model); tx.Error != nil {
@@ -74,10 +76,10 @@ func (r *UserRepository) FindByUsername(username string, tenantID uint64) (*mode
 
 	return &model, nil
 }
-func (r *UserRepository) FindByUsernameAndPassword(username string, password string, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) FindByUsernameAndPassword(ctx context.Context, username string, password string) (*models.User, error) {
 
 	model := models.User{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("username=?", username).Find(&model); tx.Error != nil {
 
@@ -96,10 +98,10 @@ func (r *UserRepository) FindByUsernameAndPassword(username string, password str
 	return &model, nil
 }
 
-func (r *UserRepository) Deactivate(id uint64, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) Deactivate(ctx context.Context, id uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -116,10 +118,10 @@ func (r *UserRepository) Deactivate(id uint64, tenantID uint64) (*models.User, e
 	return &user, nil
 }
 
-func (r *UserRepository) Activate(id uint64, tenantID uint64) (*models.User, error) {
+func (r *UserRepository) Activate(ctx context.Context, id uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -137,9 +139,9 @@ func (r *UserRepository) Activate(id uint64, tenantID uint64) (*models.User, err
 	return &user, nil
 }
 
-func (r *UserRepository) Delete(id uint64, tenantID uint64) error {
+func (r *UserRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error
@@ -148,15 +150,15 @@ func (r *UserRepository) Delete(id uint64, tenantID uint64) error {
 	return nil
 }
 
-func (r *UserRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (r *UserRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.User{}, db, input)
 }
 
-func (r *UserRepository) Seed(jsonFilePath string, tenantID uint64) error {
+func (r *UserRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	users := make([]models.User, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {
@@ -166,7 +168,7 @@ func (r *UserRepository) Seed(jsonFilePath string, tenantID uint64) error {
 				return err
 			} else {
 				if count == 0 {
-					user.TenantId = tenantID
+					user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
 
 					hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
 

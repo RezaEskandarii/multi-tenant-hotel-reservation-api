@@ -36,7 +36,42 @@ type User struct {
 	IsActive             bool       `json:"is_active"`
 }
 
-func (u *User) Validate() (bool, error) {
+type GetUser struct {
+	BaseDto
+	FirstName            string     `json:"first_name" valid:"required"`
+	LastName             string     `json:"last_name" valid:"required" `
+	Username             string     `json:"username" valid:"required" `
+	Email                string     `json:"email" valid:"required,email" `
+	PhoneNumber          string     `json:"phone_number" valid:"required" `
+	BirthDate            *time.Time `json:"birth_date"`
+	PhoneNumberConfirmed bool       `json:"-"`
+	EmailConfirmed       bool       `json:"-"`
+	CityId               int        `json:"city_id"`
+	City                 *GetCity   `json:"city" valid:"-"`
+	Gender               Gender     `json:"gender" valid:"required"`
+	Address              string     `json:"address"`
+	IsActive             bool       `json:"is_active"`
+}
+
+type UserCreateUpdate struct {
+	BaseDto
+	FirstName            string      `json:"first_name" valid:"required"`
+	LastName             string      `json:"last_name" valid:"required" `
+	Username             string      `json:"username" valid:"required" `
+	Email                string      `json:"email" valid:"required,email" `
+	PhoneNumber          string      `json:"phone_number" valid:"required" `
+	BirthDate            *time.Time  `json:"birth_date"`
+	PhoneNumberConfirmed bool        `json:"-"`
+	EmailConfirmed       bool        `json:"-"`
+	Password             string      `json:"password"`
+	CityId               int         `json:"city_id"`
+	City                 *GetCountry `json:"city" valid:"-"`
+	Gender               Gender      `json:"gender" valid:"required"`
+	Address              string      `json:"address"`
+	IsActive             bool        `json:"is_active"`
+}
+
+func (u *UserCreateUpdate) Validate() (bool, error) {
 
 	ok, err := govalidator.ValidateStruct(u)
 	if err != nil {

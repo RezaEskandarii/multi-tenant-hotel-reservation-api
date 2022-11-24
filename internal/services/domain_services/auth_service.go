@@ -1,11 +1,13 @@
 package domain_services
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/config"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
 	"time"
 )
@@ -45,10 +47,10 @@ func NewAuthService(service *UserService, cfg *config.Config) *AuthService {
 
 // SignIn finds user with given username and password and
 // generates JWT token for user.
-func (s AuthService) SignIn(username, password string, tenantID uint64) (error, *commons.JWTTokenResponse) {
+func (s AuthService) SignIn(ctx context.Context, username, password string) (error, *commons.JWTTokenResponse) {
 
 	// Get the expected password from our in memory map
-	user, err := s.UserService.FindByUsernameAndPassword(username, password, tenantID)
+	user, err := s.UserService.FindByUsernameAndPassword(ctx, username, password)
 
 	if user == nil || err != nil {
 		return err, nil
@@ -59,7 +61,7 @@ func (s AuthService) SignIn(username, password string, tenantID uint64) (error, 
 	expirationTime := time.Now().Add(time.Duration(s.Config.Authentication.TokenAliveTime) * time.Minute)
 	// SetUp the JWT claims, which includes the username and expiry time
 	claims := &Claims{
-		TenantID:    utils.Encrypt(fmt.Sprintf("%d", tenantID)),
+		TenantID:    utils.Encrypt(fmt.Sprintf("%d", tenant_resolver.GetCurrentTenant(ctx))),
 		Username:    user.Username,
 		Email:       user.Email,
 		FirstName:   user.FirstName,
@@ -119,7 +121,7 @@ func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.JWTTokenRes
 	}
 }
 
-func (s *AuthService) VerifyToken(jwtToken string, tenantID uint64) (error, *Claims) {
+func (s *AuthService) VerifyToken(ctx context.Context, jwtToken string, tenantID uint64) (error, *Claims) {
 
 	token, _ := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 
@@ -137,7 +139,7 @@ func (s *AuthService) VerifyToken(jwtToken string, tenantID uint64) (error, *Cla
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 
 		username := claims["username"]
-		user, err := s.UserService.FindByUsername(fmt.Sprintf("%s", username), tenantID)
+		user, err := s.UserService.FindByUsername(ctx, fmt.Sprintf("%s", username))
 
 		if err != nil {
 			return err, nil
@@ -154,7 +156,7 @@ func (s *AuthService) VerifyToken(jwtToken string, tenantID uint64) (error, *Cla
 			LastName:    fmt.Sprintf("%s", claims["lastname"]),
 			Address:     fmt.Sprintf("%s", claims["address"]),
 			PhoneNumber: fmt.Sprintf("%s", claims["phonenumber"]),
-			TenantID:    utils.Encrypt(fmt.Sprintf("%d", tenantID)),
+			TenantID:    fmt.Sprintf("%d", tenantID), //utils.Encrypt(fmt.Sprintf("%d", tenantID)),
 		}
 
 	} else {

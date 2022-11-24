@@ -15,15 +15,13 @@ import (
 // ProvinceHandler Province endpoint handler
 type ProvinceHandler struct {
 	Service *domain_services.ProvinceService
-	Input   *dto.HandlersShared
+	Config  *dto.HandlerConfig
 }
 
-func (handler *ProvinceHandler) Register(input *dto.HandlersShared, service *domain_services.ProvinceService) {
+func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *domain_services.ProvinceService) {
 	handler.Service = service
-	handler.Input = input
-
-	routeGroup := input.Router.Group("/provinces")
-
+	handler.Config = config
+	routeGroup := config.Router.Group("/provinces")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -49,13 +47,13 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	if err := c.Bind(&province); err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
 
@@ -69,22 +67,22 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	}
 
 	province.SetAudit(user)
-	if result, err := handler.Service.Create(province, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Create(getCurrentTenantContext(c), province); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         result,
 				ResponseCode: http.StatusOK,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
 			})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusInternalServerError,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 			})
 	}
 
@@ -105,22 +103,21 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	user := getCurrentUser(c)
-
-	province, err := handler.Service.Find(id, getCurrentTenant(c))
-	lang := c.Request().Header.Get(acceptLanguage)
+	province, err := handler.Service.Find(getCurrentTenantContext(c), id)
+	lang := getAcceptLanguage(c)
 
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
 		})
 
 	}
@@ -129,13 +126,13 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
 	if err := c.Bind(&province); err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -148,16 +145,16 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 			})
 	}
 	province.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(province, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Update(getCurrentTenantContext(c), province); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -174,15 +171,15 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	model, err := handler.Service.Find(id, getCurrentTenant(c))
+	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -194,7 +191,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -216,7 +213,7 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(paginationInput)
+	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -242,14 +239,14 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	cities, err := handler.Service.GetCities(id, getCurrentTenant(c))
+	cities, err := handler.Service.GetCities(getCurrentTenantContext(c), id)
 
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.NewApiResponse().
 			SetResponseCode(http.StatusInternalServerError).SetMessage("bad request"),
 		)

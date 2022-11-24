@@ -1,9 +1,11 @@
 package repositories
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/database/tenant_database_resolver"
 )
 
@@ -17,9 +19,9 @@ func NewRateCodeDetailRepository(r *tenant_database_resolver.TenantDatabaseResol
 	return &RateCodeDetailRepository{ConnectionResolver: r}
 }
 
-func (r *RateCodeDetailRepository) Create(model *models.RateCodeDetail, tenantID uint64) (*models.RateCodeDetail, error) {
+func (r *RateCodeDetailRepository) Create(ctx context.Context, model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -27,9 +29,9 @@ func (r *RateCodeDetailRepository) Create(model *models.RateCodeDetail, tenantID
 	return model, nil
 }
 
-func (r *RateCodeDetailRepository) Update(model *models.RateCodeDetail, tenantID uint64) (*models.RateCodeDetail, error) {
+func (r *RateCodeDetailRepository) Update(ctx context.Context, model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	tx := db.Begin()
 
 	// remove old price.
@@ -47,10 +49,10 @@ func (r *RateCodeDetailRepository) Update(model *models.RateCodeDetail, tenantID
 	return model, nil
 }
 
-func (r *RateCodeDetailRepository) FindPrice(id uint64, tenantID uint64) (*models.RateCodeDetailPrice, error) {
+func (r *RateCodeDetailRepository) FindPrice(ctx context.Context, id uint64) (*models.RateCodeDetailPrice, error) {
 
 	model := models.RateCodeDetailPrice{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Model(models.RateCodeDetailPrice{}).Where("id=?", id).Find(&model).Error; err != nil {
 		return nil, err
@@ -63,10 +65,10 @@ func (r *RateCodeDetailRepository) FindPrice(id uint64, tenantID uint64) (*model
 	return &model, nil
 }
 
-func (r *RateCodeDetailRepository) Find(id uint64, tenantID uint64) (*models.RateCodeDetail, error) {
+func (r *RateCodeDetailRepository) Find(ctx context.Context, id uint64) (*models.RateCodeDetail, error) {
 
 	model := models.RateCodeDetail{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model).Preload("RateCodeDetailPrice"); tx.Error != nil {
 		return nil, tx.Error
@@ -78,14 +80,14 @@ func (r *RateCodeDetailRepository) Find(id uint64, tenantID uint64) (*models.Rat
 	return &model, nil
 }
 
-func (r *RateCodeDetailRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
+func (r *RateCodeDetailRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.RateCodeDetail{}, db, input)
 }
 
-func (r RateCodeDetailRepository) Delete(id uint64, tenantID uint64) error {
+func (r RateCodeDetailRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if query := db.Model(&models.RateCodeDetail{}).Where("id=?", id).Delete(&models.RateCodeDetail{}); query.Error != nil {
 		return query.Error

@@ -1,6 +1,8 @@
 package commons
 
-import "time"
+import (
+	"time"
+)
 
 // ApiResponse api response struct
 type ApiResponse struct {
@@ -28,8 +30,22 @@ func (a ApiResponse) SetMessage(message string) ApiResponse {
 	return a
 }
 
+// =========================================================================
+
 // JWTTokenResponse returns authentication token and expire time.
 type JWTTokenResponse struct {
 	ExpireAt    time.Time `json:"expire_at"`
 	AccessToken string    `json:"access_token"`
 }
+
+// =========================================================================
+
+type RequestTrace struct {
+	TraceID      string `json:"trace_id"`
+	ResponseCode *int   `json:"response_code,omitempty"`
+	IPAddress    string `json:"ip_address"`
+	Tag          string `json:"tag"`
+	EndPoint     string `json:"end_point"`
+}
+
+// =========================================================================

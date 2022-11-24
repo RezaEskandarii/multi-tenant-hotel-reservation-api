@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -16,31 +17,31 @@ func NewRoomService(r *repositories.RoomRepository) *RoomService {
 }
 
 // Create creates new Room.
-func (s *RoomService) Create(room *models.Room, tenantID uint64) (*models.Room, error) {
+func (s *RoomService) Create(ctx context.Context, room *models.Room) (*models.Room, error) {
 
-	return s.Repository.Create(room, tenantID)
+	return s.Repository.Create(ctx, room)
 }
 
 // Update updates Room.
-func (s *RoomService) Update(room *models.Room, tenantID uint64) (*models.Room, error) {
+func (s *RoomService) Update(ctx context.Context, room *models.Room) (*models.Room, error) {
 
-	return s.Repository.Update(room, tenantID)
+	return s.Repository.Update(ctx, room)
 }
 
 // Find returns Room and if it does not find the Room, it returns nil.
-func (s *RoomService) Find(id uint64, tenantID uint64) (*models.Room, error) {
+func (s *RoomService) Find(ctx context.Context, id uint64) (*models.Room, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindAll returns paginates list of rooms.
-func (s *RoomService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *RoomService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // Delete removes room  by given id.
-func (s *RoomService) Delete(id uint64, tenantID uint64) error {
+func (s *RoomService) Delete(ctx context.Context, id uint64) error {
 
-	return s.Repository.Delete(id, tenantID)
+	return s.Repository.Delete(ctx, id)
 }

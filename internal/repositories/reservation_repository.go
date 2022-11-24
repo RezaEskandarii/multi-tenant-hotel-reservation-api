@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"database/sql"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
 	"reservation-api/pkg/database/tenant_database_resolver"
 	"strings"
@@ -31,7 +33,7 @@ func NewReservationRepository(r *tenant_database_resolver.TenantDatabaseResolver
 	}
 }
 
-func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomRequestDto, tenantID uint64) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) CreateReservationRequest(ctx context.Context, requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
 	// read from default config
 	expireTime := config.RoomDefaultLockDuration
@@ -64,7 +66,7 @@ func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomReq
 		CheckInDate:  requestDto.CheckInDate,
 	}
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Create(&requestModel).Error; err != nil {
 		return nil, err
@@ -73,10 +75,10 @@ func (r *ReservationRepository) CreateReservationRequest(requestDto *dto.RoomReq
 	return &requestModel, nil
 }
 
-func (r *ReservationRepository) Create(reservation *models.Reservation, tenantID uint64) (*models.Reservation, error) {
+func (r *ReservationRepository) Create(ctx context.Context, reservation *models.Reservation) (*models.Reservation, error) {
 
-	r.setReservationCalcFields(reservation, tenantID)
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	r.setReservationCalcFields(ctx, reservation)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	option := sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -100,11 +102,11 @@ func (r *ReservationRepository) Create(reservation *models.Reservation, tenantID
 	return reservation, nil
 }
 
-func (r *ReservationRepository) Update(id uint64, tenantID uint64, reservation *models.Reservation) (*models.Reservation, error) {
+func (r *ReservationRepository) Update(ctx context.Context, id uint64, reservation *models.Reservation) (*models.Reservation, error) {
 
-	r.setReservationCalcFields(reservation, tenantID)
+	r.setReservationCalcFields(ctx, reservation)
 	reservation.Id = id
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	tx := db.Begin()
 	// remove old sharers and replace with new sharers.
@@ -125,16 +127,16 @@ func (r *ReservationRepository) Update(id uint64, tenantID uint64, reservation *
 
 	tx.Commit()
 
-	result, err := r.Find(id, tenantID)
+	result, err := r.Find(ctx, id)
 
 	return result, err
 }
 
 // ChangeStatus changes the reservation check status.
-func (r ReservationRepository) ChangeStatus(id uint64, tenantID uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
+func (r ReservationRepository) ChangeStatus(ctx context.Context, id uint64, status models.ReservationCheckStatus) (*models.Reservation, error) {
 
 	reservation := models.Reservation{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Find(&reservation, id).Error; err != nil {
 		return nil, err
@@ -154,9 +156,9 @@ func (r ReservationRepository) ChangeStatus(id uint64, tenantID uint64, status m
 	return &reservation, nil
 }
 
-func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePriceDto, tenantID uint64) ([]*dto.RateCodePricesDto, error) {
+func (r *ReservationRepository) GetRecommendedRateCodes(ctx context.Context, priceDto *dto.GetRatePriceDto) ([]*dto.RateCodePricesDto, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	ratePrices := make([]*dto.RateCodePricesDto, 0)
 
 	db.Table("rate_code_details details").Select(`
@@ -187,10 +189,10 @@ func (r *ReservationRepository) GetRecommendedRateCodes(priceDto *dto.GetRatePri
 	return ratePrices, nil
 }
 
-func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reservation *models.Reservation, tenantID uint64) (bool, error) {
+func (r *ReservationRepository) HasConflict(ctx context.Context, request *dto.RoomRequestDto, reservation *models.Reservation) (bool, error) {
 
 	var reservationRequestCount int64 = 0
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Model(&models.ReservationRequest{}).
 		Where("room_id=? AND check_in_date >=? AND check_out_date<=? ",
@@ -203,7 +205,7 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reserva
 	}
 
 	if request.RequestType == dto.CreateReservation {
-		hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId, tenantID)
+		hasReservationConflict, err := r.HasReservationConflict(ctx, request.CheckInDate, request.CheckOutDate, request.RoomId)
 		if err != nil {
 			return false, err
 		}
@@ -216,7 +218,7 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reserva
 		if request.CheckInDate.Before(*reservation.CheckinDate) || request.CheckInDate.After(*request.CheckInDate) ||
 			request.CheckOutDate.Before(*reservation.CheckoutDate) || request.CheckInDate.After(*reservation.CheckoutDate) {
 
-			hasReservationConflict, err := r.HasReservationConflict(request.CheckInDate, request.CheckOutDate, request.RoomId, tenantID)
+			hasReservationConflict, err := r.HasReservationConflict(ctx, request.CheckInDate, request.CheckOutDate, request.RoomId)
 			if err != nil {
 				return false, err
 			}
@@ -229,10 +231,10 @@ func (r *ReservationRepository) HasConflict(request *dto.RoomRequestDto, reserva
 	return false, nil
 }
 
-func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, checkOutDate *time.Time, roomId uint64, tenantID uint64) (bool, error) {
+func (r *ReservationRepository) HasReservationConflict(ctx context.Context, checkInDate *time.Time, checkOutDate *time.Time, roomId uint64) (bool, error) {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Model(&models.Reservation{}).
 		Where("room_id=? AND checkin_date >=? AND checkout_date<=?",
@@ -247,10 +249,10 @@ func (r *ReservationRepository) HasReservationConflict(checkInDate *time.Time, c
 	return false, nil
 }
 
-func (r *ReservationRepository) DeleteReservationRequest(requestKey string, tenantID uint64) error {
+func (r *ReservationRepository) DeleteReservationRequest(ctx context.Context, requestKey string) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Model(models.ReservationRequest{}).Where("requestKey=?", requestKey).Count(&count).Error; err != nil {
 		return err
@@ -263,10 +265,10 @@ func (r *ReservationRepository) DeleteReservationRequest(requestKey string, tena
 	return nil
 }
 
-func (r *ReservationRepository) Find(id uint64, tenantID uint64) (*models.Reservation, error) {
+func (r *ReservationRepository) Find(ctx context.Context, id uint64) (*models.Reservation, error) {
 
 	reservation := models.Reservation{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	query := db.Model(models.Reservation{})
 	query = r.preloadReservationRelations(query)
@@ -282,10 +284,10 @@ func (r *ReservationRepository) Find(id uint64, tenantID uint64) (*models.Reserv
 	return &reservation, nil
 }
 
-func (r *ReservationRepository) FindReservationRequest(requestKey string, tenantID uint64) (*models.ReservationRequest, error) {
+func (r *ReservationRepository) FindReservationRequest(ctx context.Context, requestKey string) (*models.ReservationRequest, error) {
 
 	reservationRequest := models.ReservationRequest{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Where("request_key=?", requestKey).Find(&reservationRequest).Error; err != nil {
 		return nil, err
@@ -298,9 +300,9 @@ func (r *ReservationRepository) FindReservationRequest(requestKey string, tenant
 	return &reservationRequest, nil
 }
 
-func (r *ReservationRepository) RemoveExpiredReservationRequests(tenantID uint64) error {
+func (r *ReservationRepository) RemoveExpiredReservationRequests(ctx context.Context) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	err := db.Where("expire_time < ?", time.Now()).Delete(&models.ReservationRequest{}).Error
 	if err != nil {
@@ -310,9 +312,9 @@ func (r *ReservationRepository) RemoveExpiredReservationRequests(tenantID uint64
 	return nil
 }
 
-func (r *ReservationRepository) FindAll(filter *dto.ReservationFilter) (error, *commons.PaginatedResult) {
+func (r *ReservationRepository) FindAll(ctx context.Context, filter *dto.ReservationFilter) (error, *commons.PaginatedResult) {
 
-	db := r.ConnectionResolver.GetTenantDB(filter.TenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	reservations := make([]*models.Reservation, 0)
 
 	query := db.Model(&models.Reservation{})
@@ -333,7 +335,7 @@ func (r *ReservationRepository) preloadReservationRelations(query *gorm.DB) *gor
 		Preload("Sharers").Preload("Sharers.Guest")
 }
 
-func (r *ReservationRepository) calculatePrice(reservation *models.Reservation, tenantID uint64) float64 {
+func (r *ReservationRepository) calculatePrice(ctx context.Context, reservation *models.Reservation) float64 {
 
 	priceDto := &dto.GetRatePriceDto{
 		RoomId:     reservation.RoomId,
@@ -344,7 +346,7 @@ func (r *ReservationRepository) calculatePrice(reservation *models.Reservation, 
 		RateCodeId: reservation.RateCodeId,
 	}
 
-	prices, err := r.GetRecommendedRateCodes(priceDto, tenantID)
+	prices, err := r.GetRecommendedRateCodes(ctx, priceDto)
 
 	if err != nil {
 		return 0
@@ -370,10 +372,10 @@ func (r *ReservationRepository) calculatePrice(reservation *models.Reservation, 
 }
 
 // fill calculation fields
-func (r *ReservationRepository) setReservationCalcFields(reservation *models.Reservation, tenantID uint64) {
+func (r *ReservationRepository) setReservationCalcFields(ctx context.Context, reservation *models.Reservation) {
 	reservation.Nights = math.Round(reservation.CheckoutDate.Sub(*reservation.CheckinDate).Hours() / 24)
 	reservation.GuestCount = uint64(len(reservation.Sharers))
-	reservation.Price = r.calculatePrice(reservation, tenantID)
+	reservation.Price = r.calculatePrice(ctx, reservation)
 }
 
 func (r *ReservationRepository) getReservationFilteredQuery(query *gorm.DB, filter *dto.ReservationFilter) *gorm.DB {

@@ -15,13 +15,13 @@ import (
 // CurrencyHandler Currency endpoint handler
 type CurrencyHandler struct {
 	Service *domain_services.CurrencyService
-	Input   *dto.HandlersShared
+	Config  *dto.HandlerConfig
 }
 
-func (handler *CurrencyHandler) Register(input *dto.HandlersShared, service *domain_services.CurrencyService) {
+func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *domain_services.CurrencyService) {
 	handler.Service = service
-	handler.Input = input
-	routeGroup := handler.Input.Router.Group("/currencies")
+	handler.Config = config
+	routeGroup := handler.Config.Router.Group("/currencies")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -43,27 +43,27 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	user := getCurrentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				ResponseCode: http.StatusInternalServerError,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
 			})
 	}
 
 	model.SetAudit(user)
-	if result, err := handler.Service.Create(model, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Create(getCurrentTenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         result,
 				ResponseCode: http.StatusOK,
-				Message:      handler.Input.Translator.Localize(lang, message_keys.Created),
+				Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
 			})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError,
 			ApiResponse{
@@ -93,11 +93,11 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 
 	user := getCurrentUser(c)
-	model, err := handler.Service.Find(id, getCurrentTenant(c))
+	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -109,7 +109,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -118,16 +118,16 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(model, getCurrentTenant(c)); err == nil {
+	if result, err := handler.Service.Update(getCurrentTenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.Updated),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
 		})
 	} else {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -144,16 +144,16 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(id, getCurrentTenant(c))
+	model, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	lang := getAcceptLanguage(c)
 
 	if err != nil {
 
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
@@ -165,7 +165,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Input.Translator.Localize(lang, message_keys.NotFound),
+			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
 		})
 	}
 
@@ -187,7 +187,7 @@ func (handler *CurrencyHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
-	list, err := handler.Service.FindAll(paginationInput)
+	list, err := handler.Service.FindAll(getCurrentTenantContext(c), paginationInput)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)

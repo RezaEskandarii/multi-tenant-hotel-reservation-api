@@ -1,6 +1,7 @@
 package applogger
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
@@ -94,6 +95,12 @@ func (l *AppLogger) LogDebug(message string) {
 func (l *AppLogger) LogError(err interface{}) {
 
 	writeLog(errorLevel, fmt.Sprintf("%s", err))
+}
+
+// LogInfoJSON store log with json pattern.
+func (l *AppLogger) LogInfoJSON(message interface{}) {
+	result, _ := json.Marshal(message)
+	writeLog(infoLevel, string(result))
 }
 
 func getLogFileName() string {

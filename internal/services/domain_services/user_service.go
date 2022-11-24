@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
 	"reservation-api/internal/commons"
@@ -19,7 +20,7 @@ func NewUserService(r *repositories.UserRepository) *UserService {
 }
 
 // Create creates new User.
-func (s *UserService) Create(user *models.User, tenantID uint64) (*models.User, error) {
+func (s *UserService) Create(ctx context.Context, user *models.User) (*models.User, error) {
 
 	hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
 
@@ -29,57 +30,57 @@ func (s *UserService) Create(user *models.User, tenantID uint64) (*models.User, 
 
 	user.Password = fmt.Sprintf("%s", hash)
 
-	return s.Repository.Create(user, tenantID)
+	return s.Repository.Create(ctx, user)
 }
 
 // Update updates User.
-func (s *UserService) Update(user *models.User, tenantID uint64) (*models.User, error) {
+func (s *UserService) Update(ctx context.Context, user *models.User) (*models.User, error) {
 
-	return s.Repository.Update(user, tenantID)
+	return s.Repository.Update(ctx, user)
 }
 
 // Find returns User and if it does not find the User, it returns nil.
-func (s *UserService) Find(id uint64, tenantID uint64) (*models.User, error) {
+func (s *UserService) Find(ctx context.Context, id uint64) (*models.User, error) {
 
-	return s.Repository.Find(id, tenantID)
+	return s.Repository.Find(ctx, id)
 }
 
 // FindByUsername returns User by username and if it does not find the User, it returns nil.
-func (s *UserService) FindByUsername(username string, tenantID uint64) (*models.User, error) {
+func (s *UserService) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 
-	return s.Repository.FindByUsername(username, tenantID)
+	return s.Repository.FindByUsername(ctx, username)
 }
 
 // Delete removes user permanently;
-func (s *UserService) Delete(id uint64, tenantID uint64) error {
+func (s *UserService) Delete(ctx context.Context, id uint64) error {
 
-	return s.Repository.Delete(id, tenantID)
+	return s.Repository.Delete(ctx, id)
 }
 
 // FindAll returns paginated list of cities.
-func (s *UserService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *UserService) FindAll(ctx context.Context, filter *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, filter)
 }
 
 // Activate find user by id and activate.
-func (s *UserService) Activate(id uint64, tenantID uint64) (*models.User, error) {
+func (s *UserService) Activate(ctx context.Context, id uint64) (*models.User, error) {
 
-	return s.Repository.Activate(id, tenantID)
+	return s.Repository.Activate(ctx, id)
 }
 
 // Deactivate find and deactivates user by user id.
-func (s *UserService) Deactivate(id uint64, tenantID uint64) (*models.User, error) {
+func (s *UserService) Deactivate(ctx context.Context, id uint64) (*models.User, error) {
 
-	return s.Repository.Deactivate(id, tenantID)
+	return s.Repository.Deactivate(ctx, id)
 }
 
 // Seed seed given json file to database.
-func (s *UserService) Seed(jsonFilePath string, tenantID uint64) error {
-	return s.Repository.Seed(jsonFilePath, tenantID)
+func (s *UserService) Seed(ctx context.Context, jsonFilePath string) error {
+	return s.Repository.Seed(ctx, jsonFilePath)
 }
 
 // FindByUsernameAndPassword finds user by username and password.
-func (s *UserService) FindByUsernameAndPassword(username string, password string, tenantID uint64) (*models.User, error) {
-	return s.Repository.FindByUsernameAndPassword(username, password, tenantID)
+func (s *UserService) FindByUsernameAndPassword(ctx context.Context, username string, password string) (*models.User, error) {
+	return s.Repository.FindByUsernameAndPassword(ctx, username, password)
 }

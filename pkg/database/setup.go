@@ -7,6 +7,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/database/tenant_database_resolver"
 	"reservation-api/pkg/tenant_connection_string_resolver"
+	"sync"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 // SetUp application database
 func SetUp() error {
 
-	_, err := service.SetUp(&models.Tenant{
+	_, err := service.SetUp(nil, &models.Tenant{
 		Name:        "fist tenant",
 		Description: "first tenant",
 	})
@@ -37,21 +38,28 @@ func Migrate() error {
 	}
 
 	tenants := make([]models.Tenant, 0)
+	wg := sync.WaitGroup{}
 
 	publicDB.FindInBatches(&tenants, 100, func(tx *gorm.DB, batch int) error {
 		for _, tenant := range tenants {
-
+			wg.Add(1)
 			tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
 
-			for _, entity := range tenant_connection_string_resolver.GetEntities() {
-				if err := tenantDB.AutoMigrate(entity); err != nil {
-					return err
+			go func() {
+				for _, entity := range tenant_connection_string_resolver.GetEntities() {
+					if err := tenantDB.AutoMigrate(entity); err != nil {
+						panic(err.Error())
+					}
 				}
-			}
+
+				wg.Done()
+			}()
 
 		}
 		return nil
 	})
+
+	wg.Wait()
 
 	return nil
 }

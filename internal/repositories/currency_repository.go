@@ -1,9 +1,11 @@
 package repositories
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
 	"reservation-api/pkg/database/tenant_database_resolver"
 )
@@ -18,9 +20,9 @@ func NewCurrencyRepository(r *tenant_database_resolver.TenantDatabaseResolver) *
 	}
 }
 
-func (r *CurrencyRepository) Create(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
+func (r *CurrencyRepository) Create(ctx context.Context, currency *models.Currency) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&currency); tx.Error != nil {
 		return nil, tx.Error
@@ -29,9 +31,9 @@ func (r *CurrencyRepository) Create(currency *models.Currency, tenantID uint64) 
 	return currency, nil
 }
 
-func (r *CurrencyRepository) Update(currency *models.Currency, tenantID uint64) (*models.Currency, error) {
+func (r *CurrencyRepository) Update(ctx context.Context, currency *models.Currency) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&currency); tx.Error != nil {
 		return nil, tx.Error
@@ -40,10 +42,10 @@ func (r *CurrencyRepository) Update(currency *models.Currency, tenantID uint64) 
 	return currency, nil
 }
 
-func (r *CurrencyRepository) Find(id uint64, tenantID uint64) (*models.Currency, error) {
+func (r *CurrencyRepository) Find(ctx context.Context, id uint64) (*models.Currency, error) {
 
 	model := models.Currency{}
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
@@ -57,14 +59,14 @@ func (r *CurrencyRepository) Find(id uint64, tenantID uint64) (*models.Currency,
 	return &model, nil
 }
 
-func (r *CurrencyRepository) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetTenantDB(input.TenantID)
+func (r *CurrencyRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.Currency{}, db, input)
 }
 
-func (r *CurrencyRepository) FindBySymbol(symbol string, tenantID uint64) (*models.Currency, error) {
+func (r *CurrencyRepository) FindBySymbol(ctx context.Context, symbol string) (*models.Currency, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	model := models.Currency{}
 
 	if tx := db.Where("symbol=?", symbol).Find(&model); tx.Error != nil {
@@ -78,9 +80,9 @@ func (r *CurrencyRepository) FindBySymbol(symbol string, tenantID uint64) (*mode
 	return &model, nil
 }
 
-func (r *CurrencyRepository) Seed(jsonFilePath string, tenantID uint64) error {
+func (r *CurrencyRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenantID)
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	currencies := make([]models.Currency, 0)
 
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &currencies); err == nil {

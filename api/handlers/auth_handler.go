@@ -19,7 +19,7 @@ type AuthHandler struct {
 	logger      applogger.Logger
 }
 
-func (handler *AuthHandler) Register(input *dto.HandlersShared, service *domain_services.UserService,
+func (handler *AuthHandler) Register(input *dto.HandlerConfig, service *domain_services.UserService,
 	authService *domain_services.AuthService) {
 
 	handler.Router = input.Router
@@ -39,8 +39,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	cx := getCurrentTenant(c)
-	if err, token := handler.AuthService.SignIn(cerds.Username, cerds.Password, cx); err != nil {
+	if err, token := handler.AuthService.SignIn(getCurrentTenantContext(c), cerds.Username, cerds.Password); err != nil {
 
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {

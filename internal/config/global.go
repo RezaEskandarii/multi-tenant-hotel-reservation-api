@@ -10,5 +10,6 @@ var (
 	ReservationQueueName            = "reservation_queue"
 	SendEmailRetryCount     uint    = 3
 	TenantIDKey                     = "TenantID"
+	TenantIDCtx                     = "TenantIDCtx"
 	ClaimsKey                       = "Claims"
 )

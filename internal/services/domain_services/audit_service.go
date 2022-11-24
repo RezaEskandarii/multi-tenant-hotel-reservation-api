@@ -1,6 +1,7 @@
 package domain_services
 
 import (
+	"context"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -16,12 +17,12 @@ func NewAuditService(repository *repositories.AuditRepository) *AuditService {
 }
 
 // Save creates new audit.
-func (s *AuditService) Save(model *models.Audit, tenantID uint64) (*models.Audit, error) {
-	return s.Repository.Create(model, tenantID)
+func (s *AuditService) Save(ctx context.Context, model *models.Audit) (*models.Audit, error) {
+	return s.Repository.Create(ctx, model)
 }
 
 //FindAll returns paginated list of audits.
-func (s *AuditService) FindAll(input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
+func (s *AuditService) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return s.Repository.FindAll(input)
+	return s.Repository.FindAll(ctx, input)
 }

@@ -17,17 +17,17 @@ import (
 
 type ReservationHandler struct {
 	Service       *domain_services.ReservationService
-	Input         *dto.HandlersShared
+	Config        *dto.HandlerConfig
 	Router        *echo.Group
 	ReportService *common_services.ReportService
 }
 
-func (handler *ReservationHandler) Register(input *dto.HandlersShared, service *domain_services.ReservationService,
+func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *domain_services.ReservationService,
 	reportService *common_services.ReportService) {
-	handler.Router = input.Router
+	handler.Router = config.Router
 	handler.ReportService = reportService
 	routerGroup := handler.Router.Group("/reservation")
-	handler.Input = input
+	handler.Config = config
 	handler.Service = service
 	routerGroup.POST("/room-request", handler.createRequest)
 	routerGroup.POST("", handler.create)
@@ -59,7 +59,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	if strings.TrimSpace(reservationIdStr) != "" {
 
 		reservationId, _ := utils.ConvertToUint(reservationIdStr)
-		reservationResult, err := handler.Service.Find(reservationId, getCurrentTenant(c))
+		reservationResult, err := handler.Service.Find(getCurrentTenantContext(c), reservationId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, nil)
 		}
@@ -71,21 +71,21 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	request := dto.RoomRequestDto{}
 	if err := c.Bind(&request); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	// Checks if there is another reservation request for this room on the same check-in and check-out date,
 	// otherwise do not allow a booking request.
-	hasConflict, err := handler.Service.HasConflict(&request, reservation, getCurrentTenant(c))
+	hasConflict, err := handler.Service.HasConflict(getCurrentTenantContext(c), &request, reservation)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
 	}
 	// If there is a simultaneous booking request, the booking request is not given.
 	if hasConflict {
-		message := fmt.Sprintf(handler.Input.Translator.Localize(lang, message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
+		message := fmt.Sprintf(handler.Config.Translator.Localize(lang, message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: message,
 		})
@@ -94,32 +94,32 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	// prevent to reserve room for past dates.
 	if request.CheckInDate.Before(time.Now()) && request.RequestType == dto.CreateReservation {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Input.Translator.Localize(lang, message_keys.ImpossibleReservationLatDateError),
+			Message: handler.Config.Translator.Localize(lang, message_keys.ImpossibleReservationLatDateError),
 		})
 	}
 
 	if request.CheckInDate == nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.CheckInDateEmptyError)})
+				Message: handler.Config.Translator.Localize(lang, message_keys.CheckInDateEmptyError)})
 	}
 	if request.CheckOutDate == nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.CheckOutDateEmptyError)})
+				Message: handler.Config.Translator.Localize(lang, message_keys.CheckOutDateEmptyError)})
 	}
 
 	// create new reservation request for requested room.
-	result, err := handler.Service.CreateReservationRequest(&request, getCurrentTenant(c))
+	result, err := handler.Service.CreateReservationRequest(getCurrentTenantContext(c), &request)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
 	}
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
 	})
 }
 
@@ -135,14 +135,14 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 
 	reservation := models.Reservation{}
 	if err := c.Bind(&reservation); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	lang := getAcceptLanguage(c)
 	user := getCurrentUser(c)
 
-	invalidReservationRequestKeyErr := handler.Input.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
+	invalidReservationRequestKeyErr := handler.Config.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -150,7 +150,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey, getCurrentTenant(c))
+	reservationRequest, err := handler.Service.FindReservationRequest(getCurrentTenantContext(c), reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -172,28 +172,28 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	if len(reservation.Sharers) == 0 {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.EmptySharerError),
+				Message: handler.Config.Translator.Localize(lang, message_keys.EmptySharerError),
 			})
 	}
 
-	hasReservationConflict, err := handler.Service.HasReservationConflict(reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId, getCurrentTenant(c))
+	hasReservationConflict, err := handler.Service.HasReservationConflict(getCurrentTenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	if hasReservationConflict {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
+				Message: handler.Config.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
 	handler.setReservationFields(&reservation, reservationRequest)
 	reservation.SetAudit(user)
 	// create new reservation.
-	result, err := handler.Service.Create(&reservation, getCurrentTenant(c))
+	result, err := handler.Service.Create(getCurrentTenantContext(c), &reservation)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
@@ -201,7 +201,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
 	})
 }
 
@@ -221,13 +221,13 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	user := getCurrentUser(c)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 		})
 	}
 
-	reservationModel, err := handler.Service.Find(id, getCurrentTenant(c))
+	reservationModel, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
@@ -242,11 +242,11 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 	reservation := models.Reservation{}
 	if err := c.Bind(&reservation); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	invalidReservationRequestKeyErr := handler.Input.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
+	invalidReservationRequestKeyErr := handler.Config.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -254,7 +254,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 			})
 	}
 
-	reservationRequest, err := handler.Service.FindReservationRequest(reservation.RequestKey, getCurrentTenant(c))
+	reservationRequest, err := handler.Service.FindReservationRequest(getCurrentTenantContext(c), reservation.RequestKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -276,28 +276,28 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	if len(reservation.Sharers) == 0 {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.EmptySharerError),
+				Message: handler.Config.Translator.Localize(lang, message_keys.EmptySharerError),
 			})
 	}
 
-	hasReservationConflict, err := handler.Service.HasReservationConflict(reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId, getCurrentTenant(c))
+	hasReservationConflict, err := handler.Service.HasReservationConflict(getCurrentTenantContext(c), reservation.CheckinDate, reservation.CheckoutDate, reservation.RoomId)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	if hasReservationConflict {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Input.Translator.Localize(lang, message_keys.ReservationConflictError),
+				Message: handler.Config.Translator.Localize(lang, message_keys.ReservationConflictError),
 			})
 	}
 	reservation.SetUpdatedBy(user)
 	handler.setReservationFields(&reservation, reservationRequest)
 	// create new reservation.
-	result, err := handler.Service.Update(id, getCurrentTenant(c), &reservation)
+	result, err := handler.Service.Update(getCurrentTenantContext(c), id, &reservation)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: err.Error(),
 		})
@@ -305,7 +305,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Input.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
 	})
 }
 
@@ -321,8 +321,8 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 // @Router /reservations/cancel/{id} [delete]
 func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	requestKey := c.QueryParam("requestKey")
-	if err := handler.Service.RemoveReservationRequest(requestKey, getCurrentTenant(c)); err != nil {
-		handler.Input.Logger.LogError(err.Error())
+	if err := handler.Service.RemoveReservationRequest(getCurrentTenantContext(c), requestKey); err != nil {
+		handler.Config.Logger.LogError(err.Error())
 	}
 	return c.JSON(http.StatusOK, nil)
 }
@@ -350,9 +350,9 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 		})
 	}
 
-	result, err := handler.Service.GetRecommendedRateCodes(&priceDto, getCurrentTenant(c))
+	result, err := handler.Service.GetRecommendedRateCodes(getCurrentTenantContext(c), &priceDto)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -373,13 +373,13 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	result, err := handler.Service.Find(id, getCurrentTenant(c))
+	result, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -405,13 +405,13 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	reservation, err := handler.Service.Find(id, getCurrentTenant(c))
+	reservation, err := handler.Service.Find(getCurrentTenantContext(c), id)
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -423,13 +423,13 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 	status := models.ReservationCheckStatus(statusVal)
 
 	if err != nil {
-		handler.Input.Logger.LogError(err.Error())
+		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	if status == models.CheckIn || status == models.Checkout {
 		reservation.CheckStatus = status
-		_, err := handler.Service.ChangeStatus(id, getCurrentTenant(c), status)
+		_, err := handler.Service.ChangeStatus(getCurrentTenantContext(c), id, status)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, nil)
@@ -463,7 +463,7 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	result, err := handler.Service.FindAll(&filter)
+	result, err := handler.Service.FindAll(getCurrentTenantContext(c), &filter)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, nil)
@@ -473,7 +473,7 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 		if output == EXCEL {
 			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
 			if err != nil {
-				handler.Input.Logger.LogError(err.Error())
+				handler.Config.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
 			writeBinaryHeaders(c, "reservations", EXCEL_OUTPUT)

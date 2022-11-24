@@ -2,6 +2,9 @@ package dto
 
 import "github.com/asaskevich/govalidator"
 
+type BaseDto struct {
+}
+
 type CountryDto struct {
 	BaseDto
 	Name      string         `json:"name" valid:"required"`

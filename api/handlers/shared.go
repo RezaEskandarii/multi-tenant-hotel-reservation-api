@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"reflect"
 	"reservation-api/internal/config"
-	"reservation-api/internal/utils"
 	"strings"
 	"time"
 )
@@ -14,10 +15,9 @@ var (
 	paginationInput = "paginationInput"
 	acceptLanguage  = "Accept-Language" // accept language header.
 	tenantId        = "X-TenantIDKey"   // this value uses in http header request as a selected business id.
-
-	EXCEL        = "excel"
-	EXCEL_OUTPUT = "xlsx"
-	PDF          = "pdf"
+	EXCEL           = "excel"
+	EXCEL_OUTPUT    = "xlsx"
+	PDF             = "pdf"
 )
 
 // getAcceptLanguage returns Accept-Language header value.
@@ -30,18 +30,13 @@ func getAcceptLanguage(c echo.Context) string {
 	return lang
 }
 
-func getCurrentTenant(c echo.Context) uint64 {
-
-	tenantID, err := utils.ConvertToUint(utils.Decrypt(fmt.Sprintf("%s", c.Get(config.TenantIDKey))))
-	if err != nil {
-		panic(err)
-	}
-	return tenantID
+func getCurrentTenantContext(c echo.Context) context.Context {
+	return c.Get(config.TenantIDCtx).(context.Context)
 }
 
 // returns authenticated user from http Context
 func getCurrentUser(c echo.Context) string {
-	return fmt.Sprintf("%s", c.Get("username"))
+	return fmt.Sprintf("%s", c.Get(config.ClaimsKey))
 }
 
 // getOutputQueryParamVal returns query param with "output" key to generate pdf or excel outputs.
@@ -60,4 +55,11 @@ func writeBinaryHeaders(context echo.Context, fName string, format string) {
 	context.Response().Header().Set("Expires", "0")
 	context.Response().WriteHeader(http.StatusOK)
 
+}
+
+// setCreatedByUpdatedBy fills CreatedBy and UpdatedBy fields.
+func setCreatedByUpdatedBy(entity interface{}, audit string) {
+	val := reflect.Indirect(reflect.ValueOf(entity))
+	val.FieldByName("CreatedBy").SetString(audit)
+	val.FieldByName("UpdatedBy").SetString(audit)
 }

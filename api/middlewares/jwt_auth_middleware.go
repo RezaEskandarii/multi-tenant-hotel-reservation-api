@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/config"
@@ -25,7 +26,7 @@ func JWTAuthMiddleware(s *domain_services.AuthService) echo.MiddlewareFunc {
 				}
 
 				tenantID, _ := utils.ConvertToUint(c.Get(config.TenantIDKey))
-				if err, claims := s.VerifyToken(jwtToken, tenantID); err == nil && claims != nil {
+				if err, claims := s.VerifyToken(c.Get(config.TenantIDCtx).(context.Context), jwtToken, tenantID); err == nil && claims != nil {
 
 					c.Set("user_claims", claims)
 					c.Set(config.ClaimsKey, claims.Username)
