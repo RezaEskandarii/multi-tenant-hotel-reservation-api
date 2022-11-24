@@ -86,9 +86,9 @@ func (l *AppLogger) LogWarning(message string) {
 }
 
 // LogDebug Logs in DebugMode level.
-func (l *AppLogger) LogDebug(message string) {
+func (l *AppLogger) LogDebug(message interface{}) {
 
-	writeLog(debugLevel, message)
+	writeLog(debugLevel, fmt.Sprintf("%s", message))
 }
 
 // LogError Logs in Error level.

@@ -4,7 +4,7 @@ package applogger
 type Logger interface {
 	LogInfo(message string)
 	LogInfoJSON(message interface{})
-	LogDebug(message string)
+	LogDebug(message interface{})
 	LogWarning(message string)
 	LogError(err interface{})
 }

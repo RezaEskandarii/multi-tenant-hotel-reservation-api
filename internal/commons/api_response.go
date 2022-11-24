@@ -41,11 +41,12 @@ type JWTTokenResponse struct {
 // =========================================================================
 
 type RequestTrace struct {
-	TraceID      string `json:"trace_id"`
-	ResponseCode *int   `json:"response_code,omitempty"`
-	IPAddress    string `json:"ip_address"`
-	Tag          string `json:"tag"`
-	EndPoint     string `json:"end_point"`
+	TraceID      string      `json:"trace_id"`
+	ResponseCode int         `json:"response_code,omitempty"`
+	IPAddress    string      `json:"ip_address"`
+	Tag          string      `json:"tag"`
+	EndPoint     string      `json:"end_point"`
+	Data         interface{} `json:"data"`
 }
 
 // =========================================================================

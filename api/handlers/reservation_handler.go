@@ -476,7 +476,7 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 				handler.Config.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
-			writeBinaryHeaders(c, "reservations", EXCEL_OUTPUT)
+			setBinaryHeaders(c, "reservations", EXCEL_OUTPUT)
 			c.Response().Write(report)
 			return nil
 		}

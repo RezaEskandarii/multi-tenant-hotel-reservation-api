@@ -94,10 +94,10 @@ func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
 
 	tenantHandler.Register(config, tenantService)
 	// authHandler does bot need to authMiddleware.
-	router.Use(middlewares.LoggerMiddleware(logger))
+	router.Use(middlewares.PanicRecoveryMiddleware(logger), middlewares.LoggerMiddleware(logger), middlewares.TenantMiddleware)
 	authHandler.Register(config, userService, authService)
-	router.Use(middlewares.MetricsMiddleware, middlewares.TenantMiddleware, middlewares.JWTAuthMiddleware(authService),
-		middlewares.TenantAccessMiddleware, middlewares.PanicRecoveryMiddleware)
+	router.Use(middlewares.MetricsMiddleware, middlewares.JWTAuthMiddleware(authService),
+		middlewares.TenantAccessMiddleware)
 
 	// add authentication middleware to all routes.
 
