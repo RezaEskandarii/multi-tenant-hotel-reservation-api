@@ -42,7 +42,7 @@ func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *dom
 func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	province := &models.Province{}
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&province); err != nil {
@@ -107,7 +107,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	province, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 

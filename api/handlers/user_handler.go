@@ -34,7 +34,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 	model := models.User{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -94,7 +94,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 func (handler *UserHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

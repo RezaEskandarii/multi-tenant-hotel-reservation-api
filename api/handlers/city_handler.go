@@ -31,7 +31,7 @@ func (handler *CityHandler) Register(config *dto.HandlerConfig, service *domain_
 // create new city
 func (handler *CityHandler) create(c echo.Context) error {
 
-	currentUser := getCurrentUser(c)
+	currentUser := currentUser(c)
 	city := models.City{}
 	city.SetAudit(currentUser)
 	lang := getAcceptLanguage(c)
@@ -77,7 +77,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 
 	lang := getAcceptLanguage(c)
-	currentUser := getCurrentUser(c)
+	currentUser := currentUser(c)
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {

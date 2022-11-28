@@ -14,7 +14,6 @@ type RoomType struct {
 }
 
 func (r *RoomType) Validate() (bool, error) {
-
 	return govalidator.ValidateStruct(r)
 }
 

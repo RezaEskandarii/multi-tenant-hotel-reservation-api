@@ -41,7 +41,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 
 	model := &models.HotelType{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -87,7 +87,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)

@@ -8,6 +8,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/translator"
+	"reservation-api/pkg/validator"
 	"strings"
 )
 
@@ -39,9 +40,17 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
+	if err, messages := validator.Validate(cerds); err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Errors:       messages,
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+
 	if err, token := handler.AuthService.SignIn(tenantContext(c), cerds.Username, cerds.Password); err != nil {
 
 		return c.JSON(http.StatusBadRequest, nil)
+
 	} else {
 
 		return c.JSON(http.StatusOK, token)

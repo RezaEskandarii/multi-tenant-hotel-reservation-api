@@ -34,7 +34,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 
 	model := &models.RoomType{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -69,7 +69,7 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)

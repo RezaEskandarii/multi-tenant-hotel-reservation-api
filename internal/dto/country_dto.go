@@ -27,7 +27,6 @@ type ProvinceDto struct {
 }
 
 func (c *ProvinceDto) Validate() (bool, error) {
-
 	return govalidator.ValidateStruct(c)
 }
 

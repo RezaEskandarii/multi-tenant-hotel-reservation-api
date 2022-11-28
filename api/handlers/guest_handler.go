@@ -44,7 +44,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -82,7 +82,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
 	guest, _ := handler.Service.Find(tenantContext(c), id)

@@ -41,7 +41,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 
 	model := &models.RateGroup{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Config.Logger.LogError(err.Error())

@@ -40,7 +40,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 
 	model := &models.Currency{}
 	lang := getAcceptLanguage(c)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -92,7 +92,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 

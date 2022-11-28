@@ -58,7 +58,7 @@ func tenantContext(c echo.Context) context.Context {
 
 // returns authenticated user's username from echo context
 // the authenticated user's username set in user middleware.
-func getCurrentUser(c echo.Context) string {
+func currentUser(c echo.Context) string {
 	return fmt.Sprintf("%s", c.Get(config.ClaimsKey))
 }
 

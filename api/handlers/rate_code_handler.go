@@ -43,7 +43,7 @@ func (handler *RateCodeHandler) Register(config *dto.HandlerConfig, service *dom
 func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
@@ -87,7 +87,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

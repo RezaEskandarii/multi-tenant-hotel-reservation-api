@@ -140,7 +140,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	}
 
 	lang := getAcceptLanguage(c)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	invalidReservationRequestKeyErr := handler.Config.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
@@ -218,7 +218,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

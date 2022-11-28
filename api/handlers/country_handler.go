@@ -58,7 +58,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, ApiResponse{Message: err.Error()})
 	}
 
-	setCreatedByUpdatedBy(model.BaseModel, getCurrentUser(c))
+	setCreatedByUpdatedBy(model.BaseModel, currentUser(c))
 	output, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
@@ -96,7 +96,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	user := getCurrentUser(c)
+	user := currentUser(c)
 	model, err := handler.Service.Find(tenantContext(c), id)
 	lang := getAcceptLanguage(c)
 

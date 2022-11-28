@@ -41,7 +41,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 
 	model := &models.HotelGrade{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -89,7 +89,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

@@ -41,7 +41,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 
 	createDto := dto.HotelCreateDto{}
 	lang := c.Request().Header.Get(acceptLanguage)
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err := c.Bind(&createDto); err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -86,7 +86,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 
 	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
-	user := getCurrentUser(c)
+	user := currentUser(c)
 
 	if err != nil {
 
