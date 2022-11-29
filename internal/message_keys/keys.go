@@ -20,6 +20,7 @@ const (
 	/************************************************************/
 	UsernameDuplicated = users + "DuplicatedUsername"
 	UserNotFound       = users + "UserNotFound"
+	UserIsDeActive     = users + "UserIsNotActive"
 	/************************************************************/
 	TypeHashotel    = "TypeHashotel"
 	GradeHashotel   = "GradeHashotel"

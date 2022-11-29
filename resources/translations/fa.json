@@ -13,7 +13,8 @@
   },
   "Users": {
     "DuplicatedUsername": "نام کاربری تکراری است.",
-    "UserNotFound": "کاربر پیدا نشد"
+    "UserNotFound": "کاربر پیدا نشد",
+    "UserIsDeActive": "کاربری غیر فعال است"
   },
   "Rooms": {
     "HasReservationRequest": "ایت اتاق دارای درخواست رزرو در تاریخ ورود %s و تاریخ خروج %s است."

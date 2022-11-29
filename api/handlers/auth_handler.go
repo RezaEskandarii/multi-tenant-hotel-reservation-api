@@ -52,6 +52,13 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 			Errors:       translator.Localize(c.Request().Context(), message_keys.UserNotFound),
 			ResponseCode: http.StatusNotFound,
 		})
+
+	} else if user.IsActive == false {
+
+		return c.JSON(http.StatusForbidden, commons.ApiResponse{
+			Errors:       translator.Localize(c.Request().Context(), message_keys.UserIsDeActive),
+			ResponseCode: http.StatusForbidden,
+		})
 	}
 
 	if err, token := handler.AuthService.SignIn(tenantContext(c), cerds.Username, cerds.Password); err != nil {

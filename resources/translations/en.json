@@ -13,7 +13,8 @@
   },
   "Users": {
     "DuplicatedUsername": "Username is duplicate.",
-    "UserNotFound": "user not found"
+    "UserNotFound": "user not found",
+    "UserIsDeActive": "this user is deactivate"
   },
   "Rooms": {
     "HasReservationRequest": "this room has reservation request in checkInDate %s and checkoutDate %s"
