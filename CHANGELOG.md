@@ -1,7 +1,13 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="v1.0.0"></a>
+## [v1.0.0] - 2022-11-29
 ### Doc
+- add postman collection json file
+- add some comment to some package and functions
+- regenerate swagger doc
 - add some comment
 - add some comment
 - add some comment
@@ -9,6 +15,30 @@
 - add document to queueManager
 
 ### Feat
+- implement validator package
+- implement encrypt and decrypt functions
+- add database resolver
+- add TenantService
+- add tenant_middleware
+- add swagger comments reservation_handler
+- add swagger comments rate_code_handler
+- add swagger comments to province_handler
+- add swagger comments to hotel_types
+- add swagger comments to hotel_handler
+- add swagger comments to hotel_grade_handler
+- add swagger comments to guest_handler
+- add swagger comments to currency_handler
+- add swagger doc
+- add Dockerfile
+- implement payment_handler
+- implement PaymentService
+- implement PaymentRepository
+- add payment model
+- excel output to guests handler's findAll method
+- excel output to reservation handler's findAll method
+- add map function
+- add hotel_grade_dto
+- add new dto structs
 - implement exportToExcel function with excelize library
 - add exportToExcel function
 - add new persian translations for report outputs
@@ -35,7 +65,26 @@
 - add rabbitmq implementation
 - add ReportRepository
 
+### Fix
+- fill RoomTypeRepository in RoomTypeService
+
 ### Refactor
+- jwt_auth_middleware
+- pass context to translate function
+- handlers shared functions
+- handlers shared functions
+- pass tenantID in context to repository and appService layer
+- pass tenantID in context to repository and appService layer
+- tenant database conenction resolver
+- pass currentTenantID to service layer in handlers
+- change static database object with tenantDatabaseResolver in repository layer
+- country_handler's swagger comments
+- country_handler's swagger comments
+- add transaction to database migrator
+- remove test directory
+- reservation_repository codes
+- add ReportService to reservationHandler
+- some paginated_list
 - report_service_test
 - remove some extra files
 - change ExportToExcel function return type to byte array and error
@@ -56,6 +105,7 @@
 - move ToJson function into utils module
 
 ### Test
+- add encryption and decryption methods test
 - add unit test for utils package
 - add unit test for ReportService
 - implement integration test for redis client
@@ -342,4 +392,5 @@
 - add country service test
 
 
-[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/dev...HEAD
+[Unreleased]: https://github.com/RezaEskandarii/hotel-reservation/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/RezaEskandarii/hotel-reservation/compare/dev...v1.0.0
