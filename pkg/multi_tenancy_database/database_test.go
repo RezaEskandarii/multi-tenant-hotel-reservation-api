@@ -1,4 +1,4 @@
-package database
+package multi_tenancy_database
 
 import (
 	"testing"

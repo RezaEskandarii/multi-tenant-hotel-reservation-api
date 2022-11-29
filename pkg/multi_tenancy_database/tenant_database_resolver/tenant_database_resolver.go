@@ -1,5 +1,5 @@
 // Package tenant_database_resolver
-// this package provides special connection string and database object per given tenant ID.
+// this package provides special connection string and multi_tenancy_database object per given tenant ID.
 ///**/
 package tenant_database_resolver
 
@@ -24,7 +24,7 @@ func NewTenantDatabaseResolver() *TenantDatabaseResolver {
 }
 
 // GetTenantDB returns unique gorm DB object per given tenantID
-// multi tenancy policy is unique database per Tenant
+// multi tenancy policy is unique multi_tenancy_database per Tenant
 func (c *TenantDatabaseResolver) GetTenantDB(tenantID uint64) *gorm.DB {
 
 	c.Mutex.Lock()
@@ -34,7 +34,7 @@ func (c *TenantDatabaseResolver) GetTenantDB(tenantID uint64) *gorm.DB {
 	if tenantID != 0 {
 		dbName = fmt.Sprintf("hotel_reservation_%d", tenantID)
 	} else {
-		// this name is public database's name that contains tenants information
+		// this name is public multi_tenancy_database's name that contains tenants information
 		dbName = "hotel_reservation"
 	}
 

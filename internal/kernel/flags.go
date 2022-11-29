@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"reservation-api/pkg/database"
+	"reservation-api/pkg/multi_tenancy_database"
 )
 
 // set application commands.
@@ -14,12 +14,12 @@ func loadFlags() {
 	var migrate = false
 
 	flag.BoolVar(&setup, "setup", false, "create and migrate tenant databases")
-	flag.BoolVar(&migrate, "migrate", false, "migrate database changes")
+	flag.BoolVar(&migrate, "migrate", false, "migrate multi_tenancy_database changes")
 	flag.Parse()
 
 	if setup {
 		fmt.Println("setup started...")
-		if err := database.SetUp(); err != nil {
+		if err := multi_tenancy_database.SetUp(); err != nil {
 
 			logger.LogError(err)
 			os.Exit(1)
@@ -28,7 +28,7 @@ func loadFlags() {
 
 	if migrate {
 		fmt.Println("migration started...")
-		if err := database.Migrate(); err != nil {
+		if err := multi_tenancy_database.Migrate(); err != nil {
 
 			logger.LogError(err)
 			os.Exit(1)

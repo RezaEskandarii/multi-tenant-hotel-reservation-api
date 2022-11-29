@@ -75,7 +75,7 @@ func (s *UserService) Deactivate(ctx context.Context, id uint64) (*models.User, 
 	return s.Repository.Deactivate(ctx, id)
 }
 
-// Seed seed given json file to database.
+// Seed seed given json file to multi_tenancy_database.
 func (s *UserService) Seed(ctx context.Context, jsonFilePath string) error {
 	return s.Repository.Seed(ctx, jsonFilePath)
 }

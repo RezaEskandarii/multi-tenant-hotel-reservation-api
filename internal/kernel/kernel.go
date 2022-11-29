@@ -22,7 +22,7 @@ func Run() error {
 
 	loadFlags()
 
-	//connectionResolver := database.NewConnectionResolver()
+	//connectionResolver := multi_tenancy_database.NewConnectionResolver()
 	//db := connectionResolver.GetTenantDB("")
 
 	cfg, err := global_variables.NewConfig()

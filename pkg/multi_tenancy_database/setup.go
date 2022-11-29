@@ -1,11 +1,11 @@
-package database
+package multi_tenancy_database
 
 import (
 	"gorm.io/gorm"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/pkg/database/tenant_database_resolver"
+	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 	"reservation-api/pkg/tenant_connection_string_resolver"
 	"sync"
 )
@@ -17,7 +17,7 @@ var (
 	})
 )
 
-// SetUp application database
+// SetUp application multi_tenancy_database
 func SetUp() error {
 
 	_, err := service.SetUp(nil, &models.Tenant{

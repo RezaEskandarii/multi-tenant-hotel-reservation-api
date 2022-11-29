@@ -29,7 +29,7 @@ func NewPaginatedList(totalTableRows uint, page uint, perPage uint) *PaginatedRe
 	p.TotalPages = uint(math.Ceil(float64(totalTableRows) / float64(perPage)))
 	p.Page = page
 
-	//fetch size , This determines how many lines to fetch from database
+	//fetch size , This determines how many lines to fetch from multi_tenancy_database
 	p.PerPage = perPage
 	//fetch size offset default value
 	p.Page = 0

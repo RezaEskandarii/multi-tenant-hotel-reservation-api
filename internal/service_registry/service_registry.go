@@ -11,8 +11,8 @@ import (
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
-	"reservation-api/pkg/database/tenant_database_resolver"
 	"reservation-api/pkg/message_broker"
+	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
 // handlers

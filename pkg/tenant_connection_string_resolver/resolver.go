@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// ResolveConnectionString returns unique database connection string per given tenantID.
+// ResolveConnectionString returns unique multi_tenancy_database connection string per given tenantID.
 func ResolveConnectionString(tenantDbName string) (string, error) {
 
 	// read configs
@@ -38,7 +38,7 @@ func ResolveConnectionString(tenantDbName string) (string, error) {
 		), nil
 
 	case "mssql":
-		return fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s",
+		return fmt.Sprintf("sqlserver://%s:%s@%s:%s?multi_tenancy_database=%s",
 			cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Name,
 		), nil
 

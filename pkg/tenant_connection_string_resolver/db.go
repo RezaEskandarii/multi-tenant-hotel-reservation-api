@@ -36,7 +36,7 @@ func ResolveDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
 	sqlDB.SetMaxIdleConns(25)
 
-	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	// SetMaxOpenConns sets the maximum number of open connections to the multi_tenancy_database.
 	sqlDB.SetMaxOpenConns(25)
 
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.

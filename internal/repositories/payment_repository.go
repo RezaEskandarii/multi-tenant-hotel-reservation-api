@@ -4,7 +4,7 @@ import (
 	"context"
 	"reservation-api/internal/models"
 	"reservation-api/internal/tenant_resolver"
-	"reservation-api/pkg/database/tenant_database_resolver"
+	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
 // PaymentRepository

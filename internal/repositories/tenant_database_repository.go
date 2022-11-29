@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 	"reservation-api/internal/models"
-	"reservation-api/pkg/database/tenant_database_resolver"
+	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
 type TenantRepository struct {
