@@ -6,7 +6,10 @@ import (
 	"strings"
 )
 
+// ResolveConnectionString returns unique database connection string per given tenantID.
 func ResolveConnectionString(tenantDbName string) (string, error) {
+
+	// read configs
 	dbCfg, err := config2.NewConfig()
 
 	if err != nil {

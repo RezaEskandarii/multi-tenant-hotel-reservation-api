@@ -46,7 +46,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	}
 
-	oldUser, err := handler.Service.FindByUsername(tenantContext(c), model.Username)
+	err, oldUser := handler.Service.FindByUsername(tenantContext(c), model.Username)
 
 	if err != nil {
 
@@ -200,7 +200,7 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-	model, err := handler.Service.FindByUsername(tenantContext(c), username)
+	err, model := handler.Service.FindByUsername(tenantContext(c), username)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())

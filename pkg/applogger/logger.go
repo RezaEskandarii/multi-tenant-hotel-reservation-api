@@ -99,6 +99,7 @@ func (l *AppLogger) LogError(err interface{}) {
 
 // LogInfoJSON store log with json pattern.
 func (l *AppLogger) LogInfoJSON(message interface{}) {
+
 	result, _ := json.Marshal(message)
 	writeLog(infoLevel, string(result))
 }

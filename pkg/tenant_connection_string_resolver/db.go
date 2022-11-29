@@ -10,9 +10,11 @@ import (
 func ResolveDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 
 	if usesInTestEnv {
+		// read configs from given path in tests.
 		os.Setenv("CONFIG_PATH", "../resources/config.yml")
 	}
 
+	// get unique connection string per given tenantID
 	connectionString, err := ResolveConnectionString(tenantDbName)
 
 	if err != nil {

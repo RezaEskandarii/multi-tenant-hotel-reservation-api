@@ -1,7 +1,10 @@
+// Package translator localize messages /**/
 package translator
 
 import (
+	"context"
 	"github.com/stretchr/testify/assert"
+	"reservation-api/internal/global_variables"
 	"testing"
 )
 
@@ -23,11 +26,10 @@ func TestCanLocalizeMessage(t *testing.T) {
 		},
 	}
 
-	translationService := New()
-	assert.NotNil(t, translationService)
+	ctx := context.WithValue(context.Background(), global_variables.CurrentLang, "en")
 
 	for _, item := range testCases {
-		result := translationService.Localize("en", item.input)
+		result := Localize(ctx, item.input)
 		assert.NotNil(t, result)
 		assert.NotEqual(t, result, "")
 		assert.Equal(t, result, item.want)

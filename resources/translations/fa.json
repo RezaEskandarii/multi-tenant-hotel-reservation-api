@@ -12,7 +12,8 @@
     "BadRequest": "BadRequest"
   },
   "Users": {
-    "DuplicatedUsername": "نام کاربری تکراری است."
+    "DuplicatedUsername": "نام کاربری تکراری است.",
+    "UserNotFound": "کاربر پیدا نشد"
   },
   "Rooms": {
     "HasReservationRequest": "ایت اتاق دارای درخواست رزرو در تاریخ ورود %s و تاریخ خروج %s است."

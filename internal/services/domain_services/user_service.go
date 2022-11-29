@@ -46,7 +46,7 @@ func (s *UserService) Find(ctx context.Context, id uint64) (*models.User, error)
 }
 
 // FindByUsername returns User by username and if it does not find the User, it returns nil.
-func (s *UserService) FindByUsername(ctx context.Context, username string) (*models.User, error) {
+func (s *UserService) FindByUsername(ctx context.Context, username string) (error, *models.User) {
 
 	return s.Repository.FindByUsername(ctx, username)
 }

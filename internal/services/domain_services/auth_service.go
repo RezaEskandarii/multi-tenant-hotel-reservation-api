@@ -139,7 +139,7 @@ func (s *AuthService) VerifyToken(ctx context.Context, jwtToken string, tenantID
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 
 		username := claims["username"]
-		user, err := s.UserService.FindByUsername(ctx, fmt.Sprintf("%s", username))
+		err, user := s.UserService.FindByUsername(ctx, fmt.Sprintf("%s", username))
 
 		if err != nil {
 			return err, nil

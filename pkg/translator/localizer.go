@@ -1,4 +1,4 @@
-// Package translator /**/
+// Package translator localize messages /**/
 package translator
 
 import (

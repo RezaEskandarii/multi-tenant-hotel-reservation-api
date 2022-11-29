@@ -11,6 +11,7 @@ import (
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
 	"reservation-api/pkg/translator"
+	"reservation-api/pkg/validator"
 )
 
 // ProvinceHandler Province endpoint handler
@@ -57,12 +58,12 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	}
 
-	if ok, err := province.Validate(); !ok {
+	if err, messages := validator.Validate(province); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      err.Error(),
+				Errors:       messages,
 			})
 	}
 
@@ -135,12 +136,12 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if ok, err := province.Validate(); !ok {
+	if err, messages := validator.Validate(province); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      err.Error(),
+				Errors:       messages,
 			})
 	}
 	province.SetUpdatedBy(user)

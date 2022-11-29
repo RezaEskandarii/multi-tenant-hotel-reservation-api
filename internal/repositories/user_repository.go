@@ -26,6 +26,7 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) (*models
 
 	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
+
 	if tx := db.Create(&user); tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -61,20 +62,20 @@ func (r *UserRepository) Find(ctx context.Context, id uint64) (*models.User, err
 	return &model, nil
 }
 
-func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
+func (r *UserRepository) FindByUsername(ctx context.Context, username string) (error, *models.User) {
 
 	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	model := models.User{Username: username}
 
 	if tx := db.Where(model).Find(&model); tx.Error != nil {
-		return nil, tx.Error
+		return tx.Error, nil
 	}
 
 	if model.Id == 0 {
 		return nil, nil
 	}
 
-	return &model, nil
+	return nil, &model
 }
 func (r *UserRepository) FindByUsernameAndPassword(ctx context.Context, username string, password string) (*models.User, error) {
 

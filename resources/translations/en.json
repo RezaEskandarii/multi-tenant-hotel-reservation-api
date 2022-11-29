@@ -12,7 +12,8 @@
     "BadRequest": "BadRequest"
   },
   "Users": {
-    "DuplicatedUsername": "Username is duplicate."
+    "DuplicatedUsername": "Username is duplicate.",
+    "UserNotFound": "user not found"
   },
   "Rooms": {
     "HasReservationRequest": "this room has reservation request in checkInDate %s and checkoutDate %s"

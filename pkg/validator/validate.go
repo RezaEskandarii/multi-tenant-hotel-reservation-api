@@ -1,4 +1,7 @@
-// Package validator is package of validators and sanitizers for strings, structs and collections.
+// Package validator is package of validators and sanitizers for strings,
+// structs and collections.
+//
+//**
 package validator
 
 import (

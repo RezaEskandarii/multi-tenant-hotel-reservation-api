@@ -1,9 +1,5 @@
 package models
 
-import (
-	"github.com/asaskevich/govalidator"
-)
-
 // Province province model
 type Province struct {
 	BaseModel
@@ -24,11 +20,6 @@ type ProvinceCreateOrUpdate struct {
 }
 
 type GetCity struct {
-}
-
-func (p *Province) Validate() (bool, error) {
-
-	return govalidator.ValidateStruct(p)
 }
 
 func (p *Province) SetAudit(username string) {

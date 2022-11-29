@@ -19,6 +19,7 @@ const (
 	BadRequest          = errors + "BadRequest"
 	/************************************************************/
 	UsernameDuplicated = users + "DuplicatedUsername"
+	UserNotFound       = users + "UserNotFound"
 	/************************************************************/
 	TypeHashotel    = "TypeHashotel"
 	GradeHashotel   = "GradeHashotel"
