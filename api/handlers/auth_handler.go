@@ -7,7 +7,6 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
-	"reservation-api/pkg/translator"
 	"reservation-api/pkg/validator"
 	"strings"
 )
@@ -16,7 +15,6 @@ type AuthHandler struct {
 	Router      *echo.Group
 	Service     *domain_services.UserService
 	AuthService *domain_services.AuthService
-	translator  *translator.Translator
 	logger      applogger.Logger
 }
 
@@ -25,7 +23,6 @@ func (handler *AuthHandler) Register(input *dto.HandlerConfig, service *domain_s
 
 	handler.Router = input.Router
 	handler.Service = service
-	handler.translator = input.Translator
 	handler.logger = input.Logger
 	handler.AuthService = authService
 	routeGroup := handler.Router.Group("/auth")

@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"github.com/avast/retry-go/v4"
 	"gopkg.in/gomail.v2"
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"strings"
 	"time"
 )
@@ -39,7 +39,7 @@ func (s *EmailService) Send(dto *dto.SendEmailDto) error {
 				return err
 			}
 			return nil
-		}, retry.Attempts(config.SendEmailRetryCount),
+		}, retry.Attempts(global_variables.SendEmailRetryCount),
 
 		retry.Delay(2000*time.Millisecond),
 	)

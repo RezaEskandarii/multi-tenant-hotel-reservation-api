@@ -1,9 +1,5 @@
 package models
 
-import (
-	"github.com/asaskevich/govalidator"
-)
-
 // City struct contains all information about city.
 type City struct {
 	BaseModel
@@ -18,10 +14,6 @@ type CreateUpdateCity struct {
 	Name       string `json:"name" valid:"required"`
 	Alias      string `json:"alias" valid:"required"`
 	ProvinceId uint64 `json:"province_id"`
-}
-
-func (c *CreateUpdateCity) Validate() (bool, error) {
-	return govalidator.ValidateStruct(c)
 }
 
 func (c *City) SetAudit(username string) {

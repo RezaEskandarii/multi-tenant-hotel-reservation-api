@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"reservation-api/internal/config"
+	"reservation-api/internal/global_variables"
 	"testing"
 )
 
 func TestCanConnectToRedis(t *testing.T) {
 
-	cfg := config.Config{}
+	cfg := global_variables.Config{}
 
 	testCases := []struct {
 		key   string

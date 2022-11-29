@@ -3,8 +3,8 @@ package domain_services
 import (
 	"context"
 	"reservation-api/internal/commons"
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/utils"
@@ -31,7 +31,7 @@ func (s *ReservationService) Create(ctx context.Context, model *models.Reservati
 
 	result, err := s.Repository.Create(ctx, model)
 	if err != nil {
-		s.MessageBrokerManager.PublishMessage(config.ReservationQueueName, utils.ToJson(model))
+		s.MessageBrokerManager.PublishMessage(global_variables.ReservationQueueName, utils.ToJson(model))
 	}
 	return result, nil
 }

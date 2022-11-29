@@ -6,16 +6,14 @@ import (
 	"github.com/xuri/excelize/v2"
 	"reflect"
 	"reservation-api/internal/utils"
-	"reservation-api/pkg/translator"
 	"strings"
 )
 
 type ReportService struct {
-	Translator translator.TranslateService
 }
 
-func NewReportService(translateService translator.TranslateService) *ReportService {
-	return &ReportService{Translator: translateService}
+func NewReportService() *ReportService {
+	return &ReportService{}
 }
 
 // ExportToExcel gives a slice of structs

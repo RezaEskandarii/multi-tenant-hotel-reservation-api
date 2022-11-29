@@ -10,6 +10,7 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
 )
 
 // HotelHandler Province endpoint handler
@@ -40,7 +41,6 @@ func (handler *HotelHandler) Register(config *dto.HandlerConfig, service *domain
 func (handler *HotelHandler) create(c echo.Context) error {
 
 	createDto := dto.HotelCreateDto{}
-	lang := c.Request().Header.Get(acceptLanguage)
 	user := currentUser(c)
 
 	if err := c.Bind(&createDto); err != nil {
@@ -68,7 +68,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }
 
@@ -84,7 +84,6 @@ func (handler *HotelHandler) create(c echo.Context) error {
 // @Router /hotels/{id} [put]
 func (handler *HotelHandler) update(c echo.Context) error {
 
-	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
 	user := currentUser(c)
 
@@ -101,14 +100,14 @@ func (handler *HotelHandler) update(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
 	if mainModel == nil || (mainModel != nil && mainModel.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -120,7 +119,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
@@ -150,7 +149,6 @@ func (handler *HotelHandler) update(c echo.Context) error {
 // @Router /hotels/{id} [get]
 func (handler *HotelHandler) find(c echo.Context) error {
 
-	lang := c.Request().Header.Get(acceptLanguage)
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
@@ -167,14 +165,14 @@ func (handler *HotelHandler) find(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
 	if result == nil || (result != nil && result.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -218,13 +216,12 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 func (handler *HotelHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
@@ -234,12 +231,12 @@ func (handler *HotelHandler) delete(c echo.Context) error {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
-			Message:      handler.Config.Translator.Localize(lang, err.Error()),
+			Message:      translator.Localize(c.Request().Context(), err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(lang, message_keys.Deleted),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Deleted),
 	})
 }

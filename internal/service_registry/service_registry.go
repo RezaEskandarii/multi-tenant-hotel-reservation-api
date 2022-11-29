@@ -5,15 +5,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/database/tenant_database_resolver"
 	"reservation-api/pkg/message_broker"
-	"reservation-api/pkg/translator"
 )
 
 // handlers
@@ -39,21 +38,18 @@ var (
 )
 
 // RegisterServicesAndRoutes register dependencies for services and handlers
-func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
+func RegisterServicesAndRoutes(router *echo.Group, cfg *global_variables.Config) {
 
 	logger := applogger.New(nil)
-
-	i18nTranslator := translator.New()
 
 	// fill handlers shared dependencies in config struct and pass this
 	// struct to handlers inserted of pass many duplicated objects
 	config := &dto.HandlerConfig{
-		Router:     router,
-		Translator: i18nTranslator,
-		Logger:     logger,
+		Router: router,
+		Logger: logger,
 	}
 
-	reportService := common_services.NewReportService(i18nTranslator)
+	reportService := common_services.NewReportService()
 	ctx := context.Background()
 
 	emailService := common_services.NewEmailService(cfg.Smtp.Host,

@@ -10,6 +10,8 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
+	"reservation-api/pkg/validator"
 )
 
 // CityHandler City endpoint handler
@@ -34,15 +36,22 @@ func (handler *CityHandler) create(c echo.Context) error {
 	currentUser := currentUser(c)
 	city := models.City{}
 	city.SetAudit(currentUser)
-	lang := getAcceptLanguage(c)
 
 	if err := c.Bind(&city); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
+				Errors:       nil,
 			})
+	}
+
+	if err, messages := validator.Validate(city); err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Errors:       messages,
+			ResponseCode: http.StatusBadRequest,
+		})
 	}
 
 	if _, err := handler.Service.Create(tenantContext(c), &city); err == nil {
@@ -51,7 +60,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         city,
 				ResponseCode: http.StatusOK,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
+				Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 			})
 	} else {
 
@@ -60,7 +69,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusInternalServerError,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+				Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 			})
 	}
 
@@ -76,7 +85,6 @@ func (handler *CityHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	lang := getAcceptLanguage(c)
 	currentUser := currentUser(c)
 	model, err := handler.Service.Find(tenantContext(c), id)
 
@@ -87,7 +95,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
 	}
 
@@ -95,7 +103,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -103,16 +111,24 @@ func (handler *CityHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
+
+	if err, messages := validator.Validate(model); err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Errors:       messages,
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+
 	model.SetUpdatedBy(currentUser)
 	if output, err := handler.Service.Update(tenantContext(c), model); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
+			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
 		handler.Config.Logger.LogError(err.Error())
@@ -130,14 +146,13 @@ func (handler *CityHandler) find(c echo.Context) error {
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
-	lang := getAcceptLanguage(c)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
 	}
 
@@ -145,7 +160,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 

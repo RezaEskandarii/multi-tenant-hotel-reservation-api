@@ -10,6 +10,7 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
 )
 
 // ProvinceHandler Province endpoint handler
@@ -43,7 +44,6 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	province := &models.Province{}
 	user := currentUser(c)
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&province); err != nil {
 
@@ -53,7 +53,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
 	}
 
@@ -73,7 +73,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         result,
 				ResponseCode: http.StatusOK,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
+				Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 			})
 	} else {
 
@@ -82,7 +82,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusInternalServerError,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+				Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 			})
 	}
 
@@ -109,7 +109,6 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	user := currentUser(c)
 	province, err := handler.Service.Find(tenantContext(c), id)
-	lang := getAcceptLanguage(c)
 
 	if err != nil {
 
@@ -117,7 +116,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
 
 	}
@@ -126,7 +125,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -150,7 +149,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
+			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
 
@@ -175,7 +174,6 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(tenantContext(c), id)
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 
@@ -191,7 +189,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 

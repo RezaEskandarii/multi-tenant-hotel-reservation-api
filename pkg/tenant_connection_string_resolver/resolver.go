@@ -2,7 +2,7 @@ package tenant_connection_string_resolver
 
 import (
 	"fmt"
-	config2 "reservation-api/internal/config"
+	config2 "reservation-api/internal/global_variables"
 	"strings"
 )
 

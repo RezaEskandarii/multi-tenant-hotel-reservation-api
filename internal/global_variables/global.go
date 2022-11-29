@@ -1,4 +1,7 @@
-package config
+// Package global_variables contains variables to set and read configs, s
+// set data and read data from Context and etx.
+
+package global_variables
 
 import "time"
 
@@ -12,4 +15,5 @@ var (
 	TenantIDKey                     = "TenantID"
 	TenantIDCtx                     = "TenantIDCtx"
 	ClaimsKey                       = "Claims"
+	CurrentLang                     = "CurrentLang"
 )

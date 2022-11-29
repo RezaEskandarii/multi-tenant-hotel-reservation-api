@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
-	"reservation-api/internal/config"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/service_registry"
 	"reservation-api/pkg/applogger"
 )
@@ -25,7 +25,7 @@ func Run() error {
 	//connectionResolver := database.NewConnectionResolver()
 	//db := connectionResolver.GetTenantDB("")
 
-	cfg, err := config.NewConfig()
+	cfg, err := global_variables.NewConfig()
 
 	if err != nil {
 		return err

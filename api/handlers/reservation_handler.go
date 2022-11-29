@@ -6,11 +6,13 @@ import (
 	"net/http"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
 	"strings"
 	"time"
 )
@@ -50,7 +52,6 @@ func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *
 // @Router /reservations/{id} [post]
 func (handler *ReservationHandler) createRequest(c echo.Context) error {
 
-	lang := getAcceptLanguage(c)
 	reservationIdStr := c.QueryParam("reservationId")
 	reservation := &models.Reservation{}
 
@@ -85,7 +86,9 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	// If there is a simultaneous booking request, the booking request is not given.
 	if hasConflict {
-		message := fmt.Sprintf(handler.Config.Translator.Localize(lang, message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
+		message := fmt.Sprintf(translator.Localize(c.Request().Context(),
+			message_keys.RoomHasReservationRequest), request.CheckInDate, request.CheckOutDate)
+
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			Message: message,
 		})
@@ -94,19 +97,19 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	// prevent to reserve room for past dates.
 	if request.CheckInDate.Before(time.Now()) && request.RequestType == dto.CreateReservation {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, message_keys.ImpossibleReservationLatDateError),
+			Message: translator.Localize(c.Request().Context(), message_keys.ImpossibleReservationLatDateError),
 		})
 	}
 
 	if request.CheckInDate == nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.CheckInDateEmptyError)})
+				Message: translator.Localize(c.Request().Context(), message_keys.CheckInDateEmptyError)})
 	}
 	if request.CheckOutDate == nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.CheckOutDateEmptyError)})
+				Message: translator.Localize(c.Request().Context(), message_keys.CheckOutDateEmptyError)})
 	}
 
 	// create new reservation request for requested room.
@@ -119,7 +122,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }
 
@@ -139,10 +142,9 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	lang := getAcceptLanguage(c)
 	user := currentUser(c)
 
-	invalidReservationRequestKeyErr := handler.Config.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
+	invalidReservationRequestKeyErr := translator.Localize(c.Request().Context(), message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -172,7 +174,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	if len(reservation.Sharers) == 0 {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.EmptySharerError),
+				Message: translator.Localize(c.Request().Context(), message_keys.EmptySharerError),
 			})
 	}
 
@@ -185,7 +187,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	if hasReservationConflict {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.ReservationConflictError),
+				Message: translator.Localize(c.Request().Context(), message_keys.ReservationConflictError),
 			})
 	}
 	handler.setReservationFields(&reservation, reservationRequest)
@@ -201,7 +203,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }
 
@@ -217,7 +219,6 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 func (handler *ReservationHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	lang := c.Request().Header.Get(acceptLanguage)
 	user := currentUser(c)
 
 	if err != nil {
@@ -246,7 +247,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	invalidReservationRequestKeyErr := handler.Config.Translator.Localize(lang, message_keys.InvalidReservationRequestKey)
+	invalidReservationRequestKeyErr := translator.Localize(c.Request().Context(), message_keys.InvalidReservationRequestKey)
 	if strings.TrimSpace(reservation.RequestKey) == "" {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -276,7 +277,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	if len(reservation.Sharers) == 0 {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.EmptySharerError),
+				Message: translator.Localize(c.Request().Context(), message_keys.EmptySharerError),
 			})
 	}
 
@@ -289,7 +290,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 	if hasReservationConflict {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Message: handler.Config.Translator.Localize(lang, message_keys.ReservationConflictError),
+				Message: translator.Localize(c.Request().Context(), message_keys.ReservationConflictError),
 			})
 	}
 	reservation.SetUpdatedBy(user)
@@ -305,7 +306,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    result,
-		Message: handler.Config.Translator.Localize(getAcceptLanguage(c), message_keys.Created),
+		Message: translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }
 
@@ -471,7 +472,8 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 
 	if output != "" {
 		if output == EXCEL {
-			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			report, err := handler.ReportService.ExportToExcel(result,
+				c.Request().Header.Get(global_variables.CurrentLang))
 			if err != nil {
 				handler.Config.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})

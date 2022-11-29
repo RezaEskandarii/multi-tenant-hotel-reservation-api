@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"reservation-api/internal/config"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/utils"
 	"strings"
 )
@@ -19,10 +19,14 @@ func TenantMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		tenantID, _ := utils.ConvertToUint(tenantStr)
+		c.Set(global_variables.TenantIDKey, tenantStr)
 
-		c.Set(config.TenantIDKey, tenantStr)
 		ctx := context.WithValue(c.Request().Context(), "TenantID", tenantID)
-		c.Set(config.TenantIDCtx, ctx)
+		c.Set(global_variables.TenantIDCtx, ctx)
+
+		r := c.Request().WithContext(context.WithValue(c.Request().Context(),
+			global_variables.CurrentLang, c.Request().Header.Get("Accept-Language")))
+		c.SetRequest(r)
 
 		return next(c)
 	}

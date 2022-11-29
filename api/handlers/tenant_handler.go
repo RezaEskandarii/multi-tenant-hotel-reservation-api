@@ -8,6 +8,7 @@ import (
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
+	"reservation-api/pkg/translator"
 )
 
 type TenantHandler struct {
@@ -25,7 +26,6 @@ func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domai
 func (handler *TenantHandler) create(c echo.Context) error {
 
 	model := &models.Tenant{}
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
 		handler.Config.Logger.LogError(err.Error())
@@ -50,6 +50,6 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }

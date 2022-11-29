@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reflect"
-	"reservation-api/internal/config"
+	"reservation-api/internal/global_variables"
 	"strings"
 	"time"
 )
@@ -34,32 +34,21 @@ func setBinaryHeaders(context echo.Context, fileName string, format string) {
 
 }
 
-// getAcceptLanguage returns Accept-Language header value.
-// If the client returns the Accept-Language header, it returns it;
-// otherwise, it returns en by default.
-func getAcceptLanguage(c echo.Context) string {
-	lang := c.Request().Header.Get(acceptLanguage)
-	if lang == "" {
-		lang = "en"
-	}
-	return lang
-}
-
 // tenantContext function reads the tenant from the echo context and returns it.
 // The tenant context is set in Tenant middleware.
 func tenantContext(c echo.Context) context.Context {
 
-	var tenantCtx = c.Get(config.TenantIDCtx)
+	var tenantCtx = c.Get(global_variables.TenantIDCtx)
 	if tenantCtx == nil {
 		panic("tenant context in nil in function tenantContext")
 	}
-	return c.Get(config.TenantIDCtx).(context.Context)
+	return c.Get(global_variables.TenantIDCtx).(context.Context)
 }
 
 // returns authenticated user's username from echo context
 // the authenticated user's username set in user middleware.
 func currentUser(c echo.Context) string {
-	return fmt.Sprintf("%s", c.Get(config.ClaimsKey))
+	return fmt.Sprintf("%s", c.Get(global_variables.ClaimsKey))
 }
 
 // getOutputQueryParamVal returns query param with "output" key to generate pdf or excel outputs.

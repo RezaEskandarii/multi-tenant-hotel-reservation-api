@@ -10,6 +10,7 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
 )
 
 // RateCodeHandler RateCode endpoint handler
@@ -44,7 +45,6 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	model := &models.RateCode{}
 	user := currentUser(c)
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err := c.Bind(&model); err != nil {
 
@@ -54,7 +54,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 			commons.ApiResponse{
 				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
-				Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
 	}
 	model.SetAudit(user)
@@ -70,7 +70,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(lang, message_keys.Created),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 		Data:         result,
 	})
 }
@@ -95,13 +95,12 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
 	}
 
@@ -109,7 +108,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 	model.SetUpdatedBy(user)
@@ -125,7 +124,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.Updated),
+			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
 
@@ -149,7 +148,6 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(tenantContext(c), id)
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 
@@ -157,7 +155,7 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.InternalServerError),
+			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
 	}
 
@@ -165,7 +163,7 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -211,14 +209,13 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-	lang := c.Request().Header.Get(acceptLanguage)
 
 	if err != nil {
 
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(lang, message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
@@ -229,13 +226,13 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 		handler.Config.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
-			Message:      handler.Config.Translator.Localize(lang, err.Error()),
+			Message:      translator.Localize(c.Request().Context(), err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(lang, message_keys.Deleted),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Deleted),
 	})
 }
 
@@ -275,6 +272,6 @@ func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         result,
 		ResponseCode: http.StatusOK,
-		Message:      handler.Config.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.Created),
+		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }

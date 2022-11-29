@@ -1,8 +1,8 @@
 package common_services
 
 import (
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
 	"reservation-api/internal/utils"
 	"reservation-api/pkg/applogger"
@@ -25,7 +25,7 @@ func NewEventService(broker message_broker.MessageBrokerManager, emailSender Ema
 
 func (e *EventService) SendEmailToGuestOnReservation() {
 
-	e.MessageBrokerManager.Consume(config.ReservationQueueName, func(payload []byte) {
+	e.MessageBrokerManager.Consume(global_variables.ReservationQueueName, func(payload []byte) {
 
 		reservation := utils.ConvertWithGenerics(models.Reservation{}, payload)
 

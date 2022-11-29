@@ -5,11 +5,13 @@ import (
 	"net/http"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/pkg/translator"
 )
 
 // GuestHandler  Guest endpoint handler
@@ -43,14 +45,13 @@ func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 func (handler *GuestHandler) create(c echo.Context) error {
 
 	model := models.Guest{}
-	lang := c.Request().Header.Get(acceptLanguage)
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
@@ -58,13 +59,13 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	if _, err := handler.Service.Create(tenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, err.Error()),
+			Message: translator.Localize(c.Request().Context(), err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,
-		Message: handler.Config.Translator.Localize(lang, message_keys.Created),
+		Message: translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }
 
@@ -81,7 +82,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
-	lang := c.Request().Header.Get(acceptLanguage)
+
 	user := currentUser(c)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
@@ -90,7 +91,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message: translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -98,7 +99,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      handler.Config.Translator.Localize(c.Request().Header.Get(acceptLanguage), message_keys.BadRequest),
+			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
 	}
 
@@ -106,13 +107,13 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	if _, err := handler.Service.Update(tenantContext(c), &model); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, err.Error()),
+			Message: translator.Localize(c.Request().Context(), err.Error()),
 		})
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:    model,
-		Message: handler.Config.Translator.Localize(lang, message_keys.Updated),
+		Message: translator.Localize(c.Request().Context(), message_keys.Updated),
 	})
 }
 
@@ -126,7 +127,6 @@ func (handler *GuestHandler) update(c echo.Context) error {
 // @Router /guests/{id} [get]
 func (handler *GuestHandler) find(c echo.Context) error {
 
-	lang := c.Request().Header.Get(acceptLanguage)
 	id, _ := utils.ConvertToUint(c.Get("id"))
 
 	guest, _ := handler.Service.Find(tenantContext(c), id)
@@ -134,7 +134,7 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	if guest == nil || (guest != nil && guest.Id == 0) {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, message_keys.NotFound),
+			Message: translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
@@ -152,8 +152,6 @@ func (handler *GuestHandler) find(c echo.Context) error {
 // @Router /guests [get]
 func (handler *GuestHandler) findAll(c echo.Context) error {
 
-	lang := c.Request().Header.Get(acceptLanguage)
-
 	page, _ := utils.ConvertToUint(c.Param("page"))
 	perPage, _ := utils.ConvertToUint(c.Param("perPage"))
 	output := getOutputQueryParamVal(c)
@@ -169,13 +167,13 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Message: handler.Config.Translator.Localize(lang, err.Error()),
+			Message: translator.Localize(c.Request().Context(), err.Error()),
 		})
 	}
 
 	if output != "" {
 		if output == EXCEL {
-			report, err := handler.ReportService.ExportToExcel(result, getAcceptLanguage(c))
+			report, err := handler.ReportService.ExportToExcel(result, c.Request().Context().Value(global_variables.CurrentLang).(string))
 			if err != nil {
 				handler.Config.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})

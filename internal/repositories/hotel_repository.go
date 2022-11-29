@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"reservation-api/internal/commons"
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
@@ -44,7 +44,7 @@ func (r *HotelRepository) Create(ctx context.Context, hotel *models.Hotel) (*mod
 			if file != nil {
 				wg.Add(1)
 				go func() {
-					result, err := r.FileTransferService.Upload(config.HotelsBucketName, "", file, &wg)
+					result, err := r.FileTransferService.Upload(global_variables.HotelsBucketName, "", file, &wg)
 					if err != nil {
 						errorsCh <- err
 						return

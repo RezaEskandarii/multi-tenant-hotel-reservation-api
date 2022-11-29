@@ -10,8 +10,8 @@ import (
 	"math"
 	"math/big"
 	"reservation-api/internal/commons"
-	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
 	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
@@ -36,7 +36,7 @@ func NewReservationRepository(r *tenant_database_resolver.TenantDatabaseResolver
 func (r *ReservationRepository) CreateReservationRequest(ctx context.Context, requestDto *dto.RoomRequestDto) (*models.ReservationRequest, error) {
 
 	// read from default config
-	expireTime := config.RoomDefaultLockDuration
+	expireTime := global_variables.RoomDefaultLockDuration
 	buffer := bytes.Buffer{}
 
 	// default hour
