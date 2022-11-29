@@ -16,4 +16,5 @@ var (
 	TenantIDCtx                     = "TenantIDCtx"
 	ClaimsKey                       = "Claims"
 	CurrentLang                     = "CurrentLang"
+	UserClaims                      = "user_claims"
 )

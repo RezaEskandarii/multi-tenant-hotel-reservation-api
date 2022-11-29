@@ -50,7 +50,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Errors:       translator.Localize(c.Request().Context(), message_keys.UserNotFound),
-			ResponseCode: http.StatusBadRequest,
+			ResponseCode: http.StatusNotFound,
 		})
 	}
 
