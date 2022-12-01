@@ -10,13 +10,14 @@ import (
 )
 
 type PaymentHandler struct {
-	Config         *dto.HandlerConfig
+	handlerBase
 	PaymentService *domain_services.PaymentService
 }
 
 func (handler *PaymentHandler) Register(config *dto.HandlerConfig, service *domain_services.PaymentService) {
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/payment")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/payment")
 	handler.PaymentService = service
 	routeGroup.POST("", handler.create)
 	routeGroup.DELETE("/:id", handler.delete)
@@ -38,7 +39,7 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 	}
 
 	if result, err := handler.PaymentService.Create(tenantContext(c), &payment); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	} else {
 		return c.JSON(http.StatusOK, result)
@@ -55,8 +56,9 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Get("id"))
+
 	if err := handler.PaymentService.Delete(tenantContext(c), id); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	return c.JSON(http.StatusOK, nil)

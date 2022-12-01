@@ -12,23 +12,33 @@ import (
 )
 
 type TenantHandler struct {
+	handlerBase
 	TenantService *domain_services.TenantService
-	Config        *dto.HandlerConfig
 }
 
 func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domain_services.TenantService) {
 	handler.TenantService = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/tenants")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+
+	routeGroup := handler.Router.Group("/tenants")
 	routeGroup.POST("", handler.create)
 }
 
+// @Summary crete RoomType
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  RoomType body  models.RoomType true "RoomType"
+// @Success 200 {object} models.RoomType
+// @Router /room-types [post]
 func (handler *TenantHandler) create(c echo.Context) error {
 
 	model := &models.Tenant{}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -39,7 +49,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	result, err := handler.TenantService.SetUp(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,

@@ -17,13 +17,14 @@ import (
 // CityHandler City endpoint handler
 type CityHandler struct {
 	Service *domain_services.CityService
-	Config  *dto.HandlerConfig
+	handlerBase
 }
 
 func (handler *CityHandler) Register(config *dto.HandlerConfig, service *domain_services.CityService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/cities")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/cities")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -64,7 +65,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
@@ -81,7 +82,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -90,7 +91,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
@@ -131,7 +132,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -141,14 +142,14 @@ func (handler *CityHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,

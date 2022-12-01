@@ -15,16 +15,17 @@ import (
 
 // RateCodeHandler RateCode endpoint handler
 type RateCodeHandler struct {
+	handlerBase
 	Service               *domain_services.RateCodeService
 	RateCodeDetailService *domain_services.RateCodeDetailService
-	Config                *dto.HandlerConfig
 }
 
 func (handler *RateCodeHandler) Register(config *dto.HandlerConfig, service *domain_services.RateCodeService, rateCodeDetailService *domain_services.RateCodeDetailService) {
 	handler.Service = service
 	handler.RateCodeDetailService = rateCodeDetailService
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/rate-codes")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/rate-codes")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -48,7 +49,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 
 	if err := c.Bind(&model); err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -61,7 +62,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
@@ -90,14 +91,14 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	user := currentUser(c)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
@@ -114,7 +115,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	model.SetUpdatedBy(user)
 	if err := c.Bind(&model); err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 
 	}
@@ -128,7 +129,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -144,14 +145,14 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 func (handler *RateCodeHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
@@ -212,7 +213,7 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -223,7 +224,7 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), err.Error()),

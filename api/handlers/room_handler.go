@@ -13,16 +13,19 @@ import (
 	"reservation-api/pkg/translator"
 )
 
-// RoomHandler Province endpoint handler
+// RoomHandler Room endpoint handler
 type RoomHandler struct {
+	handlerBase
 	Service *domain_services.RoomService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *RoomHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/room")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+
+	// register routes
+	routeGroup := handler.Router.Group("/rooms")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -30,14 +33,23 @@ func (handler *RoomHandler) Register(config *dto.HandlerConfig, service *domain_
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary update Room
+// @Tags Room
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Room body models.Room true "Room"
+// @Produce json
+// @Param  Room body  models.Room true "Room"
+// @Success 200 {object} models.Room
+// @Router /rooms/{id} [put]
 func (handler *RoomHandler) create(c echo.Context) error {
 
 	model := &models.Room{}
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -49,7 +61,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -64,7 +76,16 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary update Room
+// @Tags Room
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Param Room body models.Room true "Room"
+// @Produce json
+// @Param  Room body  models.Room true "Room"
+// @Success 200 {object} models.Room
+// @Router /rooms/{id} [put]
 func (handler *RoomHandler) update(c echo.Context) error {
 
 	user := currentUser(c)
@@ -76,7 +97,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 
 	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -96,7 +117,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 	updatedModel, err := handler.Service.Update(tenantContext(c), result)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -106,13 +127,20 @@ func (handler *RoomHandler) update(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary find Room by id
+// @Tags Room
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.Room
+// @Router /rooms/{id} [get]
 func (handler *RoomHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -120,7 +148,7 @@ func (handler *RoomHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -140,7 +168,13 @@ func (handler *RoomHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Rooms
+// @Tags Room
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.Room
+// @Router /rooms [get]
 func (handler *RoomHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -158,14 +192,21 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary Delete Room
+// @Tags Room
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200
+// @Router /rooms/{id} [delete]
 func (handler *RoomHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -176,7 +217,7 @@ func (handler *RoomHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), err.Error()),

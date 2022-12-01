@@ -17,14 +17,15 @@ import (
 
 // CountryHandler country endpoint handler
 type CountryHandler struct {
+	handlerBase
 	Service *domain_services.CountryService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *domain_services.CountryService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/countries")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/countries")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -45,7 +46,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	model := &models.CountryCreateUpdate{}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
 				Data:         nil,
@@ -62,7 +63,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	output, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -92,7 +93,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -100,7 +101,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
@@ -116,7 +117,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -129,7 +130,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -146,14 +147,14 @@ func (handler *CountryHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
@@ -212,7 +213,7 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -220,7 +221,7 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,

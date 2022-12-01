@@ -15,14 +15,16 @@ import (
 
 // RateGroupHandler RateGroup endpoint handler
 type RateGroupHandler struct {
+	handlerBase
 	Service *domain_services.RateGroupService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *RateGroupHandler) Register(config *dto.HandlerConfig, service *domain_services.RateGroupService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/rate-groups")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+
+	routeGroup := handler.Router.Group("/rate-groups")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -44,7 +46,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -57,7 +59,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
@@ -85,14 +87,14 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
@@ -108,7 +110,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -121,7 +123,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -138,14 +140,14 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
@@ -205,7 +207,7 @@ func (handler *RateGroupHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -216,7 +218,7 @@ func (handler *RateGroupHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), err.Error()),

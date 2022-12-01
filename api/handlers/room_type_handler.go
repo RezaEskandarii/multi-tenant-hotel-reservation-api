@@ -13,31 +13,43 @@ import (
 	"reservation-api/pkg/translator"
 )
 
-// RoomTypeHandler Province endpoint handler
-type RoomTypeHandler struct {
+// RoomTypeTypeHandler Province endpoint handler
+type RoomTypeTypeHandler struct {
+	handlerBase
 	Service *domain_services.RoomTypeService
-	Config  *dto.HandlerConfig
 }
 
-func (handler *RoomTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
+func (handler *RoomTypeTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
+
 	handler.Service = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/room-type")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+
+	// register RoomType routes
+	routeGroup := handler.Router.Group("/room-types")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.DELETE("/:id", handler.delete)
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+
 }
 
-/*====================================================================================*/
-func (handler *RoomTypeHandler) create(c echo.Context) error {
+// @Summary crete RoomType
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  RoomType body  models.RoomType true "RoomType"
+// @Success 200 {object} models.RoomType
+// @Router /room-types [post]
+func (handler *RoomTypeTypeHandler) create(c echo.Context) error {
 
 	model := &models.RoomType{}
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -49,7 +61,7 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -64,8 +76,16 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
-func (handler *RoomTypeHandler) update(c echo.Context) error {
+// @Summary update RoomType
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Param  RoomType body  models.RoomType true "RoomType"
+// @Success 200 {object} models.RoomType
+// @Router /room-types/{id} [put]
+func (handler *RoomTypeTypeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	user := currentUser(c)
@@ -77,7 +97,7 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -98,7 +118,7 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	updatedModel, err := handler.Service.Update(tenantContext(c), result)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -108,20 +128,27 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
-func (handler *RoomTypeHandler) find(c echo.Context) error {
+// @Summary find RoomType by id
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.RoomType
+// @Router /room-types/{id} [get]
+func (handler *RoomTypeTypeHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	result, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -141,8 +168,14 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
-func (handler *RoomTypeHandler) findAll(c echo.Context) error {
+// @Summary findAll RoomTypes
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.RoomType
+// @Router /room-types [get]
+func (handler *RoomTypeTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
@@ -159,13 +192,20 @@ func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
-func (handler *RoomTypeHandler) delete(c echo.Context) error {
+// @Summary Delete RoomType
+// @Tags RoomType
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200
+// @Router /room-types/{id} [delete]
+func (handler *RoomTypeTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -175,7 +215,7 @@ func (handler *RoomTypeHandler) delete(c echo.Context) error {
 	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), err.Error()),

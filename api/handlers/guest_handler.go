@@ -16,17 +16,18 @@ import (
 
 // GuestHandler  Guest endpoint handler
 type GuestHandler struct {
+	handlerBase
 	Service       *domain_services.GuestService
-	Config        *dto.HandlerConfig
 	ReportService *common_services.ReportService
 }
 
 func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 	service *domain_services.GuestService, reportService *common_services.ReportService) {
 	handler.ReportService = reportService
-	handler.Config = config
+	handler.Router = config.Router
+	handler.Logger = config.Logger
 	handler.Service = service
-	routeGroup := handler.Config.Router.Group("/guests")
+	routeGroup := handler.Router.Group("/guests")
 	routeGroup.POST("", handler.create)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.GET("", handler.findAll)
@@ -175,7 +176,7 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 		if output == EXCEL {
 			report, err := handler.ReportService.ExportToExcel(result, c.Request().Context().Value(global_variables.CurrentLang).(string))
 			if err != nil {
-				handler.Config.Logger.LogError(err.Error())
+				handler.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
 			setBinaryHeaders(c, "guests", EXCEL_OUTPUT)

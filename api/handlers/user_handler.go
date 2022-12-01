@@ -15,14 +15,16 @@ import (
 
 // UserHandler User endpoint handler
 type UserHandler struct {
+	handlerBase
 	Service *domain_services.UserService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/users")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+
+	routeGroup := handler.Router.Group("/users")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -30,14 +32,21 @@ func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_
 	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }
 
-/*====================================================================================*/
+// @Summary crete User
+// @Tags User
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Param  User body  models.User true "User"
+// @Success 200 {object} models.User
+// @Router /users [post]
 func (handler *UserHandler) create(c echo.Context) error {
 
 	model := models.User{}
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
 				Data:         nil,
@@ -50,7 +59,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -79,7 +88,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
@@ -90,21 +99,29 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 }
 
-/*====================================================================================*/
+// @Summary update User
+// @Tags User
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Param  User body  models.User true "User"
+// @Success 200 {object} models.User
+// @Router /users/{id} [put]
 func (handler *UserHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	user := currentUser(c)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -121,7 +138,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -139,24 +156,31 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
 
-/*====================================================================================*/
+// @Summary find User by id
+// @Tags User
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.User
+// @Router /users/{id} [get]
 func (handler *UserHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -179,7 +203,13 @@ func (handler *UserHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll Users
+// @Tags User
+// @Accept json
+// @Param X-TenantID header int true "X-TenantID"
+// @Produce json
+// @Success 200 {array} models.User
+// @Router /users [get]
 func (handler *UserHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -203,7 +233,7 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 	err, model := handler.Service.FindByUsername(tenantContext(c), username)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,

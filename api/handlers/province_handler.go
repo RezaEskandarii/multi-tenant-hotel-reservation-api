@@ -16,14 +16,15 @@ import (
 
 // ProvinceHandler Province endpoint handler
 type ProvinceHandler struct {
+	handlerBase
 	Service *domain_services.ProvinceService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *domain_services.ProvinceService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/provinces")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/provinces")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -48,7 +49,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 	if err := c.Bind(&province); err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -78,7 +79,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
 				Data:         nil,
@@ -104,7 +105,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -113,7 +114,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -132,7 +133,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	if err := c.Bind(&province); err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -154,7 +155,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -171,14 +172,14 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -238,14 +239,14 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 	cities, err := handler.Service.GetCities(tenantContext(c), id)
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.NewApiResponse().
 			SetResponseCode(http.StatusInternalServerError).SetMessage("bad request"),
 		)

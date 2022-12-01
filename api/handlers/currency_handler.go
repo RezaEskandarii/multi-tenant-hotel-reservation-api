@@ -15,14 +15,15 @@ import (
 
 // CurrencyHandler Currency endpoint handler
 type CurrencyHandler struct {
+	handlerBase
 	Service *domain_services.CurrencyService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *domain_services.CurrencyService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := handler.Config.Router.Group("/currencies")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/currencies")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -43,7 +44,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	user := currentUser(c)
 
 	if err := c.Bind(&model); err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -63,7 +64,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError,
 			ApiResponse{
@@ -96,7 +97,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
@@ -126,7 +127,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		})
 	} else {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 }
@@ -143,7 +144,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -151,7 +152,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,

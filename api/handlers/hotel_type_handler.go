@@ -15,14 +15,15 @@ import (
 
 // HotelTypeHandler Province endpoint handler
 type HotelTypeHandler struct {
+	handlerBase
 	Service *domain_services.HotelTypeService
-	Config  *dto.HandlerConfig
 }
 
 func (handler *HotelTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.HotelTypeService) {
 	handler.Service = service
-	handler.Config = config
-	routeGroup := config.Router.Group("/hotel-types")
+	handler.Router = config.Router
+	handler.Logger = config.Logger
+	routeGroup := handler.Router.Group("/hotel-types")
 	routeGroup.POST("", handler.create)
 	routeGroup.PUT("/:id", handler.update)
 	routeGroup.GET("/:id", handler.find)
@@ -45,7 +46,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 
 	if err := c.Bind(&model); err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -58,7 +59,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), model)
 
 	if err != nil {
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -95,7 +96,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -118,7 +119,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -142,7 +143,7 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
@@ -150,7 +151,7 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -207,7 +208,7 @@ func (handler *HotelTypeHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -218,7 +219,7 @@ func (handler *HotelTypeHandler) delete(c echo.Context) error {
 
 	if err != nil {
 
-		handler.Config.Logger.LogError(err.Error())
+		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), err.Error()),
