@@ -8,7 +8,7 @@ import (
 	"reservation-api/internal/dto"
 )
 
-// paginatedList
+// paginatedList apply pagination filters query amd return PaginatedResult
 func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
 	var total int64
@@ -22,7 +22,7 @@ func paginatedList(model interface{}, db *gorm.DB, input *dto.PaginationFilter) 
 	modelSlice := reflect.New(functionResult.Type())
 	modelSlice.Elem().Set(functionResult)
 
-	result := commons.NewPaginatedList(uint(total), uint(input.Page), uint(input.PerPage))
+	result := commons.NewPaginatedList(uint(total), uint(input.Page), uint(input.PageSize))
 	query = query.Limit(int(result.PerPage)).Offset(int(result.Page)).Order("id desc").Find(modelSlice.Interface())
 
 	if query.Error != nil {

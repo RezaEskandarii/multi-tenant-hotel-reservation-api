@@ -15,11 +15,11 @@ func PaginationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			page = int(pageVar)
 		}
 
-		var perPage int
-		perPageVar, err := utils.ConvertToUint(c.QueryParam("perPage"))
+		var perPage = 20
+		pageSize, err := utils.ConvertToUint(c.QueryParam("page_size"))
 
 		if err == nil {
-			perPage = int(perPageVar)
+			perPage = int(pageSize)
 		}
 
 		input := dto.NewPaginatedInput(page, perPage)

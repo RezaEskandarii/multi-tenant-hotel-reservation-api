@@ -35,7 +35,7 @@ func (handler *RateGroupHandler) Register(config *dto.HandlerConfig, service *do
 // @Summary SetUp RateGroup
 // @Tags RateGroup
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  RateGroup body  models.RateGroup true "RateGroup"
 // @Success 200 {object} models.RateGroup
@@ -76,7 +76,7 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 // @Summary update RateGroup
 // @Tags RateGroup
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Param  RateGroup body  models.RateGroup true "RateGroup"
@@ -131,7 +131,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 // @Summary find RateGroup
 // @Tags RateGroup
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.RateGroup
@@ -172,7 +172,7 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 // @Summary findAll rate-codes
 // @Tags RateGroup
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.RateGroup
 // @Router /rate-groups [get]
@@ -196,7 +196,7 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 // @Summary Delete RateGroup
 // @Tags RateGroup
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.RateGroup

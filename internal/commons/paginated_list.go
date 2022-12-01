@@ -31,8 +31,6 @@ func NewPaginatedList(totalTableRows uint, page uint, perPage uint) *PaginatedRe
 
 	//fetch size , This determines how many lines to fetch from multi_tenancy_database
 	p.PerPage = perPage
-	//fetch size offset default value
-	p.Page = 0
 
 	//it sets offset value per every page by given HTTP GET  page parameter
 	if p.Page > 1 {

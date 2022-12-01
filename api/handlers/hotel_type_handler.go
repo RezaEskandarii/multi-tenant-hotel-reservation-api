@@ -35,7 +35,7 @@ func (handler *HotelTypeHandler) Register(config *dto.HandlerConfig, service *do
 // @Tags HotelType
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  HotelType body  models.HotelType true "HotelType"
 // @Success 200 {object} models.HotelType
 // @Router /hotel-types [post]
@@ -77,7 +77,7 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 // @Summary update HotelType
 // @Tags HotelType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param HotelType body models.HotelType true "HotelType"
 // @Produce json
@@ -132,7 +132,7 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 // @Summary find HotelType by id
 // @Tags HotelType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.HotelType
@@ -174,7 +174,7 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 // @Summary findAll HotelTypes
 // @Tags HotelType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.HotelType
 // @Router /hotel-types [get]
@@ -198,7 +198,7 @@ func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 // @Summary Delete HotelType
 // @Tags HotelType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.HotelType
 // @Router /hotel-types [delete]

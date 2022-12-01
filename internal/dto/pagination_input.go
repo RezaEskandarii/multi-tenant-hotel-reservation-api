@@ -2,7 +2,7 @@ package dto
 
 type PaginationFilter struct {
 	Page             int `json:"page"`
-	PerPage          int `json:"per_page"`
+	PageSize         int `json:"page_size"`
 	IgnorePagination bool
 }
 
@@ -17,7 +17,7 @@ func NewPaginatedInput(page int, perPage int) *PaginationFilter {
 	}
 
 	return &PaginationFilter{
-		Page:    page,
-		PerPage: perPage,
+		Page:     page,
+		PageSize: perPage,
 	}
 }

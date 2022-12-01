@@ -37,7 +37,7 @@ func (handler *RateCodeHandler) Register(config *dto.HandlerConfig, service *dom
 // @Summary create RateCode
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  RateCode body  models.RateCode true "RateCode"
 // @Success 200 {object} models.RateCode
@@ -79,7 +79,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 // @Summary update RateCode
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Param  RateCode body  models.RateCode true "RateCode"
@@ -137,7 +137,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 // @Summary find RateCode
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.RateCode
@@ -178,7 +178,7 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 // @Summary findAll rate-codes
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.RateCode
 // @Router /rate-codes [get]
@@ -202,7 +202,7 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 // @Summary Delete RateCode
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.RateCode
@@ -240,7 +240,7 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 // @Summary Add RateCode Details
 // @Tags RateCode
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param RateCode body models.RateCodeDetail true "RateCode"
 // @Produce json

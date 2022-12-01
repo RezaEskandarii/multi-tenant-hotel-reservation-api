@@ -1,4 +1,4 @@
-package global_variables
+package config
 
 import (
 	"gopkg.in/yaml.v2"

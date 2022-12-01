@@ -26,8 +26,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -58,8 +58,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -98,8 +98,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -134,8 +134,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -190,8 +190,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -231,8 +231,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -263,8 +263,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -303,8 +303,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -339,8 +339,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -395,8 +395,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -427,8 +427,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -467,8 +467,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -503,8 +503,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -559,8 +559,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -591,8 +591,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -629,8 +629,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -663,8 +663,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -699,8 +699,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -755,8 +755,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -787,8 +787,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -825,8 +825,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -859,8 +859,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -895,8 +895,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -951,8 +951,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -983,8 +983,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1021,8 +1021,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1055,8 +1055,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1091,8 +1091,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1147,8 +1147,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1185,8 +1185,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1219,8 +1219,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1253,8 +1253,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1289,8 +1289,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1345,8 +1345,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1386,8 +1386,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1418,8 +1418,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1459,8 +1459,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1515,8 +1515,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1554,8 +1554,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1599,8 +1599,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1639,8 +1639,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1671,8 +1671,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1712,8 +1712,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1751,8 +1751,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1796,8 +1796,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1836,8 +1836,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1871,8 +1871,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1918,8 +1918,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1958,8 +1958,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1997,8 +1997,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2042,8 +2042,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2082,8 +2082,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2114,8 +2114,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2154,8 +2154,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2190,8 +2190,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2235,8 +2235,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2270,8 +2270,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2304,8 +2304,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2340,8 +2340,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2394,8 +2394,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2429,8 +2429,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2461,8 +2461,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2501,8 +2501,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2537,8 +2537,8 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },

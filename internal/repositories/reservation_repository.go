@@ -324,7 +324,7 @@ func (r *ReservationRepository) FindAll(ctx context.Context, filter *dto.Reserva
 		return err, nil
 	}
 
-	return nil, paginateWithFilter(query, reservations, filter, filter.Page, filter.PerPage, filter.IgnorePagination)
+	return nil, paginateWithFilter(query, reservations, filter, filter.Page, filter.PageSize, filter.IgnorePagination)
 
 }
 

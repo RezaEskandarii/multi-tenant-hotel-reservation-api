@@ -34,8 +34,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -66,8 +66,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -106,8 +106,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -142,8 +142,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -198,8 +198,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -239,8 +239,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -271,8 +271,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -311,8 +311,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -347,8 +347,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -403,8 +403,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -435,8 +435,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -475,8 +475,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -511,8 +511,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -567,8 +567,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -599,8 +599,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -637,8 +637,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -671,8 +671,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -707,8 +707,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -763,8 +763,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -795,8 +795,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -833,8 +833,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -867,8 +867,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -903,8 +903,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -959,8 +959,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -991,8 +991,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1029,8 +1029,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1063,8 +1063,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1099,8 +1099,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1155,8 +1155,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1193,8 +1193,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1227,8 +1227,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1261,8 +1261,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1297,8 +1297,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1353,8 +1353,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1394,8 +1394,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1426,8 +1426,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1467,8 +1467,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1523,8 +1523,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1562,8 +1562,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1607,8 +1607,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1647,8 +1647,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -1679,8 +1679,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1720,8 +1720,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1759,8 +1759,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1804,8 +1804,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1844,8 +1844,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1879,8 +1879,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1926,8 +1926,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -1966,8 +1966,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2005,8 +2005,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2050,8 +2050,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2090,8 +2090,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2122,8 +2122,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2162,8 +2162,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2198,8 +2198,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2243,8 +2243,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2278,8 +2278,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2312,8 +2312,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2348,8 +2348,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2402,8 +2402,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2437,8 +2437,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     }
@@ -2469,8 +2469,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2509,8 +2509,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },
@@ -2545,8 +2545,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "X-TenantID",
-                        "name": "X-TenantID",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
                     },

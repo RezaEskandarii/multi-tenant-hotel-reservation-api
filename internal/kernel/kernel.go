@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
-	"reservation-api/internal/global_variables"
+	"reservation-api/internal/config"
 	"reservation-api/internal/service_registry"
 	"reservation-api/pkg/applogger"
 )
@@ -17,7 +16,7 @@ var (
 	v1RouterGroup = httpRouter.Group("/api/v1")
 )
 
-// Run run application
+// Run starts application
 func Run() error {
 
 	loadFlags()
@@ -25,7 +24,7 @@ func Run() error {
 	//connectionResolver := multi_tenancy_database.NewConnectionResolver()
 	//db := connectionResolver.GetTenantDB("")
 
-	cfg, err := global_variables.NewConfig()
+	cfg, err := config.NewConfig()
 
 	if err != nil {
 		return err
@@ -39,10 +38,9 @@ func Run() error {
 
 // return new instance of echo.
 func getHttpRouter() *echo.Echo {
-	e := echo.New()
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	e.Use(middleware.Logger())
+	e := echo.New()
+	//e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

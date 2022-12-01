@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"reservation-api/internal/commons"
@@ -30,6 +31,7 @@ func LoggerMiddleware(logger applogger.Logger) echo.MiddlewareFunc {
 				logger.LogInfoJSON(trace)
 			})
 
+			fmt.Println(trace)
 			return next(c)
 		}
 	}

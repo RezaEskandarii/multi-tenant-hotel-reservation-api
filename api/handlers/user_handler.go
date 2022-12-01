@@ -35,7 +35,7 @@ func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_
 // @Summary crete User
 // @Tags User
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  User body  models.User true "User"
 // @Success 200 {object} models.User
@@ -102,7 +102,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 // @Summary update User
 // @Tags User
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Param  User body  models.User true "User"
@@ -164,7 +164,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 // @Summary find User by id
 // @Tags User
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.User
@@ -206,7 +206,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 // @Summary findAll Users
 // @Tags User
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.User
 // @Router /users [get]

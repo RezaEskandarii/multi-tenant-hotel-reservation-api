@@ -39,7 +39,7 @@ func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 // @Tags Guest
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  Guest body  models.Guest true "Guest"
 // @Success 200 {object} models.Guest
 // @Router /guests [post]
@@ -73,7 +73,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 // @Summary update Guest
 // @Tags Guest
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Guest body models.Guest true "Guest"
 // @Produce json
@@ -121,7 +121,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 // @Summary find Guest by id
 // @Tags Guest
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Guest
@@ -147,7 +147,7 @@ func (handler *GuestHandler) find(c echo.Context) error {
 // @Summary findAll Guests
 // @Tags Guest
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Guest
 // @Router /guests [get]
@@ -158,8 +158,8 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 	output := getOutputQueryParamVal(c)
 
 	input := &dto.PaginationFilter{
-		Page:    int(page),
-		PerPage: int(perPage),
+		Page:     int(page),
+		PageSize: int(perPage),
 	}
 
 	input.IgnorePagination = output != ""

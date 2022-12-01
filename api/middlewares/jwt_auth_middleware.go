@@ -18,7 +18,7 @@ func JWTAuthMiddleware(s *domain_services.AuthService) echo.MiddlewareFunc {
 			authHeader := strings.Split(c.Request().Header.Get("Authorization"), "Bearer ")
 			if len(authHeader) != 2 {
 
-				return echo.NewHTTPError(http.StatusBadRequest, "invalid token")
+				return echo.NewHTTPError(http.StatusUnauthorized, "invalid token")
 
 			} else {
 				jwtToken := authHeader[1]

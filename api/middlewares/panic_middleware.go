@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/pkg/applogger"
@@ -22,6 +23,8 @@ func PanicRecoveryMiddleware(logger applogger.Logger) echo.MiddlewareFunc {
 					response.Header().Set("Content-Type", "application/json")
 					response.WriteHeader(http.StatusInternalServerError)
 					response.Write(responseBody)
+
+					fmt.Println(r)
 				}
 			}()
 

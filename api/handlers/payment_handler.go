@@ -27,7 +27,7 @@ func (handler *PaymentHandler) Register(config *dto.HandlerConfig, service *doma
 // @Tags Payment
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  Payment body  models.Payment true "Payment"
 // @Success 200 {object} models.Payment
 // @Router /payments [post]
@@ -49,7 +49,7 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 // @Summary Delete Payment
 // @Tags Payment
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Payment
 // @Router /payments [delete]

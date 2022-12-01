@@ -46,7 +46,7 @@ func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *
 // @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  Reservation body  models.Reservation true "Reservation"
 // @Success 200 {object} models.Reservation
@@ -130,7 +130,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 // @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  Reservation body  models.Reservation true "Reservation"
 // @Success 200 {object} models.Reservation
@@ -211,7 +211,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 // @Summary update Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Param  Reservation body  models.Reservation true "Reservation"
@@ -316,7 +316,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 // @Summary Delete Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200
@@ -332,7 +332,7 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 // @Summary SetUp Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  GetRatePriceDto body  dto.GetRatePriceDto true "GetRatePriceDto"
 // @Success 200 {object} dto.RateCodePricesDto
@@ -366,7 +366,7 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 // @Summary Delete Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.Reservation
@@ -397,7 +397,7 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 // @Summary update Reservation
 // @Tags Reservation
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param status query int true "status"
 // @Produce json
 // @Param  Reservation body  models.Reservation true "Reservation"

@@ -28,7 +28,7 @@ func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domai
 // @Summary crete RoomType
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  RoomType body  models.RoomType true "RoomType"
 // @Success 200 {object} models.RoomType

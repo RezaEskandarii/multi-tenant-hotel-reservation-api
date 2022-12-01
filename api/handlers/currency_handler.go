@@ -34,7 +34,7 @@ func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *dom
 // @Tags Currency
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  Currency body  models.Currency true "Currency"
 // @Success 200 {object} models.Currency
 // @Router /currencies [post]
@@ -79,7 +79,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 // @Summary update Currency
 // @Tags Currency
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Currency body models.Currency true "Currency"
 // @Produce json
@@ -135,7 +135,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 // @Summary find Currency by id
 // @Tags Currency
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Currency
@@ -178,7 +178,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 // @Summary findAll Currencies
 // @Tags Currency
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Currency
 // @Router /currencies [get]

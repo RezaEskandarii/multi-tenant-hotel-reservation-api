@@ -3,10 +3,11 @@ package service_registry
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"reservation-api/api/handlers"
 	"reservation-api/api/middlewares"
+	"reservation-api/internal/config"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/global_variables"
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
@@ -38,16 +39,18 @@ var (
 )
 
 // RegisterServicesAndRoutes register dependencies for services and handlers
-func RegisterServicesAndRoutes(router *echo.Group, cfg *global_variables.Config) {
+func RegisterServicesAndRoutes(router *echo.Group, cfg *config.Config) {
 
 	logger := applogger.New(nil)
 
-	// fill handlers shared dependencies in config struct and pass this
+	// fill handlers shared dependencies in handlerConf struct and pass this
 	// struct to handlers inserted of pass many duplicated objects
-	config := &dto.HandlerConfig{
+	handlerConf := &dto.HandlerConfig{
 		Router: router,
 		Logger: logger,
 	}
+
+	router.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	reportService := common_services.NewReportService()
 	ctx := context.Background()
@@ -88,45 +91,47 @@ func RegisterServicesAndRoutes(router *echo.Group, cfg *global_variables.Config)
 		//auditService          = domain_services.NewAuditService(repositories.NewAuditRepository(connectionResolver))
 	)
 
-	tenantHandler.Register(config, tenantService)
+	tenantHandler.Register(handlerConf, tenantService)
 	// authHandler does bot need to authMiddleware.
 	router.Use(middlewares.PanicRecoveryMiddleware(logger), middlewares.LoggerMiddleware(logger), middlewares.TenantMiddleware)
-	authHandler.Register(config, userService, authService)
+
+	authHandler.Register(handlerConf, userService, authService)
+
 	router.Use(middlewares.MetricsMiddleware, middlewares.JWTAuthMiddleware(authService),
 		middlewares.TenantAccessMiddleware)
 
 	// add authentication middleware to all routes.
 
 	metricHandler.Register(cfg)
-	countryHandler.Register(config, countryService)
+	countryHandler.Register(handlerConf, countryService)
 
-	provinceHandler.Register(config, provinceService)
+	provinceHandler.Register(handlerConf, provinceService)
 
-	cityHandler.Register(config, cityService)
+	cityHandler.Register(handlerConf, cityService)
 
-	currencyHandler.Register(config, currencyService)
+	currencyHandler.Register(handlerConf, currencyService)
 
-	usersHandler.Register(config, userService)
+	usersHandler.Register(handlerConf, userService)
 
-	hotelTypeHandler.Register(config, hotelTypeService)
+	hotelTypeHandler.Register(handlerConf, hotelTypeService)
 
-	hotelGradeHandler.Register(config, hotelGradeService)
+	hotelGradeHandler.Register(handlerConf, hotelGradeService)
 
-	hotelHandler.Register(config, hotelService)
+	hotelHandler.Register(handlerConf, hotelService)
 
-	roomTypeHandler.Register(config, roomTypeService)
+	roomTypeHandler.Register(handlerConf, roomTypeService)
 
-	roomHandler.Register(config, roomService)
+	roomHandler.Register(handlerConf, roomService)
 
-	guestHandler.Register(config, guestService, reportService)
+	guestHandler.Register(handlerConf, guestService, reportService)
 
-	rateGroupHandler.Register(config, rateGroupService)
+	rateGroupHandler.Register(handlerConf, rateGroupService)
 
-	rateCodeHandler.Register(config, rateCodeService, rateCodeDetailService)
+	rateCodeHandler.Register(handlerConf, rateCodeService, rateCodeDetailService)
 
-	reservationHandler.Register(config, reservationService, reportService)
+	reservationHandler.Register(handlerConf, reservationService, reportService)
 
-	paymentHandler.Register(config, paymentService)
+	paymentHandler.Register(handlerConf, paymentService)
 
 	// schedule to remove expired reservation requests.
 	scheduleRemoveExpiredReservationRequests(reservationService, logger)

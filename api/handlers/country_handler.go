@@ -37,7 +37,7 @@ func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *doma
 // @Tags Country
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  country body  models.Country true "Country"
 // @Success 200 {object} models.Country
 // @Router /countries [post]
@@ -81,7 +81,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 // @Summary update Country
 // @Tags Country
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Country body models.Country true "Country"
 // @Produce json
@@ -138,7 +138,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 // @Summary find Country by id
 // @Tags Country
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Country
@@ -179,7 +179,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 // @Summary findAll Countries
 // @Tags Country
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Country
 // @Router /countries [get]
@@ -203,7 +203,7 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 // @Summary find Provinces by country ID
 // @Tags Country
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.Province
@@ -225,13 +225,11 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
-			Message:      err.Error(),
 		})
 	}
 
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         provinces,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }

@@ -638,9 +638,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -659,9 +659,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Country
@@ -685,9 +685,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -709,9 +709,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -746,9 +746,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -773,9 +773,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -794,9 +794,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Currency
@@ -820,9 +820,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -844,9 +844,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -881,9 +881,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -902,9 +902,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Guest
@@ -928,9 +928,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -952,9 +952,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -989,9 +989,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1010,9 +1010,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1031,9 +1031,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: HotelGrade
@@ -1057,9 +1057,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1081,9 +1081,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1118,9 +1118,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1139,9 +1139,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1160,9 +1160,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: HotelType
@@ -1186,9 +1186,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1210,9 +1210,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1247,9 +1247,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1268,9 +1268,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1289,9 +1289,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Hotel
@@ -1315,9 +1315,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1339,9 +1339,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1376,9 +1376,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1397,9 +1397,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Payment
@@ -1423,9 +1423,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1445,9 +1445,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1469,9 +1469,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1506,9 +1506,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1533,9 +1533,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1559,9 +1559,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1581,9 +1581,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1607,9 +1607,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: RateCode
@@ -1632,9 +1632,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1663,9 +1663,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1700,9 +1700,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1726,9 +1726,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -1748,9 +1748,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1774,9 +1774,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: RateGroup
@@ -1799,9 +1799,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1830,9 +1830,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1856,9 +1856,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Reservation
@@ -1881,9 +1881,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1912,9 +1912,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -1935,9 +1935,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: status
@@ -1966,9 +1966,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: GetRatePriceDto
@@ -1992,9 +1992,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -2013,9 +2013,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: RoomType
@@ -2039,9 +2039,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2061,9 +2061,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2085,9 +2085,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2116,9 +2116,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -2138,9 +2138,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2160,9 +2160,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2184,9 +2184,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2221,9 +2221,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       produces:
@@ -2242,9 +2242,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: User
@@ -2268,9 +2268,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id
@@ -2292,9 +2292,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: X-TenantID
+      - description: X-Tenant-ID
         in: header
-        name: X-TenantID
+        name: X-Tenant-ID
         required: true
         type: integer
       - description: Id

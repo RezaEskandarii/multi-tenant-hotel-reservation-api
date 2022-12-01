@@ -13,13 +13,13 @@ import (
 	"reservation-api/pkg/translator"
 )
 
-// RoomTypeTypeHandler Province endpoint handler
-type RoomTypeTypeHandler struct {
+// RoomTypeHandler endpoint handler
+type RoomTypeHandler struct {
 	handlerBase
 	Service *domain_services.RoomTypeService
 }
 
-func (handler *RoomTypeTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
+func (handler *RoomTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
 
 	handler.Service = service
 	handler.Router = config.Router
@@ -38,12 +38,12 @@ func (handler *RoomTypeTypeHandler) Register(config *dto.HandlerConfig, service 
 // @Summary crete RoomType
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Param  RoomType body  models.RoomType true "RoomType"
 // @Success 200 {object} models.RoomType
 // @Router /room-types [post]
-func (handler *RoomTypeTypeHandler) create(c echo.Context) error {
+func (handler *RoomTypeHandler) create(c echo.Context) error {
 
 	model := &models.RoomType{}
 	user := currentUser(c)
@@ -79,13 +79,13 @@ func (handler *RoomTypeTypeHandler) create(c echo.Context) error {
 // @Summary update RoomType
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Param  RoomType body  models.RoomType true "RoomType"
 // @Success 200 {object} models.RoomType
 // @Router /room-types/{id} [put]
-func (handler *RoomTypeTypeHandler) update(c echo.Context) error {
+func (handler *RoomTypeHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	user := currentUser(c)
@@ -131,12 +131,12 @@ func (handler *RoomTypeTypeHandler) update(c echo.Context) error {
 // @Summary find RoomType by id
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.RoomType
 // @Router /room-types/{id} [get]
-func (handler *RoomTypeTypeHandler) find(c echo.Context) error {
+func (handler *RoomTypeHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 
@@ -171,11 +171,11 @@ func (handler *RoomTypeTypeHandler) find(c echo.Context) error {
 // @Summary findAll RoomTypes
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.RoomType
 // @Router /room-types [get]
-func (handler *RoomTypeTypeHandler) findAll(c echo.Context) error {
+func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 
@@ -195,12 +195,12 @@ func (handler *RoomTypeTypeHandler) findAll(c echo.Context) error {
 // @Summary Delete RoomType
 // @Tags RoomType
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200
 // @Router /room-types/{id} [delete]
-func (handler *RoomTypeTypeHandler) delete(c echo.Context) error {
+func (handler *RoomTypeHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 

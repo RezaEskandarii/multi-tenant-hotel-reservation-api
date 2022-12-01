@@ -35,7 +35,7 @@ func (handler *HotelHandler) Register(config *dto.HandlerConfig, service *domain
 // @Tags Hotel
 // @Accept json
 // @Produce json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param  Hotel body  models.Hotel true "Hotel"
 // @Success 200 {object} models.Hotel
 // @Router /hotels [post]
@@ -76,7 +76,7 @@ func (handler *HotelHandler) create(c echo.Context) error {
 // @Summary update Hotel
 // @Tags Hotel
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Hotel body models.Hotel true "Hotel"
 // @Produce json
@@ -143,7 +143,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 // @Summary find Hotel by id
 // @Tags Hotel
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Hotel
@@ -186,7 +186,7 @@ func (handler *HotelHandler) find(c echo.Context) error {
 // @Summary findAll Hotels
 // @Tags Hotel
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Hotel
 // @Router /hotels [get]
@@ -210,7 +210,7 @@ func (handler *HotelHandler) findAll(c echo.Context) error {
 // @Summary Delete Hotel
 // @Tags Hotel
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Hotel
 // @Router /hotels [delete]

@@ -36,7 +36,7 @@ func (handler *RoomHandler) Register(config *dto.HandlerConfig, service *domain_
 // @Summary update Room
 // @Tags Room
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Room body models.Room true "Room"
 // @Produce json
@@ -79,7 +79,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 // @Summary update Room
 // @Tags Room
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Room body models.Room true "Room"
 // @Produce json
@@ -130,7 +130,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 // @Summary find Room by id
 // @Tags Room
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Room
@@ -171,7 +171,7 @@ func (handler *RoomHandler) find(c echo.Context) error {
 // @Summary findAll Rooms
 // @Tags Room
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Room
 // @Router /rooms [get]
@@ -195,7 +195,7 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 // @Summary Delete Room
 // @Tags Room
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200

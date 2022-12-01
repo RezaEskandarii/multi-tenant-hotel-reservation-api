@@ -35,7 +35,7 @@ func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *dom
 // @Summary update Province
 // @Tags Province
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Province body models.Province true "Province"
 // @Produce json
@@ -93,7 +93,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 // @Summary update Province
 // @Tags Province
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Param Province body models.Province true "Province"
 // @Produce json
@@ -163,7 +163,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 // @Summary find Province by id
 // @Tags Province
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {object} models.Province
@@ -205,7 +205,7 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 // @Summary findAll Provinces
 // @Tags Province
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Produce json
 // @Success 200 {array} models.Province
 // @Router /provinces [get]
@@ -229,7 +229,7 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 // @Summary find Province cities by Province ID
 // @Tags Province
 // @Accept json
-// @Param X-TenantID header int true "X-TenantID"
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
 // @Param Id path int true "Id"
 // @Produce json
 // @Success 200 {array} models.Province

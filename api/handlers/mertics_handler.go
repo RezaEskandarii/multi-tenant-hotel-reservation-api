@@ -5,17 +5,17 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"net/http"
-	"reservation-api/internal/global_variables"
+	"reservation-api/internal/config"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type MetricHandler struct {
-	Config *global_variables.Config
+	Config *config.Config
 }
 
-func (handler *MetricHandler) Register(config *global_variables.Config) {
+func (handler *MetricHandler) Register(config *config.Config) {
 	handler.Config = config
 	go handler.listenToMetrics()
 }
