@@ -43,7 +43,7 @@ func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *
 
 }
 
-// @Summary SetUp Reservation
+// @Summary create reservation request
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -127,7 +127,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	})
 }
 
-// @Summary SetUp Reservation
+// @Summary create Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -313,7 +313,7 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 // If the client cancels the reservation request, they can call this endpoint to delete the reservation request.
 
-// @Summary Delete Reservation
+// @Summary cancel reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -329,7 +329,7 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-// @Summary SetUp Reservation
+// @Summary get reservation ratecodes
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -394,7 +394,7 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary update Reservation
+// @Summary change Reservation check status
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -446,13 +446,14 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+//== **********************************************************************************/
 func (handler *ReservationHandler) setReservationFields(reservation *models.Reservation, reservationRequest *models.ReservationRequest) {
 	reservation.CheckinDate = reservationRequest.CheckInDate
 	reservation.CheckoutDate = reservationRequest.CheckOutDate
 	reservation.RoomId = reservationRequest.RoomId
 }
 
+//== **********************************************************************************/
 func (handler *ReservationHandler) findAll(c echo.Context) error {
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
 	output := getOutputQueryParamVal(c)
@@ -472,15 +473,20 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 	}
 
 	if output != "" {
+
 		if output == EXCEL {
+
 			report, err := handler.ReportService.ExportToExcel(result,
 				c.Request().Header.Get(global_variables.CurrentLang))
 			if err != nil {
+
 				handler.Logger.LogError(err.Error())
 				return c.JSON(http.StatusInternalServerError, commons.ApiResponse{})
 			}
+
 			setBinaryHeaders(c, "reservations", EXCEL_OUTPUT)
 			c.Response().Write(report)
+
 			return nil
 		}
 	}
