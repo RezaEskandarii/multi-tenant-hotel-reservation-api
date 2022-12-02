@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -19,16 +22,13 @@ type HotelTypeHandler struct {
 	Service *domain_services.HotelTypeService
 }
 
+// Register HotelTypeHandler
+// this method registers all routes,routeGroups and passes HotelTypeHandler's related dependencies
 func (handler *HotelTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.HotelTypeService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/hotel-types")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.DELETE("/:id", handler.delete)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
 // @Summary create new HotelType
@@ -230,4 +230,14 @@ func (handler *HotelTypeHandler) delete(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      translator.Localize(c.Request().Context(), message_keys.Deleted),
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *HotelTypeHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/hotel-types")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.DELETE("/:id", handler.delete)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

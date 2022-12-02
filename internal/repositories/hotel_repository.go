@@ -5,25 +5,20 @@ import (
 	"errors"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/global_variables"
 	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
-	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
-	"sync"
 )
 
 type HotelRepository struct {
-	ConnectionResolver  *tenant_database_resolver.TenantDatabaseResolver
-	FileTransferService common_services.FileTransferer
+	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
-func NewHotelRepository(r *tenant_database_resolver.TenantDatabaseResolver, fileTransferService common_services.FileTransferer) *HotelRepository {
+func NewHotelRepository(r *tenant_database_resolver.TenantDatabaseResolver) *HotelRepository {
 
 	return &HotelRepository{
-		ConnectionResolver:  r,
-		FileTransferService: fileTransferService,
+		ConnectionResolver: r,
 	}
 }
 
@@ -33,44 +28,6 @@ func (r *HotelRepository) Create(ctx context.Context, hotel *models.Hotel) (*mod
 
 	if tx := db.Create(&hotel); tx.Error != nil {
 		return nil, tx.Error
-	}
-
-	if hotel.Thumbnails != nil && len(hotel.Thumbnails) > 0 {
-
-		var wg sync.WaitGroup
-		errorsCh := make(chan error, 0)
-
-		for _, file := range hotel.Thumbnails {
-			if file != nil {
-				wg.Add(1)
-				go func() {
-					result, err := r.FileTransferService.Upload(global_variables.HotelsBucketName, "", file, &wg)
-					if err != nil {
-						errorsCh <- err
-						return
-					}
-					thumbnail := models.Thumbnail{
-						VersionID:  result.VersionID,
-						HotelId:    hotel.Id,
-						BucketName: result.BucketName,
-						FileName:   result.FileName,
-						FileSize:   result.FileSize,
-					}
-
-					if err := db.Create(&thumbnail).Error; err != nil {
-						errorsCh <- err
-					}
-				}()
-			}
-		}
-		select {
-		case err := <-errorsCh:
-			return nil, err
-		default:
-
-		}
-		wg.Wait()
-		close(errorsCh)
 	}
 
 	return hotel, nil
@@ -85,6 +42,16 @@ func (r *HotelRepository) Update(ctx context.Context, hotel *models.Hotel) (*mod
 	}
 
 	return hotel, nil
+}
+
+func (r *HotelRepository) SetExtraData(ctx context.Context, id uint64, data string) error {
+
+	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+
+	if err := db.Model(&models.Hotel{}).Update("extra_data", data).Where("id=?", id).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *HotelRepository) Find(ctx context.Context, id uint64) (*models.Hotel, error) {

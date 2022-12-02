@@ -2,7 +2,7 @@ package tenant_connection_string_resolver
 
 import (
 	"fmt"
-	config2 "reservation-api/internal/config"
+	config2 "reservation-api/internal/appconfig"
 	"strings"
 )
 
@@ -10,7 +10,7 @@ import (
 func ResolveConnectionString(tenantDbName string) (string, error) {
 
 	// read configs
-	dbCfg, err := config2.NewConfig()
+	dbCfg, err := config2.New()
 
 	if err != nil {
 		return "", nil

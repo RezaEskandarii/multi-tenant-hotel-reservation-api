@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -19,17 +22,13 @@ type UserHandler struct {
 	Service *domain_services.UserService
 }
 
+// Register UserHandler
+// this method registers all routes,routeGroups and passes UserHandler's related dependencies
 func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-
-	routeGroup := handler.Router.Group("/users")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("/by-username/:username", handler.findByUsername)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
 // @Summary crete User
@@ -99,7 +98,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 }
 
-// @Summary update User
+// @Summary update
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -161,7 +160,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find User by id
+// @Summary findById
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -203,7 +202,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Users
+// @Summary findAll
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -226,7 +225,14 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findByUsername
+// @Tags User
+// @Accept json
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
+// @Param username query string true "username"
+// @Produce json
+// @Success 200 {object} models.User
+// @Router /users [get]
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
@@ -254,4 +260,14 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *UserHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/users")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("/by-username/:username", handler.findByUsername)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

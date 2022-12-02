@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -19,19 +22,14 @@ type RoomTypeHandler struct {
 	Service *domain_services.RoomTypeService
 }
 
+// Register RoomTypeHandler
+// this method registers all routes,routeGroups and passes RoomTypeHandler's related dependencies
 func (handler *RoomTypeHandler) Register(config *dto.HandlerConfig, service *domain_services.RoomTypeService) {
 
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-
-	// register RoomType routes
-	routeGroup := handler.Router.Group("/room-types")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.DELETE("/:id", handler.delete)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 
 }
 
@@ -226,4 +224,14 @@ func (handler *RoomTypeHandler) delete(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      translator.Localize(c.Request().Context(), message_keys.Deleted),
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *RoomTypeHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/room-types")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.DELETE("/:id", handler.delete)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -20,16 +23,13 @@ type ProvinceHandler struct {
 	Service *domain_services.ProvinceService
 }
 
+// Register ProvinceHandler
+// this method registers all routes,routeGroups and passes ProvinceHandler's related dependencies
 func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *domain_services.ProvinceService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/provinces")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("/:id/cities", handler.cities)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
 // @Summary update Province
@@ -258,4 +258,14 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *ProvinceHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/provinces")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("/:id/cities", handler.cities)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

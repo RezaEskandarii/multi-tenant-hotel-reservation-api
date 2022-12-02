@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -16,13 +19,13 @@ type TenantHandler struct {
 	TenantService *domain_services.TenantService
 }
 
+// Register TenantHandler
+// this method registers all routes,routeGroups and passes TenantHandler's related dependencies
 func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domain_services.TenantService) {
 	handler.TenantService = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-
-	routeGroup := handler.Router.Group("/tenants")
-	routeGroup.POST("", handler.create)
+	handler.registerRoutes()
 }
 
 // @Summary crete RoomType
@@ -62,4 +65,10 @@ func (handler *TenantHandler) create(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *TenantHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/tenants")
+	routeGroup.POST("", handler.create)
 }

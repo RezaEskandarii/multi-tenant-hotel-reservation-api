@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"reservation-api/internal/appconfig"
 	"reservation-api/internal/commons"
-	"reservation-api/internal/config"
 	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal/utils"
 	"time"
@@ -30,7 +30,7 @@ type Claims struct {
 
 type AuthService struct {
 	UserService *UserService
-	Config      *config.Config
+	Config      *appconfig.Config
 }
 
 var (
@@ -38,7 +38,7 @@ var (
 )
 
 // NewAuthService returns new instance of auth service.
-func NewAuthService(service *UserService, cfg *config.Config) *AuthService {
+func NewAuthService(service *UserService, cfg *appconfig.Config) *AuthService {
 	return &AuthService{
 		UserService: service,
 		Config:      cfg,

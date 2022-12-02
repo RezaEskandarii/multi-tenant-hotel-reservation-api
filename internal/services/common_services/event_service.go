@@ -27,7 +27,7 @@ func (e *EventService) SendEmailToGuestOnReservation() {
 
 	e.MessageBrokerManager.Consume(global_variables.ReservationQueueName, func(payload []byte) {
 
-		reservation := utils.ConvertWithGenerics(models.Reservation{}, payload)
+		reservation := utils.ConvertByGeneric(models.Reservation{}, payload)
 
 		if reservation.Supervisor != nil {
 			e.EmailSender.Send(&dto.SendEmailDto{

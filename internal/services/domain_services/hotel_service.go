@@ -2,26 +2,75 @@ package domain_services
 
 import (
 	"context"
+	"encoding/json"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal/services/common_services"
+	"sync"
 )
 
 type HotelService struct {
-	Repository *repositories.HotelRepository
+	Repository      *repositories.HotelRepository
+	FileTransformer common_services.FileTransformer
 }
 
 // NewHotelService returns new HotelService
-func NewHotelService(r *repositories.HotelRepository) *HotelService {
+func NewHotelService(r *repositories.HotelRepository, fs common_services.FileTransformer) *HotelService {
 
-	return &HotelService{Repository: r}
+	return &HotelService{Repository: r, FileTransformer: fs}
 }
 
 // Create creates new Hotel.
 func (s *HotelService) Create(ctx context.Context, hotel *models.Hotel) (*models.Hotel, error) {
 
-	return s.Repository.Create(ctx, hotel)
+	result, err := s.Repository.Create(ctx, hotel)
+	if err == nil {
+		if hotel.Thumbnails != nil && len(hotel.Thumbnails) > 0 {
+
+			var wg sync.WaitGroup
+			errorsCh := make(chan error, 0)
+
+			for _, file := range hotel.Thumbnails {
+				if file != nil {
+					wg.Add(1)
+					go func() {
+
+						uploadResult, err := s.FileTransformer.Upload(global_variables.HotelsBucketName, "", file, &wg)
+
+						if err != nil {
+							errorsCh <- err
+							return
+						}
+
+						thumbnail := models.Thumbnail{
+							VersionID:  uploadResult.VersionID,
+							HotelId:    hotel.Id,
+							BucketName: uploadResult.BucketName,
+							FileName:   uploadResult.FileName,
+							FileSize:   uploadResult.FileSize,
+						}
+
+						extraData, _ := json.Marshal(thumbnail)
+
+						s.Repository.SetExtraData(ctx, result.Id, string(extraData))
+					}()
+				}
+			}
+			select {
+			case err := <-errorsCh:
+				return nil, err
+			default:
+
+			}
+			wg.Wait()
+			close(errorsCh)
+		}
+	}
+
+	return result, err
 }
 
 // Update updates Hotel.

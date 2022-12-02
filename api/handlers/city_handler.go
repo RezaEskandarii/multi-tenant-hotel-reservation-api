@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -20,18 +23,23 @@ type CityHandler struct {
 	handlerBase
 }
 
+// Register CityHandler
+// this method registers all routes,routeGroups and passes CityHandler's related dependencies
 func (handler *CityHandler) Register(config *dto.HandlerConfig, service *domain_services.CityService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/cities")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("", handler.findAll, m.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
-// create new city
+// @Summary create
+// @Tags city
+// @Accept json
+// @Produce json
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
+// @Param  city body  models.City true "City"
+// @Success 200 {object} models.City
+// @Router /cities [post]
 func (handler *CityHandler) create(c echo.Context) error {
 
 	currentUser := currentUser(c)
@@ -76,7 +84,16 @@ func (handler *CityHandler) create(c echo.Context) error {
 
 }
 
-/*====================================================================================*/
+// @Summary update
+// @Tags City
+// @Accept json
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
+// @Param Id path int true "Id"
+// @Param City body models.City true "City"
+// @Produce json
+// @Param  country body  models.City true "City"
+// @Success 200 {object} models.City
+// @Router /cities/{id} [put]
 func (handler *CityHandler) update(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -137,7 +154,14 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 }
 
-/*====================================================================================*/
+// @Summary findById
+// @Tags City
+// @Accept json
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
+// @Param Id path int true "Id"
+// @Produce json
+// @Success 200 {object} models.City
+// @Router /cities/{id} [get]
 func (handler *CityHandler) find(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
@@ -172,7 +196,13 @@ func (handler *CityHandler) find(c echo.Context) error {
 	})
 }
 
-/*====================================================================================*/
+// @Summary findAll
+// @Tags City
+// @Accept json
+// @Param X-Tenant-ID header int true "X-Tenant-ID"
+// @Produce json
+// @Success 200 {array} models.City
+// @Router /cities [get]
 func (handler *CityHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
@@ -187,4 +217,13 @@ func (handler *CityHandler) findAll(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *CityHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/cities")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("", handler.findAll, m.PaginationMiddleware)
 }

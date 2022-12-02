@@ -16,15 +16,15 @@ import (
 	"time"
 )
 
-// FileTransferer interface is related to file management,
+// FileTransformer interface is related to file management,
 // which includes three upload and delete upload methods
-type FileTransferer interface {
+type FileTransformer interface {
 	Upload(bucketName, serverName string, file *os.File, wg *sync.WaitGroup) (*dto.FileTransferResponse, error)
 	Remove(fileName, bucketName, versionID string) error
 	Download(fileName, bucketName string) error
 }
 
-// FileTransferService implements FileTransferer interface
+// FileTransferService implements FileTransformer interface
 // this struct implements io functions with minio object manager.
 type FileTransferService struct {
 	Client *minio.Client

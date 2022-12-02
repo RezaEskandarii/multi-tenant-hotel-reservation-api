@@ -174,6 +174,8 @@ definitions:
         type: string
       email_address:
         type: string
+      extra_data:
+        type: string
       fax_number:
         type: string
       hotel_grade:
@@ -633,6 +635,114 @@ info:
   title: Reservation API
   version: "1.0"
 paths:
+  /cities:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-Tenant-ID
+        in: header
+        name: X-Tenant-ID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.City'
+            type: array
+      summary: findAll
+      tags:
+      - City
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-Tenant-ID
+        in: header
+        name: X-Tenant-ID
+        required: true
+        type: integer
+      - description: City
+        in: body
+        name: city
+        required: true
+        schema:
+          $ref: '#/definitions/models.City'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.City'
+      summary: create
+      tags:
+      - city
+  /cities/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-Tenant-ID
+        in: header
+        name: X-Tenant-ID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.City'
+      summary: findById
+      tags:
+      - City
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: X-Tenant-ID
+        in: header
+        name: X-Tenant-ID
+        required: true
+        type: integer
+      - description: Id
+        in: path
+        name: Id
+        required: true
+        type: integer
+      - description: City
+        in: body
+        name: City
+        required: true
+        schema:
+          $ref: '#/definitions/models.City'
+      - description: City
+        in: body
+        name: country
+        required: true
+        schema:
+          $ref: '#/definitions/models.City'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.City'
+      summary: update
+      tags:
+      - City
   /countries:
     get:
       consumes:
@@ -652,7 +762,7 @@ paths:
             items:
               $ref: '#/definitions/models.Country'
             type: array
-      summary: findAll Countries
+      summary: findAll
       tags:
       - Country
     post:
@@ -677,7 +787,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Country'
-      summary: create new Country
+      summary: create
       tags:
       - Country
   /countries/{id}:
@@ -702,7 +812,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Country'
-      summary: find Country by id
+      summary: findById
       tags:
       - Country
     put:
@@ -738,7 +848,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Country'
-      summary: update Country
+      summary: update
       tags:
       - Country
   /countries/{id}/provinces:
@@ -1874,7 +1984,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Reservation'
-      summary: SetUp Reservation
+      summary: create Reservation
       tags:
       - Reservation
     put:
@@ -1927,7 +2037,7 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Delete Reservation
+      summary: cancel reservation
       tags:
       - Reservation
   /reservations/change-status/{id}:
@@ -1958,7 +2068,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Reservation'
-      summary: update Reservation
+      summary: change Reservation check status
       tags:
       - Reservation
   /reservations/recommend-rate-codes/{id}:
@@ -1984,7 +2094,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.RateCodePricesDto'
-      summary: SetUp Reservation
+      summary: get reservation ratecodes
       tags:
       - Reservation
   /room-types:
@@ -2226,16 +2336,19 @@ paths:
         name: X-Tenant-ID
         required: true
         type: integer
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.User'
-            type: array
-      summary: findAll Users
+            $ref: '#/definitions/models.User'
+      summary: findByUsername
       tags:
       - User
     post:
@@ -2285,7 +2398,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.User'
-      summary: find User by id
+      summary: findById
       tags:
       - User
     put:
@@ -2315,7 +2428,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.User'
-      summary: update User
+      summary: update
       tags:
       - User
 swagger: "2.0"

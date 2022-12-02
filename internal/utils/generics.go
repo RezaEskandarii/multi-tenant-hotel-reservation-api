@@ -7,7 +7,7 @@ type Number interface {
 		uint32 | uint64 | uintptr | float32 | float64
 }
 
-func ConvertWithGenerics[T any](obj T, data []byte) T {
+func ConvertByGeneric[T any](obj T, data []byte) T {
 	json.Unmarshal(data, &obj)
 	return obj
 }

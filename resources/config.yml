@@ -12,6 +12,7 @@ application:
   ignore_migration: false
   debug_mode: true
   metric_end_point_port: 8081
+  allowed_origins: '*'
 minio:
   endpoint: 127.0.0.1:9000
   access_key_id: minioadmin
@@ -20,11 +21,12 @@ minio:
 messagebroker:
   url: amqp://guest:guest@localhost:5672/
   management: http://localhost:15672/
-  smtp:
-    host: smt.p.test
-    username: test
-    password: test
-    port: 857
+
+smtp:
+  host: smt.p.test
+  username: test
+  password: test
+  port: 857
 authentication:
   jwt_key: test123$%!@@#%%&YU&*
   token_alive_time: 520

@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -21,19 +24,16 @@ type CountryHandler struct {
 	Service *domain_services.CountryService
 }
 
+// Register CountryHandler
+// this method registers all routes,routeGroups and passes CountryHandler's related dependencies
 func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *domain_services.CountryService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/countries")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("/:id/provinces", handler.provinces)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
-// @Summary create new Country
+// @Summary create
 // @Tags Country
 // @Accept json
 // @Produce json
@@ -78,7 +78,7 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update Country
+// @Summary update
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -135,7 +135,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find Country by id
+// @Summary findById
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -176,7 +176,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Countries
+// @Summary findAll
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -232,4 +232,14 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 		Data:         provinces,
 		ResponseCode: http.StatusOK,
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *CountryHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/countries")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("/:id/provinces", handler.provinces)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

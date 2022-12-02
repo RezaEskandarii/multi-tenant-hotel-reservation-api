@@ -19,6 +19,170 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/cities": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "City"
+                ],
+                "summary": "findAll",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.City"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "city"
+                ],
+                "summary": "create",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "City",
+                        "name": "city",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "City"
+                ],
+                "summary": "findById",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "City"
+                ],
+                "summary": "update",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "X-Tenant-ID",
+                        "name": "X-Tenant-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "City",
+                        "name": "City",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    },
+                    {
+                        "description": "City",
+                        "name": "country",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    }
+                }
+            }
+        },
         "/countries": {
             "get": {
                 "consumes": [
@@ -30,7 +194,7 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "findAll Countries",
+                "summary": "findAll",
                 "parameters": [
                     {
                         "type": "integer",
@@ -62,7 +226,7 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "create new Country",
+                "summary": "create",
                 "parameters": [
                     {
                         "type": "integer",
@@ -102,7 +266,7 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "find Country by id",
+                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -138,7 +302,7 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "update Country",
+                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1840,7 +2004,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Delete Reservation",
+                "summary": "cancel reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1875,7 +2039,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "update Reservation",
+                "summary": "change Reservation check status",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1922,7 +2086,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "SetUp Reservation",
+                "summary": "get reservation ratecodes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2046,7 +2210,7 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "SetUp Reservation",
+                "summary": "create Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2433,7 +2597,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "findAll Users",
+                "summary": "findByUsername",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2441,16 +2605,20 @@ const docTemplate = `{
                         "name": "X-Tenant-ID",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.User"
-                            }
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 }
@@ -2505,7 +2673,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "find User by id",
+                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2541,7 +2709,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "update User",
+                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2841,6 +3009,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email_address": {
+                    "type": "string"
+                },
+                "extra_data": {
                     "type": "string"
                 },
                 "fax_number": {

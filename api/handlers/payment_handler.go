@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -14,13 +17,13 @@ type PaymentHandler struct {
 	PaymentService *domain_services.PaymentService
 }
 
+// Register PaymentHandler
+// this method registers all routes,routeGroups and passes PaymentHandler's related dependencies
 func (handler *PaymentHandler) Register(config *dto.HandlerConfig, service *domain_services.PaymentService) {
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/payment")
 	handler.PaymentService = service
-	routeGroup.POST("", handler.create)
-	routeGroup.DELETE("/:id", handler.delete)
+	handler.registerRoutes()
 }
 
 // @Summary create new Payment
@@ -63,4 +66,11 @@ func (handler *PaymentHandler) delete(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, nil)
 
+}
+
+// ============================= register routes ================================================== //
+func (handler *PaymentHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/payment")
+	routeGroup.POST("", handler.create)
+	routeGroup.DELETE("/:id", handler.delete)
 }

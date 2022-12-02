@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -24,23 +27,15 @@ type ReservationHandler struct {
 	ReportService *common_services.ReportService
 }
 
+// Register ReservationHandler
+// this method registers all routes,routeGroups and passes ReservationHandler's related dependencies
 func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *domain_services.ReservationService,
 	reportService *common_services.ReportService) {
 	handler.Router = config.Router
 	handler.Logger = config.Logger
 	handler.ReportService = reportService
 	handler.Service = service
-
-	routerGroup := handler.Router.Group("/reservation")
-	routerGroup.POST("/room-request", handler.createRequest)
-	routerGroup.POST("", handler.create)
-	routerGroup.DELETE("/cancel", handler.cancelRequest)
-	routerGroup.POST("/recommend-rate-codes", handler.recommendRateCodes)
-	routerGroup.GET("/:id", handler.find)
-	routerGroup.GET("", handler.findAll)
-	routerGroup.PUT("/:id", handler.update)
-	routerGroup.PUT("/change-status/:id", handler.changeStatus)
-
+	handler.registerRoutes(handler.Router)
 }
 
 // @Summary create reservation request
@@ -496,4 +491,17 @@ func (handler *ReservationHandler) findAll(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *ReservationHandler) registerRoutes(router *echo.Group) {
+	routerGroup := handler.Router.Group("/reservation")
+	routerGroup.POST("/room-request", handler.createRequest)
+	routerGroup.POST("", handler.create)
+	routerGroup.DELETE("/cancel", handler.cancelRequest)
+	routerGroup.POST("/recommend-rate-codes", handler.recommendRateCodes)
+	routerGroup.GET("/:id", handler.find)
+	routerGroup.GET("", handler.findAll)
+	routerGroup.PUT("/:id", handler.update)
+	routerGroup.PUT("/change-status/:id", handler.changeStatus)
 }

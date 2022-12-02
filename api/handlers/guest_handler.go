@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -21,18 +24,15 @@ type GuestHandler struct {
 	ReportService *common_services.ReportService
 }
 
+// Register GuestHandler
+// this method registers all routes,routeGroups and passes GuestHandler's related dependencies
 func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 	service *domain_services.GuestService, reportService *common_services.ReportService) {
 	handler.ReportService = reportService
 	handler.Router = config.Router
 	handler.Logger = config.Logger
 	handler.Service = service
-	routeGroup := handler.Router.Group("/guests")
-	routeGroup.POST("", handler.create)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("", handler.findAll)
-	routeGroup.PUT("", handler.update)
-	//routeGroup.DELETE("", handler)
+	handler.registerRoutes()
 }
 
 // @Summary create new Guest
@@ -188,4 +188,14 @@ func (handler *GuestHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data: result,
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *GuestHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/guests")
+	routeGroup.POST("", handler.create)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("", handler.findAll)
+	routeGroup.PUT("", handler.update)
+	//routeGroup.DELETE("", handler)
 }

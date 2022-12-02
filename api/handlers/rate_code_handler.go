@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -20,18 +23,14 @@ type RateCodeHandler struct {
 	RateCodeDetailService *domain_services.RateCodeDetailService
 }
 
+// Register RateCodeHandler
+// this method registers all routes,routeGroups and passes RateCodeHandler's related dependencies
 func (handler *RateCodeHandler) Register(config *dto.HandlerConfig, service *domain_services.RateCodeService, rateCodeDetailService *domain_services.RateCodeDetailService) {
 	handler.Service = service
 	handler.RateCodeDetailService = rateCodeDetailService
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/rate-codes")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.DELETE("/:id", handler.delete)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
-	routeGroup.POST("/add-details/:id", handler.addDetails)
+	handler.registerRoutes()
 }
 
 // @Summary create RateCode
@@ -275,4 +274,15 @@ func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      translator.Localize(c.Request().Context(), message_keys.Created),
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *RateCodeHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/rate-codes")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.DELETE("/:id", handler.delete)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	routeGroup.POST("/add-details/:id", handler.addDetails)
 }

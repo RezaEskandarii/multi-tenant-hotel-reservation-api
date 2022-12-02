@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -5,20 +8,23 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"net/http"
-	"reservation-api/internal/config"
+	"reservation-api/internal/appconfig"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type MetricHandler struct {
-	Config *config.Config
+	Config *appconfig.Config
 }
 
-func (handler *MetricHandler) Register(config *config.Config) {
+// Register MetricHandler
+// this method registers all routes,routeGroups and passes MetricHandler's related dependencies
+func (handler *MetricHandler) Register(config *appconfig.Config) {
 	handler.Config = config
 	go handler.listenToMetrics()
 }
+
 func recordMetrics() {
 	go func() {
 		for {

@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -19,15 +22,13 @@ type CurrencyHandler struct {
 	Service *domain_services.CurrencyService
 }
 
+// Register CurrencyHandler
+// this method registers all routes,routeGroups and passes CurrencyHandler's related dependencies
 func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *domain_services.CurrencyService) {
 	handler.Service = service
 	handler.Router = config.Router
 	handler.Logger = config.Logger
-	routeGroup := handler.Router.Group("/currencies")
-	routeGroup.POST("", handler.create)
-	routeGroup.PUT("/:id", handler.update)
-	routeGroup.GET("/:id", handler.find)
-	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
+	handler.registerRoutes()
 }
 
 // @Summary create new Currency
@@ -197,4 +198,13 @@ func (handler *CurrencyHandler) findAll(c echo.Context) error {
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})
+}
+
+// ============================= register routes ================================================== //
+func (handler *CurrencyHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/currencies")
+	routeGroup.POST("", handler.create)
+	routeGroup.PUT("/:id", handler.update)
+	routeGroup.GET("/:id", handler.find)
+	routeGroup.GET("", handler.findAll, middlewares2.PaginationMiddleware)
 }

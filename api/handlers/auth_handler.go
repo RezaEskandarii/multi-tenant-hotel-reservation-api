@@ -1,3 +1,6 @@
+// Package handlers
+// handles all http requests
+///**/
 package handlers
 
 import (
@@ -20,16 +23,16 @@ type AuthHandler struct {
 	logger      applogger.Logger
 }
 
-func (handler *AuthHandler) Register(input *dto.HandlerConfig, service *domain_services.UserService,
+// Register AuthHandler
+// this method registers all routes,routeGroups and passes AuthHandler's related dependencies
+func (handler *AuthHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService,
 	authService *domain_services.AuthService) {
 
-	handler.Router = input.Router
+	handler.Router = config.Router
 	handler.Service = service
-	handler.logger = input.Logger
+	handler.logger = config.Logger
 	handler.AuthService = authService
-	routeGroup := handler.Router.Group("/auth")
-	routeGroup.POST("/signin", handler.signin)
-	routeGroup.POST("/refresh-token", handler.refreshToken)
+	handler.registerRoutes()
 }
 
 func (handler *AuthHandler) signin(c echo.Context) error {
@@ -90,4 +93,11 @@ func (handler *AuthHandler) refreshToken(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusOK, result)
 	}
+}
+
+// ============================= register routes ================================================== //
+func (handler *AuthHandler) registerRoutes() {
+	routeGroup := handler.Router.Group("/auth")
+	routeGroup.POST("/signin", handler.signin)
+	routeGroup.POST("/refresh-token", handler.refreshToken)
 }
