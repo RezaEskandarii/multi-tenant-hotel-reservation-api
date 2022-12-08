@@ -15,10 +15,6 @@ import (
 // RegisterServicesAndRoutes register dependencies for services and handlers
 func RegisterServicesAndRoutes(router *echo.Group) error {
 
-	if confErr != nil {
-		return confErr
-	}
-
 	router.Use(middleware.Gzip())
 
 	router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
