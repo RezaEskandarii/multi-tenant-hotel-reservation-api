@@ -21,11 +21,11 @@ func init() {
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 
 	if _, err := bundle.LoadMessageFile("resources/translations/en.json"); err != nil {
-		panic(err.Error())
+		//	panic(err.Error())
 	}
 
 	if _, err := bundle.LoadMessageFile("resources/translations/fa.json"); err != nil {
-		panic(err.Error())
+		///	panic(err.Error())
 	}
 
 }

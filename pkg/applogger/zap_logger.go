@@ -101,6 +101,7 @@ func (l *AppLogger) LogError(err interface{}) {
 func (l *AppLogger) LogInfoJSON(message interface{}) {
 
 	result, _ := json.Marshal(message)
+	fmt.Println(string(result))
 	writeLog(infoLevel, string(result))
 }
 

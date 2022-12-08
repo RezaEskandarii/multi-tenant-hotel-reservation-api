@@ -19,7 +19,7 @@ type httpHelper struct {
 type Request struct {
 	Ctx     context.Context
 	Url     string
-	Body    interface{}
+	Body    map[string]interface{}
 	Headers map[string]string
 	Out     interface{}
 }
@@ -111,7 +111,7 @@ func (h *httpHelper) Patch(request Request) (error, string, *http.Response) {
 }
 
 // sendHttpRequest sends http Request by given method and parameters.
-func (h *httpHelper) sendHttpRequest(ctx context.Context, method string, url string, body interface{}, header map[string]string, out interface{}) (error, string, *http.Response) {
+func (h *httpHelper) sendHttpRequest(ctx context.Context, method string, url string, body map[string]interface{}, header map[string]string, out interface{}) (error, string, *http.Response) {
 
 	// Request body
 	var bodyBytes []byte
