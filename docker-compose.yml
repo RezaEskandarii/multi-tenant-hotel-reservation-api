@@ -41,7 +41,7 @@ services:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
-      - rabbitmq_nodejs
+      - backend
 
 networks:
   backend:
