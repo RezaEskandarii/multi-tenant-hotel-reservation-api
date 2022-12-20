@@ -1,12 +1,11 @@
-hello:
+ping:
 	echo "hotel reservation API"
 
 build:
-	go build -o  main.go
+	go build -v -ldflags="-X 'main.BuildInfo.Version=v1.0.0' -X 'main.BuildInfo.User=$(id -u -n)' -X 'main.BuildInfo.Time=$(date)'"
 
 run:
 	go run main.go --migrate
-
 
 compile:
 	echo "Compiling for every OS and Platform"
@@ -22,4 +21,8 @@ test:
 	go test ./...
 	echo "Done!"
 
-all: hello build
+build-docker-compose:
+	docker-compose up -d
+
+start-vault-server:
+	 vault server -dev -dev-root-token-id RhcmkiLCJhZGRyZXNzIjoiIiwicGhvbmVfbnVtYmVyIjoiOTk5OTk5OSIsInRlbmFudF9pZCI6IkkwS0ZsL

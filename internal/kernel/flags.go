@@ -19,7 +19,7 @@ func loadFlags() {
 
 	if setup {
 		fmt.Println("setup started...")
-		if err := multi_tenancy_database.SetUp(); err != nil {
+		if err := multi_tenancy_database.ClientSetUp(); err != nil {
 
 			logger.LogError(err)
 			os.Exit(1)

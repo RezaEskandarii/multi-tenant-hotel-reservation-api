@@ -15,12 +15,21 @@ var (
 	baseUrl = "http://127.0.0.1:8080/api/v1"
 )
 
+func init() {
+	setup()
+}
+
+func setup() {
+
+	time.Sleep(10000)
+
+}
+
 func getHeaders() map[string]string {
 
 	headers := make(map[string]string)
 	headers["Content-Type"] = "application/json"
 	headers["X-Tenant-ID"] = "1"
-
 	return headers
 }
 

@@ -24,6 +24,18 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*
 		return nil, err
 	}
 
+	// check if tenant exists
+	// this code uses for prevent create tenant in restart application
+	// because create tenant command calls in docker cmd
+	if tenant.Id != 0 {
+		var count int64 = 0
+		if err := publicDB.Model(&models.Tenant{}).Where("id=?", tenant.Id).Count(&count).Error; err != nil {
+			return nil, err
+		}
+		if count > 0 {
+			return nil, nil
+		}
+	}
 	if tx := publicDB.Create(&tenant); tx.Error != nil {
 		return nil, tx.Error
 	}

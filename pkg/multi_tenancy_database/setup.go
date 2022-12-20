@@ -2,6 +2,7 @@ package multi_tenancy_database
 
 import (
 	"gorm.io/gorm"
+	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services/domain_services"
@@ -17,13 +18,26 @@ var (
 	})
 )
 
-// SetUp application multi_tenancy_database
-func SetUp() error {
+// ClientSetUp application multi_tenancy_database
+func ClientSetUp() error {
 
 	_, err := service.SetUp(nil, &models.Tenant{
 		Name:        "fist tenant",
 		Description: "first tenant",
 	})
+
+	return err
+}
+
+// SetUp application multi_tenancy_database for first time in command line
+func SetUp() error {
+
+	tenant := &models.Tenant{
+		Name:        "fist tenant",
+		Description: "first tenant",
+	}
+	tenant.Id = global_variables.DefaultTenantID
+	_, err := service.SetUp(nil, tenant)
 
 	return err
 }

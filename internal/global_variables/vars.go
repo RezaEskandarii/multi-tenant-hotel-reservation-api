@@ -17,4 +17,5 @@ var (
 	ClaimsKey                       = "Claims"
 	CurrentLang                     = "CurrentLang"
 	UserClaims                      = "user_claims"
+	DefaultTenantID                 = uint64(1)
 )

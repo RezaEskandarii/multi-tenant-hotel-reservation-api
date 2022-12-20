@@ -7,6 +7,10 @@ import (
 	"reservation-api/pkg/applogger"
 )
 
+var (
+	BuildInfo = Build{}
+)
+
 // @title Reservation API
 // @version 1.0
 // @description Swagger documentation for reservation API .
@@ -20,6 +24,13 @@ import (
 func main() {
 
 	logger := applogger.New(nil)
+	defer func() {
+		if r := recover(); r != nil {
+			logger.LogInfoJSON(r)
+		}
+	}()
+
+	BuildInfo.Print()
 
 	if err := kernel.Run(); err != nil {
 		logger.LogError(err)
