@@ -5,5 +5,6 @@ A Golang web-based restful api hotel reservation system, that acts a broker betw
 # 
 
 **Application architecture**:<br>
-The architecture used in this program is **multitenancy**, for each new **hotel(tenant)**, a new separate database is created, all of its tables are separate, and the information of each **hotel(tenant)** is stored separately in its own database.
+The architecture used in this program is **multitenancy**, for each new **hotel(tenant)**, a new separate database is created, all of its tables are separate, and the information of each **hotel(tenant)** is stored separately in its own database. <br>
+This pattern uses a **multi-tenant** application with many **databases**, all being single-tenant databases. A new database is provisioned for each new **tenant**.
  
