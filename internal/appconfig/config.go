@@ -60,7 +60,7 @@ type Config struct {
 // New reads Config from yml file copies to Config struct and returns Config struct
 func New() (*Config, error) {
 
-	path := "./resources/Config.yml"
+	path := "./resources/config.yml"
 
 	if os.Getenv("CONFIG_PATH") != "" {
 		path = os.Getenv("CONFIG_PATH")

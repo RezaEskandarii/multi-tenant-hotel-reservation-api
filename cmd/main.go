@@ -2,13 +2,14 @@ package main
 
 import (
 	"os"
+	"reservation-api/cmd/build"
 	_ "reservation-api/docs"
 	"reservation-api/internal/kernel"
 	"reservation-api/pkg/applogger"
 )
 
 var (
-	BuildInfo = Build{}
+	BuildInfo = build.Build{}
 )
 
 // @title Reservation API

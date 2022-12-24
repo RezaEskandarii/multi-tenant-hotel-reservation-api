@@ -8,15 +8,14 @@ LABEL maintainer="Reza Eskandari"
 WORKDIR /app
 
 COPY go.mod go.sum ./
-
 RUN go mod download
 
 COPY . .
-COPY . ./data
-COPY . ./resources
+COPY ./data .
+COPY ./resources .
 
-RUN go build ./cmd/main.go -o main .
+RUN go build ./cmd/main.go
 
 EXPOSE 8080
 
-CMD ["./main"]
+CMD ["./main","-migrate","-setup"]

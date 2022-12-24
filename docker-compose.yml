@@ -1,18 +1,23 @@
-version: '3'
-
 # Define services
 services:
 
-  postgresdb:
-    image: postgres:latest
-    container_name: postgres_container
+  postgres:
+    container_name: postgres
+    image: "postgres:12"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=hotel_reservation
-      - DATABASE_HOST=127.0.0.1
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_DB: "hotel_reservation"
+      POSTGRES_HOST: "127.0.0.1"
+      PGDATA: "/data/postgres"
+    expose:
+      - 5432
+    volumes:
+      - postgres:/data/postgres
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
     ports:
-      - '5432:5432'
+      - "5432:5432"
+    restart: unless-stopped
     networks:
       - backend
   rabbitmq:
@@ -36,10 +41,12 @@ services:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: unless-stopped
     depends_on:
-      - postgresdb # This service depends on redis. Start that first.
+      - postgres # This service depends on redis. Start that first.
     environment: # Pass environment variables to the service
       REDIS_URL: redis:6379
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
 networks:
   backend:
+volumes:
+  postgres:
