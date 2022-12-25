@@ -13,6 +13,7 @@ This pattern uses a **multi-tenant** application with many **databases**, all be
 - PostgreSql
 - Rabbitmq
 - Redis
+- Minio 
 - Docker
 - DockerCompose
 ## How to run(with docker):
@@ -20,11 +21,12 @@ To run this program, you can easily use **DockerCompose**, all required dependen
 First of all, install Docker and Docker Compose on your machine and after run the `docer-compose up -d` command, the program is executed, the default database It is made and also all the seeds are done.
 ## How to run(without docker):
 If for any reason you don't want to run the program with Docker and just want to run and compile the code, follow the steps below:
-- install postgresql on your machine
-- install rabbitmq on your machine
-- install redis on your machine
-- go to **resorecess** directory and override the **config.yml**
-- add your postgres port and ip address
-- add your redis client port and ip address
-- add your rabbitmq address
-- 
+- install **postgresql** on your machine
+- install **rabbitmq** on your machine
+- install **redis** on your machine
+- install **minio** on your machine
+- go to **resorecess** directory and override the **config.yml** with following steps:
+  1. add your postgres port and ip address
+  2. add your redis client port and ip address
+  3. add your rabbitmq address
+  4. add your minio conenction
