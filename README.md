@@ -30,5 +30,5 @@ If for any reason you don't want to run the program with Docker and just want to
   2. add your redis client port and ip address
   3. add your rabbitmq address
   4. add your minio conenction
-  5. in the last step, go to the **cmd** directory and run the `make build` command to compile, غou can also run the `go run ./main.go` command to execute.
+  5. in the last step, go to the **cmd** directory and run the `make build` command to compile, you can also run the `go run ./main.go` command to execute.
 
