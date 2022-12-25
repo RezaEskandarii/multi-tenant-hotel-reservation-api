@@ -14,6 +14,7 @@ This pattern uses a **multi-tenant** application with many **databases**, all be
 - Rabbitmq
 - Redis
 - Docker
+- DockerCompose
 ## How to run:
 To run this program, you can easily use **DockerCompose**, all required dependencies such as Postgres, Redis, etc. are listed in the <br> **docker-compose** file.<br>
 First of all, install Docker and Docker Compose on your machine and after run the `docer-compose up -d` command, the program is executed, the default database It is made and also all the seeds are done.
