@@ -9,7 +9,7 @@ type ApiResponse struct {
 	Data         interface{} `json:"data"`
 	ResponseCode int         `json:"response_code"`
 	Message      string      `json:"message"`
-	Errors       interface{} `json:"errors"`
+	Errors       interface{} `json:"internal_errors"`
 }
 
 func NewApiResponse() ApiResponse {

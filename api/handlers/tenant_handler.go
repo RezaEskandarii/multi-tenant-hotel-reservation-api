@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -38,9 +38,9 @@ func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domai
 // @Router /room-types [post]
 func (handler *TenantHandler) create(c echo.Context) error {
 
-	model := &models.Tenant{}
+	tenant := &models.Tenant{}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&tenant); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -49,7 +49,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 		})
 	}
 
-	result, err := handler.TenantService.SetUp(tenantContext(c), model)
+	result, err := handler.TenantService.SetUp(tenantContext(c), tenant)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())

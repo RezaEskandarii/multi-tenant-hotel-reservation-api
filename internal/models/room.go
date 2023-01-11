@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"github.com/asaskevich/govalidator"
-	"reservation-api/internal/message_keys"
+	"reservation-api/internal_errors/message_keys"
 )
 
 type CleanStatus int

@@ -5,9 +5,9 @@ import (
 	"errors"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/tenant_resolver"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 

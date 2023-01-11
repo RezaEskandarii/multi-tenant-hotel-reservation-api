@@ -9,10 +9,10 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -43,10 +43,10 @@ func (handler *RoomHandler) Register(config *dto.HandlerConfig, service *domain_
 // @Router /rooms/{id} [put]
 func (handler *RoomHandler) create(c echo.Context) error {
 
-	model := &models.Room{}
+	room := &models.Room{}
 	user := currentUser(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&room); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -55,8 +55,8 @@ func (handler *RoomHandler) create(c echo.Context) error {
 		})
 	}
 
-	model.SetAudit(user)
-	result, err := handler.Service.Create(tenantContext(c), model)
+	room.SetAudit(user)
+	result, err := handler.Service.Create(tenantContext(c), room)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())

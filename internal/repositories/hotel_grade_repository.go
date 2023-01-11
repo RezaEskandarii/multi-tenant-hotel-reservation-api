@@ -6,6 +6,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/tenant_resolver"
+	"reservation-api/internal_errors"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -71,7 +72,7 @@ func (r HotelGradeRepository) Delete(ctx context.Context, id uint64) error {
 	}
 
 	if count > 0 {
-		return GradeHasHotel
+		return internal_errors.GradeHasHotel
 	}
 
 	if query := db.Model(&models.HotelGrade{}).Where("id=?", id).Delete(&models.HotelGrade{}); query.Error != nil {

@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"io"
@@ -148,5 +149,5 @@ func (s *FileTransferService) generateRandomFileName(filename string) string {
 	// convert generated random string to SHA256 hash.
 	randomStr = utils.GenerateSHA256(randomStr)
 
-	return fmt.Sprintf("%s%s", randomStr, fileExtension)
+	return fmt.Sprintf("%s%s%s", randomStr, uuid.New().String(), fileExtension)
 }

@@ -85,6 +85,26 @@ func (s AuthService) SignIn(ctx context.Context, username, password string) (err
 	}
 }
 
+func (s *AuthService) ParseClaims(tknStr string) *Claims {
+
+	claims := &Claims{}
+
+	// Parse the JWT string and store the result in `claims`.
+	// Note that we are passing the key in this method as well. This method will return an error
+	// if the token is invalid (if it has expired according to the expiry time we set on sign in),
+	// or if the signature does not match
+	_, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+		return nil, nil
+	})
+
+	if err != nil {
+		return claims
+	}
+
+	return claims
+
+}
+
 func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.JWTTokenResponse) {
 
 	jwtKey := s.Config.Authentication.JwtKey
@@ -121,7 +141,7 @@ func (s *AuthService) RefreshToken(tokenStr string) (error, *commons.JWTTokenRes
 	}
 }
 
-func (s *AuthService) VerifyToken(ctx context.Context, jwtToken string, tenantID uint64) (error, *Claims) {
+func (s *AuthService) VerifyToken(ctx context.Context, jwtToken string, tenantID uint64) (error, bool) {
 
 	token, _ := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 
@@ -133,34 +153,14 @@ func (s *AuthService) VerifyToken(ctx context.Context, jwtToken string, tenantID
 	})
 
 	if token == nil {
-		return errors.New("token is null"), nil
+		return errors.New("token is null"), false
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	if token.Valid {
 
-		username := claims["username"]
-		err, user := s.UserService.FindByUsername(ctx, fmt.Sprintf("%s", username))
-
-		if err != nil {
-			return err, nil
-		}
-
-		if user == nil {
-			return InvalidTokenError, nil
-		}
-
-		return nil, &Claims{
-			Username:    fmt.Sprintf("%s", claims["username"]),
-			Email:       fmt.Sprintf("%s", claims["email"]),
-			FirstName:   fmt.Sprintf("%s", claims["firstname"]),
-			LastName:    fmt.Sprintf("%s", claims["lastname"]),
-			Address:     fmt.Sprintf("%s", claims["address"]),
-			PhoneNumber: fmt.Sprintf("%s", claims["phonenumber"]),
-			TenantID:    fmt.Sprintf("%d", tenantID), //utils.Encrypt(fmt.Sprintf("%d", tenantID)),
-		}
-
+		return nil, true
 	} else {
-		return InvalidTokenError, nil
+		return InvalidTokenError, false
 	}
 
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/andskur/argon2-hashing"
+	"gorm.io/gorm"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
@@ -14,6 +15,7 @@ import (
 
 type UserRepository struct {
 	DbResolver *tenant_database_resolver.TenantDatabaseResolver
+	Db         gorm.DB
 }
 
 func NewUserRepository(r *tenant_database_resolver.TenantDatabaseResolver) *UserRepository {
@@ -48,55 +50,55 @@ func (r *UserRepository) Update(ctx context.Context, user *models.User) (*models
 
 func (r *UserRepository) Find(ctx context.Context, id uint64) (*models.User, error) {
 
-	model := models.User{}
+	user := models.User{}
 	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
-	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
+	if tx := db.Where("id=?", id).Find(&user); tx.Error != nil {
 		return nil, tx.Error
 	}
 
-	if model.Id == 0 {
+	if user.Id == 0 {
 		return nil, nil
 	}
 
-	return &model, nil
+	return &user, nil
 }
 
-func (r *UserRepository) FindByUsername(ctx context.Context, username string) (error, *models.User) {
+func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 
 	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
-	model := models.User{Username: username}
+	user := models.User{Username: username}
 
-	if tx := db.Where(model).Find(&model); tx.Error != nil {
-		return tx.Error, nil
+	if tx := db.Where(user).Find(&user); tx.Error != nil {
+		return nil, tx.Error
 	}
 
-	if model.Id == 0 {
+	if user.Id == 0 {
 		return nil, nil
 	}
 
-	return nil, &model
+	return &user, nil
 }
 func (r *UserRepository) FindByUsernameAndPassword(ctx context.Context, username string, password string) (*models.User, error) {
 
-	model := models.User{}
+	user := models.User{}
 	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
-	if tx := db.Where("username=?", username).Find(&model); tx.Error != nil {
+	if tx := db.Where("username=?", username).Find(&user); tx.Error != nil {
 
 		return nil, tx.Error
 	}
 
-	if model.Id == 0 {
+	if user.Id == 0 {
 		return nil, nil
 	}
 
-	err := argon2.CompareHashAndPassword([]byte(model.Password), []byte(password))
+	err := argon2.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return nil, err
 	}
 
-	return &model, nil
+	return &user, nil
 }
 
 func (r *UserRepository) Deactivate(ctx context.Context, id uint64) (*models.User, error) {

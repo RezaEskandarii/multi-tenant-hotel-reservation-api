@@ -21,7 +21,7 @@ func TestCanLocalizeMessage(t *testing.T) {
 			want:  "reservation-api",
 		},
 		{
-			input: "errors.BadRequest",
+			input: "internal_errors.BadRequest",
 			want:  "BadRequest",
 		},
 	}

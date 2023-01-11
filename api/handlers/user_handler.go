@@ -9,10 +9,10 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -41,10 +41,10 @@ func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_
 // @Router /users [post]
 func (handler *UserHandler) create(c echo.Context) error {
 
-	model := models.User{}
+	userModel := models.User{}
 	user := currentUser(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&userModel); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -54,7 +54,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 			})
 	}
 
-	err, oldUser := handler.Service.FindByUsername(tenantContext(c), model.Username)
+	oldUser, err := handler.Service.FindByUsername(tenantContext(c), userModel.Username)
 
 	if err != nil {
 
@@ -76,8 +76,8 @@ func (handler *UserHandler) create(c echo.Context) error {
 		})
 	}
 
-	model.SetAudit(user)
-	if result, err := handler.Service.Create(tenantContext(c), &model); err == nil {
+	userModel.SetAudit(user)
+	if result, err := handler.Service.Create(tenantContext(c), &userModel); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
@@ -117,7 +117,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(tenantContext(c), id)
+	userModel, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -128,7 +128,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if userModel == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -136,7 +136,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&userModel); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
@@ -145,8 +145,8 @@ func (handler *UserHandler) update(c echo.Context) error {
 		})
 	}
 
-	model.SetUpdatedBy(user)
-	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
+	userModel.SetUpdatedBy(user)
+	if result, err := handler.Service.Update(tenantContext(c), userModel); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         result,
@@ -236,7 +236,7 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	username := c.Param("username")
-	err, model := handler.Service.FindByUsername(tenantContext(c), username)
+	user, err := handler.Service.FindByUsername(tenantContext(c), username)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -247,7 +247,7 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if user == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -256,7 +256,7 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:         model,
+		Data:         user,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

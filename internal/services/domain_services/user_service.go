@@ -8,6 +8,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/repositories"
+	"reservation-api/internal_errors"
 )
 
 type UserService struct {
@@ -21,6 +22,14 @@ func NewUserService(r *repositories.UserRepository) *UserService {
 
 // Create creates new User.
 func (s *UserService) Create(ctx context.Context, user *models.User) (*models.User, error) {
+
+	usr, err := s.FindByUsername(ctx, user.Username)
+	if err != nil {
+		return nil, err
+	}
+	if usr != nil {
+		return nil, internal_errors.DuplicatedUser
+	}
 
 	hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
 
@@ -46,7 +55,7 @@ func (s *UserService) Find(ctx context.Context, id uint64) (*models.User, error)
 }
 
 // FindByUsername returns User by username and if it does not find the User, it returns nil.
-func (s *UserService) FindByUsername(ctx context.Context, username string) (error, *models.User) {
+func (s *UserService) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 
 	return s.Repository.FindByUsername(ctx, username)
 }

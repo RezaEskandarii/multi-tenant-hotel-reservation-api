@@ -9,8 +9,8 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	. "reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 
 	_ "reservation-api/internal/models"
@@ -43,9 +43,9 @@ func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *doma
 // @Router /countries [post]
 func (handler *CountryHandler) create(c echo.Context) error {
 
-	model := &models.CountryCreateUpdate{}
+	country := &models.CountryCreateUpdate{}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&country); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -55,12 +55,12 @@ func (handler *CountryHandler) create(c echo.Context) error {
 			})
 	}
 
-	if ok, err := model.Validate(); err != nil && ok == false {
+	if ok, err := country.Validate(); err != nil && ok == false {
 		return c.JSON(http.StatusBadRequest, ApiResponse{Message: err.Error()})
 	}
 
-	setCreatedByUpdatedBy(model.BaseModel, currentUser(c))
-	output, err := handler.Service.Create(tenantContext(c), model)
+	setCreatedByUpdatedBy(country.BaseModel, currentUser(c))
+	output, err := handler.Service.Create(tenantContext(c), country)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -98,7 +98,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 
 	user := currentUser(c)
-	model, err := handler.Service.Find(tenantContext(c), id)
+	country, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -108,7 +108,7 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if country == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -116,13 +116,13 @@ func (handler *CountryHandler) update(c echo.Context) error {
 		})
 	}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&country); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model.SetUpdatedBy(user)
-	if output, err := handler.Service.Update(tenantContext(c), model); err == nil {
+	country.SetUpdatedBy(user)
+	if output, err := handler.Service.Update(tenantContext(c), country); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         output,
@@ -151,7 +151,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(tenantContext(c), id)
+	country, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -161,7 +161,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if country == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -170,7 +170,7 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ApiResponse{
-		Data:         model,
+		Data:         country,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

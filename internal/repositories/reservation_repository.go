@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"database/sql"
 	"fmt"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"math"
 	"math/big"
@@ -52,7 +53,8 @@ func (r *ReservationRepository) CreateReservationRequest(ctx context.Context, re
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
 
 	// generate reservation request key.
-	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s", expireTime, buffer.String(), requestDto.CheckInDate.String(), requestDto.CheckOutDate.String()))
+	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s%s", expireTime, buffer.String(),
+		requestDto.CheckInDate.String(), requestDto.CheckOutDate.String(), uuid.New().String()))
 
 	if err == nil {
 		buffer.WriteString(rnd.String())
@@ -173,18 +175,19 @@ func (r *ReservationRepository) GetRecommendedRateCodes(ctx context.Context, pri
        prices.guest_count,
        prices.id as rate_price_id
 	`).Joins(`
-         join rate_code_detail_prices prices
-              on prices.rate_code_detail_id = details.id
-         join rate_codes parent 
-              on details.rate_code_id = parent.id
+       LEFT JOIN rate_code_detail_prices prices
+              ON prices.rate_code_detail_id = details.id
+         LEFT JOIN rate_codes parent 
+              ON details.rate_code_id = parent.id
 	`).Where(`
 		  details.room_id = ?
-		  and prices.guest_count = ?
-		  and details.min_nights <= ?
-		  and details.date_start <= ?
-		  and details.date_end >= ?
-          and details.rate_code_id=?
-	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart, priceDto.DateEnd, priceDto.RateCodeId).Scan(&ratePrices)
+		  AND prices.guest_count = ?
+		  AND details.min_nights <= ?
+		  AND details.date_start <= ?
+		  AND details.date_end >= ?
+          AND details.rate_code_id=?
+	`, priceDto.RoomId, priceDto.GuestCount, priceDto.NightCount, priceDto.DateStart,
+		priceDto.DateEnd, priceDto.RateCodeId).Scan(&ratePrices)
 
 	return ratePrices, nil
 }

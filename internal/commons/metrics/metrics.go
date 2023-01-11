@@ -18,7 +18,7 @@ func init() {
 	m = &metrics{
 		goroutines: expvar.NewInt("goroutines"),
 		requests:   expvar.NewInt("requests"),
-		errors:     expvar.NewInt("errors"),
+		errors:     expvar.NewInt("internal_errors"),
 		panics:     expvar.NewInt("panics"),
 	}
 }

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/services/domain_services"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/translator"
 	"reservation-api/pkg/validator"
@@ -49,7 +49,7 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		})
 	}
 
-	if _, user := handler.Service.FindByUsername(tenantContext(c), cerds.Username); user == nil {
+	if user, _ := handler.Service.FindByUsername(tenantContext(c), cerds.Username); user == nil {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Errors:       translator.Localize(c.Request().Context(), message_keys.UserNotFound),

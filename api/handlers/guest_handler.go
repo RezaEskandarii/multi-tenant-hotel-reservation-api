@@ -9,11 +9,11 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/global_variables"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -45,10 +45,10 @@ func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 // @Router /guests [post]
 func (handler *GuestHandler) create(c echo.Context) error {
 
-	model := models.Guest{}
+	guest := models.Guest{}
 	user := currentUser(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&guest); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -56,8 +56,8 @@ func (handler *GuestHandler) create(c echo.Context) error {
 		})
 	}
 
-	model.SetAudit(user)
-	if _, err := handler.Service.Create(tenantContext(c), &model); err != nil {
+	guest.SetAudit(user)
+	if _, err := handler.Service.Create(tenantContext(c), &guest); err != nil {
 
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: translator.Localize(c.Request().Context(), err.Error()),
@@ -65,7 +65,7 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:    model,
+		Data:    guest,
 		Message: translator.Localize(c.Request().Context(), message_keys.Created),
 	})
 }

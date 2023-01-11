@@ -9,10 +9,10 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -94,7 +94,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	mainModel, err := handler.Service.Find(tenantContext(c), id)
+	hotelEntity, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -105,7 +105,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 		})
 	}
 
-	if mainModel == nil || (mainModel != nil && mainModel.Id == 0) {
+	if hotelEntity == nil || (hotelEntity != nil && hotelEntity.Id == 0) {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
@@ -125,7 +125,7 @@ func (handler *HotelHandler) update(c echo.Context) error {
 	}
 
 	// map client request fields.
-	modelToUpdate := handler.Service.Map(&clientModel, mainModel)
+	modelToUpdate := handler.Service.Map(&clientModel, hotelEntity)
 	modelToUpdate.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(tenantContext(c), modelToUpdate)
 

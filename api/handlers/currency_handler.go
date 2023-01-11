@@ -9,10 +9,10 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	. "reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -41,10 +41,10 @@ func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *dom
 // @Router /currencies [post]
 func (handler *CurrencyHandler) create(c echo.Context) error {
 
-	model := &models.Currency{}
+	currency := &models.Currency{}
 	user := currentUser(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&currency); err != nil {
 		handler.Logger.LogError(err.Error())
 
 		return c.JSON(http.StatusBadRequest,
@@ -54,8 +54,8 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 			})
 	}
 
-	model.SetAudit(user)
-	if result, err := handler.Service.Create(tenantContext(c), model); err == nil {
+	currency.SetAudit(user)
+	if result, err := handler.Service.Create(tenantContext(c), currency); err == nil {
 
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
@@ -95,7 +95,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 
 	user := currentUser(c)
-	model, err := handler.Service.Find(tenantContext(c), id)
+	currency, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -106,7 +106,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if currency == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -114,12 +114,12 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 		})
 	}
 
-	model.SetUpdatedBy(user)
-	if err := c.Bind(&model); err != nil {
+	currency.SetUpdatedBy(user)
+	if err := c.Bind(&currency); err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	if result, err := handler.Service.Update(tenantContext(c), model); err == nil {
+	if result, err := handler.Service.Update(tenantContext(c), currency); err == nil {
 
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         result,
@@ -149,7 +149,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(tenantContext(c), id)
+	currency, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
@@ -161,7 +161,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if currency == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -170,7 +170,7 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ApiResponse{
-		Data:         model,
+		Data:         currency,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

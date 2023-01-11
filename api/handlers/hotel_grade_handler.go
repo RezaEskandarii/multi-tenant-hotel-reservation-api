@@ -9,10 +9,10 @@ import (
 	middlewares2 "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 )
 
@@ -41,10 +41,10 @@ func (handler *HotelGradeHandler) Register(config *dto.HandlerConfig, service *d
 // @Router /hotel-grades [post]
 func (handler *HotelGradeHandler) create(c echo.Context) error {
 
-	model := &models.HotelGrade{}
+	hotel := &models.HotelGrade{}
 	user := currentUser(c)
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&hotel); err != nil {
 
 		handler.Logger.LogError(err.Error())
 
@@ -55,8 +55,8 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 		})
 	}
 
-	model.SetAudit(user)
-	result, err := handler.Service.Create(tenantContext(c), model)
+	hotel.SetAudit(user)
+	result, err := handler.Service.Create(tenantContext(c), hotel)
 
 	if err != nil {
 
@@ -115,8 +115,8 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	}
 
 	// bind request to tmp struct.
-	tmpModel := models.HotelGrade{}
-	err = c.Bind(&tmpModel)
+	tmpHotel := models.HotelGrade{}
+	err = c.Bind(&tmpHotel)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -127,7 +127,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	}
 
 	// prevent to edit other fields.
-	result.Name = tmpModel.Name
+	result.Name = tmpHotel.Name
 	result.SetUpdatedBy(user)
 	updatedModel, err := handler.Service.Update(tenantContext(c), result)
 

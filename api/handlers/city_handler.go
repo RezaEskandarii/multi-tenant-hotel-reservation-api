@@ -9,10 +9,10 @@ import (
 	m "reservation-api/api/middlewares"
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
-	"reservation-api/internal/message_keys"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/internal/utils"
+	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 	"reservation-api/pkg/validator"
 )
@@ -104,7 +104,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 
 	currentUser := currentUser(c)
-	model, err := handler.Service.Find(tenantContext(c), id)
+	city, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 
@@ -117,7 +117,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if city == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -125,7 +125,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 		})
 	}
 
-	if err := c.Bind(&model); err != nil {
+	if err := c.Bind(&city); err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
@@ -133,15 +133,15 @@ func (handler *CityHandler) update(c echo.Context) error {
 		})
 	}
 
-	if err, messages := validator.Validate(model); err != nil {
+	if err, messages := validator.Validate(city); err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Errors:       messages,
 			ResponseCode: http.StatusBadRequest,
 		})
 	}
 
-	model.SetUpdatedBy(currentUser)
-	if output, err := handler.Service.Update(tenantContext(c), model); err == nil {
+	city.SetUpdatedBy(currentUser)
+	if output, err := handler.Service.Update(tenantContext(c), city); err == nil {
 
 		return c.JSON(http.StatusOK, commons.ApiResponse{
 			Data:         output,
@@ -170,7 +170,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
-	model, err := handler.Service.Find(tenantContext(c), id)
+	city, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -181,7 +181,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 		})
 	}
 
-	if model == nil {
+	if city == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Data:         nil,
 			ResponseCode: http.StatusNotFound,
@@ -190,7 +190,7 @@ func (handler *CityHandler) find(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, commons.ApiResponse{
-		Data:         model,
+		Data:         city,
 		ResponseCode: http.StatusOK,
 		Message:      "",
 	})

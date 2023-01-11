@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"reflect"
 	"reservation-api/internal/global_variables"
 	"strings"
 	"time"
@@ -61,7 +60,7 @@ func getOutputQueryParamVal(c echo.Context) string {
 
 // setCreatedByUpdatedBy fills CreatedBy and UpdatedBy fields.
 func setCreatedByUpdatedBy(entity interface{}, audit string) {
-	val := reflect.Indirect(reflect.ValueOf(entity))
-	val.FieldByName("CreatedBy").SetString(audit)
-	val.FieldByName("UpdatedBy").SetString(audit)
+	//val := reflect.Indirect(reflect.ValueOf(entity))
+	//val.FieldByName("CreatedBy").SetString(audit)
+	//val.FieldByName("UpdatedBy").SetString(audit)
 }
