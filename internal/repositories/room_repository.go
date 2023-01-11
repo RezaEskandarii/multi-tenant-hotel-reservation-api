@@ -10,7 +10,7 @@ import (
 )
 
 type RoomRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewRoomRepository(r *tenant_database_resolver.TenantDatabaseResolver) *RoomRepository {
@@ -19,7 +19,7 @@ func NewRoomRepository(r *tenant_database_resolver.TenantDatabaseResolver) *Room
 
 func (r *RoomRepository) Create(ctx context.Context, room *models.Room) (*models.Room, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&room); tx.Error != nil {
 		return nil, tx.Error
@@ -30,7 +30,7 @@ func (r *RoomRepository) Create(ctx context.Context, room *models.Room) (*models
 
 func (r *RoomRepository) Update(ctx context.Context, room *models.Room) (*models.Room, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&room); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +42,7 @@ func (r *RoomRepository) Update(ctx context.Context, room *models.Room) (*models
 func (r *RoomRepository) Find(ctx context.Context, id uint64) (*models.Room, error) {
 
 	model := models.Room{}
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -57,12 +57,12 @@ func (r *RoomRepository) Find(ctx context.Context, id uint64) (*models.Room, err
 
 func (r *RoomRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Room{}, r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx)), input)
+	return paginatedList(&models.Room{}, r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx)), input)
 }
 
 func (r RoomRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if query := db.Model(&models.Room{}).Where("id=?", id).Delete(&models.Room{}); query.Error != nil {
 		return query.Error

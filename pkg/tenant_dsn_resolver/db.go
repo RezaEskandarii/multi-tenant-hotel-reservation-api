@@ -1,11 +1,25 @@
-package tenant_connection_string_resolver
+package tenant_dsn_resolver
 
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"log"
 	"os"
 	"time"
 )
+
+// getDbLogger returns logger interface
+func getDbLogger() logger.Interface {
+	return logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold: time.Second, // Slow SQL threshold
+			LogLevel:      logger.Info, // Log level
+			Colorful:      true,        // Disable color,
+		},
+	)
+}
 
 func ResolveDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 
@@ -25,7 +39,7 @@ func ResolveDB(usesInTestEnv bool, tenantDbName string) (*gorm.DB, error) {
 		DSN:                  connectionString,
 		PreferSimpleProtocol: true,
 	}), &gorm.Config{
-		Logger:                                   GetDbLogger(),
+		Logger:                                   getDbLogger(),
 		SkipDefaultTransaction:                   true,
 		DisableForeignKeyConstraintWhenMigrating: true,
 		PrepareStmt:                              false,

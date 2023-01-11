@@ -10,16 +10,16 @@ import (
 )
 
 type HotelGradeRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewHotelGradeRepository(r *tenant_database_resolver.TenantDatabaseResolver) *HotelGradeRepository {
-	return &HotelGradeRepository{ConnectionResolver: r}
+	return &HotelGradeRepository{DbResolver: r}
 }
 
 func (r *HotelGradeRepository) Create(ctx context.Context, hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
@@ -30,7 +30,7 @@ func (r *HotelGradeRepository) Create(ctx context.Context, hotelGrade *models.Ho
 
 func (r *HotelGradeRepository) Update(ctx context.Context, hotelGrade *models.HotelGrade) (*models.HotelGrade, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&hotelGrade); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +42,7 @@ func (r *HotelGradeRepository) Update(ctx context.Context, hotelGrade *models.Ho
 func (r *HotelGradeRepository) Find(ctx context.Context, id uint64) (*models.HotelGrade, error) {
 
 	model := models.HotelGrade{}
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Preload("HotelType").Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -57,14 +57,14 @@ func (r *HotelGradeRepository) Find(ctx context.Context, id uint64) (*models.Hot
 
 func (r *HotelGradeRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.HotelGrade{}, db, input)
 }
 
 func (r HotelGradeRepository) Delete(ctx context.Context, id uint64) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if query := db.Model(&models.Hotel{}).Where(&models.Hotel{HotelGradeId: id}).Count(&count); query.Error != nil {
 		return query.Error

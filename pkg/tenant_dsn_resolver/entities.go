@@ -1,4 +1,4 @@
-package tenant_connection_string_resolver
+package tenant_dsn_resolver
 
 import "reservation-api/internal/models"
 

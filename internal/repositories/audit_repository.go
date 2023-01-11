@@ -10,16 +10,16 @@ import (
 )
 
 type AuditRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewAuditRepository(r *tenant_database_resolver.TenantDatabaseResolver) *AuditRepository {
-	return &AuditRepository{ConnectionResolver: r}
+	return &AuditRepository{DbResolver: r}
 }
 
 func (r *AuditRepository) Create(ctx context.Context, model *models.Audit) (*models.Audit, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Create(&model).Error; err != nil {
 		return nil, err
@@ -28,6 +28,6 @@ func (r *AuditRepository) Create(ctx context.Context, model *models.Audit) (*mod
 }
 
 func (r *AuditRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.City{}, db, input)
 }

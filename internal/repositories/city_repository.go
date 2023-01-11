@@ -10,18 +10,18 @@ import (
 )
 
 type CityRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewCityRepository(connectionResolver *tenant_database_resolver.TenantDatabaseResolver) *CityRepository {
 	return &CityRepository{
-		ConnectionResolver: connectionResolver,
+		DbResolver: connectionResolver,
 	}
 }
 
 func (r *CityRepository) Create(ctx context.Context, city *models.City) (*models.City, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	if tx := db.Create(&city); tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -31,7 +31,7 @@ func (r *CityRepository) Create(ctx context.Context, city *models.City) (*models
 
 func (r *CityRepository) Update(ctx context.Context, city *models.City) (*models.City, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&city); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +42,7 @@ func (r *CityRepository) Update(ctx context.Context, city *models.City) (*models
 
 func (r *CityRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if err := db.Model(&models.City{}).Where("id=?", id).Delete(&models.City{}).Error; err != nil {
 		return err
@@ -54,7 +54,7 @@ func (r *CityRepository) Delete(ctx context.Context, id uint64) error {
 func (r *CityRepository) Find(ctx context.Context, id uint64) (*models.City, error) {
 
 	model := models.City{}
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 
@@ -69,6 +69,6 @@ func (r *CityRepository) Find(ctx context.Context, id uint64) (*models.City, err
 }
 
 func (r *CityRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.City{}, db, input)
 }

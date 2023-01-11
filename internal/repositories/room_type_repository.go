@@ -17,16 +17,16 @@ var (
 )
 
 type RoomTypeRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewRoomTypeRepository(r *tenant_database_resolver.TenantDatabaseResolver) *RoomTypeRepository {
-	return &RoomTypeRepository{ConnectionResolver: r}
+	return &RoomTypeRepository{DbResolver: r}
 }
 
 func (r *RoomTypeRepository) Create(ctx context.Context, roomType *models.RoomType) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&roomType); tx.Error != nil {
 		return nil, tx.Error
@@ -37,7 +37,7 @@ func (r *RoomTypeRepository) Create(ctx context.Context, roomType *models.RoomTy
 
 func (r *RoomTypeRepository) Update(ctx context.Context, roomType *models.RoomType) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&roomType); tx.Error != nil {
 		return nil, tx.Error
@@ -48,7 +48,7 @@ func (r *RoomTypeRepository) Update(ctx context.Context, roomType *models.RoomTy
 
 func (r *RoomTypeRepository) Find(ctx context.Context, id uint64) (*models.RoomType, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	model := models.RoomType{}
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
@@ -64,14 +64,14 @@ func (r *RoomTypeRepository) Find(ctx context.Context, id uint64) (*models.RoomT
 
 func (r *RoomTypeRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.RoomType{}, db, input)
 }
 
 func (r RoomTypeRepository) Delete(ctx context.Context, id uint64) error {
 
 	var count int64 = 0
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if query := db.Model(&models.Room{}).Where(&models.Room{RoomTypeId: id}).Count(&count); query.Error != nil {
 
@@ -92,7 +92,7 @@ func (r RoomTypeRepository) Delete(ctx context.Context, id uint64) error {
 
 func (r *RoomTypeRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	roomTypes := make([]models.RoomType, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err == nil {

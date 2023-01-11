@@ -7,14 +7,14 @@ import (
 	"reservation-api/internal/repositories"
 	"reservation-api/internal/services/domain_services"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
-	"reservation-api/pkg/tenant_connection_string_resolver"
+	"reservation-api/pkg/tenant_dsn_resolver"
 	"sync"
 )
 
 var (
 	resolver = tenant_database_resolver.NewTenantDatabaseResolver()
 	service  = domain_services.NewTenantService(&repositories.TenantRepository{
-		DatabaseResolver: resolver,
+		DbResolver: resolver,
 	})
 )
 
@@ -60,7 +60,7 @@ func Migrate() error {
 			tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
 
 			go func() {
-				for _, entity := range tenant_connection_string_resolver.GetEntities() {
+				for _, entity := range tenant_dsn_resolver.GetEntities() {
 					if err := tenantDB.AutoMigrate(entity); err != nil {
 						panic(err.Error())
 					}

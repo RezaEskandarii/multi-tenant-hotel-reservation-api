@@ -19,16 +19,16 @@ import (
 //}
 
 type CountryRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 func NewCountryRepository(connectionResolver *tenant_database_resolver.TenantDatabaseResolver) *CountryRepository {
-	return &CountryRepository{ConnectionResolver: connectionResolver}
+	return &CountryRepository{DbResolver: connectionResolver}
 }
 
 func (r *CountryRepository) Create(ctx context.Context, country *models.Country) (*models.Country, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&country); tx.Error != nil {
 		return nil, tx.Error
@@ -39,7 +39,7 @@ func (r *CountryRepository) Create(ctx context.Context, country *models.Country)
 
 func (r *CountryRepository) Update(ctx context.Context, country *models.Country) (*models.Country, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&country); tx.Error != nil {
 		return nil, tx.Error
@@ -51,7 +51,7 @@ func (r *CountryRepository) Update(ctx context.Context, country *models.Country)
 func (r *CountryRepository) Find(ctx context.Context, id uint64) (*models.Country, error) {
 
 	model := models.Country{}
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Preload("Provinces").Find(&model); tx.Error != nil {
 
@@ -67,14 +67,14 @@ func (r *CountryRepository) Find(ctx context.Context, id uint64) (*models.Countr
 
 func (r *CountryRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.Country{}, db, input)
 }
 
 func (r *CountryRepository) GetProvinces(ctx context.Context, countryId uint64) ([]*models.Province, error) {
 
 	var result []*models.Province
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	query := db.Model(&models.Province{}).
 		Where("country_id=?", countryId).Find(&result)
@@ -88,7 +88,7 @@ func (r *CountryRepository) GetProvinces(ctx context.Context, countryId uint64) 
 
 func (r *CountryRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	countries := make([]models.Country, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {

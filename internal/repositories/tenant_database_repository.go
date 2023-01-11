@@ -7,18 +7,18 @@ import (
 )
 
 type TenantRepository struct {
-	DatabaseResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 // NewTenantDatabaseRepository returns new TenantRepository.
 func NewTenantDatabaseRepository(resolver *tenant_database_resolver.TenantDatabaseResolver) *TenantRepository {
 
-	return &TenantRepository{DatabaseResolver: resolver}
+	return &TenantRepository{DbResolver: resolver}
 }
 
 func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 
-	publicDB := r.DatabaseResolver.GetTenantDB(0).Debug()
+	publicDB := r.DbResolver.GetTenantDB(0).Debug()
 
 	if err := publicDB.AutoMigrate(&models.Tenant{}); err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*
 func (r *TenantRepository) FindByTenantID(tenantID uint64) (*models.Tenant, error) {
 
 	entity := models.Tenant{}
-	db := r.DatabaseResolver.GetTenantDB(tenantID)
+	db := r.DbResolver.GetTenantDB(tenantID)
 
 	if tx := db.Where("tenant_id=?", tenantID).Find(&entity); tx.Error != nil {
 		return nil, tx.Error

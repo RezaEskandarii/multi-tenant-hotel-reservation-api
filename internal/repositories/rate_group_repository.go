@@ -10,18 +10,18 @@ import (
 )
 
 type RateGroupRepository struct {
-	ConnectionResolver *tenant_database_resolver.TenantDatabaseResolver
+	DbResolver *tenant_database_resolver.TenantDatabaseResolver
 }
 
 // NewRateGroupRepository returns new RateGroupRepository.
 func NewRateGroupRepository(r *tenant_database_resolver.TenantDatabaseResolver) *RateGroupRepository {
 
-	return &RateGroupRepository{ConnectionResolver: r}
+	return &RateGroupRepository{DbResolver: r}
 }
 
 func (r *RateGroupRepository) Create(ctx context.Context, model *models.RateGroup) (*models.RateGroup, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -32,7 +32,7 @@ func (r *RateGroupRepository) Create(ctx context.Context, model *models.RateGrou
 
 func (r *RateGroupRepository) Update(ctx context.Context, model *models.RateGroup) (*models.RateGroup, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Updates(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -44,7 +44,7 @@ func (r *RateGroupRepository) Update(ctx context.Context, model *models.RateGrou
 func (r *RateGroupRepository) Find(ctx context.Context, id uint64) (*models.RateGroup, error) {
 
 	model := models.RateGroup{}
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -59,13 +59,13 @@ func (r *RateGroupRepository) Find(ctx context.Context, id uint64) (*models.Rate
 
 func (r *RateGroupRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 	return paginatedList(&models.RateGroup{}, db, input)
 }
 
 func (r RateGroupRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.ConnectionResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
 	if query := db.Model(&models.RateGroup{}).Where("id=?", id).Delete(&models.RateGroup{}); query.Error != nil {
 		return query.Error

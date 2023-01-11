@@ -6,7 +6,7 @@ package tenant_database_resolver
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"reservation-api/pkg/tenant_connection_string_resolver"
+	"reservation-api/pkg/tenant_dsn_resolver"
 	"sync"
 )
 
@@ -39,7 +39,7 @@ func (c *TenantDatabaseResolver) GetTenantDB(tenantID uint64) *gorm.DB {
 	}
 
 	if c.cache[tenantID] == nil {
-		cn, err := tenant_connection_string_resolver.ResolveDB(false, dbName)
+		cn, err := tenant_dsn_resolver.ResolveDB(false, dbName)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -61,7 +61,7 @@ func (c *TenantDatabaseResolver) CreateDbForTenant(db *gorm.DB, tenantId uint64)
 // Migrate migrate all entities
 func (c *TenantDatabaseResolver) Migrate(db *gorm.DB, tenantId uint64) {
 
-	for _, entity := range tenant_connection_string_resolver.GetEntities() {
+	for _, entity := range tenant_dsn_resolver.GetEntities() {
 		if err := db.AutoMigrate(entity); err != nil {
 			panic(err.Error())
 		}
