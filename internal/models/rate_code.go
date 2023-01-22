@@ -4,6 +4,8 @@ import (
 	"github.com/asaskevich/govalidator"
 )
 
+type RateCodeStats int
+
 type RateCode struct {
 	BaseModel
 	Name        string     `json:"name"  valid:"required  gorm:"type:varchar(255)""`
@@ -15,7 +17,7 @@ type RateCode struct {
 	RateGroupId uint64     `json:"rate_group_id"`
 	//Guest       Guest     `json:"guest"  valid:"-"`
 	//GuestId     uint64    `json:"guest_id"  valid:"required"`
-	Status bool `json:"status"`
+	Status RateCodeStats `json:"status"`
 }
 
 func (r *RateCode) Validate() (bool, error) {

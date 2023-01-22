@@ -66,11 +66,13 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	} else {
 		reservation = nil
 	}
+
 	request := dto.RoomRequestDto{}
 	if err := c.Bind(&request); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	// Checks if there is another reservation request for this room on the same check-in and check-out date,
 	// otherwise do not allow a booking request.
 	hasConflict, err := handler.Service.HasConflict(tenantContext(c), &request, reservation)
@@ -80,6 +82,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 			Message: err.Error(),
 		})
 	}
+
 	// If there is a simultaneous booking request, the booking request is not given.
 	if hasConflict {
 		message := fmt.Sprintf(translator.Localize(c.Request().Context(),
