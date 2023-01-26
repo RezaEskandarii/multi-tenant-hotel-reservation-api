@@ -7,8 +7,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"reservation-api/internal/appconfig"
 	"reservation-api/internal/commons"
-	"reservation-api/internal/tenant_resolver"
-	"reservation-api/internal/utils"
 	"time"
 )
 
@@ -60,8 +58,10 @@ func (s AuthService) SignIn(ctx context.Context, username, password string) (err
 	// here, we have kept it as 5 minutes
 	expirationTime := time.Now().Add(time.Duration(s.Config.Authentication.TokenAliveTime) * time.Minute)
 	// SetUp the JWT claims, which includes the username and expiry time
+	//tenantIdStr := fmt.Sprintf("%d", tenant_resolver.GetCurrentTenant(ctx))
+	//tenantId := utils.Encrypt([]byte(tenantIdStr))
 	claims := &Claims{
-		TenantID:    utils.Encrypt(fmt.Sprintf("%d", tenant_resolver.GetCurrentTenant(ctx))),
+		///	TenantID:    string(tenantId),
 		Username:    user.Username,
 		Email:       user.Email,
 		FirstName:   user.FirstName,

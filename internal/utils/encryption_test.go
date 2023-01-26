@@ -8,11 +8,11 @@ import (
 func TestEncryptAndDecrypt(t *testing.T) {
 
 	sampleTexts := [5]string{
-		"Reza", "this is sample text", "hello", "reservation api", "Golang",
+		"exampleplaintex",
 	}
 
 	for _, item := range sampleTexts {
-		encryptedText := Encrypt(item)
+		encryptedText := Encrypt([]byte(item))
 		assert.NotEqual(t, encryptedText, item)
 		assert.Equal(t, Decrypt(encryptedText), item)
 	}

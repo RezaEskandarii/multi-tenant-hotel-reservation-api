@@ -85,7 +85,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	model := models.Guest{}
 
 	user := currentUser(c)
-	id, _ := utils.ConvertToUint(c.Get("id"))
+	id, _ := utils.ConvertToUint(c.Param("id"))
 
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
@@ -128,7 +128,7 @@ func (handler *GuestHandler) update(c echo.Context) error {
 // @Router /guests/{id} [get]
 func (handler *GuestHandler) find(c echo.Context) error {
 
-	id, _ := utils.ConvertToUint(c.Get("id"))
+	id, _ := utils.ConvertToUint(c.Param("id"))
 
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
@@ -196,6 +196,6 @@ func (handler *GuestHandler) registerRoutes() {
 	routeGroup.POST("", handler.create)
 	routeGroup.GET("/:id", handler.find)
 	routeGroup.GET("", handler.findAll)
-	routeGroup.PUT("", handler.update)
+	routeGroup.PUT("/:id", handler.update)
 	//routeGroup.DELETE("", handler)
 }

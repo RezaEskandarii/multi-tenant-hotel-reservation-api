@@ -6,10 +6,11 @@ import (
 
 // ApiResponse api response struct
 type ApiResponse struct {
-	Data         interface{} `json:"data"`
-	ResponseCode int         `json:"response_code"`
+	Data interface{} `json:"data"`
+	//	ResponseCode int         `json:"response_code"`
 	Message      string      `json:"message"`
 	Errors       interface{} `json:"internal_errors"`
+	ResponseCode int         `json:"response_code"`
 }
 
 func NewApiResponse() ApiResponse {
@@ -22,7 +23,7 @@ func (a ApiResponse) SetData(data interface{}) ApiResponse {
 }
 
 func (a ApiResponse) SetResponseCode(statusCode int) ApiResponse {
-	a.ResponseCode = statusCode
+	//a.ResponseCode = statusCode
 	return a
 }
 

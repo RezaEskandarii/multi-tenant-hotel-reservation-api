@@ -34,7 +34,7 @@ func (r *GuestRepository) Update(ctx context.Context, guest *models.Guest) (*mod
 
 	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
 
-	if tx := db.Updates(&guest); tx.Error != nil {
+	if tx := db.Where("id=?", guest.Id).Updates(&guest); tx.Error != nil {
 		return nil, tx.Error
 	}
 

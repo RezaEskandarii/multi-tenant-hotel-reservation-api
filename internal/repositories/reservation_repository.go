@@ -168,7 +168,7 @@ func (r *ReservationRepository) GetRecommendedRateCodes(ctx context.Context, pri
        details.rate_code_id,
        details.created_at,
        details.room_id,
-       details.id,
+       details.id AS detail_id,
        details.date_start,
        details.date_end,
        prices.price,
