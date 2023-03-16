@@ -4,7 +4,7 @@ import (
 	"os"
 	"reservation-api/cmd/build"
 	_ "reservation-api/docs"
-	"reservation-api/internal/kernel"
+	"reservation-api/internal/app"
 	"reservation-api/pkg/applogger"
 )
 
@@ -33,7 +33,7 @@ func main() {
 
 	BuildInfo.Print()
 
-	if err := kernel.Run(); err != nil {
+	if err := app.Run(); err != nil {
 		logger.LogError(err)
 		os.Exit(1)
 	}
