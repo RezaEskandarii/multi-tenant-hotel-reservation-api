@@ -35,7 +35,6 @@ func (handler *GuestHandler) Register(config *dto.HandlerConfig,
 	handler.registerRoutes()
 }
 
-// @Summary create new Guest
 // @Tags Guest
 // @Accept json
 // @Produce json
@@ -70,7 +69,6 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update Guest
 // @Tags Guest
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -118,7 +116,6 @@ func (handler *GuestHandler) update(c echo.Context) error {
 	})
 }
 
-// @Summary find Guest by id
 // @Tags Guest
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -144,7 +141,6 @@ func (handler *GuestHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Guests
 // @Tags Guest
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

@@ -31,7 +31,6 @@ func (handler *HotelGradeHandler) Register(config *dto.HandlerConfig, service *d
 	handler.registerRoutes()
 }
 
-// @Summary create new HotelGrade
 // @Tags HotelGrade
 // @Accept json
 // @Produce json
@@ -76,7 +75,6 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update HotelGrade
 // @Tags HotelGrade
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -142,7 +140,6 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 	})
 }
 
-// @Summary find HotelGrade by id
 // @Tags HotelGrade
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -182,7 +179,6 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll HotelGrades
 // @Tags HotelGrade
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -205,7 +201,6 @@ func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete HotelGrade
 // @Tags HotelGrade
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

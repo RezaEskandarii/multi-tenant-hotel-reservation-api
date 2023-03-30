@@ -38,7 +38,6 @@ func (handler *ReservationHandler) Register(config *dto.HandlerConfig, service *
 	handler.registerRoutes(handler.Router)
 }
 
-// @Summary create reservation request
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -125,7 +124,6 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	})
 }
 
-// @Summary create Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -206,7 +204,6 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -311,7 +308,6 @@ func (handler *ReservationHandler) update(c echo.Context) error {
 
 // If the client cancels the reservation request, they can call this endpoint to delete the reservation request.
 
-// @Summary cancel reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -327,7 +323,6 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-// @Summary get reservation ratecodes
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -361,7 +356,6 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 	})
 }
 
-// @Summary Delete Reservation
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -392,7 +386,6 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary change Reservation check status
 // @Tags Reservation
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

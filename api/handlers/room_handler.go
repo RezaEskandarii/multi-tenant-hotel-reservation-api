@@ -31,7 +31,6 @@ func (handler *RoomHandler) Register(config *dto.HandlerConfig, service *domain_
 	handler.registerRoutes()
 }
 
-// @Summary update Room
 // @Tags Room
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -74,7 +73,6 @@ func (handler *RoomHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update Room
 // @Tags Room
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -125,7 +123,6 @@ func (handler *RoomHandler) update(c echo.Context) error {
 	})
 }
 
-// @Summary find Room by id
 // @Tags Room
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -166,7 +163,6 @@ func (handler *RoomHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Rooms
 // @Tags Room
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -190,7 +186,6 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete Room
 // @Tags Room
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

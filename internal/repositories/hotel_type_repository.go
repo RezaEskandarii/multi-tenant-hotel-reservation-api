@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/internal_errors"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
@@ -20,18 +19,16 @@ func NewHotelTypeRepository(r *tenant_database_resolver.TenantDatabaseResolver) 
 
 func (r *HotelTypeRepository) Create(ctx context.Context, hotelType *models.HotelType) (*models.HotelType, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
-
+	db := r.DbResolver.GetTenantDB(ctx)
 	if tx := db.Create(&hotelType); tx.Error != nil {
 		return nil, tx.Error
 	}
-
 	return hotelType, nil
 }
 
 func (r *HotelTypeRepository) Update(ctx context.Context, hotelType *models.HotelType) (*models.HotelType, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Updates(&hotelType); tx.Error != nil {
 		return nil, tx.Error
@@ -43,7 +40,7 @@ func (r *HotelTypeRepository) Update(ctx context.Context, hotelType *models.Hote
 func (r *HotelTypeRepository) Find(ctx context.Context, id uint64) (*models.HotelType, error) {
 
 	model := models.HotelType{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Preload("Grades").Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -58,14 +55,14 @@ func (r *HotelTypeRepository) Find(ctx context.Context, id uint64) (*models.Hote
 
 func (r *HotelTypeRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.HotelType{}, db, input)
 }
 
 func (r HotelTypeRepository) Delete(ctx context.Context, id uint64) error {
 
 	var count int64 = 0
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if query := db.Model(&models.Hotel{}).Where(&models.Hotel{HotelTypeId: id}).Count(&count); query.Error != nil {
 		return query.Error

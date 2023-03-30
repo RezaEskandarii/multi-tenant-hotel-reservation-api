@@ -31,7 +31,6 @@ func (handler *UserHandler) Register(config *dto.HandlerConfig, service *domain_
 	handler.registerRoutes()
 }
 
-// @Summary crete User
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -98,7 +97,6 @@ func (handler *UserHandler) create(c echo.Context) error {
 
 }
 
-// @Summary update
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -160,7 +158,6 @@ func (handler *UserHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary findById
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -202,7 +199,6 @@ func (handler *UserHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -225,7 +221,6 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary findByUsername
 // @Tags User
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

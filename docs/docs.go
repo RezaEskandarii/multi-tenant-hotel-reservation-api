@@ -30,7 +30,6 @@ const docTemplate = `{
                 "tags": [
                     "City"
                 ],
-                "summary": "findAll",
                 "parameters": [
                     {
                         "type": "integer",
@@ -62,7 +61,6 @@ const docTemplate = `{
                 "tags": [
                     "city"
                 ],
-                "summary": "create",
                 "parameters": [
                     {
                         "type": "integer",
@@ -102,7 +100,6 @@ const docTemplate = `{
                 "tags": [
                     "City"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -138,7 +135,6 @@ const docTemplate = `{
                 "tags": [
                     "City"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -194,7 +190,6 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "findAll",
                 "parameters": [
                     {
                         "type": "integer",
@@ -226,7 +221,6 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "create",
                 "parameters": [
                     {
                         "type": "integer",
@@ -266,7 +260,6 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -302,7 +295,6 @@ const docTemplate = `{
                 "tags": [
                     "Country"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -399,7 +391,6 @@ const docTemplate = `{
                 "tags": [
                     "Currency"
                 ],
-                "summary": "findAll Currencies",
                 "parameters": [
                     {
                         "type": "integer",
@@ -431,7 +422,6 @@ const docTemplate = `{
                 "tags": [
                     "Currency"
                 ],
-                "summary": "create new Currency",
                 "parameters": [
                     {
                         "type": "integer",
@@ -471,7 +461,6 @@ const docTemplate = `{
                 "tags": [
                     "Currency"
                 ],
-                "summary": "find Currency by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -507,7 +496,6 @@ const docTemplate = `{
                 "tags": [
                     "Currency"
                 ],
-                "summary": "update Currency",
                 "parameters": [
                     {
                         "type": "integer",
@@ -563,7 +551,6 @@ const docTemplate = `{
                 "tags": [
                     "Guest"
                 ],
-                "summary": "findAll Guests",
                 "parameters": [
                     {
                         "type": "integer",
@@ -595,7 +582,6 @@ const docTemplate = `{
                 "tags": [
                     "Guest"
                 ],
-                "summary": "create new Guest",
                 "parameters": [
                     {
                         "type": "integer",
@@ -635,7 +621,6 @@ const docTemplate = `{
                 "tags": [
                     "Guest"
                 ],
-                "summary": "find Guest by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -671,7 +656,6 @@ const docTemplate = `{
                 "tags": [
                     "Guest"
                 ],
-                "summary": "update Guest",
                 "parameters": [
                     {
                         "type": "integer",
@@ -727,7 +711,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "findAll HotelGrades",
                 "parameters": [
                     {
                         "type": "integer",
@@ -759,7 +742,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "create new HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -797,7 +779,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "Delete HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -831,7 +812,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "find HotelGrade by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -867,7 +847,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "update HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -923,7 +902,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "findAll HotelTypes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -955,7 +933,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "create new HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -993,7 +970,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "Delete HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1027,7 +1003,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "find HotelType by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1063,7 +1038,6 @@ const docTemplate = `{
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "update HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1119,7 +1093,6 @@ const docTemplate = `{
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "findAll Hotels",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1151,7 +1124,6 @@ const docTemplate = `{
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "create new Hotel",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1223,7 +1195,6 @@ const docTemplate = `{
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "find Hotel by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1259,7 +1230,6 @@ const docTemplate = `{
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "update Hotel",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1315,7 +1285,6 @@ const docTemplate = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "create new Payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1353,7 +1322,6 @@ const docTemplate = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "Delete Payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1387,7 +1355,6 @@ const docTemplate = `{
                 "tags": [
                     "Province"
                 ],
-                "summary": "findAll Provinces",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1421,7 +1388,6 @@ const docTemplate = `{
                 "tags": [
                     "Province"
                 ],
-                "summary": "find Province by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1457,7 +1423,6 @@ const docTemplate = `{
                 "tags": [
                     "Province"
                 ],
-                "summary": "update Province",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1513,7 +1478,6 @@ const docTemplate = `{
                 "tags": [
                     "Province"
                 ],
-                "summary": "find Province cities by Province ID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1554,7 +1518,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "findAll rate-codes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1586,7 +1549,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "Delete RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1627,7 +1589,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "Add RateCode Details",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1683,7 +1644,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "find RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1722,7 +1682,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "update RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1767,7 +1726,6 @@ const docTemplate = `{
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "create RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1807,7 +1765,6 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "findAll rate-codes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1839,7 +1796,6 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "Delete RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1880,7 +1836,6 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "find RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1919,7 +1874,6 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "update RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1964,7 +1918,6 @@ const docTemplate = `{
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "SetUp RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2004,7 +1957,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "cancel reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2039,7 +1991,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "change Reservation check status",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2086,7 +2037,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "get reservation ratecodes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2126,7 +2076,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Delete Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2165,7 +2114,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "update Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2210,7 +2158,6 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "create Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2250,7 +2197,6 @@ const docTemplate = `{
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "findAll RoomTypes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2282,7 +2228,6 @@ const docTemplate = `{
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "crete RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2322,7 +2267,6 @@ const docTemplate = `{
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "find RoomType by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2358,7 +2302,6 @@ const docTemplate = `{
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "update RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2403,7 +2346,6 @@ const docTemplate = `{
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "Delete RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2438,7 +2380,6 @@ const docTemplate = `{
                 "tags": [
                     "Room"
                 ],
-                "summary": "findAll Rooms",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2472,7 +2413,6 @@ const docTemplate = `{
                 "tags": [
                     "Room"
                 ],
-                "summary": "find Room by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2508,7 +2448,6 @@ const docTemplate = `{
                 "tags": [
                     "Room"
                 ],
-                "summary": "update Room",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2562,7 +2501,6 @@ const docTemplate = `{
                 "tags": [
                     "Room"
                 ],
-                "summary": "Delete Room",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2597,7 +2535,6 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "findByUsername",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2633,7 +2570,6 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "crete User",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2673,7 +2609,6 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2709,7 +2644,6 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3281,7 +3215,7 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "Guest       Guest     ` + "`" + `json:\"guest\"  valid:\"-\"` + "`" + `\nGuestId     uint64    ` + "`" + `json:\"guest_id\"  valid:\"required\"` + "`" + `",
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "tenant_id": {
                     "type": "integer"

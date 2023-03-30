@@ -28,7 +28,6 @@ func (handler *TenantHandler) Register(config *dto.HandlerConfig, service *domai
 	handler.registerRoutes()
 }
 
-// @Summary crete RoomType
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

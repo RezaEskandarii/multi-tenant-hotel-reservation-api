@@ -22,6 +22,7 @@ var (
 // @in header
 // @name Authorization
 // @tokenUrl http://127.0.0.1:8000/auth/signin
+//
 func main() {
 
 	logger := applogger.New(nil)

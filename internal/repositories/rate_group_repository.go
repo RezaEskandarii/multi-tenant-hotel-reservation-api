@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -21,7 +20,7 @@ func NewRateGroupRepository(r *tenant_database_resolver.TenantDatabaseResolver) 
 
 func (r *RateGroupRepository) Create(ctx context.Context, model *models.RateGroup) (*models.RateGroup, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -32,7 +31,7 @@ func (r *RateGroupRepository) Create(ctx context.Context, model *models.RateGrou
 
 func (r *RateGroupRepository) Update(ctx context.Context, model *models.RateGroup) (*models.RateGroup, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Updates(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -44,7 +43,7 @@ func (r *RateGroupRepository) Update(ctx context.Context, model *models.RateGrou
 func (r *RateGroupRepository) Find(ctx context.Context, id uint64) (*models.RateGroup, error) {
 
 	model := models.RateGroup{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -59,13 +58,13 @@ func (r *RateGroupRepository) Find(ctx context.Context, id uint64) (*models.Rate
 
 func (r *RateGroupRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.RateGroup{}, db, input)
 }
 
 func (r RateGroupRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if query := db.Model(&models.RateGroup{}).Where("id=?", id).Delete(&models.RateGroup{}); query.Error != nil {
 		return query.Error

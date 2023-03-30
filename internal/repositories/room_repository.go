@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -18,19 +17,16 @@ func NewRoomRepository(r *tenant_database_resolver.TenantDatabaseResolver) *Room
 }
 
 func (r *RoomRepository) Create(ctx context.Context, room *models.Room) (*models.Room, error) {
-
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
-
+	db := r.DbResolver.GetTenantDB(ctx)
 	if tx := db.Create(&room); tx.Error != nil {
 		return nil, tx.Error
 	}
-
 	return room, nil
 }
 
 func (r *RoomRepository) Update(ctx context.Context, room *models.Room) (*models.Room, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Updates(&room); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +38,7 @@ func (r *RoomRepository) Update(ctx context.Context, room *models.Room) (*models
 func (r *RoomRepository) Find(ctx context.Context, id uint64) (*models.Room, error) {
 
 	model := models.Room{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -57,12 +53,12 @@ func (r *RoomRepository) Find(ctx context.Context, id uint64) (*models.Room, err
 
 func (r *RoomRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	return paginatedList(&models.Room{}, r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx)), input)
+	return paginatedList(&models.Room{}, r.DbResolver.GetTenantDB(ctx), input)
 }
 
 func (r RoomRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if query := db.Model(&models.Room{}).Where("id=?", id).Delete(&models.Room{}); query.Error != nil {
 		return query.Error

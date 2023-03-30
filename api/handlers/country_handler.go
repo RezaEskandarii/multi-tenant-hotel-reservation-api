@@ -33,7 +33,6 @@ func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *doma
 	handler.registerRoutes()
 }
 
-// @Summary create
 // @Tags Country
 // @Accept json
 // @Produce json
@@ -78,7 +77,6 @@ func (handler *CountryHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -135,7 +133,6 @@ func (handler *CountryHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary findById
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -176,7 +173,6 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll
 // @Tags Country
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

@@ -18,7 +18,7 @@ func NewTenantDatabaseRepository(resolver *tenant_database_resolver.TenantDataba
 
 func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 
-	publicDB := r.DbResolver.GetTenantDB(0).Debug()
+	publicDB := r.DbResolver.GetTenantDB(ctx).Debug()
 
 	if err := publicDB.AutoMigrate(&models.Tenant{}); err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*
 	ctx = context.WithValue(context.Background(), "TenantID", tenant.Id)
 
 	resolver := tenant_database_resolver.NewTenantDatabaseResolver()
-	tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
+	tenantDB := resolver.GetTenantDB(ctx).Debug()
 
 	resolver.CreateDbForTenant(publicDB, tenant.Id)
 	resolver.Migrate(tenantDB, tenant.Id)
@@ -67,15 +67,4 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*
 	}
 
 	return tenant, nil
-}
-
-func (r *TenantRepository) FindByTenantID(tenantID uint64) (*models.Tenant, error) {
-
-	entity := models.Tenant{}
-	db := r.DbResolver.GetTenantDB(tenantID)
-
-	if tx := db.Where("tenant_id=?", tenantID).Find(&entity); tx.Error != nil {
-		return nil, tx.Error
-	}
-	return &entity, nil
 }

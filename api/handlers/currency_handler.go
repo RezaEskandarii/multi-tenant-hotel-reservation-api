@@ -31,7 +31,6 @@ func (handler *CurrencyHandler) Register(config *dto.HandlerConfig, service *dom
 	handler.registerRoutes()
 }
 
-// @Summary create new Currency
 // @Tags Currency
 // @Accept json
 // @Produce json
@@ -77,7 +76,6 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	}
 }
 
-// @Summary update Currency
 // @Tags Currency
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -133,7 +131,6 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find Currency by id
 // @Tags Currency
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -176,7 +173,6 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Currencies
 // @Tags Currency
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

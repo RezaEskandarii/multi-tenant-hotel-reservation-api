@@ -4,8 +4,10 @@
 package tenant_database_resolver
 
 import (
+	"context"
 	"fmt"
 	"gorm.io/gorm"
+	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/tenant_dsn_resolver"
 	"sync"
 )
@@ -25,10 +27,11 @@ func NewTenantDatabaseResolver() *TenantDatabaseResolver {
 
 // GetTenantDB returns unique gorm DB object per given tenantID
 // multi tenancy policy is unique multi_tenancy_database per Tenant
-func (c *TenantDatabaseResolver) GetTenantDB(tenantID uint64) *gorm.DB {
+func (c *TenantDatabaseResolver) GetTenantDB(ctx context.Context) *gorm.DB {
 
 	c.Mutex.Lock()
 	defer c.Mutex.Unlock()
+	tenantID := tenant_resolver.GetCurrentTenant(ctx)
 
 	dbName := ""
 	if tenantID != 0 {

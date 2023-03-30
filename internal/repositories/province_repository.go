@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -21,7 +20,7 @@ func NewProvinceRepository(r *tenant_database_resolver.TenantDatabaseResolver) *
 
 func (r *ProvinceRepository) Create(ctx context.Context, province *models.Province) (*models.Province, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Create(&province); tx.Error != nil {
 		return nil, tx.Error
@@ -32,7 +31,7 @@ func (r *ProvinceRepository) Create(ctx context.Context, province *models.Provin
 
 func (r *ProvinceRepository) Update(ctx context.Context, province *models.Province) (*models.Province, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Updates(&province); tx.Error != nil {
 		return nil, tx.Error
@@ -44,7 +43,7 @@ func (r *ProvinceRepository) Update(ctx context.Context, province *models.Provin
 func (r *ProvinceRepository) Find(ctx context.Context, id uint64) (*models.Province, error) {
 
 	model := models.Province{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -59,14 +58,14 @@ func (r *ProvinceRepository) Find(ctx context.Context, id uint64) (*models.Provi
 
 func (r *ProvinceRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.Province{}, db, input)
 }
 
 func (r *ProvinceRepository) GetCities(ctx context.Context, provinceId uint64) ([]*models.City, error) {
 
 	var result []*models.City
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	query := db.Model(&models.City{}).
 		Where("province_id=?", provinceId).Find(&result)

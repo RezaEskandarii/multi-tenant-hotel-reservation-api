@@ -22,7 +22,6 @@
                 "tags": [
                     "City"
                 ],
-                "summary": "findAll",
                 "parameters": [
                     {
                         "type": "integer",
@@ -54,7 +53,6 @@
                 "tags": [
                     "city"
                 ],
-                "summary": "create",
                 "parameters": [
                     {
                         "type": "integer",
@@ -94,7 +92,6 @@
                 "tags": [
                     "City"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -130,7 +127,6 @@
                 "tags": [
                     "City"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -186,7 +182,6 @@
                 "tags": [
                     "Country"
                 ],
-                "summary": "findAll",
                 "parameters": [
                     {
                         "type": "integer",
@@ -218,7 +213,6 @@
                 "tags": [
                     "Country"
                 ],
-                "summary": "create",
                 "parameters": [
                     {
                         "type": "integer",
@@ -258,7 +252,6 @@
                 "tags": [
                     "Country"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -294,7 +287,6 @@
                 "tags": [
                     "Country"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -391,7 +383,6 @@
                 "tags": [
                     "Currency"
                 ],
-                "summary": "findAll Currencies",
                 "parameters": [
                     {
                         "type": "integer",
@@ -423,7 +414,6 @@
                 "tags": [
                     "Currency"
                 ],
-                "summary": "create new Currency",
                 "parameters": [
                     {
                         "type": "integer",
@@ -463,7 +453,6 @@
                 "tags": [
                     "Currency"
                 ],
-                "summary": "find Currency by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -499,7 +488,6 @@
                 "tags": [
                     "Currency"
                 ],
-                "summary": "update Currency",
                 "parameters": [
                     {
                         "type": "integer",
@@ -555,7 +543,6 @@
                 "tags": [
                     "Guest"
                 ],
-                "summary": "findAll Guests",
                 "parameters": [
                     {
                         "type": "integer",
@@ -587,7 +574,6 @@
                 "tags": [
                     "Guest"
                 ],
-                "summary": "create new Guest",
                 "parameters": [
                     {
                         "type": "integer",
@@ -627,7 +613,6 @@
                 "tags": [
                     "Guest"
                 ],
-                "summary": "find Guest by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -663,7 +648,6 @@
                 "tags": [
                     "Guest"
                 ],
-                "summary": "update Guest",
                 "parameters": [
                     {
                         "type": "integer",
@@ -719,7 +703,6 @@
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "findAll HotelGrades",
                 "parameters": [
                     {
                         "type": "integer",
@@ -751,7 +734,6 @@
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "create new HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -789,7 +771,6 @@
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "Delete HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -823,7 +804,6 @@
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "find HotelGrade by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -859,7 +839,6 @@
                 "tags": [
                     "HotelGrade"
                 ],
-                "summary": "update HotelGrade",
                 "parameters": [
                     {
                         "type": "integer",
@@ -915,7 +894,6 @@
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "findAll HotelTypes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -947,7 +925,6 @@
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "create new HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -985,7 +962,6 @@
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "Delete HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1019,7 +995,6 @@
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "find HotelType by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1055,7 +1030,6 @@
                 "tags": [
                     "HotelType"
                 ],
-                "summary": "update HotelType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1111,7 +1085,6 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "findAll Hotels",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1143,7 +1116,6 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "create new Hotel",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1215,7 +1187,6 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "find Hotel by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1251,7 +1222,6 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "update Hotel",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1307,7 +1277,6 @@
                 "tags": [
                     "Payment"
                 ],
-                "summary": "create new Payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1345,7 +1314,6 @@
                 "tags": [
                     "Payment"
                 ],
-                "summary": "Delete Payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1379,7 +1347,6 @@
                 "tags": [
                     "Province"
                 ],
-                "summary": "findAll Provinces",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1413,7 +1380,6 @@
                 "tags": [
                     "Province"
                 ],
-                "summary": "find Province by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1449,7 +1415,6 @@
                 "tags": [
                     "Province"
                 ],
-                "summary": "update Province",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1505,7 +1470,6 @@
                 "tags": [
                     "Province"
                 ],
-                "summary": "find Province cities by Province ID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1546,7 +1510,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "findAll rate-codes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1578,7 +1541,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "Delete RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1619,7 +1581,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "Add RateCode Details",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1675,7 +1636,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "find RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1714,7 +1674,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "update RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1759,7 +1718,6 @@
                 "tags": [
                     "RateCode"
                 ],
-                "summary": "create RateCode",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1799,7 +1757,6 @@
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "findAll rate-codes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1831,7 +1788,6 @@
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "Delete RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1872,7 +1828,6 @@
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "find RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1911,7 +1866,6 @@
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "update RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1956,7 +1910,6 @@
                 "tags": [
                     "RateGroup"
                 ],
-                "summary": "SetUp RateGroup",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1996,7 +1949,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "cancel reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2031,7 +1983,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "change Reservation check status",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2078,7 +2029,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "get reservation ratecodes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2118,7 +2068,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Delete Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2157,7 +2106,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "update Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2202,7 +2150,6 @@
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "create Reservation",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2242,7 +2189,6 @@
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "findAll RoomTypes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2274,7 +2220,6 @@
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "crete RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2314,7 +2259,6 @@
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "find RoomType by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2350,7 +2294,6 @@
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "update RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2395,7 +2338,6 @@
                 "tags": [
                     "RoomType"
                 ],
-                "summary": "Delete RoomType",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2430,7 +2372,6 @@
                 "tags": [
                     "Room"
                 ],
-                "summary": "findAll Rooms",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2464,7 +2405,6 @@
                 "tags": [
                     "Room"
                 ],
-                "summary": "find Room by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2500,7 +2440,6 @@
                 "tags": [
                     "Room"
                 ],
-                "summary": "update Room",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2554,7 +2493,6 @@
                 "tags": [
                     "Room"
                 ],
-                "summary": "Delete Room",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2589,7 +2527,6 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "findByUsername",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2625,7 +2562,6 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "crete User",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2665,7 +2601,6 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "findById",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2701,7 +2636,6 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "update",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3273,7 +3207,7 @@
                 },
                 "status": {
                     "description": "Guest       Guest     `json:\"guest\"  valid:\"-\"`\nGuestId     uint64    `json:\"guest_id\"  valid:\"required\"`",
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "tenant_id": {
                     "type": "integer"

@@ -33,7 +33,6 @@ func (handler *RoomTypeHandler) Register(config *dto.HandlerConfig, service *dom
 
 }
 
-// @Summary crete RoomType
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -74,7 +73,6 @@ func (handler *RoomTypeHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update RoomType
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -126,7 +124,6 @@ func (handler *RoomTypeHandler) update(c echo.Context) error {
 	})
 }
 
-// @Summary find RoomType by id
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -166,7 +163,6 @@ func (handler *RoomTypeHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll RoomTypes
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -190,7 +186,6 @@ func (handler *RoomTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete RoomType
 // @Tags RoomType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

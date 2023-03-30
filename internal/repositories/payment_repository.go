@@ -3,7 +3,6 @@ package repositories
 import (
 	"context"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -18,7 +17,7 @@ func NewPaymentRepository(r *tenant_database_resolver.TenantDatabaseResolver) *P
 
 func (p *PaymentRepository) Create(ctx context.Context, payment *models.Payment) (*models.Payment, error) {
 
-	db := p.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := p.DbResolver.GetTenantDB(ctx)
 
 	if err := db.Create(payment).Error; err != nil {
 		return nil, err
@@ -29,7 +28,7 @@ func (p *PaymentRepository) Create(ctx context.Context, payment *models.Payment)
 
 func (p *PaymentRepository) Find(ctx context.Context, id uint64) (*models.Payment, error) {
 
-	db := p.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := p.DbResolver.GetTenantDB(ctx)
 	result := models.Payment{}
 
 	if err := db.Where("id=?").Find(&result).
@@ -42,7 +41,7 @@ func (p *PaymentRepository) Find(ctx context.Context, id uint64) (*models.Paymen
 
 func (p *PaymentRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := p.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := p.DbResolver.GetTenantDB(ctx)
 
 	if err := db.Model(&models.Payment{}).Where("id=?", id).Delete(&models.Payment{}).Error; err != nil {
 		return err
@@ -54,7 +53,7 @@ func (p *PaymentRepository) Delete(ctx context.Context, id uint64) error {
 func (p *PaymentRepository) GetListByReservationID(ctx context.Context, reservationID uint64, paymentType *models.PaymentType) ([]*models.Payment, error) {
 
 	result := make([]*models.Payment, 0)
-	db := p.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := p.DbResolver.GetTenantDB(ctx)
 	query := db.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
 
 	if paymentType != nil {
@@ -71,7 +70,7 @@ func (p *PaymentRepository) GetListByReservationID(ctx context.Context, reservat
 func (p *PaymentRepository) GetBalance(ctx context.Context, reservationID uint64, paymentType *models.PaymentType) (float64, error) {
 
 	var result float64
-	db := p.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := p.DbResolver.GetTenantDB(ctx)
 
 	query := db.Model(&models.Payment{}).Where("reservation_id=?", reservationID)
 

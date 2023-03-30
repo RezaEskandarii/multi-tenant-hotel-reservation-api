@@ -1,6 +1,7 @@
 package multi_tenancy_database
 
 import (
+	"context"
 	"gorm.io/gorm"
 	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
@@ -45,7 +46,9 @@ func SetUp() error {
 // Migrate migrate tables
 func Migrate() error {
 
-	publicDB := resolver.GetTenantDB(0).Debug()
+	parentCtx := context.Background()
+	ctx := context.WithValue(parentCtx, global_variables.TenantIDKey, 0)
+	publicDB := resolver.GetTenantDB(ctx).Debug()
 
 	if err := publicDB.AutoMigrate(&models.Tenant{}); err != nil {
 		return err
@@ -56,8 +59,11 @@ func Migrate() error {
 
 	publicDB.FindInBatches(&tenants, 100, func(tx *gorm.DB, batch int) error {
 		for _, tenant := range tenants {
+
 			wg.Add(1)
-			tenantDB := resolver.GetTenantDB(tenant.Id).Debug()
+
+			ctx = context.WithValue(parentCtx, global_variables.TenantIDKey, tenant.Id)
+			tenantDB := resolver.GetTenantDB(ctx).Debug()
 
 			go func() {
 				for _, entity := range tenant_dsn_resolver.GetEntities() {

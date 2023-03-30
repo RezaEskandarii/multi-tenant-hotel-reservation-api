@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -19,7 +18,7 @@ func NewAuditRepository(r *tenant_database_resolver.TenantDatabaseResolver) *Aud
 
 func (r *AuditRepository) Create(ctx context.Context, model *models.Audit) (*models.Audit, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if err := db.Create(&model).Error; err != nil {
 		return nil, err
@@ -28,6 +27,6 @@ func (r *AuditRepository) Create(ctx context.Context, model *models.Audit) (*mod
 }
 
 func (r *AuditRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.City{}, db, input)
 }

@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -21,7 +20,7 @@ func NewRateCodeDetailRepository(r *tenant_database_resolver.TenantDatabaseResol
 
 func (r *RateCodeDetailRepository) Create(ctx context.Context, model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -31,7 +30,7 @@ func (r *RateCodeDetailRepository) Create(ctx context.Context, model *models.Rat
 
 func (r *RateCodeDetailRepository) Update(ctx context.Context, model *models.RateCodeDetail) (*models.RateCodeDetail, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	tx := db.Begin()
 
 	// remove old price.
@@ -52,7 +51,7 @@ func (r *RateCodeDetailRepository) Update(ctx context.Context, model *models.Rat
 func (r *RateCodeDetailRepository) FindPrice(ctx context.Context, id uint64) (*models.RateCodeDetailPrice, error) {
 
 	model := models.RateCodeDetailPrice{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if err := db.Model(models.RateCodeDetailPrice{}).Where("id=?", id).Find(&model).Error; err != nil {
 		return nil, err
@@ -68,7 +67,7 @@ func (r *RateCodeDetailRepository) FindPrice(ctx context.Context, id uint64) (*m
 func (r *RateCodeDetailRepository) Find(ctx context.Context, id uint64) (*models.RateCodeDetail, error) {
 
 	model := models.RateCodeDetail{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&model).Preload("RateCodeDetailPrice"); tx.Error != nil {
 		return nil, tx.Error
@@ -81,13 +80,13 @@ func (r *RateCodeDetailRepository) Find(ctx context.Context, id uint64) (*models
 }
 
 func (r *RateCodeDetailRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.RateCodeDetail{}, db, input)
 }
 
 func (r RateCodeDetailRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if query := db.Model(&models.RateCodeDetail{}).Where("id=?", id).Delete(&models.RateCodeDetail{}); query.Error != nil {
 		return query.Error

@@ -26,7 +26,7 @@ func NewUserRepository(r *tenant_database_resolver.TenantDatabaseResolver) *User
 
 func (r *UserRepository) Create(ctx context.Context, user *models.User) (*models.User, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
 
 	if tx := db.Create(&user); tx.Error != nil {
@@ -38,7 +38,7 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) (*models
 
 func (r *UserRepository) Update(ctx context.Context, user *models.User) (*models.User, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
 
 	if tx := db.Updates(&user); tx.Error != nil {
@@ -51,7 +51,7 @@ func (r *UserRepository) Update(ctx context.Context, user *models.User) (*models
 func (r *UserRepository) Find(ctx context.Context, id uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&user); tx.Error != nil {
 		return nil, tx.Error
@@ -66,7 +66,7 @@ func (r *UserRepository) Find(ctx context.Context, id uint64) (*models.User, err
 
 func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	user := models.User{Username: username}
 
 	if tx := db.Where(user).Find(&user); tx.Error != nil {
@@ -82,10 +82,9 @@ func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*
 func (r *UserRepository) FindByUsernameAndPassword(ctx context.Context, username string, password string) (*models.User, error) {
 
 	user := models.User{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("username=?", username).Find(&user); tx.Error != nil {
-
 		return nil, tx.Error
 	}
 
@@ -104,7 +103,7 @@ func (r *UserRepository) FindByUsernameAndPassword(ctx context.Context, username
 func (r *UserRepository) Deactivate(ctx context.Context, id uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -124,7 +123,7 @@ func (r *UserRepository) Deactivate(ctx context.Context, id uint64) (*models.Use
 func (r *UserRepository) Activate(ctx context.Context, id uint64) (*models.User, error) {
 
 	user := models.User{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
 
@@ -144,7 +143,7 @@ func (r *UserRepository) Activate(ctx context.Context, id uint64) (*models.User,
 
 func (r *UserRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Model(&models.User{}).Where("id=?", id).Delete(&models.User{}); tx.Error != nil {
 		return tx.Error
@@ -155,13 +154,13 @@ func (r *UserRepository) Delete(ctx context.Context, id uint64) error {
 
 func (r *UserRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.User{}, db, input)
 }
 
 func (r *UserRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	users := make([]models.User, 0)
 	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {

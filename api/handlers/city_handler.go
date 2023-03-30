@@ -32,7 +32,6 @@ func (handler *CityHandler) Register(config *dto.HandlerConfig, service *domain_
 	handler.registerRoutes()
 }
 
-// @Summary create
 // @Tags city
 // @Accept json
 // @Produce json
@@ -84,7 +83,6 @@ func (handler *CityHandler) create(c echo.Context) error {
 
 }
 
-// @Summary update
 // @Tags City
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -154,7 +152,6 @@ func (handler *CityHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary findById
 // @Tags City
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -196,7 +193,6 @@ func (handler *CityHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll
 // @Tags City
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

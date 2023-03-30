@@ -5,7 +5,6 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -21,7 +20,7 @@ func NewRateCodeRepository(r *tenant_database_resolver.TenantDatabaseResolver) *
 
 func (r *RateCodeRepository) Create(ctx context.Context, model *models.RateCode) (*models.RateCode, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Create(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -31,7 +30,7 @@ func (r *RateCodeRepository) Create(ctx context.Context, model *models.RateCode)
 
 func (r *RateCodeRepository) Update(ctx context.Context, model *models.RateCode) (*models.RateCode, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Updates(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -42,7 +41,7 @@ func (r *RateCodeRepository) Update(ctx context.Context, model *models.RateCode)
 func (r *RateCodeRepository) Find(ctx context.Context, id uint64) (*models.RateCode, error) {
 
 	model := models.RateCode{}
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if tx := db.Where("id=?", id).Find(&model); tx.Error != nil {
 		return nil, tx.Error
@@ -56,13 +55,13 @@ func (r *RateCodeRepository) Find(ctx context.Context, id uint64) (*models.RateC
 
 func (r *RateCodeRepository) FindAll(ctx context.Context, input *dto.PaginationFilter) (*commons.PaginatedResult, error) {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 	return paginatedList(&models.RateCode{}, db, input)
 }
 
 func (r RateCodeRepository) Delete(ctx context.Context, id uint64) error {
 
-	db := r.DbResolver.GetTenantDB(tenant_resolver.GetCurrentTenant(ctx))
+	db := r.DbResolver.GetTenantDB(ctx)
 
 	if query := db.Model(&models.RateCode{}).Where("id=?", id).Delete(&models.RateCode{}); query.Error != nil {
 		return query.Error

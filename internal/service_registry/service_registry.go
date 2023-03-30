@@ -25,19 +25,12 @@ import (
 func RegisterServicesAndRoutes(router *echo.Group) error {
 
 	router.Use(middleware.Gzip())
-
 	appConfig, err := appconfig.New()
 	if err != nil {
 		return err
 	}
 
-	// add basic middlewares
-	router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{appConfig.Application.AllowedOrigins},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch,
-			http.MethodPost, http.MethodDelete},
-	}))
+	addCorsMiddleware(router, appConfig)
 
 	var (
 		// ================================================================================================================
@@ -146,4 +139,13 @@ func RegisterServicesAndRoutes(router *echo.Group) error {
 	///go eventService.SendEmailToGuestOnReservation()
 
 	return nil
+}
+
+func addCorsMiddleware(router *echo.Group, config *appconfig.Config) {
+	router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{config.Application.AllowedOrigins},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch,
+			http.MethodPost, http.MethodDelete},
+	}))
 }

@@ -32,7 +32,6 @@ func (handler *ProvinceHandler) Register(config *dto.HandlerConfig, service *dom
 	handler.registerRoutes()
 }
 
-// @Summary update Province
 // @Tags Province
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -90,7 +89,6 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 
 }
 
-// @Summary update Province
 // @Tags Province
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -160,7 +158,6 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find Province by id
 // @Tags Province
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -202,7 +199,6 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll Provinces
 // @Tags Province
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -226,7 +222,6 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary find Province cities by Province ID
 // @Tags Province
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

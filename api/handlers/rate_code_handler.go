@@ -33,7 +33,6 @@ func (handler *RateCodeHandler) Register(config *dto.HandlerConfig, service *dom
 	handler.registerRoutes()
 }
 
-// @Summary create RateCode
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -75,7 +74,6 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update RateCode
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -133,7 +131,6 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find RateCode
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -174,7 +171,6 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll rate-codes
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -198,7 +194,6 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete RateCode
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -236,7 +231,6 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 	})
 }
 
-// @Summary Add RateCode Details
 // @Tags RateCode
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

@@ -31,7 +31,6 @@ func (handler *RateGroupHandler) Register(config *dto.HandlerConfig, service *do
 	handler.registerRoutes()
 }
 
-// @Summary SetUp RateGroup
 // @Tags RateGroup
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -72,7 +71,6 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update RateGroup
 // @Tags RateGroup
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -127,7 +125,6 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 	}
 }
 
-// @Summary find RateGroup
 // @Tags RateGroup
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -168,7 +165,6 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll rate-codes
 // @Tags RateGroup
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -192,7 +188,6 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete RateGroup
 // @Tags RateGroup
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"

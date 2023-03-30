@@ -31,7 +31,6 @@ func (handler *HotelTypeHandler) Register(config *dto.HandlerConfig, service *do
 	handler.registerRoutes()
 }
 
-// @Summary create new HotelType
 // @Tags HotelType
 // @Accept json
 // @Produce json
@@ -74,7 +73,6 @@ func (handler *HotelTypeHandler) create(c echo.Context) error {
 	})
 }
 
-// @Summary update HotelType
 // @Tags HotelType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -129,7 +127,6 @@ func (handler *HotelTypeHandler) update(c echo.Context) error {
 	})
 }
 
-// @Summary find HotelType by id
 // @Tags HotelType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -171,7 +168,6 @@ func (handler *HotelTypeHandler) find(c echo.Context) error {
 	})
 }
 
-// @Summary findAll HotelTypes
 // @Tags HotelType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
@@ -195,7 +191,6 @@ func (handler *HotelTypeHandler) findAll(c echo.Context) error {
 	})
 }
 
-// @Summary Delete HotelType
 // @Tags HotelType
 // @Accept json
 // @Param X-Tenant-ID header int true "X-Tenant-ID"
