@@ -44,11 +44,8 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	user := currentUser(c)
 
 	if err := c.Bind(&hotel); err != nil {
-
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
 			Message:      message_keys.BadRequest,
 		})
@@ -58,13 +55,9 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 	result, err := handler.Service.Create(tenantContext(c), hotel)
 
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusBadRequest,
-			Message:      "",
 		})
 	}
 
@@ -158,7 +151,6 @@ func (handler *HotelGradeHandler) find(c echo.Context) error {
 
 	result, err := handler.Service.Find(tenantContext(c), id)
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -197,7 +189,6 @@ func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -212,7 +203,6 @@ func (handler *HotelGradeHandler) delete(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,

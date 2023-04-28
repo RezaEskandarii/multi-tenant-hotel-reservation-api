@@ -14,7 +14,6 @@ type Collection[T any] interface {
 	Contains(T) bool
 	Size() int
 	Get(int) (T, error)
-	Where(func(T) bool) Collection[T]
 	Filter(func(T) bool) Collection[T]
 	Map(func(T) T) Collection[T]
 }
@@ -65,9 +64,9 @@ func (c *GenericCollection[T]) Get(index int) (T, error) {
 	return c.elements[index], nil
 }
 
-// Where filters the collection based on a provided predicate function,
+// Filter filters the collection based on a provided predicate function,
 // returning a new collection containing the matching elements.
-func (c *GenericCollection[T]) Where(f func(T) bool) Collection[T] {
+func (c *GenericCollection[T]) Filter(f func(T) bool) Collection[T] {
 	result := &GenericCollection[T]{}
 	for _, v := range c.elements {
 		if f(v) {
@@ -75,11 +74,6 @@ func (c *GenericCollection[T]) Where(f func(T) bool) Collection[T] {
 		}
 	}
 	return result
-}
-
-// Filter is an alias for the Where method.
-func (c *GenericCollection[T]) Filter(f func(T) bool) Collection[T] {
-	return c.Where(f)
 }
 
 // Map applies a provided function to each element in the collection

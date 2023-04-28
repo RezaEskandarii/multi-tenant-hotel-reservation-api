@@ -65,7 +65,6 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 	} else {
 
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError,
 			ApiResponse{
 				Data:         nil,
@@ -118,14 +117,12 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 	}
 
 	if result, err := handler.Service.Update(tenantContext(c), currency); err == nil {
-
 		return c.JSON(http.StatusOK, ApiResponse{
 			Data:         result,
 			ResponseCode: http.StatusOK,
 			Message:      translator.Localize(c.Request().Context(), message_keys.Updated),
 		})
 	} else {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, nil)
 	}
@@ -141,26 +138,20 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 func (handler *CurrencyHandler) find(c echo.Context) error {
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
 
 	currency, err := handler.Service.Find(tenantContext(c), id)
-
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
-			Message:      "",
 		})
 	}
 
 	if currency == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -169,7 +160,6 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         currency,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -182,7 +172,6 @@ func (handler *CurrencyHandler) find(c echo.Context) error {
 func (handler *CurrencyHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-
 	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
@@ -192,7 +181,6 @@ func (handler *CurrencyHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 

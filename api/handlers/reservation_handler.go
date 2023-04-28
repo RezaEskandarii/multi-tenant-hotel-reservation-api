@@ -333,7 +333,6 @@ func (handler *ReservationHandler) cancelRequest(c echo.Context) error {
 func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 
 	priceDto := dto.GetRatePriceDto{}
-
 	if err := c.Bind(&priceDto); err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}

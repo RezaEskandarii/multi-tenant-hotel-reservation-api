@@ -47,7 +47,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
+
 				ResponseCode: http.StatusBadRequest,
 				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
@@ -69,7 +69,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 	if oldUser != nil && oldUser.Id > 0 {
 
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusConflict,
 			Message:      translator.Localize(c.Request().Context(), message_keys.UsernameDuplicated),
 		})
@@ -89,7 +89,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
-				Data:         nil,
+
 				ResponseCode: http.StatusInternalServerError,
 				Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 			})
@@ -120,7 +120,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
@@ -128,7 +128,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 
 	if userModel == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -137,7 +137,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 	if err := c.Bind(&userModel); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 		})
@@ -178,7 +178,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
@@ -186,7 +186,7 @@ func (handler *UserHandler) find(c echo.Context) error {
 
 	if model == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -195,7 +195,6 @@ func (handler *UserHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         model,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -217,7 +216,6 @@ func (handler *UserHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -236,7 +234,6 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
@@ -244,7 +241,7 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 
 	if user == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -253,7 +250,6 @@ func (handler *UserHandler) findByUsername(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         user,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 

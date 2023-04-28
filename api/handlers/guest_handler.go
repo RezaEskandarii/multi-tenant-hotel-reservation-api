@@ -48,7 +48,6 @@ func (handler *GuestHandler) create(c echo.Context) error {
 	user := currentUser(c)
 
 	if err := c.Bind(&guest); err != nil {
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -57,7 +56,6 @@ func (handler *GuestHandler) create(c echo.Context) error {
 
 	guest.SetAudit(user)
 	if _, err := handler.Service.Create(tenantContext(c), &guest); err != nil {
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: translator.Localize(c.Request().Context(), err.Error()),
 		})
@@ -81,21 +79,17 @@ func (handler *GuestHandler) create(c echo.Context) error {
 func (handler *GuestHandler) update(c echo.Context) error {
 
 	model := models.Guest{}
-
 	user := currentUser(c)
 	id, _ := utils.ConvertToUint(c.Param("id"))
-
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
-
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Message: translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
 	if err := c.Bind(&model); err != nil {
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
 			Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
@@ -104,7 +98,6 @@ func (handler *GuestHandler) update(c echo.Context) error {
 
 	model.SetUpdatedBy(user)
 	if _, err := handler.Service.Update(tenantContext(c), &model); err != nil {
-
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: translator.Localize(c.Request().Context(), err.Error()),
 		})
@@ -126,11 +119,9 @@ func (handler *GuestHandler) update(c echo.Context) error {
 func (handler *GuestHandler) find(c echo.Context) error {
 
 	id, _ := utils.ConvertToUint(c.Param("id"))
-
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
-
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Message: translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})

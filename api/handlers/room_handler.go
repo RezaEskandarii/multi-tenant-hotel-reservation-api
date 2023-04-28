@@ -172,7 +172,6 @@ func (handler *RoomHandler) find(c echo.Context) error {
 func (handler *RoomHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-
 	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
@@ -182,7 +181,6 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -196,7 +194,6 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 func (handler *RoomHandler) delete(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-
 	if err != nil {
 
 		handler.Logger.LogError(err.Error())

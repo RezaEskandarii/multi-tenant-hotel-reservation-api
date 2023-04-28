@@ -47,7 +47,6 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
@@ -60,7 +59,6 @@ func (handler *RateGroupHandler) create(c echo.Context) error {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
-			Message:      err.Error(),
 		})
 	}
 
@@ -100,7 +98,7 @@ func (handler *RateGroupHandler) update(c echo.Context) error {
 
 	if rateGroup == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -161,7 +159,6 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         rateGroup,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -174,7 +171,6 @@ func (handler *RateGroupHandler) find(c echo.Context) error {
 func (handler *RateGroupHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-
 	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
@@ -184,7 +180,6 @@ func (handler *RateGroupHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 

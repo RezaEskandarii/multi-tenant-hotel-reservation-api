@@ -42,7 +42,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	if err := c.Bind(&tenant); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusBadRequest,
 			Message:      message_keys.BadRequest,
 		})
@@ -53,7 +53,7 @@ func (handler *TenantHandler) create(c echo.Context) error {
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Data:         nil,
+
 			ResponseCode: http.StatusBadRequest,
 			Message:      err.Error(),
 		})

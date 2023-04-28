@@ -23,11 +23,7 @@ type AuthHandler struct {
 	logger      applogger.Logger
 }
 
-// Register AuthHandler
-// this method registers all routes,routeGroups and passes AuthHandler's related dependencies
-func (handler *AuthHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService,
-	authService *domain_services.AuthService) {
-
+func (handler *AuthHandler) Register(config *dto.HandlerConfig, service *domain_services.UserService, authService *domain_services.AuthService) {
 	handler.Router = config.Router
 	handler.Service = service
 	handler.logger = config.Logger
@@ -36,7 +32,6 @@ func (handler *AuthHandler) Register(config *dto.HandlerConfig, service *domain_
 }
 
 func (handler *AuthHandler) signin(c echo.Context) error {
-
 	cerds := domain_services.Credentials{}
 	if err := c.Bind(&cerds); err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
@@ -49,22 +44,12 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		})
 	}
 
-	if err, messages := validator.Validate(cerds); err != nil {
-		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
-			Errors:       messages,
-			ResponseCode: http.StatusBadRequest,
-		})
-	}
-
 	if user, _ := handler.Service.FindByUsername(tenantContext(c), cerds.Username); user == nil {
-
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
 			Errors:       translator.Localize(c.Request().Context(), message_keys.UserNotFound),
 			ResponseCode: http.StatusNotFound,
 		})
-
 	} else if user.IsActive == false {
-
 		return c.JSON(http.StatusForbidden, commons.ApiResponse{
 			Errors:       translator.Localize(c.Request().Context(), message_keys.UserIsDeActive),
 			ResponseCode: http.StatusForbidden,
@@ -72,16 +57,12 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 	}
 
 	if err, token := handler.AuthService.SignIn(tenantContext(c), cerds.Username, cerds.Password); err != nil {
-
 		return c.JSON(http.StatusBadRequest, nil)
-
 	} else {
-
 		return c.JSON(http.StatusOK, token)
 	}
 }
 
-// refresh token.
 func (handler *AuthHandler) refreshToken(c echo.Context) error {
 	tokenStr := c.Request().Header.Get("Authorization")
 
@@ -96,13 +77,11 @@ func (handler *AuthHandler) refreshToken(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			Message: err.Error(),
 		})
-
 	} else {
 		return c.JSON(http.StatusOK, result)
 	}
 }
 
-// ============================= register routes ================================================== //
 func (handler *AuthHandler) registerRoutes() {
 	routeGroup := handler.Router.Group("/auth")
 	routeGroup.POST("/signin", handler.signin)

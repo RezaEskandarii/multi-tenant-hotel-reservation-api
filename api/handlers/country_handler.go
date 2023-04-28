@@ -43,12 +43,10 @@ func (handler *CountryHandler) Register(config *dto.HandlerConfig, service *doma
 func (handler *CountryHandler) create(c echo.Context) error {
 
 	country := &models.CountryCreateUpdate{}
-
 	if err := c.Bind(&country); err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest,
 			ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
@@ -108,7 +106,6 @@ func (handler *CountryHandler) update(c echo.Context) error {
 
 	if country == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -160,7 +157,6 @@ func (handler *CountryHandler) find(c echo.Context) error {
 
 	if country == nil {
 		return c.JSON(http.StatusNotFound, ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -169,7 +165,6 @@ func (handler *CountryHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         country,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -182,7 +177,6 @@ func (handler *CountryHandler) find(c echo.Context) error {
 func (handler *CountryHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-
 	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
@@ -192,7 +186,6 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -207,7 +200,6 @@ func (handler *CountryHandler) findAll(c echo.Context) error {
 func (handler *CountryHandler) provinces(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
-
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -216,9 +208,7 @@ func (handler *CountryHandler) provinces(c echo.Context) error {
 	provinces, err := handler.Service.GetProvinces(tenantContext(c), id)
 
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusInternalServerError, ApiResponse{
 			ResponseCode: http.StatusInternalServerError,
 		})

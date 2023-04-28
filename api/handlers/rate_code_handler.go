@@ -51,11 +51,11 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
 	}
+
 	rateCode.SetAudit(user)
 	result, err := handler.Service.Create(tenantContext(c), rateCode)
 
@@ -104,7 +104,6 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 
 	if rateCode == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -158,7 +157,6 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 
 	if rateCode == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
@@ -167,7 +165,6 @@ func (handler *RateCodeHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         rateCode,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -190,7 +187,6 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 

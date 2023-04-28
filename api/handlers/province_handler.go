@@ -47,12 +47,9 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	user := currentUser(c)
 
 	if err := c.Bind(&province); err != nil {
-
 		handler.Logger.LogError(err.Error())
-
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Message:      translator.Localize(c.Request().Context(), message_keys.BadRequest),
 			})
@@ -61,7 +58,6 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 	if err, messages := validator.Validate(province); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Errors:       messages,
 			})
@@ -81,7 +77,6 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusInternalServerError,
 				Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 			})
@@ -114,7 +109,6 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
 			Message:      translator.Localize(c.Request().Context(), message_keys.InternalServerError),
 		})
@@ -123,14 +117,12 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 
 	if province == nil {
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusNotFound,
 			Message:      translator.Localize(c.Request().Context(), message_keys.NotFound),
 		})
 	}
 
 	if err := c.Bind(&province); err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -138,7 +130,6 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 	if err, messages := validator.Validate(province); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			commons.ApiResponse{
-				Data:         nil,
 				ResponseCode: http.StatusBadRequest,
 				Errors:       messages,
 			})
@@ -166,21 +157,19 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 // @Success 200 {object} models.Province
 // @Router /provinces/{id} [get]
 func (handler *ProvinceHandler) find(c echo.Context) error {
+
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
+
 	model, err := handler.Service.Find(tenantContext(c), id)
 
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusInternalServerError, commons.ApiResponse{
-			Data:         nil,
 			ResponseCode: http.StatusInternalServerError,
-			Message:      "",
 		})
 	}
 
@@ -195,7 +184,6 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         model,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -208,7 +196,6 @@ func (handler *ProvinceHandler) find(c echo.Context) error {
 func (handler *ProvinceHandler) findAll(c echo.Context) error {
 
 	paginationInput := c.Get(paginationInput).(*dto.PaginationFilter)
-
 	list, err := handler.Service.FindAll(tenantContext(c), paginationInput)
 
 	if err != nil {
@@ -218,7 +205,6 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         list,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
@@ -233,12 +219,11 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 
 	id, err := utils.ConvertToUint(c.Param("id"))
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
 	}
-	cities, err := handler.Service.GetCities(tenantContext(c), id)
 
+	cities, err := handler.Service.GetCities(tenantContext(c), id)
 	if err != nil {
 
 		handler.Logger.LogError(err.Error())
@@ -251,7 +236,6 @@ func (handler *ProvinceHandler) cities(c echo.Context) error {
 	return c.JSON(http.StatusOK, commons.ApiResponse{
 		Data:         cities,
 		ResponseCode: http.StatusOK,
-		Message:      "",
 	})
 }
 
