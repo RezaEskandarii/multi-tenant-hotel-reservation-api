@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"reservation-api/cmd/build"
 	_ "reservation-api/docs"
 	"reservation-api/internal/app"
 	"reservation-api/pkg/applogger"
+	"time"
 )
 
 var (
@@ -26,6 +28,7 @@ var (
 func main() {
 
 	logger := applogger.New(nil)
+	logger.LogInfo(fmt.Sprintf("Application started at: {%s}", time.Now().String()))
 	defer func() {
 		if r := recover(); r != nil {
 			logger.LogInfoJSON(r)

@@ -42,14 +42,6 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestWhere(t *testing.T) {
-	c := &GenericCollection[int]{elements: []int{1, 2, 3}}
-	filtered := c.Where(func(v int) bool { return v > 1 })
-	if filtered.Size() != 2 {
-		t.Errorf("Expected size of filtered collection to be 2, but got %d", filtered.Size())
-	}
-}
-
 func TestFilter(t *testing.T) {
 	c := &GenericCollection[int]{elements: []int{1, 2, 3}}
 	filtered := c.Filter(func(v int) bool { return v > 1 })

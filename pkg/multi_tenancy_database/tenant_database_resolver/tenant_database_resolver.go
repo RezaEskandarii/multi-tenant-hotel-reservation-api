@@ -31,7 +31,10 @@ func (c *TenantDatabaseResolver) GetTenantDB(ctx context.Context) *gorm.DB {
 
 	c.Mutex.Lock()
 	defer c.Mutex.Unlock()
-	tenantID := tenant_resolver.GetCurrentTenant(ctx)
+	tenantID := uint64(0)
+	if ctx != nil {
+		tenantID = tenant_resolver.GetCurrentTenant(ctx)
+	}
 
 	dbName := ""
 	if tenantID != 0 {

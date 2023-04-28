@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 	"strings"
 )
 
@@ -20,11 +21,18 @@ const (
 var sugarLogger *zap.SugaredLogger
 
 func InitLogger() {
-	writeSyncer := getLogWriter()
-	encoder := getEncoder()
-	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
+	// create a custom zapcore encoder that includes the level and timestamp in the log message
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderConfig),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), fileWriter(), dbWriter()),
+		zap.InfoLevel,
+	)
 
-	logger := zap.New(core, zap.AddCaller())
+	// create a new logger with the custom core
+	logger := zap.New(core)
 	sugarLogger = logger.Sugar()
 }
 
@@ -37,7 +45,7 @@ func getEncoder() zapcore.Encoder {
 }
 
 // getLogWriter returns zapcore WriteSyncer
-func getLogWriter() zapcore.WriteSyncer {
+func fileWriter() zapcore.WriteSyncer {
 
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   getLogFileName(),
@@ -46,7 +54,14 @@ func getLogWriter() zapcore.WriteSyncer {
 		MaxAge:     30,
 		Compress:   false,
 	}
+
 	return zapcore.AddSync(lumberJackLogger)
+}
+
+func dbWriter() zapcore.WriteSyncer {
+	dbResolver := tenant_database_resolver.NewTenantDatabaseResolver()
+	db := dbResolver.GetTenantDB(nil)
+	return zapcore.AddSync(NewLogDbWriter(db))
 }
 
 func writeLog(level string, message string) {
@@ -68,7 +83,7 @@ func writeLog(level string, message string) {
 		sugarLogger.Debug(message)
 		break
 	default:
-		sugarLogger.Error(message)
+		sugarLogger.Info(message)
 		break
 	}
 }
