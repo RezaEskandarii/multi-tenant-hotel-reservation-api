@@ -49,6 +49,13 @@ func (handler *AuthHandler) signin(c echo.Context) error {
 		})
 	}
 
+	if err, messages := validator.Validate(cerds); err != nil {
+		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
+			Errors:       messages,
+			ResponseCode: http.StatusBadRequest,
+		})
+	}
+
 	if user, _ := handler.Service.FindByUsername(tenantContext(c), cerds.Username); user == nil {
 
 		return c.JSON(http.StatusNotFound, commons.ApiResponse{

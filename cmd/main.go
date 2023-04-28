@@ -18,10 +18,10 @@ var (
 // @license.name MIT
 // @BasePath /api/v1
 // @Param Authorization header string true "With the bearer started"
-// @Security  JWT
-// @in header
-// @name Authorization
-// @tokenUrl http://127.0.0.1:8000/auth/signin
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @securityDefinitions.apikey Bearer
 //
 func main() {
 
@@ -33,9 +33,9 @@ func main() {
 	}()
 
 	BuildInfo.Print()
-
 	if err := app.Run(); err != nil {
 		logger.LogError(err)
 		os.Exit(1)
 	}
+
 }

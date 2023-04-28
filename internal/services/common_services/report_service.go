@@ -1,8 +1,10 @@
 package common_services
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"github.com/jung-kurt/gofpdf"
 	"github.com/xuri/excelize/v2"
 	"reflect"
 	"reservation-api/internal/utils"
@@ -100,6 +102,58 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 
 	return buffer.Bytes(), nil
 
+}
+
+func (*ReportService) ExportToPDF(data interface{}, headers []string) ([]byte, error) {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+
+	pdf.SetHeaderFunc(func() {
+		pdf.SetFont("Arial", "B", 16)
+		pdf.Cell(0, 10, "Report")
+		pdf.Ln(20)
+		pdf.SetFont("Arial", "B", 12)
+		for _, header := range headers {
+			pdf.Cell(40, 10, header)
+		}
+		pdf.Ln(12)
+	})
+
+	// Table column widths
+	//colWidths := []float64{20, 50, 50, 20}
+	//
+	//// Draw table headers
+	//for i, header := range headers {
+	////	pdf.CellFormat(colWidths[i], 10, header, "1", 0, "", false, 0, "")
+	//}
+
+	pdf.SetFooterFunc(func() {
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", 8)
+		pdf.Cell(0, 10, fmt.Sprintf("Page %d", pdf.PageNo()))
+	})
+
+	slice := reflect.ValueOf(data)
+	pdf.AddPage()
+
+	for row := 0; row < slice.Len(); row++ {
+		//	pdf.AddPage()
+		//	pdf.SetFont("Arial", "", 12)
+		rowData := slice.Index(row)
+		for col := 0; col < rowData.NumField(); col++ {
+			value := rowData.Field(col).Interface()
+			if value != nil && value != "" && fmt.Sprintf("%v", rowData) != value {
+				pdf.Cell(40, 10, fmt.Sprintf("%v", value))
+			}
+		}
+		pdf.Ln(8)
+	}
+
+	buf := new(bytes.Buffer)
+	err := pdf.Output(buf)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
 // getColName returns excel column name per given column number
