@@ -33,7 +33,7 @@ func (r *WalletRepository) UpdateWallet(ctx context.Context, wallet *Wallet) (*W
 	return wallet, nil
 }
 
-func (r *WalletRepository) GetWalletByID(ctx context.Context, walletID uint) (*Wallet, error) {
+func (r *WalletRepository) GetWalletByID(ctx context.Context, walletID uint64) (*Wallet, error) {
 	db := r.DbResolver.GetTenantDB(ctx)
 	var wallet Wallet
 	if err := db.First(&wallet, walletID).Error; err != nil {
@@ -42,7 +42,7 @@ func (r *WalletRepository) GetWalletByID(ctx context.Context, walletID uint) (*W
 	return &wallet, nil
 }
 
-func (r *WalletRepository) Deposit(ctx context.Context, walletID uint, amount decimal.Decimal) (*Wallet, error) {
+func (r *WalletRepository) Deposit(ctx context.Context, walletID uint64, amount decimal.Decimal) (*Wallet, error) {
 	db := r.DbResolver.GetTenantDB(ctx)
 	if err := db.Transaction(func(tx *gorm.DB) error {
 		var wallet Wallet
@@ -60,7 +60,7 @@ func (r *WalletRepository) Deposit(ctx context.Context, walletID uint, amount de
 	return r.GetWalletByID(ctx, walletID)
 }
 
-func (r *WalletRepository) Withdraw(ctx context.Context, walletID uint, amount decimal.Decimal) (*Wallet, error) {
+func (r *WalletRepository) Withdraw(ctx context.Context, walletID uint64, amount decimal.Decimal) (*Wallet, error) {
 	db := r.DbResolver.GetTenantDB(ctx)
 	if err := db.Transaction(func(tx *gorm.DB) error {
 		var wallet Wallet
