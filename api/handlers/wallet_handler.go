@@ -16,6 +16,7 @@ type WalletHandler struct {
 
 func (handler *WalletHandler) Register(service *domain_services.WalletService) {
 	handler.service = service
+	handler.registerRoutes()
 }
 
 type createWalletRequest struct {
@@ -36,7 +37,7 @@ type createWalletResponse struct {
 // @Param request body createWalletRequest true "Wallet creation request"
 // @Success 201 {object} createWalletResponse
 // @Router /wallets [post]
-func (h *WalletHandler) CreateWallet(c echo.Context) error {
+func (handler *WalletHandler) CreateWallet(c echo.Context) error {
 	var req createWalletRequest
 	if err := c.Bind(&req); err != nil {
 		return err
@@ -45,7 +46,7 @@ func (h *WalletHandler) CreateWallet(c echo.Context) error {
 		UserId:  req.UserId,
 		Balance: req.Balance,
 	}
-	if _, err := h.service.Create(c.Request().Context(), wallet); err != nil {
+	if _, err := handler.service.Create(c.Request().Context(), wallet); err != nil {
 		return err
 	}
 	res := createWalletResponse{
@@ -68,12 +69,12 @@ type getWalletResponse struct {
 // @Param id path uint true "Wallet ID"
 // @Success 200 {object} getWalletResponse
 // @Router /wallets/{id} [get]
-func (h *WalletHandler) GetWallet(c echo.Context) error {
+func (handler *WalletHandler) GetWallet(c echo.Context) error {
 	walletID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "Invalid wallet ID")
 	}
-	wallet, err := h.service.GetWalletByID(c.Request().Context(), walletID)
+	wallet, err := handler.service.GetWalletByID(c.Request().Context(), walletID)
 	if err != nil {
 		return err
 	}
@@ -104,7 +105,7 @@ type depositResponse struct {
 // @Param request body depositRequest true "Deposit request"
 // @Success 200 {object} depositResponse
 // @Router /wallets/{id}/deposit [post]
-func (h *WalletHandler) Deposit(c echo.Context) error {
+func (handler *WalletHandler) Deposit(c echo.Context) error {
 	walletID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "Invalid wallet ID")
@@ -114,7 +115,7 @@ func (h *WalletHandler) Deposit(c echo.Context) error {
 		return err
 	}
 	amount := req.Amount
-	wallet, err := h.service.Deposit(c.Request().Context(), walletID, amount)
+	wallet, err := handler.service.Deposit(c.Request().Context(), walletID, amount)
 	if err != nil {
 		return err
 	}
@@ -145,7 +146,7 @@ type withdrawResponse struct {
 // @Param request body withdrawRequest true "Withdrawal request"
 // @Success 200 {object} withdrawResponse
 // @Router /wallets/{id}/withdraw [post]
-func (h *WalletHandler) Withdraw(c echo.Context) error {
+func (handler *WalletHandler) Withdraw(c echo.Context) error {
 	walletID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "Invalid wallet ID")
@@ -155,7 +156,7 @@ func (h *WalletHandler) Withdraw(c echo.Context) error {
 		return err
 	}
 	amount := req.Amount
-	wallet, err := h.service.Withdraw(c.Request().Context(), walletID, amount)
+	wallet, err := handler.service.Withdraw(c.Request().Context(), walletID, amount)
 	if err != nil {
 		return err
 	}
@@ -167,7 +168,7 @@ func (h *WalletHandler) Withdraw(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
-func registerRoutes(handler *WalletHandler) {
+func (handler *WalletHandler) registerRoutes() {
 
 	routeGroup := handler.Router.Group("/wallets")
 	routeGroup.POST("", handler.CreateWallet)
