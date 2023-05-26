@@ -11,7 +11,7 @@ import (
 )
 
 type EmailSender interface {
-	Send(dto *dto.SendEmailDto) error
+	Send(dto *dto.SendEmailRequest) error
 }
 
 type EmailService struct {
@@ -26,7 +26,7 @@ func NewEmailService(host, username, password string, port int) *EmailService {
 	}
 }
 
-func (s *EmailService) Send(dto *dto.SendEmailDto) error {
+func (s *EmailService) Send(dto *dto.SendEmailRequest) error {
 
 	if strings.TrimSpace(dto.ContentType) == "" {
 		dto.ContentType = "text/plain"
@@ -47,7 +47,7 @@ func (s *EmailService) Send(dto *dto.SendEmailDto) error {
 	return err
 }
 
-func (s *EmailService) sendEmail(dto *dto.SendEmailDto) error {
+func (s *EmailService) sendEmail(dto *dto.SendEmailRequest) error {
 	m := gomail.NewMessage()
 
 	m.SetHeader("From", dto.From)

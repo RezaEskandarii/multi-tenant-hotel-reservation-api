@@ -126,15 +126,12 @@ func (r *UserRepository) Activate(ctx context.Context, id uint64) (*models.User,
 	db := r.DbResolver.GetTenantDB(ctx)
 
 	query := db.Model(&models.User{}).Where("id=?", id).Find(&user)
-
 	if query.Error != nil {
 		return nil, query.Error
 	}
 
 	user.IsActive = true
-
 	if tx := db.Model(&models.User{}).Updates(user); tx.Error != nil {
-
 		return nil, tx.Error
 	}
 
@@ -158,35 +155,40 @@ func (r *UserRepository) FindAll(ctx context.Context, input *dto.PaginationFilte
 	return paginatedList(&models.User{}, db, input)
 }
 
+func (r *UserRepository) HashPassword(password string) (string, error) {
+	params := argon2.DefaultParams
+	hash, err := argon2.GenerateFromPassword([]byte(password), params)
+	if err != nil {
+		return "", fmt.Errorf("failed to hash password: %v", err)
+	}
+	return fmt.Sprintf("%s", hash), nil
+}
+
 func (r *UserRepository) Seed(ctx context.Context, jsonFilePath string) error {
 
 	db := r.DbResolver.GetTenantDB(ctx)
 
 	users := make([]models.User, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err == nil {
-		for _, user := range users {
-			var count int64 = 0
-			if err := db.Model(models.User{}).Where("username", user.Username).Count(&count).Error; err != nil {
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err != nil {
+		return err
+	}
+
+	for _, user := range users {
+		var existingUser models.User
+		if err := db.Where("username", user.Username).FirstOrCreate(&existingUser, &user).Error; err != nil {
+			return err
+		}
+		if existingUser.Id == 0 {
+			hashedPassword, err := r.HashPassword(existingUser.Password)
+			if err != nil {
 				return err
-			} else {
-				if count == 0 {
-					user.TenantId = tenant_resolver.GetCurrentTenant(ctx)
+			}
+			existingUser.Password = hashedPassword
 
-					hash, err := argon2.GenerateFromPassword([]byte(user.Password), argon2.DefaultParams)
-
-					if err != nil {
-						return err
-					}
-					user.Password = fmt.Sprintf("%s", hash)
-
-					if err := db.Create(&user).Error; err != nil {
-						return err
-					}
-				}
+			if err := db.Create(&existingUser).Error; err != nil {
+				return err
 			}
 		}
-	} else {
-		return err
 	}
 	return nil
 }

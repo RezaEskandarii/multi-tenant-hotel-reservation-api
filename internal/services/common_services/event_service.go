@@ -30,7 +30,7 @@ func (e *EventService) SendEmailToGuestOnReservation() {
 		reservation := utils.ConvertByGeneric(models.Reservation{}, payload)
 
 		if reservation.Supervisor != nil {
-			e.EmailSender.Send(&dto.SendEmailDto{
+			e.EmailSender.Send(&dto.SendEmailRequest{
 				From:    "reservationapi@test.test",
 				To:      reservation.Supervisor.Email,
 				Subject: "reservation",

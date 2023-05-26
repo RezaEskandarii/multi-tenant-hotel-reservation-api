@@ -90,21 +90,22 @@ func (r *CountryRepository) Seed(ctx context.Context, jsonFilePath string) error
 	db := r.DbResolver.GetTenantDB(ctx)
 
 	countries := make([]models.Country, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err == nil {
-		for _, country := range countries {
-			var count int64 = 0
-			if err := db.Model(models.Country{}).Where("name", country.Name).Count(&count).Error; err != nil {
-				return err
-			} else {
-				if count == 0 {
-					if err := db.Create(&country).Error; err != nil {
-						return err
-					}
-				}
-			}
-		}
-	} else {
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &countries); err != nil {
 		return err
 	}
+
+	for _, country := range countries {
+		var countryCount int64 = 0
+		if err := db.Model(models.Country{}).Where("name", country.Name).Count(&countryCount).Error; err != nil {
+			return err
+		}
+
+		if countryCount == 0 {
+			if err := db.Create(&country).Error; err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }

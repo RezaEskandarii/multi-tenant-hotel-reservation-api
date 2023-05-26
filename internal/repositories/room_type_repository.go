@@ -90,25 +90,29 @@ func (r RoomTypeRepository) Delete(ctx context.Context, id uint64) error {
 }
 
 func (r *RoomTypeRepository) Seed(ctx context.Context, jsonFilePath string) error {
-
+	// Get a handle to the tenant database
 	db := r.DbResolver.GetTenantDB(ctx)
 
+	// Read the JSON file and convert its contents to a slice of RoomType structs
 	roomTypes := make([]models.RoomType, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err == nil {
-		for _, roomType := range roomTypes {
-			var count int64 = 0
-			if err := db.Model(models.RoomType{}).Count(&count).Error; err != nil {
-				return err
-			} else {
-				if count == 0 {
-					if err := db.Create(&roomType).Error; err != nil {
-						return err
-					}
-				}
-			}
-		}
-	} else {
+	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err != nil {
 		return err
 	}
+
+	// Iterate over each room type and check if it already exists in the database
+	for _, roomType := range roomTypes {
+		var count int64
+		if err := db.Model(models.RoomType{}).Where("name = ?", roomType.Name).Count(&count).Error; err != nil {
+			return err
+		}
+
+		// If the room type does not exist in the database, create a new record for it
+		if count == 0 {
+			if err := db.Create(&roomType).Error; err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }

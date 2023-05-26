@@ -1,6 +1,6 @@
 package dto
 
-type SendEmailDto struct {
+type SendEmailRequest struct {
 	From        string
 	To          string
 	Subject     string
