@@ -18,8 +18,6 @@ func NewWalletService(repo *WalletRepository) *WalletService {
 }
 
 func (s *WalletService) Create(ctx context.Context, wallet *Wallet) (*Wallet, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	return s.repo.CreateWallet(ctx, wallet)
 }
 

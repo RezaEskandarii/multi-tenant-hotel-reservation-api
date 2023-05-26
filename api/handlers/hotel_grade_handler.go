@@ -11,9 +11,9 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // HotelGradeHandler Province endpoint handler
@@ -79,7 +79,7 @@ func (handler *HotelGradeHandler) create(c echo.Context) error {
 // @Router /hotel-grades/{id} [put]
 func (handler *HotelGradeHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := currentUser(c)
 
 	if err != nil {
@@ -142,7 +142,7 @@ func (handler *HotelGradeHandler) update(c echo.Context) error {
 // @Router /hotel-grades/{id} [get]
 func (handler *HotelGradeHandler) find(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -200,8 +200,7 @@ func (handler *HotelGradeHandler) findAll(c echo.Context) error {
 // @Router /hotel-grades [delete]
 func (handler *HotelGradeHandler) delete(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
-
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{

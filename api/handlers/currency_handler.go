@@ -11,9 +11,9 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // CurrencyHandler Currency endpoint handler
@@ -86,7 +86,7 @@ func (handler *CurrencyHandler) create(c echo.Context) error {
 // @Router /currencies/{id} [put]
 func (handler *CurrencyHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
 	}
@@ -136,7 +136,7 @@ func (handler *CurrencyHandler) update(c echo.Context) error {
 // @Success 200 {object} models.Currency
 // @Router /currencies/{id} [get]
 func (handler *CurrencyHandler) find(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)

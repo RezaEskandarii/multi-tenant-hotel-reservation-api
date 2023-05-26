@@ -4,12 +4,13 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
+	"strconv"
 )
 
 type PaymentHandler struct {
@@ -56,7 +57,8 @@ func (handler *PaymentHandler) create(c echo.Context) error {
 // @Router /payments [delete]
 func (handler *PaymentHandler) delete(c echo.Context) error {
 
-	id, _ := utils.ConvertToUint(c.Get("id"))
+	idStr := fmt.Sprintf("%s", c.Get("id"))
+	id, _ := strconv.ParseUint(idStr, 10, 64)
 
 	if err := handler.PaymentService.Delete(tenantContext(c), id); err != nil {
 		handler.Logger.LogError(err.Error())

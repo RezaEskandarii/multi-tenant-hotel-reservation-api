@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"reservation-api/internal/global_variables"
-	"reservation-api/internal/utils"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +18,12 @@ func TenantMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "X-Tenant-ID header is null")
 		}
 
-		tenantID, _ := utils.ConvertToUint(tenantStr)
+		tenantID, err := strconv.ParseUint(tenantStr, 10, 64)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest)
+		}
+
 		c.Set(global_variables.TenantIDKey, tenantStr)
 
 		ctx := context.WithValue(c.Request().Context(), "TenantID", tenantID)

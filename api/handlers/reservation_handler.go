@@ -13,9 +13,9 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -54,7 +54,7 @@ func (handler *ReservationHandler) createRequest(c echo.Context) error {
 	// client must send the reservation ID to avoid conflicts with other reservations on this check-in and check-out date.
 	if strings.TrimSpace(reservationIdStr) != "" {
 
-		reservationId, _ := utils.ConvertToUint(reservationIdStr)
+		reservationId, _ := strconv.ParseUint(reservationIdStr, 10, 64)
 		reservationResult, err := handler.Service.Find(tenantContext(c), reservationId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, nil)
@@ -214,7 +214,7 @@ func (handler *ReservationHandler) create(c echo.Context) error {
 // @Router /reservations/{id} [put]
 func (handler *ReservationHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := currentUser(c)
 
 	if err != nil {
@@ -363,7 +363,7 @@ func (handler *ReservationHandler) recommendRateCodes(c echo.Context) error {
 // @Success 200 {array} models.Reservation
 // @Router /reservations/{id} [get]
 func (handler *ReservationHandler) find(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -394,7 +394,7 @@ func (handler *ReservationHandler) find(c echo.Context) error {
 // @Success 200 {object} models.Reservation
 // @Router /reservations/change-status/{id} [put]
 func (handler *ReservationHandler) changeStatus(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -411,7 +411,7 @@ func (handler *ReservationHandler) changeStatus(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, nil)
 	}
 
-	statusVal, err := utils.ConvertToUint(c.QueryParam("status"))
+	statusVal, err := strconv.ParseUint(c.QueryParam("status"), 10, 64)
 	status := models.ReservationCheckStatus(statusVal)
 
 	if err != nil {

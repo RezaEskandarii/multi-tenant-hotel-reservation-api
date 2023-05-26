@@ -8,6 +8,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"reflect"
 	"reservation-api/internal/utils"
+	"strconv"
 	"strings"
 )
 
@@ -168,7 +169,10 @@ func (r *ReportService) getColName(i int) string {
 
 	for _, chr := range str {
 		char := fmt.Sprintf("%c", chr)
-		number, _ := utils.ConvertToUint(char)
+		number, err := strconv.ParseInt(char, 10, 64)
+		if err != nil {
+			return ""
+		}
 		// generate output result
 		strResult.Write([]byte(fmt.Sprintf("%c", rune('A'-1+number))))
 	}

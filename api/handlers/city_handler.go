@@ -11,10 +11,10 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 	"reservation-api/pkg/validator"
+	"strconv"
 )
 
 // CityHandler City endpoint handler
@@ -87,7 +87,7 @@ func (handler *CityHandler) create(c echo.Context) error {
 // @Success 200 {object} models.City
 // @Router /cities/{id} [put]
 func (handler *CityHandler) update(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -148,7 +148,7 @@ func (handler *CityHandler) update(c echo.Context) error {
 // @Router /cities/{id} [get]
 func (handler *CityHandler) find(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)

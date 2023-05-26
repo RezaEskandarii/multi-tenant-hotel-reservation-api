@@ -11,10 +11,10 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
 	"reservation-api/pkg/validator"
+	"strconv"
 )
 
 // ProvinceHandler Province endpoint handler
@@ -95,7 +95,7 @@ func (handler *ProvinceHandler) create(c echo.Context) error {
 // @Router /provinces/{id} [put]
 func (handler *ProvinceHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -158,7 +158,7 @@ func (handler *ProvinceHandler) update(c echo.Context) error {
 // @Router /provinces/{id} [get]
 func (handler *ProvinceHandler) find(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -217,7 +217,7 @@ func (handler *ProvinceHandler) findAll(c echo.Context) error {
 // @Router /provinces/{id}/cities [get]
 func (handler *ProvinceHandler) cities(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)

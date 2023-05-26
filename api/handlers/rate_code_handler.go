@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	middlewares2 "reservation-api/api/middlewares"
@@ -11,9 +12,9 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // RateCodeHandler RateCode endpoint handler
@@ -84,7 +85,7 @@ func (handler *RateCodeHandler) create(c echo.Context) error {
 // @Router /rate-codes/{id} [put]
 func (handler *RateCodeHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := currentUser(c)
 
 	if err != nil {
@@ -138,7 +139,7 @@ func (handler *RateCodeHandler) update(c echo.Context) error {
 // @Success 200 {array} models.RateCode
 // @Router /rate-codes/{id} [get]
 func (handler *RateCodeHandler) find(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, nil)
@@ -199,10 +200,8 @@ func (handler *RateCodeHandler) findAll(c echo.Context) error {
 // @Router /rate-codes [delete]
 func (handler *RateCodeHandler) delete(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
-
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,
@@ -213,7 +212,6 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 	err = handler.Service.Delete(tenantContext(c), id)
 
 	if err != nil {
-
 		handler.Logger.LogError(err.Error())
 		return c.JSON(http.StatusConflict, commons.ApiResponse{
 			ResponseCode: http.StatusConflict,
@@ -238,7 +236,8 @@ func (handler *RateCodeHandler) delete(c echo.Context) error {
 // @Router /rate-codes/add-details/{id} [post]
 func (handler *RateCodeHandler) addDetails(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Get("id"))
+	idStr := fmt.Sprintf("%s", c.Get("id"))
+	id, err := strconv.ParseUint(idStr, 10, 64)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, commons.ApiResponse{
 			ResponseCode: http.StatusBadRequest,

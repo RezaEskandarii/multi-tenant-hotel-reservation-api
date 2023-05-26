@@ -12,9 +12,9 @@ import (
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/common_services"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // GuestHandler  Guest endpoint handler
@@ -78,9 +78,13 @@ func (handler *GuestHandler) create(c echo.Context) error {
 // @Router /guests/{id} [put]
 func (handler *GuestHandler) update(c echo.Context) error {
 
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+
 	model := models.Guest{}
 	user := currentUser(c)
-	id, _ := utils.ConvertToUint(c.Param("id"))
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
@@ -118,7 +122,10 @@ func (handler *GuestHandler) update(c echo.Context) error {
 // @Router /guests/{id} [get]
 func (handler *GuestHandler) find(c echo.Context) error {
 
-	id, _ := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
 	guest, _ := handler.Service.Find(tenantContext(c), id)
 
 	if guest == nil || (guest != nil && guest.Id == 0) {
@@ -140,8 +147,8 @@ func (handler *GuestHandler) find(c echo.Context) error {
 // @Router /guests [get]
 func (handler *GuestHandler) findAll(c echo.Context) error {
 
-	page, _ := utils.ConvertToUint(c.Param("page"))
-	perPage, _ := utils.ConvertToUint(c.Param("perPage"))
+	page, _ := strconv.ParseUint(c.Param("page"), 10, 64)
+	perPage, _ := strconv.ParseUint(c.Param("perPage"), 10, 64)
 	output := getOutputQueryParamVal(c)
 
 	input := &dto.PaginationFilter{

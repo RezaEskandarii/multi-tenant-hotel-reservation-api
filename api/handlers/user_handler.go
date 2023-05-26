@@ -11,9 +11,9 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // UserHandler User endpoint handler
@@ -107,7 +107,7 @@ func (handler *UserHandler) create(c echo.Context) error {
 // @Router /users/{id} [put]
 func (handler *UserHandler) update(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := currentUser(c)
 
 	if err != nil {
@@ -166,7 +166,7 @@ func (handler *UserHandler) update(c echo.Context) error {
 // @Success 200 {object} models.User
 // @Router /users/{id} [get]
 func (handler *UserHandler) find(c echo.Context) error {
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())

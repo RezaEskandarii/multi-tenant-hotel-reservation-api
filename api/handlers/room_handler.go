@@ -11,9 +11,9 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/services/domain_services"
-	"reservation-api/internal/utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/translator"
+	"strconv"
 )
 
 // RoomHandler Room endpoint handler
@@ -85,7 +85,7 @@ func (handler *RoomHandler) create(c echo.Context) error {
 func (handler *RoomHandler) update(c echo.Context) error {
 
 	user := currentUser(c)
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, nil)
@@ -132,7 +132,7 @@ func (handler *RoomHandler) update(c echo.Context) error {
 // @Router /rooms/{id} [get]
 func (handler *RoomHandler) find(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		handler.Logger.LogError(err.Error())
@@ -193,7 +193,7 @@ func (handler *RoomHandler) findAll(c echo.Context) error {
 // @Router /rooms/{id} [delete]
 func (handler *RoomHandler) delete(c echo.Context) error {
 
-	id, err := utils.ConvertToUint(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 
 		handler.Logger.LogError(err.Error())
