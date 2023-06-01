@@ -9,7 +9,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
 	"reservation-api/internal/tenant_resolver"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/file_utils"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -169,7 +169,7 @@ func (r *UserRepository) Seed(ctx context.Context, jsonFilePath string) error {
 	db := r.DbResolver.GetTenantDB(ctx)
 
 	users := make([]models.User, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &users); err != nil {
+	if err := file_utils.CastJsonFileToStruct(jsonFilePath, &users); err != nil {
 		return err
 	}
 

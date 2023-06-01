@@ -5,7 +5,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/file_utils"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
 
@@ -81,7 +81,7 @@ func (r *CurrencyRepository) Seed(ctx context.Context, jsonFilePath string) erro
 
 	// Read the JSON file and convert its contents to a slice of Currency structs
 	currencies := make([]models.Currency, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &currencies); err != nil {
+	if err := file_utils.CastJsonFileToStruct(jsonFilePath, &currencies); err != nil {
 		return err
 	}
 

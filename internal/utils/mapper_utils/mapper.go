@@ -1,4 +1,4 @@
-package utils
+package mapper_utils
 
 import (
 	"encoding/json"

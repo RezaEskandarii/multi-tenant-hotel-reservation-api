@@ -4,7 +4,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/mapper_utils"
 	"reservation-api/pkg/applogger"
 	"reservation-api/pkg/message_broker"
 )
@@ -27,7 +27,7 @@ func (e *EventService) SendEmailToGuestOnReservation() {
 
 	e.MessageBrokerManager.Consume(global_variables.ReservationQueueName, func(payload []byte) {
 
-		reservation := utils.ConvertByGeneric(models.Reservation{}, payload)
+		reservation := mapper_utils.ConvertByGeneric(models.Reservation{}, payload)
 
 		if reservation.Supervisor != nil {
 			e.EmailSender.Send(&dto.SendEmailRequest{

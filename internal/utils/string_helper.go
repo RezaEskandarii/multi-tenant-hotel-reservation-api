@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"reservation-api/internal/utils/hash_utils"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ func GenerateCacheKey(keys ...interface{}) string {
 		str := fmt.Sprintf("%v", str)
 		strBuilder.Write([]byte(str))
 	}
-	return GenerateSHA256(strBuilder.String())
+	return hash_utils.GenerateSHA256(strBuilder.String())
 }
 
 // ToJson converts given model to json and returns as a byte array.

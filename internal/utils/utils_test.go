@@ -3,21 +3,24 @@ package utils
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"reservation-api/internal/utils/file_utils"
+	"reservation-api/internal/utils/hash_utils"
+	"reservation-api/internal/utils/mapper_utils"
 	"strings"
 	"testing"
 )
 
 func TestFileExists(t *testing.T) {
-	assert.True(t, FileExists("./mapper.go"))
+	assert.True(t, file_utils.FileExists("./mapper.go"))
 }
 
 func TestGenerateSHA256(t *testing.T) {
 	strToHash1 := "this sample text"
 	strToHash2 := "this sample text ."
 
-	result1 := GenerateSHA256(strToHash1)
-	result2 := GenerateSHA256(strToHash1)
-	result3 := GenerateSHA256(strToHash2)
+	result1 := hash_utils.GenerateSHA256(strToHash1)
+	result2 := hash_utils.GenerateSHA256(strToHash1)
+	result3 := hash_utils.GenerateSHA256(strToHash2)
 
 	assert.NotNil(t, result1)
 	assert.NotNil(t, result2)
@@ -48,7 +51,7 @@ func TestConvertToInterfaceSlice(t *testing.T) {
 		},
 	}
 
-	result, err := ConvertToInterfaceSlice(testCases)
+	result, err := mapper_utils.ConvertToInterfaceSlice(testCases)
 	assert.Nil(t, err)
 	assert.Equal(t, len(result), len(testCases))
 

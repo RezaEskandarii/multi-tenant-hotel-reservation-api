@@ -1,4 +1,4 @@
-package utils
+package hash_utils
 
 import (
 	"github.com/stretchr/testify/assert"

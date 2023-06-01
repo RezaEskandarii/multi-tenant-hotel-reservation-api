@@ -6,7 +6,7 @@ import (
 	"reservation-api/internal/commons"
 	"reservation-api/internal/dto"
 	"reservation-api/internal/models"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/file_utils"
 	"reservation-api/internal_errors/message_keys"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 )
@@ -95,7 +95,7 @@ func (r *RoomTypeRepository) Seed(ctx context.Context, jsonFilePath string) erro
 
 	// Read the JSON file and convert its contents to a slice of RoomType structs
 	roomTypes := make([]models.RoomType, 0)
-	if err := utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err != nil {
+	if err := file_utils.CastJsonFileToStruct(jsonFilePath, &roomTypes); err != nil {
 		return err
 	}
 

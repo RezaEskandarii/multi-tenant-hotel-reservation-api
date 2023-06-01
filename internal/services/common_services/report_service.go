@@ -7,7 +7,7 @@ import (
 	"github.com/jung-kurt/gofpdf"
 	"github.com/xuri/excelize/v2"
 	"reflect"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/mapper_utils"
 	"strconv"
 	"strings"
 )
@@ -42,7 +42,7 @@ func (r *ReportService) ExportToExcel(input interface{}, lang string) ([]byte, e
 	}
 
 	// convert input to slice of structs
-	slice, err := utils.ConvertToInterfaceSlice(input)
+	slice, err := mapper_utils.ConvertToInterfaceSlice(input)
 	if err != nil {
 		return nil, err
 	}

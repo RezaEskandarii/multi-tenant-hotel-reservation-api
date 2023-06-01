@@ -14,7 +14,7 @@ import (
 	"reservation-api/internal/dto"
 	"reservation-api/internal/global_variables"
 	"reservation-api/internal/models"
-	"reservation-api/internal/utils"
+	"reservation-api/internal/utils/hash_utils"
 	"reservation-api/pkg/multi_tenancy_database/tenant_database_resolver"
 	"strings"
 	"time"
@@ -52,7 +52,7 @@ func (r *ReservationRepository) CreateReservationRequest(ctx context.Context, re
 	rnd, err := rand.Int(rand.Reader, big.NewInt(5))
 
 	// generate reservation request key.
-	requestKey := utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s%s", expireTime, buffer.String(),
+	requestKey := hash_utils.GenerateSHA256(fmt.Sprintf("%s%s%s%s%s", expireTime, buffer.String(),
 		requestDto.CheckInDate.String(), requestDto.CheckOutDate.String(), uuid.New().String()))
 
 	if err == nil {
