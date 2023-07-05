@@ -51,15 +51,11 @@ func (s *EmailService) sendEmail(dto *dto.SendEmailRequest) error {
 	m := gomail.NewMessage()
 
 	m.SetHeader("From", dto.From)
-
 	m.SetHeader("To", dto.To)
-
 	m.SetHeader("Subject", dto.Subject)
-
 	m.SetBody(dto.ContentType, dto.Body)
 
 	dialer := s.Dialer
-
 	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	if err := dialer.DialAndSend(m); err != nil {
