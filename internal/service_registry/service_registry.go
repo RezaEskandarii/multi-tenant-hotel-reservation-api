@@ -59,15 +59,16 @@ func RegisterServicesAndRoutes(router *echo.Group) error {
 
 		// ================================== common services =============================================================
 		reportService = common_services.NewReportService()
-		//emailService  = common_services.NewEmailService(appConfig.Smtp.Host,
-		//	appConfig.Smtp.Username, appConfig.Smtp.Password, appConfig.Smtp.Port,
-		//)
+		emailService  = common_services.NewEmailService(appConfig.Smtp.Host,
+			appConfig.Smtp.Username, appConfig.Smtp.Password, appConfig.Smtp.Port,
+		)
+
 		rabbitMqManager = message_broker.New(appConfig.MessageBroker.Url, logger)
 		fileService     = common_services.NewFileTransferService(appConfig.Minio.Endpoint, appConfig.Minio.AccessKeyID,
 			appConfig.Minio.SecretAccessKey, appConfig.Minio.UseSSL, ctx)
 
-		cacheService = common_services.NewCacheService(appConfig.Redis.Addr, appConfig.Redis.Password, appConfig.Redis.CacheDB, ctx)
-		///eventService       = common_services.NewEventService(rabbitMqManager, emailService)
+		cacheService       = common_services.NewCacheService(appConfig.Redis.Addr, appConfig.Redis.Password, appConfig.Redis.CacheDB, ctx)
+		eventService       = common_services.NewEventService(rabbitMqManager, emailService)
 		connectionResolver = tenant_database_resolver.NewTenantDatabaseResolver()
 
 		// =============================== domain services ===============================================================
@@ -133,10 +134,10 @@ func RegisterServicesAndRoutes(router *echo.Group) error {
 	reservationHandler.Register(handlerConf, reservationService, reportService)
 	paymentHandler.Register(handlerConf, paymentService)
 	// schedule to remove expired reservation requests.
-	scheduleRemoveExpiredReservationRequests(reservationService, logger)
+	scheduleRemoveExpiredReservationRequests(reservationService, logger, tenantService)
 
 	// listen to message broker on reservation event and send email in background.
-	///go eventService.SendEmailToGuestOnReservation()
+	go eventService.SendEmailToGuestOnReservation()
 
 	return nil
 }

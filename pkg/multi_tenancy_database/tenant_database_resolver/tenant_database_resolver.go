@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"gorm.io/gorm"
+	"math"
 	"reservation-api/internal/tenant_resolver"
 	"reservation-api/pkg/tenant_dsn_resolver"
 	"sync"
@@ -44,6 +45,24 @@ func (c *TenantDatabaseResolver) GetTenantDB(ctx context.Context) *gorm.DB {
 		dbName = "hotel_reservation"
 	}
 
+	if c.cache[tenantID] == nil {
+		cn, err := tenant_dsn_resolver.ResolveDB(false, dbName)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		c.cache[tenantID] = cn
+		return cn
+	}
+
+	return c.cache[tenantID]
+
+}
+
+func (c *TenantDatabaseResolver) GetDefaultDB() *gorm.DB {
+
+	dbName := "hotel_reservation"
+	tenantID := uint64(math.MaxUint64)
 	if c.cache[tenantID] == nil {
 		cn, err := tenant_dsn_resolver.ResolveDB(false, dbName)
 		if err != nil {

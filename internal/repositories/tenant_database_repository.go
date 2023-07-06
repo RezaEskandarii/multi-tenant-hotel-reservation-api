@@ -60,11 +60,25 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *models.Tenant) (*
 	if err := roomTypeRepository.Seed(ctx, "./data/seed/room_types.json"); err != nil {
 		panic(err)
 	}
-
 	// seed currencies
 	if err := currencyRepository.Seed(ctx, "./data/seed/currencies.json"); err != nil {
 		panic(err)
 	}
 
 	return tenant, nil
+}
+
+func (r *TenantRepository) GetAll() ([]models.Tenant, error) {
+
+	db := r.DbResolver.GetDefaultDB()
+	var tenantsCount int64 = 0
+	if err := db.Model(&models.Tenant{}).Count(&tenantsCount).Error; err != nil {
+		return nil, err
+	}
+
+	tenants := make([]models.Tenant, tenantsCount)
+	if err := db.Model(&models.Tenant{}).Scan(&tenants).Error; err != nil {
+		return nil, err
+	}
+	return tenants, nil
 }

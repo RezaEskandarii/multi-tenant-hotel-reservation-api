@@ -21,3 +21,7 @@ func (s *TenantService) SetUp(ctx context.Context, model *models.Tenant) (*model
 
 	return s.Repository.Create(dbCtx, model)
 }
+
+func (s *TenantService) GetAll() ([]models.Tenant, error) {
+	return s.Repository.GetAll()
+}
